@@ -1,13 +1,14 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 const User = require('../models/User');
-const saltRound = require('../config/env').SALT;
+const saltRounds = require('../config/env').SALT;
+const jwtHelper = require('../helpers/issueJwt');
 
-exports.register = async (req, res) => {
+exports.registerUser = async (req, res) => {
     const { first_name, last_name, username, email, password, role } = req.body;
 
     try {
-        const salt = await bcrypt.genSalt(saltRound);
+        const salt = await bcrypt.genSalt(parseInt(saltRounds));
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = await User({
@@ -20,19 +21,18 @@ exports.register = async (req, res) => {
             creation_date: Date.now(),
         });
 
-        await newUser
-            .save()
-            .then((user) => res.status(200).json(user))
-            .catch((error) => next(error));
+        await newUser.save();
+        res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
-        res.status(500).json({ message: 'Registration failed' });
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
 exports.loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email: email });
+        const user = await User.findOne({ email });
 
         if (!user) {
             res.status(404).json({ message: 'User not found' });
@@ -45,13 +45,12 @@ exports.loginUser = async (req, res) => {
                 .status(401)
                 .json({ message: 'Incorrect email or password' });
 
-        const jwt = jwtHelper.issueJWT(user);
+        const jwt = jwtHelper.issueJwt(user);
         const { token, expires } = jwt;
 
         res.status(200).json({ user, token, expiresIn: expires });
     } catch (error) {
-        res.status(500).error(error.message);
+        console.log(error);
+        res.status(500).json({ message: error.message });
     }
 };
-
-exports.getAllUsers = async (req, res) => {};

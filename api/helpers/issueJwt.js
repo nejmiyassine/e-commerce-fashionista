@@ -1,11 +1,11 @@
-const jwt = require('jwt');
-const JwtSecretKey = require('../config/JwtSecretKey');
+const jwt = require('jsonwebtoken');
+const JwtSecretKey = require('../config/env').JwtSecretKey;
 
 const issueJwt = (user) => {
     const userId = user._id;
     const expiresIn = '1d';
 
-    const payload = { id: userId, email, role };
+    const payload = { id: userId, email: user.email, role: user.role };
 
     const token = jwt.sign(payload, JwtSecretKey, { expiresIn });
 
@@ -15,4 +15,4 @@ const issueJwt = (user) => {
     };
 };
 
-module.exports = issueJwt;
+module.exports.issueJwt = issueJwt;
