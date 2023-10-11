@@ -30,9 +30,18 @@ const userSchema = new Schema({
         required: true,
         minLength: 8,
     },
-    creation_date: { type: Date },
-    last_login: { type: Date },
-    last_update: { type: Date },
+    creation_date: {
+        type: Date,
+        default: Date.now,
+    },
+    last_login: {
+        type: Date,
+        default: Date.now,
+    },
+    last_update: {
+        type: Date,
+        default: Date.now,
+    },
     active: {
         type: Boolean,
         default: false,

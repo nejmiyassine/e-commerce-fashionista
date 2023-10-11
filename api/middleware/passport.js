@@ -11,9 +11,10 @@ const jwtOpts = {
 };
 
 const jwtVerifyCallback = async (jwtPayload, done) => {
+    console.log('jwtPayload: ', jwtPayload);
+
     try {
-        const user = await User.findById(jwtPayload._id);
-        console.log('jwtPayload: ', jwtPayload);
+        const user = await User.findById(jwtPayload.userId);
         console.log('user: ', user);
 
         if (user) {

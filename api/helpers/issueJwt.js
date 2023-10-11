@@ -5,7 +5,7 @@ const issueJwt = (user) => {
     const userId = user._id;
     const expiresIn = '1d';
 
-    const payload = { id: userId, email: user.email, role: user.role };
+    const payload = { userId };
 
     const token = jwt.sign(payload, JwtSecretKey, { expiresIn });
 

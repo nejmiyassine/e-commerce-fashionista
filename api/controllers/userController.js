@@ -54,3 +54,5 @@ exports.loginUser = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.getAllUsersList = async (req, res) => {}
