@@ -4,10 +4,11 @@ const { check } = require('express-validator');
 
 const User = require('../models/User');
 const {
-    loginUser,
-    registerUser,
     getAllUsersList,
     getUserById,
+    searchForUser,
+    loginUser,
+    registerUser,
     updateUser,
 } = require('../controllers/userController');
 
@@ -61,6 +62,8 @@ router.post(
 );
 
 router.get('/', getAllUsersList);
+
+router.get('/search', searchForUser);
 
 router.get('/:id', getUserById);
 

@@ -5,6 +5,74 @@ const User = require('../models/User');
 const saltRounds = require('../config/env').SALT;
 const jwtHelper = require('../helpers/issueJwt');
 
+exports.getAllUsersList = async (req, res) => {
+    const page = req.query.page || 0;
+    const sort = req.query.sort || 'ASC';
+    const usersPerPage = 3;
+
+    try {
+        const users = await User.find()
+            .sort({ username: sort })
+            .skip(page * usersPerPage)
+            .limit(usersPerPage);
+
+        if (!users) {
+            return res.status(404).json({ message: 'users not found' });
+        }
+
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.getUserById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'users not found' });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.searchForUser = async (req, res) => {
+    const { query } = req.query;
+    const page = req.query.page || 0;
+    const sort = req.query.sort || 'ASC';
+    const usersPerPage = 3;
+
+    const searchCriteria = {
+        $or: [
+            { username: { $regex: query, $options: 'i' } },
+            { email: { $regex: query, $options: 'i' } },
+        ],
+    };
+
+    try {
+        const users = await User.find(searchCriteria)
+            .sort({ username: sort })
+            .skip(page * usersPerPage)
+            .limit(usersPerPage);
+
+        if (!users || users.length === 0) {
+            return res.status(404).json({
+                message: 'No users found matching the search criteria',
+            });
+        }
+
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 exports.registerUser = async (req, res) => {
     const { first_name, last_name, username, email, password, role } = req.body;
     try {
@@ -65,43 +133,6 @@ exports.loginUser = async (req, res) => {
     }
 };
 
-exports.getAllUsersList = async (req, res) => {
-    const page = req.query.page || 0;
-    const sort = req.query.sort || 'ASC';
-    const usersPerPage = 3;
-
-    try {
-        const users = await User.find()
-            .sort({ username: sort })
-            .skip(page * usersPerPage)
-            .limit(usersPerPage);
-
-        if (!users) {
-            return res.status(404).json({ message: 'users not found' });
-        }
-
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-exports.getUserById = async (req, res) => {
-    const { id } = req.params;
-
-    try {
-        const user = await User.findById(id);
-
-        if (!user) {
-            return res.status(404).json({ message: 'users not found' });
-        }
-
-        res.status(200).json(user);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
 exports.updateUser = async (req, res) => {
     const { id } = req.params;
     const { first_name, last_name, username, email, password, role } = req.body;
@@ -115,6 +146,7 @@ exports.updateUser = async (req, res) => {
             password,
             role,
         };
+
         const user = await User.findByIdAndUpdate(id, updatedFields, {
             new: true,
         });
