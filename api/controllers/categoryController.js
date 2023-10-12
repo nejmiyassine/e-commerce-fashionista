@@ -91,3 +91,103 @@ const deleteCategoryController = async (req, res) => {
     }}
 
     module.exports = deleteCategoryController
+
+
+//Get category by ID
+
+    const getCategoryController = async (req, res) => {
+        try {
+            const {id} = req.params 
+            await categoryModel.findById(id);
+            res.status(200).send({
+                success: true,
+                message: 'Category found successfully'
+            })
+    
+    
+        }
+        catch (error) {
+            console.log(error);
+            res.status(500).send({
+                success: false,
+                message: 'Error finding category',
+                error
+            });
+        }}
+    
+        module.exports = getCategoryController
+
+
+//Get All categories
+
+const getAllCategoryController = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1; 
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        const categories = await categoryModel
+            .find({})
+            .limit(limit)
+            .skip(skip);
+
+        if (categories.length === 0) {
+            return res.status(200).send([]); 
+        }
+        res.status(200).send({
+            success: true,
+            message: 'Categories listed successfully',
+            data: categories,
+        });
+    }
+
+    catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: 'Error listing all the categories',
+            error
+        });
+    }}
+
+    module.exports = getAllCategoryController
+
+    //Get Search Category
+    const getSearchCategoryController = async (req, res) => {
+        try {
+            const page = parseInt(req.query.page) || 1; 
+            const limit = 10;
+            const skip = (page - 1) * limit;
+            const searchTerm = req.query.search || '';
+
+            const searchRegex = new RegExp(searchTerm, 'i');
+
+            const query = searchTerm
+            ? { name: { $regex: searchRegex } }: {};
+    
+            const categories = await categoryModel
+                .find({})
+                .limit(limit)
+                .skip(skip);
+    
+            if (categories.length === 0) {
+                return res.status(200).send([]); 
+            }
+            res.status(200).send({
+                success: true,
+                message: 'Categories listed successfully',
+                data: categories,
+            });
+        }
+    
+        catch (error) {
+            console.log(error);
+            res.status(500).send({
+                success: false,
+                message: 'Error listing all the categories',
+                error
+            });
+        }}
+
+
+    module.exports = getSearchCategoryController
