@@ -1,4 +1,4 @@
-const customerModel = require('../models/Customers');
+const customerModel = require('../../models/Customers');
 const {genSalt , hash } = require('bcryptjs');
 
 
