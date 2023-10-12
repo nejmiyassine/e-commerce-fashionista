@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { validationResult } = require('express-validator');
 
 const User = require('../models/User');
 const saltRounds = require('../config/env').SALT;
@@ -6,8 +7,12 @@ const jwtHelper = require('../helpers/issueJwt');
 
 exports.registerUser = async (req, res) => {
     const { first_name, last_name, username, email, password, role } = req.body;
-
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
         const salt = await bcrypt.genSalt(parseInt(saltRounds));
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -30,12 +35,18 @@ exports.registerUser = async (req, res) => {
 };
 
 exports.loginUser = async (req, res) => {
+    const { email, password } = req.body;
+
     try {
-        const { email, password } = req.body;
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
         const user = await User.findOne({ email });
 
         if (!user) {
-            res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
 
         const isPasswordValid = bcrypt.compare(password, user.password);
@@ -50,9 +61,86 @@ exports.loginUser = async (req, res) => {
 
         res.status(200).json({ user, token, expiresIn: expires });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: error.message });
     }
 };
 
-exports.getAllUsersList = async (req, res) => {}
+exports.getAllUsersList = async (req, res) => {
+    const page = req.query.page || 0;
+    const sort = req.query.sort || 'ASC';
+    const usersPerPage = 3;
+
+    try {
+        const users = await User.find()
+            .sort({ username: sort })
+            .skip(page * usersPerPage)
+            .limit(usersPerPage);
+
+        if (!users) {
+            return res.status(404).json({ message: 'users not found' });
+        }
+
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.getUserById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'users not found' });
+        }
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.updateUser = async (req, res) => {
+    const { id } = req.params;
+    const { first_name, last_name, username, email, password, role } = req.body;
+
+    try {
+        const updatedFields = {
+            first_name,
+            last_name,
+            username,
+            email,
+            password,
+            role,
+        };
+        const user = await User.findByIdAndUpdate(id, updatedFields, {
+            new: true,
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'users not found' });
+        }
+
+        res.status(201).json(user);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+exports.deleteUser = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await User.findByIdAndDelete(id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'users not found' });
+        }
+
+        res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
