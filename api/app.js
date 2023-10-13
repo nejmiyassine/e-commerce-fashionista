@@ -19,8 +19,10 @@ const userRoutes = require('./routes/userRoutes');
 const protectedRoutes = require('./routes/protectedRoutes');
 const categoryRoutes = require('./routes/categoryRoutes.js');
 const subcategoryRoutes = require('./routes/subcategoryRoutes.js');
+const authRoutes = require('./routes/customerRoutes');
 
 app.use('/v1/users', userRoutes);
+app.use('/v1', authRoutes);
 app.use('/v1', protectedRoutes);
 app.use('/v1/subcategories', subcategoryRoutes)
 app.use('/v1/categories', categoryRoutes)
