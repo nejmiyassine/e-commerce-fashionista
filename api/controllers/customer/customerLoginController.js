@@ -1,4 +1,4 @@
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const tokenSecretKey = require('../../config/env').tokenSecretKey;
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
