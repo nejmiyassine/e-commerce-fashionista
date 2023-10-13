@@ -14,7 +14,6 @@ app.use(express.json());
 app.use('/v1/subcategories', subcategoryRoutes)
 app.use('/v1/categories', categoryRoutes)
 
-
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });

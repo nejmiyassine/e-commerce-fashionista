@@ -129,14 +129,15 @@ const getAllCategoryController = async (req, res) => {
         const categories = await categoryModel
             .find({})
             .limit(limit)
-            .skip(skip);
+            .skip(skip)
+            .select('_id')
+
 
         if (categories.length === 0) {
             return res.status(200).send([]); 
         }
         res.status(200).send({
-            success: true,
-            message: 'Categories listed successfully',
+           
             data: categories,
         });
     }
