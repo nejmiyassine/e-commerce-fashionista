@@ -1,6 +1,11 @@
+const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcryptjs');
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const JwtSecretKey = require('../config/env').JwtSecretKey;
+
+const User = require('../models/User');
 const Customer = require('../models/Customers');
 
 
@@ -28,4 +33,29 @@ const verifyCb = async (email, password, done) => {
 
 const strategy = new LocalStrategy(customFields , verifyCb )
 
-passport.use (strategy)
+const jwtOpts = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: JwtSecretKey,
+};
+
+const jwtVerifyCallback = async (jwtPayload, done) => {
+    console.log('jwtPayload: ', jwtPayload);
+
+    try {
+        const user = await User.findById(jwtPayload.userId);
+        console.log('user: ', user);
+
+        if (user) {
+            return done(null, user);
+        } else {
+            return done(null, false);
+        }
+    } catch (error) {
+        return done(err, false);
+    }
+};
+
+const jwtStrategy = new JwtStrategy(jwtOpts, jwtVerifyCallback);
+
+passport.use(strategy)
+passport.use(jwtStrategy);
