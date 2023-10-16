@@ -1,27 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const createCategoryController = require('../controllers/categoryController');
-const updateCategoryController = require('../controllers/categoryController');
-const deleteCategoryController = require('../controllers/categoryController');
-const getCategoryController = require('../controllers/categoryController');
-const getAllCategoryController = require('../controllers/categoryController');
-const getSearchCategoryController = require('../controllers/categoryController');
+const {
+    getAllCategories,
+    getCategoryById,
+    getSearchCategory,
+    createCategory,
+    deleteCategory,
+    updateCategory,
+} = require('../controllers/categoryController');
+
 //Post route
-router.post('/create-category', createCategoryController)
+router.post('/create-category', createCategory);
 
 //Update route
-router.put('/update-category/:id', updateCategoryController)
+router.put('/update-category/:id', updateCategory);
 
 //Delete route
-router.delete('/delete-category/:id', deleteCategoryController)
+router.delete('/delete-category/:id', deleteCategory);
 
 //Get category
-router.get('/get-category/:id', getCategoryController)
+router.get('/get-category/:id', getCategoryById);
 
 //Get all categories
-router.get('/category', getAllCategoryController)
+router.get('/category', getAllCategories);
 
 //Get Search category
-router.get('/search-category', getSearchCategoryController)
+router.get('/search-category', getSearchCategory);
 
 module.exports = router;
