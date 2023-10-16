@@ -1,4 +1,4 @@
-const subcategoryModel = require('../models/subcategoryModel');
+const Subcategory = require('../models/Subcategory');
 
 // Post sub-category
 const createSubCategoryController = async (req, res) => {
@@ -6,10 +6,12 @@ const createSubCategoryController = async (req, res) => {
         const { name, active, categoryId } = req.body;
 
         if (!name) {
-            return res.status(400).send({ message: 'Sub-Category Name is Required' });
+            return res
+                .status(400)
+                .send({ message: 'Sub-Category Name is Required' });
         }
 
-        const existingSubCategory = await subcategoryModel.findOne({ name });
+        const existingSubCategory = await Subcategory.findOne({ name });
 
         if (existingSubCategory) {
             return res.status(200).send({
@@ -18,7 +20,11 @@ const createSubCategoryController = async (req, res) => {
             });
         }
 
-        const newSubCategory = await subcategoryModel.create({ name, active, categoryId });
+        const newSubCategory = await Subcategory.create({
+            name,
+            active,
+            categoryId,
+        });
 
         res.status(201).send({
             success: true,
@@ -40,9 +46,9 @@ module.exports = createSubCategoryController;
 //Delete sub-category
 const deleteSubCategoryController = async (req, res) => {
     try {
-        const subcategoryId = req.params.id; 
+        const subcategoryId = req.params.id;
 
-        const subcategory = await subcategoryModel.findById(subcategoryId);
+        const subcategory = await Subcategory.findById(subcategoryId);
 
         if (!subcategory) {
             return res.status(404).json({
@@ -51,8 +57,7 @@ const deleteSubCategoryController = async (req, res) => {
             });
         }
 
-       
-        await subcategoryModel.findByIdAndRemove(subcategoryId);
+        await Subcategory.findByIdAndRemove(subcategoryId);
 
         return res.status(200).json({
             success: true,
@@ -73,59 +78,53 @@ module.exports = deleteSubCategoryController;
 //Get by ID
 const getSubCategoryController = async (req, res) => {
     try {
-        const {id} = req.params 
-        await subcategoryModel.findById(id);
+        const { id } = req.params;
+        await Subcategory.findById(id);
         res.status(200).send({
             success: true,
-            message: 'SubCategory found successfully'
-        })
-
-
-    }
-    catch (error) {
+            message: 'SubCategory found successfully',
+        });
+    } catch (error) {
         console.log(error);
         res.status(404).send({
             success: false,
             message: 'Error finding SubCategory',
-            error
+            error,
         });
-    }}
+    }
+};
 
-    module.exports = getSubCategoryController
+module.exports = getSubCategoryController;
 
-    //Get ALL 
-    const getAllSubCategoryController = async (req, res) => {
-        try {
-            const page = parseInt(req.query.page) || 1; 
-            const limit = 10;
-            const skip = (page - 1) * limit;
-    
-            const subcategories = await subcategoryModel
-                .find({})
-                .limit(limit)
-                .skip(skip)
-                .select('_id')
-    
-            if (subcategories.length === 0) {
-                return res.status(200).send([]); 
-            }
-            res.status(200).send({
-              
-                data: subcategories,
-            });
+//Get ALL
+const getAllSubCategoryController = async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        const subcategories = await Subcategory.find({})
+            .limit(limit)
+            .skip(skip)
+            .select('_id');
+
+        if (subcategories.length === 0) {
+            return res.status(200).send([]);
         }
-    
-        catch (error) {
-            console.log(error);
-            res.status(500).send({
-                success: false,
-                message: 'Error listing all the subcategories',
-                error
-            });
-        }}
-    
-        module.exports = getAllSubCategoryController
+        res.status(200).send({
+            data: subcategories,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: 'Error listing all the subcategories',
+            error,
+        });
+    }
+};
 
+module.exports = getAllSubCategoryController;
 
 //Get Search Subcategories
 const getSearchSubCategoryController = async (req, res) => {
@@ -137,13 +136,10 @@ const getSearchSubCategoryController = async (req, res) => {
 
         const searchRegex = new RegExp(searchTerm, 'i');
 
-        const query = searchTerm
-            ? { name: { $regex: searchRegex } }
-            : {};
+        const query = searchTerm ? { name: { $regex: searchRegex } } : {};
 
-        const subcategories = await subcategoryModel
-            .find(query) 
-            .select('_id') 
+        const subcategories = await Subcategory.find(query)
+            .select('_id')
             .limit(limit)
             .skip(skip);
 
@@ -151,7 +147,6 @@ const getSearchSubCategoryController = async (req, res) => {
             return res.status(200).send([]);
         }
         res.status(200).send({
-          
             data: subcategories,
         });
     } catch (error) {
@@ -162,7 +157,7 @@ const getSearchSubCategoryController = async (req, res) => {
             error,
         });
     }
-}
+};
 
 module.exports = getSearchSubCategoryController;
 
@@ -170,9 +165,9 @@ module.exports = getSearchSubCategoryController;
 const updateSubCategoryController = async (req, res) => {
     try {
         const { name } = req.body;
-        const id = req.params.id; 
+        const id = req.params.id;
 
-        const subcategory = await subcategoryModel.findById(id);
+        const subcategory = await Subcategory.findById(id);
 
         if (!subcategory) {
             return res.status(404).send({
@@ -187,18 +182,16 @@ const updateSubCategoryController = async (req, res) => {
         res.status(200).send({
             success: true,
             message: 'SubCategory updated successfully',
-            subcategory
+            subcategory,
         });
     } catch (error) {
         console.log(error);
         res.status(500).send({
             success: false,
             error,
-            message: 'Error updating subcategory'
+            message: 'Error updating subcategory',
         });
     }
 };
 
 module.exports = updateSubCategoryController;
-
-
