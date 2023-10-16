@@ -150,7 +150,7 @@ exports.updateUser = async (req, res) => {
 
         const user = await User.findByIdAndUpdate(id, updatedFields, {
             new: true,
-        });
+        }); 
 
         if (!user) {
             return res.status(404).json({ message: 'users not found' });

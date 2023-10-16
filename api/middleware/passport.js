@@ -20,10 +20,7 @@ const verifyCb = async (email, password, done) => {
             return done(null, false, { message: 'invalid credentials' });
         }
 
-        const isValidPassword = await bcrypt.compare(
-            password,
-            customer.password
-        );
+        const isValidPassword =  await bcrypt.compare(password, customer.password);
         if (!isValidPassword) {
             return done(null, false, { message: 'invalid credentials' });
         }
