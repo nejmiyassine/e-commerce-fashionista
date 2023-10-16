@@ -3,12 +3,18 @@ const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
 
-const {
-    loginCustomer,
-    registerCustomer,
-    getCustomerById,
-} = require('../controllers/customerController');
 const isAdminOrManager = require('../middleware/isAdminOrManager');
+
+const {
+  registerCustomer,
+  getAllCustomersList,
+    loginCustomer,
+    getCustomerById,
+    deleteCustomerById,
+    updateCustomers,
+    searchCustomer,
+} = require('../controllers/customerController');
+
 
 router.post(
     '/',
@@ -52,5 +58,11 @@ router.post(
     ],
     loginCustomer
 );
+router.get('/', getAllCustomersList);
+router.get('/:id', getCustomerById);
+router.delete('/:id', deleteCustomerById);
+router.put('/:id', updateCustomers);
+router.get('/:key' , searchCustomer)
+
 
 module.exports = router;
