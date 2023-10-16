@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const { genSalt, hash } = require('bcrypt');
 const { validationResult } = require('express-validator');
 
 const User = require('../models/User');
@@ -75,7 +75,7 @@ exports.searchForUser = async (req, res) => {
 };
 
 exports.registerUser = async (req, res) => {
-    const { first_name, last_name, username, email, password, role } = req.body;
+    const { firstName, lastName, username, email, password, role } = req.body;
 
     try {
         const errors = validationResult(req);
@@ -83,12 +83,12 @@ exports.registerUser = async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const salt = await bcrypt.genSalt(parseInt(saltRounds));
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const salt = genSalt(parseInt(saltRounds));
+        const hashedPassword = hash(password, salt);
 
         const newUser = await User({
-            first_name,
-            last_name,
+            first_name: firstName,
+            last_name: lastName,
             username,
             email,
             password: hashedPassword,
@@ -141,22 +141,26 @@ exports.loginUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     const { id } = req.params;
-    const { first_name, last_name, username, email, password, role } = req.body;
+    const { firstName, lastName, username, email, password, role } = req.body;
 
     try {
         const updatedFields = {
-            first_name,
-            last_name,
+            first_name: firstName,
+            last_name: lastName,
             username,
             email,
-            password,
             role,
             last_update: Date.now(),
         };
 
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, salt);
+            updatedFields.password = hashedPassword;
+        }
+
         const user = await User.findByIdAndUpdate(id, updatedFields, {
             new: true,
-        }); 
+        });
 
         if (!user) {
             return res.status(404).json({ message: 'users not found' });

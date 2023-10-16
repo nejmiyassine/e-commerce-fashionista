@@ -2,15 +2,16 @@ const { genSalt, hash } = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
+const saltRounds = require('../config/env').SALT;
 const tokenSecretKey = require('../config/env').tokenSecretKey;
 const Customer = require('../models/Customers');
 
 exports.registerCustomer = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-  
-  try {
-        const salt = await genSalt(10);
-        const hashedPassword = await hash(password, salt);
+    const { firstName, lastName, email, password } = req.body;
+
+    try {
+        const salt = genSalt(saltRounds);
+        const hashedPassword = hash(password, salt);
 
         const exists = await Customer.findOne({ email });
 
@@ -20,10 +21,9 @@ exports.registerCustomer = async (req, res) => {
             });
         }
 
-
         const customer = await Customer.create({
-            first_name,
-            last_name,
+            first_name: firstName,
+            last_name: lastName,
             email,
             password: hashedPassword,
         });
@@ -57,18 +57,18 @@ exports.loginCustomer = async (req, res, next) => {
 exports.getAllCustomersList = async (req, res) => {
     const page = req.query.page || 0;
     const sort = req.query.sort || 'DESC';
-  
+
     try {
-      const customers = await Customer.find()
+        const customers = await Customer.find()
             .skip(page * 2)
             .sort({ first_name: sort })
             .limit(2);
 
-      if (!customers) {
+        if (!customers) {
             return res.status(404).json({ message: 'customers not found' });
-      }
-      
-      res.status(200).json(customers);
+        }
+
+        res.status(200).json(customers);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -101,16 +101,22 @@ exports.deleteCustomerById = async (req, res) => {
 };
 
 exports.updateCustomers = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-  
-  try {
+    const { firstName, lastName, email, password } = req.body;
+
+    try {
+        const id = { _id: req.params.id };
         const updatedFields = {
-            first_name,
-            last_name,
+            first_name: firstName,
+            last_name: lastName,
             email,
             password,
         };
-        const id = { _id: req.params.id };
+
+        if (password) {
+            const hashedPassword = await bcrypt.hash(password, salt);
+            updatedFields.password = hashedPassword;
+        }
+
         const updatedCustomer = await Customer.findByIdAndUpdate(
             id,
             updatedFields,
@@ -126,20 +132,22 @@ exports.updateCustomers = async (req, res) => {
     }
 };
 
-
-
 exports.searchCustomer = async (req, res) => {
-  try {
-    let searchedCustomer = await Customer.find(
-      {
-          first_name : {$regex : req.params.key}
-      }
-     )
-     
-    if (!searchedCustomer) res.status(404).json({ message: 'Customer not found' });
-      
-    res.status(200).json({searchedCustomer})
-  } catch(error) {
-      res.status(500).json({ message: error.message });
-  }
+    try {
+        const searchCriteria = {
+            $or: [
+                { first_name: { $regex: query, $options: 'i' } },
+                { email: { $regex: query, $options: 'i' } },
+            ],
+        };
+
+        let searchedCustomer = await Customer.find(searchCriteria);
+
+        if (!searchedCustomer)
+            res.status(404).json({ message: 'Customer not found' });
+
+        res.status(200).json({ searchedCustomer });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };

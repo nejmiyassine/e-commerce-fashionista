@@ -6,7 +6,7 @@ const passport = require('passport');
 const connectDb = require('./config/database');
 const PORT = require('./config/env').PORT;
 
-const indexRouter = require('./routes/index.routes');
+const indexRoutes = require('./routes/index.routes');
 
 // ------ Middlewares ------
 connectDb();
@@ -17,7 +17,6 @@ app.use(passport.initialize());
 require('./middleware/passport');
 
 app.use('/v1', indexRoutes);
-
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
