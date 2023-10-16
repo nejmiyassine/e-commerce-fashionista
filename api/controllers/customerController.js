@@ -1,50 +1,38 @@
-const Customer = require('../models/Customers');
-const customerModel = require('../models/Customers');
 const { genSalt, hash } = require('bcrypt');
-const bcrypt = require('bcrypt');
-const tokenSecretKey = require('../config/env').tokenSecretKey;
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
+const tokenSecretKey = require('../config/env').tokenSecretKey;
+const Customer = require('../models/Customers');
+
 exports.registerCustomer = async (req, res) => {
-    try {
-        const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
+  
+  try {
         const salt = await genSalt(10);
         const hashedPassword = await hash(password, salt);
 
-        if (!firstName) {
-            return res.status(400).json({
-                error: 'FirstName is required',
-            });
-        }
+        const exists = await Customer.findOne({ email });
 
-        if (!lastName) {
-            return res.status(400).json({
-                error: 'LastName is required',
-            });
-        }
-
-        if (!password || password.length < 6) {
-            return res.status(400).json({
-                error: 'Password is requred and must be at least 6 charachters long ',
-            });
-        }
-
-        const exists = await customerModel.findOne({ email });
         if (exists) {
             return res.status(400).json({
                 error: 'Email is already existed',
             });
         }
-        const customer = await customerModel.create({
-            first_name: firstName,
-            last_name: lastName,
+
+
+        const customer = await Customer.create({
+            first_name,
+            last_name,
             email,
             password: hashedPassword,
         });
-        return res.status(201).json({message : 'customer created successfully'});
+
+        return res
+            .status(200)
+            .json({ message: 'customer created successfully', customer });
     } catch (err) {
-        return res.status(400).json({message : "customer can't created"});
+        return res.status(500).json({ message: err.message });
     }
 };
 
@@ -69,18 +57,20 @@ exports.loginCustomer = async (req, res, next) => {
 exports.getAllCustomersList = async (req, res) => {
     const page = req.query.page || 0;
     const sort = req.query.sort || 'DESC';
-
+  
     try {
-        const customers = await Customer.find()
+      const customers = await Customer.find()
             .skip(page * 2)
             .sort({ first_name: sort })
             .limit(2);
-        res.status(200).json(customers);
-        if (!customers) {
-            return res.status(404).json({ message: 'There is no customers' });
-        }
+
+      if (!customers) {
+            return res.status(404).json({ message: 'customers not found' });
+      }
+      
+      res.status(200).json(customers);
     } catch (error) {
-        res.status(403).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -94,7 +84,7 @@ exports.getCustomerById = async (req, res) => {
 
         return res.status(200).json(customer);
     } catch (error) {
-        return res.json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
@@ -111,12 +101,14 @@ exports.deleteCustomerById = async (req, res) => {
 };
 
 exports.updateCustomers = async (req, res) => {
-    try {
+  const { firstName, lastName, email, password } = req.body;
+  
+  try {
         const updatedFields = {
-            first_name: req.body.firstName,
-            last_name: req.body.lastName,
-            email: req.body.email,
-            password: req.body.password,
+            first_name,
+            last_name,
+            email,
+            password,
         };
         const id = { _id: req.params.id };
         const updatedCustomer = await Customer.findByIdAndUpdate(
@@ -126,7 +118,7 @@ exports.updateCustomers = async (req, res) => {
         );
         if (!updatedCustomer) {
             //a revoir
-            return res.status(400).json({ message: error.message });
+            return res.status(404).json({ message: 'Customer not found' });
         }
         res.json(updatedCustomer);
     } catch (error) {
@@ -137,15 +129,17 @@ exports.updateCustomers = async (req, res) => {
 
 
 exports.searchCustomer = async (req, res) => {
-
-   let searchedCustomer = await Customer.find(
-    {
-        first_name : {$regex : req.params.key}
-    }
-   )
-   res.status(200).json({searchedCustomer})
-
-
+  try {
+    let searchedCustomer = await Customer.find(
+      {
+          first_name : {$regex : req.params.key}
+      }
+     )
+     
+    if (!searchedCustomer) res.status(404).json({ message: 'Customer not found' });
+      
+    res.status(200).json({searchedCustomer})
+  } catch(error) {
+      res.status(500).json({ message: error.message });
+  }
 };
-
-

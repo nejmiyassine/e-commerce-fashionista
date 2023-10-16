@@ -16,14 +16,17 @@ const customFields = {
 const verifyCb = async (email, password, done) => {
     try {
         const customer = await Customer.findOne({ email });
+
         if (!customer) {
             return done(null, false, { message: 'invalid credentials' });
         }
 
         const isValidPassword =  await bcrypt.compare(password, customer.password);
+
         if (!isValidPassword) {
             return done(null, false, { message: 'invalid credentials' });
         }
+
         return done(null, customer);
     } catch (error) {
         done(error);
@@ -38,11 +41,8 @@ const jwtOpts = {
 };
 
 const jwtVerifyCallback = async (jwtPayload, done) => {
-    console.log('jwtPayload: ', jwtPayload);
-
     try {
         const user = await User.findById(jwtPayload.userId);
-        console.log('user: ', user);
 
         if (user) {
             return done(null, user);
