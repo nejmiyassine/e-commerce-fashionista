@@ -1,46 +1,42 @@
 const mongoose = require('mongoose');
+const { Schema, model } = mongoose;
 
-const customerSchema = new mongoose.Schema({
+const SellerSchema = new Schema({
     first_name: {
         type: String,
-        required: true,
     },
     last_name: {
         type: String,
-        required: true,
     },
-
     email: {
         type: String,
         required: true,
         unique: true,
     },
-
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     password: {
         type: String,
         required: true,
     },
-
     creation_date: {
         type: Date,
-        default: Date.now,
     },
-
     last_login: {
         type: Date,
-        default: Date.now,
     },
-
-    valid_account: {
-        type: Boolean,
-        default: false,
+    last_update: {
+        type: Date,
     },
-
     active: {
         type: Boolean,
-        default: false,
+        default: true,
     },
 });
 
-const Customer = mongoose.model('Customer', customerSchema);
-module.exports = Customer;
+const Seller = model('Seller', SellerSchema);
+
+module.exports = Seller;
