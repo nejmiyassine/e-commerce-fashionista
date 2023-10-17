@@ -63,9 +63,7 @@ router.post(
 );
 
 router.get('/', getAllUsersList);
-
 router.get('/search', searchForUser);
-
 router.get('/:id', getUserById);
 
 router.put('/:id', updateUser);
