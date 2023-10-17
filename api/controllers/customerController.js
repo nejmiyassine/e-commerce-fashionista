@@ -1,4 +1,4 @@
-const { genSalt, hash } = require('bcrypt');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 
@@ -10,8 +10,8 @@ exports.registerCustomer = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
 
     try {
-        const salt = genSalt(saltRounds);
-        const hashedPassword = hash(password, salt);
+        const salt = await bcrypt.genSalt(parseInt(saltRounds));
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         const exists = await Customer.findOne({ email });
 
@@ -133,6 +133,8 @@ exports.updateCustomers = async (req, res) => {
 };
 
 exports.searchCustomer = async (req, res) => {
+    const { query } = req.query;
+    
     try {
         const searchCriteria = {
             $or: [

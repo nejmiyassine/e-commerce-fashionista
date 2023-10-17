@@ -6,15 +6,14 @@ const { check } = require('express-validator');
 const isAdminOrManager = require('../middleware/isAdminOrManager');
 
 const {
-  registerCustomer,
-  getAllCustomersList,
+    registerCustomer,
+    getAllCustomersList,
     loginCustomer,
     getCustomerById,
     deleteCustomerById,
     updateCustomers,
     searchCustomer,
 } = require('../controllers/customerController');
-
 
 router.post(
     '/',
@@ -62,7 +61,6 @@ router.get('/', getAllCustomersList);
 router.get('/:id', getCustomerById);
 router.delete('/:id', deleteCustomerById);
 router.put('/:id', updateCustomers);
-router.get('/:key' , searchCustomer)
-
+router.get('/:key', searchCustomer);
 
 module.exports = router;

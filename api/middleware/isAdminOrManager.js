@@ -1,13 +1,5 @@
-const isAdminOrManager = (req, res, next) => {
-    // Check if the user is authenticated
-    if (!req.isAuthenticated()) {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
+const passport = require('passport');
 
-    const user = req.user;
-    if (user.role === 'admin' || user.role === 'manager') {
-        next();
-    } else {
-        res.status(403).json({ message: 'Forbidden' });
-    }
-};
+const isAdminOrManager = passport.authenticate('jwt', { session: false });
+
+module.exports = isAdminOrManager;
