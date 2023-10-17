@@ -21,7 +21,10 @@ const verifyCb = async (email, password, done) => {
             return done(null, false, { message: 'invalid credentials' });
         }
 
-        const isValidPassword =  await bcrypt.compare(password, customer.password);
+        const isValidPassword = await bcrypt.compare(
+            password,
+            customer.password
+        );
 
         if (!isValidPassword) {
             return done(null, false, { message: 'invalid credentials' });
@@ -40,11 +43,14 @@ const jwtOpts = {
     secretOrKey: JwtSecretKey,
 };
 
-const jwtVerifyCallback = async (jwtPayload, done) => {
+const jwtVerifyModel = async (model, jwtPayload, done) => {
     try {
-        const user = await User.findById(jwtPayload.userId);
-
+        
+        const user = await model.findById(jwtPayload.userId);
+console.log("passportUser : " , user)
+console.log("passportJwtPayload : " , jwtPayload)
         if (user) {
+             
             return done(null, user);
         } else {
             return done(null, false);
@@ -54,7 +60,16 @@ const jwtVerifyCallback = async (jwtPayload, done) => {
     }
 };
 
-const jwtStrategy = new JwtStrategy(jwtOpts, jwtVerifyCallback);
+const jwtVerifyCallbackUser = async (jwtPayload, done) => {
+    jwtVerifyModel(User, jwtPayload, done);
+};
+const jwtVerifyCallbackCustomer = async (jwtPayload, done) => {
+    jwtVerifyModel(Customer, jwtPayload, done);
+};
+
+const jwtStrategyUser = new JwtStrategy(jwtOpts, jwtVerifyCallbackUser);
+const jwtStrategyCustomer = new JwtStrategy(jwtOpts, jwtVerifyCallbackCustomer);
 
 passport.use(strategy);
-passport.use(jwtStrategy);
+passport.use('user', jwtStrategyUser);
+passport.use('customer', jwtStrategyCustomer);
