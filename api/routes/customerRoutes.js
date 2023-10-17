@@ -3,7 +3,11 @@ const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
 
-const isAdminOrManager = require('../middleware/isAdminOrManager');
+const Customer = require('../models/Customers');
+const {
+    isAdminOrManager,
+    isCustomer,
+} = require('../middleware/authMiddleware');
 
 const {
     registerCustomer,
@@ -12,14 +16,14 @@ const {
     getCustomerById,
     deleteCustomerById,
     updateCustomers,
-    searchCustomer,
+    searchForCustomer,
 } = require('../controllers/customerController');
 
 router.post(
     '/',
     [
-        check('first_name').notEmpty().withMessage('First name is required'),
-        check('last_name').notEmpty().withMessage('Last name is required'),
+        check('firstName').notEmpty().withMessage('First name is required'),
+        check('lastName').notEmpty().withMessage('Last name is required'),
         check('email')
             .notEmpty()
             .withMessage('Email is required')
@@ -27,8 +31,8 @@ router.post(
             .withMessage('Email is not valid')
             .custom(async (email) => {
                 // Check if the email is already registered
-                const existingUser = await User.findOne({ email });
-                if (existingUser) {
+                const existingCustomer = await Customer.findOne({ email });
+                if (existingCustomer) {
                     throw new Error('Email is already in use');
                 }
             }),
@@ -57,10 +61,11 @@ router.post(
     ],
     loginCustomer
 );
-router.get('/', getAllCustomersList);
-router.get('/:id', getCustomerById);
-router.delete('/:id', deleteCustomerById);
-router.put('/:id', updateCustomers);
-router.get('/:key', searchCustomer);
+
+router.get('/', isCustomer, getAllCustomersList);
+router.get('/:id', isAdminOrManager, getCustomerById);
+router.put('/:id', isAdminOrManager, updateCustomers);
+router.get('/', isAdminOrManager, searchForCustomer);
+router.delete('/:id', isCustomer, isAdminOrManager, deleteCustomerById);
 
 module.exports = router;
