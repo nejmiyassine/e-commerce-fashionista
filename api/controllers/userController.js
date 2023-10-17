@@ -1,4 +1,4 @@
-const { genSalt, hash } = require('bcrypt');
+const bcrypt = require('bcrypt');
 const { validationResult } = require('express-validator');
 
 const User = require('../models/User');
@@ -75,7 +75,7 @@ exports.searchForUser = async (req, res) => {
 };
 
 exports.registerUser = async (req, res) => {
-    const { firstName, lastName, username, email, password, role } = req.body;
+    const { firstName, lastName, userName, email, password, role } = req.body;
 
     try {
         const errors = validationResult(req);
@@ -83,13 +83,13 @@ exports.registerUser = async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const salt = genSalt(parseInt(saltRounds));
-        const hashedPassword = hash(password, salt);
+        const salt = await bcrypt.genSalt(parseInt(saltRounds));
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = await User({
             first_name: firstName,
             last_name: lastName,
-            username,
+            username : userName,
             email,
             password: hashedPassword,
             role,
@@ -123,7 +123,7 @@ exports.loginUser = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const isPasswordValid = bcrypt.compare(password, user.password);
+        const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid)
             return res
