@@ -14,7 +14,10 @@ const customFields = {
     passwordField: 'password',
 };
 
+
 // Common verification callback function
+
+
 const verifyCbModel = async (email, password, done, model) => {
     try {
         const user = await model.findOne({ email });
@@ -65,3 +68,4 @@ const createJwtStrategy = (model, name) => {
 createJwtStrategy(User, 'user');
 createJwtStrategy(Customer, 'customer');
 createJwtStrategy(Seller, 'seller');
+

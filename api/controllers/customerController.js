@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+
 const saltRounds = require('../config/env').SALT;
 const Customer = require('../models/Customers');
 const authService = require('../services/authServices');
@@ -12,6 +13,7 @@ exports.registerCustomer =  (req, res ) => {
 exports.loginCustomer = (req, res, next) => {
    
     authService.authLogin(req , res , next , 'local-customer')
+
 };
 
 exports.getAllCustomersList = async (req, res) => {
