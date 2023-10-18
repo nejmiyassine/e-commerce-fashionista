@@ -1,61 +1,13 @@
 const bcrypt = require('bcrypt');
-const passport = require('passport');
-const { validationResult } = require('express-validator');
-const saltRounds = require('../config/env').SALT;
-const JwtSecretKey = require('../config/env').JwtSecretKey;
 const Customer = require('../models/Customers');
-const jwtHelper = require('../helpers/issueJwt');
+const authService = require('../services/authServices');
 
 exports.registerCustomer = async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-        const salt = await bcrypt.genSalt(parseInt(saltRounds));
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        const exists = await Customer.findOne({ email });
-
-        if (exists) {
-            return res.status(400).json({
-                error: 'Email is already existed',
-            });
-        }
-
-        const customer = await Customer.create({
-            first_name: firstName,
-            last_name: lastName,
-            email,
-            password: hashedPassword,
-        });
-
-        return res
-            .status(200)
-            .json({ message: 'customer created successfully', customer });
-    } catch (err) {
-        return res.status(500).json({ message: err.message });
-    }
+    authService.authRegister(req, res, Customer);
 };
 
 exports.loginCustomer = async (req, res, next) => {
-    passport.authenticate('local', { session: false }, (error, customer) => {
-        if (error) {
-            return res.status(500).json({ message: error.message });
-        }
-
-        if (!customer) {
-            return res.status(401).send('invalid credentials');
-        }
-
-        const jwt = jwtHelper.issueJwt(customer, JwtSecretKey);
-        const { token, expires } = jwt;
-
-        res.status(200).json({ customer, token, expiresIn: expires });
-    })(req, res, next);
+    authService.authLogin(req, res, next, 'local-customer');
 };
 
 exports.getAllCustomersList = async (req, res) => {
