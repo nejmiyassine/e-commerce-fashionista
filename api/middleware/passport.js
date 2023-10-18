@@ -14,7 +14,7 @@ const customFields = {
     passwordField: 'password',
 };
 
-// Common verification callback function
+// Common verification callback functionj
 const verifyCbModel = async (email, password, done, model) => {
     try {
         const user = await model.findOne({ email });

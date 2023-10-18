@@ -2,8 +2,14 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const storage = multer.memoryStorage();
-
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const crypto = require('crypto');
+const sharp = require('sharp');
+const {
+    S3Client,
+    PutObjectCommand,
+    GetObjectCommand,
+    DeleteObjectCommand,
+} = require('@aws-sdk/client-s3');
 
 const awsBucketName = require('../config/env').AWS_BUCKET_NAME;
 const awsBucketRegion = require('../config/env').AWS_BUCKET_REGION;
@@ -20,17 +26,61 @@ const s3 = new S3Client({
 
 const upload = multer({ storage: storage });
 
-router.get('/image', upload.single('image'), (req, res) => {
-    console.log('req.file', req.file);
+const randomImageName = (bytes = 32) =>
+    crypto.randomBytes(bytes).toString('hex');
+
+router.post('/image', upload.single('image'), async (req, res) => {
+    // Resize Image
+    const buffer = await sharp(req.file.buffer)
+        .resize({ height: 1920, width: 1080, fit: 'contain' })
+        .toBuffer();
+
+    const imageName = `${req.file.fieldname}_${randomImageName()}_${
+        req.file.originalname
+    }`;
 
     const params = {
         Bucket: awsBucketName,
-        Key: req.file.originalname,
-        Body: req.file.buffer,
+        Key: imageName,
+        Body: buffer,
         ContentType: req.file.mimetype,
     };
 
     const command = new PutObjectCommand(params);
+
+    await s3.send(command);
+
+    res.status(200).json({ message: 'Image uploaded successfully' });
 });
+
+// router.get('/getImage', async (req, res) => {
+//     const products = await Product.find();
+//     for (const product of products) {
+//         const getObjectParams = {
+//             bucket: bucketName,
+//             key: product.imageName,
+//         };
+//         const command = new GetObjectCommand(getObjectParams);
+//         const url = await s3.getSignedUrl(s3, command, { expiresIn: 3600 });
+//         product.imageUrl = url;
+//     }
+
+//     res.send(products)
+// });
+
+// router.delete('/image/:id', async (req, res) => {
+//     const { id } = req.params;
+//     const product = await Product.findById(id);
+
+//     const params = {
+//         bucket: bucketName,
+//         key: product.imageName,
+//     };
+
+//     const command = new DeleteObjectCommand(params);
+//     await s3.send(command);
+
+//     res.status(204).send({ message: 'Product deleted successfully', product });
+// });
 
 module.exports = router;
