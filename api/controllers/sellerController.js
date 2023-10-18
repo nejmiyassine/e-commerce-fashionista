@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 
 const Seller = require('../models/Seller');
 const authService = require('../services/authServices');
-const saltRounds = require('../config/env').SALT;
 
 exports.registerSeller = (req, res) => {
     authService.authRegister(req, res, Seller);

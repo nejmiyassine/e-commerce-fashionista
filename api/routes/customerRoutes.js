@@ -17,6 +17,7 @@ const {
     deleteCustomerById,
     updateCustomers,
     searchForCustomer,
+    getProfile
 } = require('../controllers/customerController');
 
 router.post(
@@ -62,10 +63,11 @@ router.post(
     loginCustomer
 );
 
-router.get('/', isCustomer, getAllCustomersList);
+router.get('/', isAdminOrManager, getAllCustomersList);
 router.get('/:id', isAdminOrManager, getCustomerById);
-router.put('/:id', isAdminOrManager, updateCustomers);
-router.get('/', isAdminOrManager, searchForCustomer);
-router.delete('/:id', isCustomer, isAdminOrManager, deleteCustomerById);
+router.get('/search', isAdminOrManager, searchForCustomer);
+router.patch('/update/:id', isCustomer, updateCustomers);
+router.delete('/delete/:id', isCustomer, isAdminOrManager, deleteCustomerById);
+router.get('/profile/:id' , isCustomer , getProfile);
 
 module.exports = router;

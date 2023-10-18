@@ -35,8 +35,9 @@ const authRegister = async (req, res, model) => {
     }
 };
 
-const authLogin = async (req, res, next, local) => {
+const authLogin =  (req, res, next, local) => {
     passport.authenticate(local, { session: false }, (error, user) => {
+        
         if (error) {
             return res.status(500).json({ message: error.message });
         }
@@ -49,7 +50,7 @@ const authLogin = async (req, res, next, local) => {
         const { token, expires } = jwt;
 
         res.status(200).json({ user, token, expiresIn: expires });
-    })(req, res, next);
+    })(req, res, next , local) ;
 };
 
 module.exports = { authRegister, authLogin };
