@@ -5,7 +5,7 @@ const tokenSecretKey = require('../config/env').tokenSecretKey;
 const jwtHelper = require('../helpers/issueJwt');
 
 const authRegister = async (req, res, model) => {
-    const { first_name, last_name, email, password } = req.body;
+    const { firstName, lastName, userName, email, password } = req.body;
 
     try {
         const salt = await genSalt(10);
@@ -20,8 +20,9 @@ const authRegister = async (req, res, model) => {
         }
 
         const user = await model.create({
-            first_name,
-            last_name,
+            first_name: firstName,
+            last_name: lastName,
+            username: userName,
             email,
             password: hashedPassword,
         });
@@ -34,8 +35,8 @@ const authRegister = async (req, res, model) => {
     }
 };
 
-const authLogin = async (req, res, next, model) => {
-    passport.authenticate('local', { session: false }, (error, user) => {
+const authLogin = async (req, res, next, local) => {
+    passport.authenticate(local, { session: false }, (error, user) => {
         if (error) {
             return res.status(500).json({ message: error.message });
         }

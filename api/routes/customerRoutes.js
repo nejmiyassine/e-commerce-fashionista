@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
 
-const Customer = require('../models/Customers')
+const Customer = require('../models/Customers');
 const {
     isAdminOrManager,
     isCustomer,
@@ -66,6 +66,6 @@ router.get('/', isCustomer, getAllCustomersList);
 router.get('/:id', isAdminOrManager, getCustomerById);
 router.put('/:id', isAdminOrManager, updateCustomers);
 router.get('/', isAdminOrManager, searchForCustomer);
-router.delete('/:id', isCustomer,  isAdminOrManager, deleteCustomerById);
+router.delete('/:id', isCustomer, isAdminOrManager, deleteCustomerById);
 
 module.exports = router;

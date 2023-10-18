@@ -24,7 +24,7 @@ exports.getUserById = async (req, res) => {
 
 exports.getAllUsersList = async (req, res) => {
     const page = parseInt(req.query.page) || 0;
-    const sort = req.query.sort || 'ASC';
+    const sort = req.query.sort || 'DESC';
     const usersPerPage = 10;
 
     try {
@@ -46,7 +46,7 @@ exports.getAllUsersList = async (req, res) => {
 exports.searchForUser = async (req, res) => {
     const { query } = req.query || '';
     const page = req.query.page || 0;
-    const sort = req.query.sort || 'ASC';
+    const sort = req.query.sort || 'DESC';
     const usersPerPage = 10;
 
     const searchCriteria = {
@@ -77,19 +77,19 @@ exports.searchForUser = async (req, res) => {
 exports.registerUser = async (req, res) => {
     const { firstName, lastName, userName, email, password, role } = req.body;
 
-    try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
+    try {
         const salt = await bcrypt.genSalt(parseInt(saltRounds));
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = await User({
             first_name: firstName,
             last_name: lastName,
-            username : userName,
+            username: userName,
             email,
             password: hashedPassword,
             role,
@@ -111,12 +111,12 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
 
-    try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-            return res.status(400).json({ errors: errors.array() });
-        }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
+    try {
         const user = await User.findOne({ email });
 
         if (!user) {
@@ -141,13 +141,13 @@ exports.loginUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     const { id } = req.params;
-    const { firstName, lastName, username, email, password, role } = req.body;
+    const { firstName, lastName, userName, email, password, role } = req.body;
 
     try {
         const updatedFields = {
             first_name: firstName,
             last_name: lastName,
-            username,
+            username: userName,
             email,
             role,
             last_update: Date.now(),
@@ -178,7 +178,7 @@ exports.deleteUser = async (req, res) => {
         const user = await User.findByIdAndDelete(id);
 
         if (!user) {
-            return res.status(404).json({ message: 'users not found' });
+            return res.status(404).json({ message: 'user not found' });
         }
 
         res.status(200).json({ message: 'User deleted successfully' });
