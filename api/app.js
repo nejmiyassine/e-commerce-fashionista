@@ -14,6 +14,7 @@ connectDb();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(passport.initialize());
+
 require('./middleware/passport');
 
 app.use('/v1', indexRoutes);

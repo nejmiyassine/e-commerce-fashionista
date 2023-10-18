@@ -16,8 +16,8 @@ const {
 router.post(
     '/',
     [
-        check('first_name').notEmpty().withMessage('First name is required'),
-        check('last_name').notEmpty().withMessage('Last name is required'),
+        check('firstName').notEmpty().withMessage('First name is required'),
+        check('lastName').notEmpty().withMessage('Last name is required'),
         check('email')
             .notEmpty()
             .withMessage('Email is required')
@@ -34,7 +34,7 @@ router.post(
             .notEmpty()
             .withMessage('Role is required')
             .isIn(['manager', 'admin']),
-        check('username')
+        check('userName')
             .notEmpty()
             .withMessage('Username is required')
             .custom(async (username) => {
@@ -63,9 +63,7 @@ router.post(
 );
 
 router.get('/', getAllUsersList);
-
 router.get('/search', searchForUser);
-
 router.get('/:id', getUserById);
 
 router.put('/:id', updateUser);

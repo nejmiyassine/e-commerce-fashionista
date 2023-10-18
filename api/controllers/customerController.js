@@ -1,17 +1,22 @@
-const { genSalt, hash } = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const passport = require('passport');
-
+const { validationResult } = require('express-validator');
 const saltRounds = require('../config/env').SALT;
-const tokenSecretKey = require('../config/env').tokenSecretKey;
+const JwtSecretKey = require('../config/env').JwtSecretKey;
 const Customer = require('../models/Customers');
+const jwtHelper = require('../helpers/issueJwt');
 
 exports.registerCustomer = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
     try {
-        const salt = genSalt(saltRounds);
-        const hashedPassword = hash(password, salt);
+        const salt = await bcrypt.genSalt(parseInt(saltRounds));
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         const exists = await Customer.findOne({ email });
 
@@ -46,23 +51,23 @@ exports.loginCustomer = async (req, res, next) => {
             return res.status(401).send('invalid credentials');
         }
 
-        const token = jwt.sign({ _id: customer._id }, tokenSecretKey, {
-            expiresIn: '1d',
-        });
+        const jwt = jwtHelper.issueJwt(customer, JwtSecretKey);
+        const { token, expires } = jwt;
 
-        res.json({ customer, token });
+        res.status(200).json({ customer, token, expiresIn: expires });
     })(req, res, next);
 };
 
 exports.getAllCustomersList = async (req, res) => {
     const page = req.query.page || 0;
     const sort = req.query.sort || 'DESC';
+    const customerPerPage = 2;
 
     try {
         const customers = await Customer.find()
-            .skip(page * 2)
+            .skip(page * customerPerPage)
             .sort({ first_name: sort })
-            .limit(2);
+            .limit(customerPerPage);
 
         if (!customers) {
             return res.status(404).json({ message: 'customers not found' });
@@ -123,7 +128,6 @@ exports.updateCustomers = async (req, res) => {
             { new: true }
         );
         if (!updatedCustomer) {
-            //a revoir
             return res.status(404).json({ message: 'Customer not found' });
         }
         res.json(updatedCustomer);
@@ -132,21 +136,31 @@ exports.updateCustomers = async (req, res) => {
     }
 };
 
-exports.searchCustomer = async (req, res) => {
+exports.searchForCustomer = async (req, res) => {
+    const query = req.query.first_name || '';
+    const sort = req.query.sort || 'DESC';
+    const customersPerPage = 2;
+    const searchCriteria = {
+        $or: [
+            { first_name: { $regex: query, $options: 'i' } },
+            { email: { $regex: query, $options: 'i' } },
+        ],
+
+        first_name: { $regex: query, $options: 'i' },
+    };
+
     try {
-        const searchCriteria = {
-            $or: [
-                { first_name: { $regex: query, $options: 'i' } },
-                { email: { $regex: query, $options: 'i' } },
-            ],
-        };
+        const customers = await Customer.find(searchCriteria)
+            .sort({ first_name: sort })
+            .skip(customersPerPage)
+            .limit(customersPerPage);
 
-        let searchedCustomer = await Customer.find(searchCriteria);
-
-        if (!searchedCustomer)
-            res.status(404).json({ message: 'Customer not found' });
-
-        res.status(200).json({ searchedCustomer });
+        if (!customers || customers.length === 0) {
+            return res.status(404).json({
+                message: 'No customers found matching the search criteria',
+            });
+        }
+        res.status(200).json(users);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
