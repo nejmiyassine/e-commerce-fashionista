@@ -10,10 +10,11 @@ const createOrdersController = async (req, res) => {
         order_items: req.body.order_items,
         order_date: new Date(),
         cart_total_price: req.body.cart_total_price,
-        status: 'open'
+        status: 'open',
     });
 
-    newOrder.save()
+    newOrder
+        .save()
         .then((order) => {
             res.status(201).json(order);
         })
@@ -23,7 +24,7 @@ const createOrdersController = async (req, res) => {
 };
 module.exports = createOrdersController;
 
-//Put Orders 
+//Put Orders
 const updateOrdersController = async (req, res) => {
     if (!req.user.emailValidated) {
         const orderId = req.params.orderId;
@@ -31,7 +32,6 @@ const updateOrdersController = async (req, res) => {
         if (!orderId) {
             return res.status(404).json({ error: 'Order not found' });
         }
-
 
         Orders.findByIdAndUpdate(orderId, req.body, { new: true })
             .then((order) => {
@@ -47,7 +47,7 @@ const updateOrdersController = async (req, res) => {
         res.status(403).json({ error: 'Not authorized' });
     }
 };
-module.exports = updateOrdersController
+module.exports = updateOrdersController;
 
 //Get Orders by ID
 const getOrdersController = async (req, res) => {
@@ -71,65 +71,61 @@ const getOrdersController = async (req, res) => {
     }
 };
 
-module.exports = getOrdersController
+module.exports = getOrdersController;
 
 //Get All Orders
 
 const getAllOrdersController = async (req, res) => {
-  try {
-    if (!req.user.emailValidated) {
-      return res.status(403).json({ error: 'Forbidden' });
-    }
-    
-    if (userRole === 'admin' || userRole === 'manager') {
-      const page = parseInt(req.query.page) || 1;
-      const limit = 10;
-      const skip = (page - 1) * limit;
+    try {
+        if (!req.user.emailValidated) {
+            return res.status(403).json({ error: 'Forbidden' });
+        }
 
-      const orders = await Orders.aggregate([
-        {
-          $lookup: {
-            from: 'customers',
-            localField: 'customer_id',
-            foreignField: '_id',
-            as: 'customerInfo',
-          },
-        },
-        {
-          $unwind: '$customerInfo',
-        },
-        {
-          $group: {
-            _id: '$_id',
-            count: { $sum: 1 },
-            itemsTotal: { $sum: '$cart_total_price' },
-            customer: {
-              $first: '$customerInfo',
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const skip = (page - 1) * limit;
+
+        const orders = await Orders.aggregate([
+            {
+                $lookup: {
+                    from: 'customers',
+                    localField: 'customer_id',
+                    foreignField: '_id',
+                    as: 'customerInfo',
+                },
             },
-          },
-        },
-      ])
-        .limit(limit)
-        .skip(skip);
+            {
+                $unwind: '$customerInfo',
+            },
+            {
+                $group: {
+                    _id: '$_id',
+                    count: { $sum: 1 },
+                    itemsTotal: { $sum: '$cart_total_price' },
+                    customer: {
+                        $first: '$customerInfo',
+                    },
+                },
+            },
+        ])
+            .limit(limit)
+            .skip(skip);
 
-      if (orders.length === 0) {
-        return res.status(200).send([]);
-      }
+        if (orders.length === 0) {
+            return res.status(200).send([]);
+        }
 
-      res.status(200).send({
-        data: orders,
-      });
-    } else {
-      res.status(403).json({ error: 'Not authorized' });
+        res.status(200).send({
+            data: orders,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: 'Error listing all the orders',
+            error,
+        });
     }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: 'Error listing all the orders',
-      error,
-    });
-  }
 };
 
 module.exports = getAllOrdersController;
