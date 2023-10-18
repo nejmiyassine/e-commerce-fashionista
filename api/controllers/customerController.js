@@ -1,14 +1,19 @@
 const bcrypt = require('bcrypt');
 
+const saltRounds = require('../config/env').SALT;
 const Customer = require('../models/Customers');
 const authService = require('../services/authServices');
 
-exports.registerCustomer = async (req, res) => {
-    authService.authRegister(req, res, Customer);
+
+exports.registerCustomer =  (req, res ) => {
+    
+    authService.authRegister(req , res , Customer)
 };
 
-exports.loginCustomer = async (req, res, next) => {
-    authService.authLogin(req, res, next, 'local-customer');
+exports.loginCustomer = (req, res, next) => {
+   
+    authService.authLogin(req , res , next , 'local-customer')
+
 };
 
 exports.getAllCustomersList = async (req, res) => {
@@ -62,6 +67,9 @@ exports.updateCustomers = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
 
     try {
+        const salt = await bcrypt.genSalt(parseInt(saltRounds));
+        const hashedPassword = await bcrypt.hash(password, salt);
+
         const id = { _id: req.params.id };
         const updatedFields = {
             first_name: firstName,
@@ -70,8 +78,15 @@ exports.updateCustomers = async (req, res) => {
             password,
         };
 
+        if (email) {
+            const exists = await Customer.findOne({ email });
+            if (exists) {
+                return res
+                    .status(400)
+                    .json({ message: 'email is already existed' });
+            }
+        }
         if (password) {
-            const hashedPassword = await bcrypt.hash(password, salt);
             updatedFields.password = hashedPassword;
         }
 
@@ -91,21 +106,18 @@ exports.updateCustomers = async (req, res) => {
 
 exports.searchForCustomer = async (req, res) => {
     const query = req.query.first_name || '';
+    const page = req.query.page || 0;
     const sort = req.query.sort || 'DESC';
     const customersPerPage = 2;
-    const searchCriteria = {
-        $or: [
-            { first_name: { $regex: query, $options: 'i' } },
-            { email: { $regex: query, $options: 'i' } },
-        ],
 
+    const searchCriteria = {
         first_name: { $regex: query, $options: 'i' },
     };
 
     try {
         const customers = await Customer.find(searchCriteria)
             .sort({ first_name: sort })
-            .skip(customersPerPage)
+            .skip(page * customersPerPage)
             .limit(customersPerPage);
 
         if (!customers || customers.length === 0) {
@@ -113,7 +125,16 @@ exports.searchForCustomer = async (req, res) => {
                 message: 'No customers found matching the search criteria',
             });
         }
-        res.status(200).json(users);
+        res.status(200).json(customers);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+exports.getProfile = async (req, res) => {
+    try {
+        const customer = await Customer.findById(req.params.id);
+        if (!customer) res.status(404).json({ message: 'Customer not found' });
+        return res.status(200).json(customer);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
