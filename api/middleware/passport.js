@@ -14,28 +14,25 @@ const customFields = {
     passwordField: 'password',
 };
 
-
 // Common verification callback function
+// const verifyCbModel = async (email, password, done, model) => {
 
-
-const verifyCbModel = async (email, password, done, model) => {
-    try {
-        const user = await model.findOne({ email });
-
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-            return done(null, false, { message: 'Invalid credentials' });
-        }
-
-        return done(null, user);
-    } catch (error) {
-        done(error);
-    }
-};
+// };
 
 // Local strategies
 const createLocalStrategy = (model, name) => {
     const verifyCallback = async (email, password, done) => {
-        await verifyCbModel(email, password, done, model);
+        try {
+            const user = await model.findOne({ email });
+
+            if (!user || !(await bcrypt.compare(password, user.password))) {
+                return done(null, false, { message: 'Invalid credentials' });
+            }
+
+            return done(null, user);
+        } catch (error) {
+            done(error);
+        }
     };
     passport.use(name, new LocalStrategy(customFields, verifyCallback));
 };
@@ -53,6 +50,7 @@ const createJwtStrategy = (model, name) => {
     const verifyCallback = async (jwtPayload, done) => {
         try {
             const user = await model.findById(jwtPayload.userId);
+
             if (user) {
                 return done(null, user);
             } else {
@@ -68,4 +66,3 @@ const createJwtStrategy = (model, name) => {
 createJwtStrategy(User, 'user');
 createJwtStrategy(Customer, 'customer');
 createJwtStrategy(Seller, 'seller');
-
