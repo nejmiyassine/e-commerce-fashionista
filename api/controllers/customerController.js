@@ -4,16 +4,12 @@ const saltRounds = require('../config/env').SALT;
 const Customer = require('../models/Customers');
 const authService = require('../services/authServices');
 
-
-exports.registerCustomer =  (req, res ) => {
-    
-    authService.authRegister(req , res , Customer)
+exports.registerCustomer = (req, res) => {
+    authService.authRegister(req, res, Customer);
 };
 
 exports.loginCustomer = (req, res, next) => {
-   
-    authService.authLogin(req , res , next , 'local-customer')
-
+    authService.authLogin(req, res, next, 'local-customer');
 };
 
 exports.getAllCustomersList = async (req, res) => {

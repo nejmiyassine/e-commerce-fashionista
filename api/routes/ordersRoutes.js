@@ -1,9 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const {createOrdersController, updateOrdersController, getOrdersController, getAllOrdersController} = require('../controllers/createOrdersController');
 
+const {
+    createOrdersController,
+    updateOrdersController,
+    getOrderByIdController,
+    getAllOrdersController,
+} = require('../controllers/odersController');
+const {
+    isAdminOrManager,
+    isCustomer,
+} = require('../middleware/authMiddleware');
 
-router.post('/createOrders', createOrdersController)
-router.put('/updateOrders', updateOrdersController)
-router.get('/getOrders', getOrdersController)
-router.get('/getAllOrders', getAllOrdersController)
+router.post('/', isCustomer, createOrdersController);
+router.get('/:id', isCustomer, getOrderByIdController);
+router.get('/', isAdminOrManager, getAllOrdersController);
+router.put('/:id', isAdminOrManager, updateOrdersController);
+
+module.exports = router;
