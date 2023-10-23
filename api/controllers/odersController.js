@@ -2,84 +2,94 @@ const Orders = require('../models/Orders');
 
 // Post Orders
 const createOrdersController = async (req, res) => {
-    if (!req.user.emailValidated) {
-        return res.status(403).json({ error: 'Email not validated' });
-    }
-    const newOrder = new Orders({
-        customer_id: req.user._id,
-        order_items: req.body.order_items,
-        order_date: new Date(),
-        cart_total_price: req.body.cart_total_price,
-        status: 'open',
-    });
+    try {
+        // if (!req.user.emailValidated) {
+        //     return res.status(403).json({ error: 'Email not validated' });
+        // }
+        console.log('create order user: ', req.user);
 
-    newOrder
-        .save()
-        .then((order) => {
-            res.status(201).json(order);
-        })
-        .catch((err) => {
-            res.status(500).json({ error: err });
+        const newOrder = new Orders({
+            customer_id: req.user._id,
+            order_items: req.body.order_items,
+            order_date: new Date(),
+            cart_total_price: req.body.cart_total_price,
+            status: 'open',
         });
+
+        const createdOrder = await newOrder.save();
+
+        res.status(201).json({
+            message: 'Order created successfully',
+            createdOrder: createdOrder,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
-module.exports = createOrdersController;
 
 //Put Orders
 const updateOrdersController = async (req, res) => {
-    if (!req.user.emailValidated) {
-        const orderId = req.params.orderId;
-
+    const orderId = req.params.id;
+    try {
+        // if (!req.user.emailValidated) {
         if (!orderId) {
             return res.status(404).json({ error: 'Order not found' });
         }
 
-        Orders.findByIdAndUpdate(orderId, req.body, { new: true })
-            .then((order) => {
-                if (!order) {
-                    return res.status(404).json({ error: 'Order not found' });
-                }
-                res.status(204).send();
-            })
-            .catch((err) => {
-                res.status(500).json({ error: err });
-            });
-    } else {
-        res.status(403).json({ error: 'Not authorized' });
+        const order = await Orders.findByIdAndUpdate(orderId, req.body, {
+            new: true,
+        });
+
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        res.status(204).json({
+            message: 'Order updated successfully',
+            order,
+        });
+        // } else {
+        //     return res.status(403).json({ error: 'Not authorized' });
+        // }
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
 };
-module.exports = updateOrdersController;
 
 //Get Orders by ID
-const getOrdersController = async (req, res) => {
-    if (!req.user.emailValidated) {
-        return res.status(403).json({ error: 'Forbidden' });
-    }
+const getOrderByIdController = async (req, res) => {
+    // if (!req.user.emailValidated) {
+    //     return res.status(403).json({ error: 'Forbidden' });
+    // }
+
+    const { id } = req.params;
+
     try {
-        const { id } = req.params;
-        await Orders.findById(id);
-        res.status(200).send({
+        const order = await Orders.findById(id);
+
+        if (!order) {
+            return res.status(404).json({ error: 'Order not found' });
+        }
+
+        res.status(200).json({
             success: true,
-            message: 'Order found successfully',
+            order,
         });
     } catch (error) {
-        console.log(error);
-        res.status(404).send({
+        res.status(500).send({
             success: false,
-            message: 'Error finding Order',
-            error,
+            message: error.message,
         });
     }
 };
-
-module.exports = getOrdersController;
 
 //Get All Orders
 
 const getAllOrdersController = async (req, res) => {
     try {
-        if (!req.user.emailValidated) {
-            return res.status(403).json({ error: 'Forbidden' });
-        }
+        // if (!req.user.emailValidated) {
+        //     return res.status(403).json({ error: 'Forbidden' });
+        // }
 
         const page = parseInt(req.query.page) || 1;
         const limit = 10;
@@ -115,17 +125,18 @@ const getAllOrdersController = async (req, res) => {
             return res.status(200).send([]);
         }
 
-        res.status(200).send({
-            data: orders,
-        });
+        res.status(200).send(orders);
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             success: false,
-            message: 'Error listing all the orders',
-            error,
+            message: error.message,
         });
     }
 };
 
-module.exports = getAllOrdersController;
+module.exports = {
+    createOrdersController,
+    updateOrdersController,
+    getOrderByIdController,
+    getAllOrdersController,
+};

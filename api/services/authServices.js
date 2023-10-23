@@ -1,9 +1,8 @@
 const { genSalt, hash } = require('bcrypt');
 const passport = require('passport');
 
-const tokenSecretKey = require('../config/env').tokenSecretKey;
+const JwtSecretKey = require('../config/env').JwtSecretKey;
 const jwtHelper = require('../helpers/issueJwt');
-
 
 const authRegister = async (req, res, model) => {
     const { firstName, lastName, userName, email, password } = req.body;
@@ -27,17 +26,19 @@ const authRegister = async (req, res, model) => {
             password: hashedPassword,
         });
 
+        if (userName) {
+            user.username = userName;
+        }
+
         return res
             .status(201)
             .json({ message: 'user created successfully', user });
     } catch (err) {
         return res.status(400).json({ message: err.message });
     }
-
-
-    
 };
-const authLogin = (req, res, next, local) => {
+
+const authLogin = async (req, res, next, local) => {
     passport.authenticate(local, { session: false }, (error, user) => {
         if (error) {
             return res.status(500).json({ message: error.message });
@@ -47,7 +48,7 @@ const authLogin = (req, res, next, local) => {
             return res.status(401).json({ message: 'invalid credentials' });
         }
 
-        const jwt = jwtHelper.issueJwt(user, tokenSecretKey);
+        const jwt = jwtHelper.issueJwt(user, JwtSecretKey);
         const { token, expires } = jwt;
 
         res.status(200).json({ user, token, expiresIn: expires });
