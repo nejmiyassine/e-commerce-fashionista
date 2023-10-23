@@ -8,8 +8,12 @@ const PORT = require('./config/env').PORT;
 
 const indexRoutes = require('./routes/index.routes');
 
+
+
+
 // ------ Middlewares ------
 connectDb();
+
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());

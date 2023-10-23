@@ -14,9 +14,7 @@ const customFields = {
     passwordField: 'password',
 };
 
-
 // Common verification callback function
-
 
 const verifyCbModel = async (email, password, done, model) => {
     try {
@@ -32,9 +30,10 @@ const verifyCbModel = async (email, password, done, model) => {
     }
 };
 
+
 // Local strategies
 const createLocalStrategy = (model, name) => {
-    const verifyCallback = async (email, password, done) => {
+    const verifyCallback = async (email, password, done ) => {
         await verifyCbModel(email, password, done, model);
     };
     passport.use(name, new LocalStrategy(customFields, verifyCallback));
@@ -68,4 +67,3 @@ const createJwtStrategy = (model, name) => {
 createJwtStrategy(User, 'user');
 createJwtStrategy(Customer, 'customer');
 createJwtStrategy(Seller, 'seller');
-
