@@ -1,16 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import AdminDashboard from './pages/admin/dashboard/AdminDashboard';
-import Home from './pages/Home';
+import RouteConfig from './routes/RouteConfig';
 
-const App = () => {
+function App() {
     return (
-        <Router>
-            <Routes>
-                <Route exact path='/' element={<Home />} />
-                <Route path='/admin-dashboard' element={<AdminDashboard />} />
-            </Routes>
-        </Router>
+        <div>
+            <RouteConfig />
+        </div>
     );
-};
+}
 
 export default App;
