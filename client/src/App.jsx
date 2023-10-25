@@ -1,11 +1,14 @@
 import RouteConfig from './routes/RouteConfig';
+import { useDarkMode } from './hooks/useDarkMode';
 
-function App() {
+const App = () => {
+    const { darkMode } = useDarkMode();
+
     return (
-        <div>
+        <div className={`${darkMode ? 'dark' : ''}`}>
             <RouteConfig />
         </div>
     );
-}
+};
 
 export default App;
