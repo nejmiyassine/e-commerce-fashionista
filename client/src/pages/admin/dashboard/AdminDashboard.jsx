@@ -1,30 +1,44 @@
-import { createContext, useState } from 'react';
+import { useState } from 'react';
+
 import AdminNavbar from '../../../layouts/AdminNavbar';
 import AdminSidebar from '../../../layouts/AdminSidebar';
-
-export const SidebarContext = createContext();
+import DashboardWelcome from '../../../components/Dashboard/DashboardWelcome';
+import DashboardCard from '../../../components/Dashboard/DashboardCard';
+import VerticalChart from '../../../components/Dashboard/VerticalChart';
+import AreaChart from '../../../components/Dashboard/AreaChart';
 
 const AdminDashboard = () => {
     const [expanded, setExpanded] = useState(false);
 
     const toggleSidebar = () => {
-        console.log('admin dashboard: ', expanded);
         setExpanded(!expanded);
     };
 
     return (
-        <SidebarContext.Provider value={{ expanded, toggleSidebar }}>
-            <div className='flex'>
-                <AdminSidebar />
-                <div className='w-full'>
-                    <AdminNavbar />
+        <div className='flex'>
+            <AdminSidebar expanded={expanded} />
+            <div className='w-full flex-1'>
+                <AdminNavbar
+                    expanded={expanded}
+                    toggleSidebar={toggleSidebar}
+                />
 
-                    <div className='min-h-screen text-primary-light bg-primary-dark dark:text-primary-dark dark:bg-primary-light'>
-                        <h2 className='p-4 text-xl font-semibold'>Dashboard</h2>
+                <div className='w-full p-4 min-h-screen text-primary-light bg-primary-dark dark:text-primary-dark dark:bg-primary-light'>
+                    <div className='container mx-auto'>
+                        <DashboardWelcome />
+                        <DashboardCard />
+                        <div className='w-full flex items-center justify-between gap-4 pt-4'>
+                            <div className='w-1/2 p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
+                                <VerticalChart />
+                            </div>
+                            <div className='w-1/2 p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
+                                <AreaChart />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </SidebarContext.Provider>
+        </div>
     );
 };
 
