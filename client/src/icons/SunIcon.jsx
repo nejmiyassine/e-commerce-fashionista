@@ -2,9 +2,9 @@ export const SunIcon = (props) => (
     <svg
         aria-hidden='true'
         focusable='false'
-        height='1em'
+        height={10}
+        width={10}
         role='presentation'
-        width='1em'
         xmlns='http://www.w3.org/2000/svg'
         viewBox='0 0 24 24'
         {...props}

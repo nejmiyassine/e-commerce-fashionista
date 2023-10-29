@@ -1,64 +1,62 @@
-import { AiOutlineBarChart, AiOutlinePieChart } from 'react-icons/ai';
-import { BiScatterChart } from 'react-icons/bi';
-import { HiOutlinePresentationChartBar } from 'react-icons/hi';
+import { cardItemsData } from '../../data/cardItemsData';
 
 const DashboardCard = () => {
-    const cardItems = [
-        {
-            title: 'Sales',
-            number: '1,000',
-            icon: <AiOutlineBarChart size={35} />,
-            percentage: '15%',
-            percentageIcon: <HiOutlinePresentationChartBar size={35} />,
-        },
-        {
-            title: 'Customers',
-            number: '19K',
-            icon: <AiOutlinePieChart size={35} />,
-            percentage: '30%',
-            percentageIcon: <HiOutlinePresentationChartBar size={35} />,
-        },
-        {
-            title: 'Orders',
-            number: '30k',
-            icon: <BiScatterChart size={35} />,
-            percentage: '20%',
-            percentageIcon: <HiOutlinePresentationChartBar size={35} />,
-        },
-        {
-            title: 'Incomes',
-            number: '$3,000',
-            icon: <HiOutlinePresentationChartBar size={35} />,
-            percentage: '10%',
-            percentageIcon: <HiOutlinePresentationChartBar size={35} />,
-        },
-    ];
-
     return (
         <div className='flex justify-between gap-4 mt-4'>
-            {cardItems.map(({ title, number, icon }, idx) => (
-                <div
-                    key={idx}
-                    className='rounded-md w-full shadow-sm bg-white text-primary-light dark:bg-primary-deepDark dark:text-primary-dark'
-                >
-                    <div className='p-4 flex items-center justify-between'>
-                        <div>
-                            <h3 className='font-semibold text-sm pb-4'>
-                                {title}
-                            </h3>
-                            <span className='font-bold text-3xl tracking-wide'>
-                                {number}
-                            </span>
-                            <p></p>
-                        </div>
-                        <div className='rounded-full bg-primary-blueCyan text-white dark:bg-primary-dark dark:text-primary-deepDark p-3'>
-                            <div>{icon}</div>
-                        </div>
-                    </div>
-                    {/* <div className='w-full border-b border-dash' />
-                <div className='p-4'></div> */}
-                </div>
-            ))}
+            {cardItemsData &&
+                cardItemsData.map(
+                    (
+                        { title, number, Icon, percentage, PercentageIcon },
+                        idx
+                    ) => {
+                        const icon = <Icon size={35} />;
+                        const percentageIcon = (
+                            <PercentageIcon
+                                className={`${
+                                    parseInt(percentage) > 0
+                                        ? 'rotate-180'
+                                        : 'rotate-0'
+                                }`}
+                            />
+                        );
+
+                        return (
+                            <div
+                                key={idx}
+                                className='w-1/4 rounded-md w-full shadow-sm bg-white text-primary-light dark:bg-primary-deepDark dark:text-primary-dark'
+                            >
+                                <div className='p-4 flex items-center justify-between'>
+                                    <div>
+                                        <h3 className='font-semibold text-sm pb-4'>
+                                            {title}
+                                        </h3>
+                                        <span className='font-bold text-3xl tracking-wide'>
+                                            {number}
+                                        </span>
+                                        <p></p>
+                                    </div>
+                                    <div className='rounded-full bg-primary-blueCyan text-white dark:bg-primary-dark dark:text-primary-deepDark p-3'>
+                                        {icon}
+                                    </div>
+                                </div>
+                                <div className='w-full border-b border-dash' />
+                                <div
+                                    className={`p-4 flex items-center gap-2 text-sm ${
+                                        parseInt(percentage) >= 0
+                                            ? 'text-green-600 dark:text-green-500'
+                                            : 'text-red-600 dark:text-red-500'
+                                    }  font-semibold`}
+                                >
+                                    <div className='flex items-center gap-1'>
+                                        <p>{percentage}</p>
+                                        {percentageIcon}
+                                    </div>
+                                    <p>From last year</p>
+                                </div>
+                            </div>
+                        );
+                    }
+                )}
         </div>
     );
 };
