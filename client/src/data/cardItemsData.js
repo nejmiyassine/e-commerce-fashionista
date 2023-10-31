@@ -1,7 +1,7 @@
 import { AiOutlineBarChart, AiOutlinePieChart } from 'react-icons/ai';
 import { BiScatterChart } from 'react-icons/bi';
 import { BsChevronDown } from 'react-icons/bs';
-import { HiOutlinePresentationChartBar } from 'react-icons/hi';
+import { MdAttachMoney } from 'react-icons/md';
 
 export const cardItemsData = [
     {
@@ -28,7 +28,7 @@ export const cardItemsData = [
     {
         title: 'Incomes',
         number: '$3,000',
-        Icon: HiOutlinePresentationChartBar,
+        Icon: MdAttachMoney,
         percentage: '-10%',
         PercentageIcon: BsChevronDown,
     },

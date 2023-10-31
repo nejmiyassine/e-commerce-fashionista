@@ -11,22 +11,31 @@ import {
     Dropdown,
     DropdownMenu,
     DropdownItem,
-    Chip,
     User,
+    Chip,
 } from '@nextui-org/react';
 import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
-import { columns, users } from '../../data/lastUsersTableData';
+import { useGetUsersQuery } from '../../app/services/usersApi';
 import { capitalize } from '../../utils/capitalize';
+import LoadingSpinner from '../LoadingSpinner';
+import ErrorsBoundaries from '../ErrorsBoundaries';
 
-const statusColorMap = {
-    active: 'success',
-    paused: 'danger',
-    vacation: 'warning',
+const columns = [
+    { name: 'ID', uid: '_id' },
+    { name: 'USERNAME', uid: 'username' },
+    { name: 'ROLE', uid: 'role' },
+];
+
+const roleColorMap = {
+    admin: 'success',
+    manager: 'warning',
 };
 
-const INITIAL_VISIBLE_COLUMNS = ['username', 'role', 'status', 'actions'];
+const INITIAL_VISIBLE_COLUMNS = ['_id', 'username', 'role'];
 
 const LastUsersTable = () => {
+    const { error, isLoading, data } = useGetUsersQuery();
+
     const [visibleColumns, setVisibleColumns] = React.useState(
         new Set(INITIAL_VISIBLE_COLUMNS)
     );
@@ -62,26 +71,16 @@ const LastUsersTable = () => {
                 );
             case 'role':
                 return (
-                    <div className='flex flex-col'>
-                        <p className='text-bold text-small capitalize'>
-                            {cellValue}
-                        </p>
-                        <p className='text-bold text-tiny capitalize text-default-500'>
-                            {user.team}
-                        </p>
-                    </div>
-                );
-            case 'status':
-                return (
                     <Chip
-                        className='capitalize border-none gap-1 text-default-600'
-                        color={statusColorMap[user.status]}
+                        className='capitalize'
+                        color={roleColorMap[user.role.toLowerCase()]}
                         size='sm'
-                        variant='dot'
+                        variant='flat'
                     >
                         {cellValue}
                     </Chip>
                 );
+
             default:
                 return cellValue;
         }
@@ -126,12 +125,12 @@ const LastUsersTable = () => {
                 </div>
                 <div className='flex justify-between items-center'>
                     <span className='text-default-400 text-small'>
-                        Total {users.length} users
+                        Total {data && data.length} users
                     </span>
                 </div>
             </div>
         );
-    }, [visibleColumns]);
+    }, [data, visibleColumns]);
 
     const classNames = React.useMemo(
         () => ({
@@ -156,6 +155,14 @@ const LastUsersTable = () => {
         }),
         []
     );
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
+
+    if (error) {
+        return <ErrorsBoundaries />;
+    }
 
     return (
         <>
@@ -189,9 +196,12 @@ const LastUsersTable = () => {
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody emptyContent={'No users found'} items={users}>
+                <TableBody
+                    emptyContent={'No users found'}
+                    items={data.slice(0, 5)}
+                >
                     {(item) => (
-                        <TableRow key={item.id}>
+                        <TableRow key={item._id}>
                             {(columnKey) => (
                                 <TableCell>
                                     {renderCell(item, columnKey)}

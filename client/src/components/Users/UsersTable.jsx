@@ -356,13 +356,16 @@ const UsersTable = () => {
         []
     );
 
-    return (
-        <>
-            {isLoading && <LoadingSpinner />}
-            {error && (
-                <p className='bg-red-500 text-white p-4 rounded-md'>{error}</p>
-            )}
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
+    if (error) {
+        return <p>Error: {error}</p>;
+    }
+
+    return (
+        <div className='rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
             <h2 className='font-bold text-xl mb-4'>Last Users</h2>
             <Table
                 isCompact
@@ -410,7 +413,7 @@ const UsersTable = () => {
                     )}
                 </TableBody>
             </Table>
-        </>
+        </div>
     );
 };
 

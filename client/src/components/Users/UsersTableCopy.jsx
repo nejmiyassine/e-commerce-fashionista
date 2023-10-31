@@ -24,19 +24,35 @@ import { VerticalDotsIcon } from '../../icons/VerticalDotsIcon';
 import { SearchIcon } from '../../icons/SearchIcon';
 import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
 
-import { columns, users, statusOptions } from '../../data/usersData';
 import { capitalize } from '../../utils/capitalize';
 import LoadingSpinner from '../LoadingSpinner';
+import ErrorsBoundaries from '../ErrorsBoundaries';
 
-const statusColorMap = {
-    active: 'success',
-    paused: 'danger',
-    vacation: 'warning',
+const columns = [
+    { name: 'ID', uid: '_id', sortable: true },
+    { name: 'FIRSTNAME', uid: 'first_name', sortable: true },
+    { name: 'LASTNAME', uid: 'last_name', sortable: true },
+    { name: 'USERNAME', uid: 'username', sortable: true },
+    { name: 'EMAIL', uid: 'email', sortable: true },
+    { name: 'ROLE', uid: 'role', sortable: true },
+    { name: 'LAST_LOGIN', uid: 'last_login', sortable: true },
+    { name: 'LAST_UPDATE', uid: 'last_update', sortable: true },
+    { name: 'ACTIONS', uid: 'actions' },
+];
+
+const roleColorMap = {
+    admin: 'success',
+    manager: 'warning',
 };
 
-const INITIAL_VISIBLE_COLUMNS = ['name', 'role', 'status', 'actions'];
+const statusOptions = [
+    { name: 'Admin', uid: 'admin' },
+    { name: 'Manager', uid: 'manager' },
+];
 
-const UsersTable = () => {
+const INITIAL_VISIBLE_COLUMNS = ['username', 'role', '_id', 'actions'];
+
+const UsersTableCopy = () => {
     const { error, isLoading, data } = useGetUsersQuery();
 
     console.log(data);
@@ -49,12 +65,12 @@ const UsersTable = () => {
     const [statusFilter, setStatusFilter] = React.useState('all');
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [sortDescriptor, setSortDescriptor] = React.useState({
-        column: 'age',
+        column: 'username',
         direction: 'ascending',
     });
     const [page, setPage] = React.useState(1);
 
-    const pages = Math.ceil(users.length / rowsPerPage);
+    const pages = data && Math.ceil(data.length / rowsPerPage);
 
     const hasSearchFilter = Boolean(filterValue);
 
@@ -67,11 +83,11 @@ const UsersTable = () => {
     }, [visibleColumns]);
 
     const filteredItems = React.useMemo(() => {
-        let filteredUsers = [...users];
+        let filteredUsers = data;
 
         if (hasSearchFilter) {
             filteredUsers = filteredUsers.filter((user) =>
-                user.name.toLowerCase().includes(filterValue.toLowerCase())
+                user.username.toLowerCase().includes(filterValue.toLowerCase())
             );
         }
         if (
@@ -79,40 +95,36 @@ const UsersTable = () => {
             Array.from(statusFilter).length !== statusOptions.length
         ) {
             filteredUsers = filteredUsers.filter((user) =>
-                Array.from(statusFilter).includes(user.status)
+                Array.from(statusFilter).includes(user.role)
             );
         }
 
         return filteredUsers;
-    }, [
-        // users,
-        filterValue,
-        statusFilter,
-        hasSearchFilter, // I added it
-    ]);
+    }, [data, filterValue, statusFilter, hasSearchFilter]);
 
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
 
-        return filteredItems.slice(start, end);
+        if (filteredItems) return filteredItems.slice(start, end);
     }, [page, filteredItems, rowsPerPage]);
 
     const sortedItems = React.useMemo(() => {
-        return [...items].sort((a, b) => {
-            const first = a[sortDescriptor.column];
-            const second = b[sortDescriptor.column];
-            const cmp = first < second ? -1 : first > second ? 1 : 0;
+        if (items)
+            return items.sort((a, b) => {
+                const first = a[sortDescriptor.column];
+                const second = b[sortDescriptor.column];
+                const cmp = first < second ? -1 : first > second ? 1 : 0;
 
-            return sortDescriptor.direction === 'descending' ? -cmp : cmp;
-        });
+                return sortDescriptor.direction === 'descending' ? -cmp : cmp;
+            });
     }, [sortDescriptor, items]);
 
     const renderCell = React.useCallback((user, columnKey) => {
         const cellValue = user[columnKey];
 
         switch (columnKey) {
-            case 'name':
+            case 'username':
                 return (
                     <User
                         avatarProps={{
@@ -131,20 +143,20 @@ const UsersTable = () => {
                 );
             case 'role':
                 return (
-                    <div className='flex flex-col'>
-                        <p className='text-bold text-small capitalize'>
-                            {cellValue}
-                        </p>
-                        <p className='text-bold text-tiny capitalize text-default-500'>
-                            {user.team}
-                        </p>
-                    </div>
+                    <Chip
+                        className='capitalize'
+                        color={roleColorMap[user.role.toLowerCase()]}
+                        size='sm'
+                        variant='flat'
+                    >
+                        {cellValue}
+                    </Chip>
                 );
             case 'status':
                 return (
                     <Chip
                         className='capitalize border-none gap-1 text-default-600'
-                        color={statusColorMap[user.status]}
+                        color={roleColorMap[user.role]}
                         size='sm'
                         variant='dot'
                     >
@@ -222,7 +234,7 @@ const UsersTable = () => {
                                     size='sm'
                                     variant='flat'
                                 >
-                                    Status
+                                    Role
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu
@@ -284,7 +296,7 @@ const UsersTable = () => {
                 </div>
                 <div className='flex justify-between items-center'>
                     <span className='text-default-400 text-small'>
-                        Total {users.length} users
+                        Total {data && data.length} users
                     </span>
                     <label className='flex items-center text-default-400 text-small'>
                         Rows per page:
@@ -301,6 +313,7 @@ const UsersTable = () => {
             </div>
         );
     }, [
+        data,
         filterValue,
         statusFilter,
         visibleColumns,
@@ -309,6 +322,7 @@ const UsersTable = () => {
     ]);
 
     const bottomContent = React.useMemo(() => {
+        const itemsLength = items && items.length;
         return (
             <div className='py-2 px-2 flex justify-between items-center'>
                 <Pagination
@@ -326,11 +340,11 @@ const UsersTable = () => {
                 <span className='text-small text-default-400'>
                     {selectedKeys === 'all'
                         ? 'All items selected'
-                        : `${selectedKeys.size} of ${items.length} selected`}
+                        : `${selectedKeys.size} of ${itemsLength} selected`}
                 </span>
             </div>
         );
-    }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+    }, [selectedKeys, items, page, pages, hasSearchFilter]);
 
     const classNames = React.useMemo(
         () => ({
@@ -356,13 +370,16 @@ const UsersTable = () => {
         []
     );
 
-    return (
-        <>
-            {isLoading && <LoadingSpinner />}
-            {error && (
-                <p className='bg-red-500 text-white p-4 rounded-md'>{error}</p>
-            )}
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
+    if (error) {
+        return <ErrorsBoundaries error={error} />;
+    }
+
+    return (
+        <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
             <h2 className='font-bold text-xl mb-4'>Last Users</h2>
             <Table
                 isCompact
@@ -400,7 +417,7 @@ const UsersTable = () => {
                 </TableHeader>
                 <TableBody emptyContent={'No users found'} items={sortedItems}>
                     {(item) => (
-                        <TableRow key={item.id}>
+                        <TableRow key={item._id}>
                             {(columnKey) => (
                                 <TableCell>
                                     {renderCell(item, columnKey)}
@@ -410,8 +427,8 @@ const UsersTable = () => {
                     )}
                 </TableBody>
             </Table>
-        </>
+        </div>
     );
 };
 
-export default UsersTable;
+export default UsersTableCopy;

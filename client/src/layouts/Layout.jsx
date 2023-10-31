@@ -13,12 +13,10 @@ const Layout = ({ children }) => {
     return (
         <div className='flex'>
             <AdminSidebar expanded={expanded} toggleSidebar={toggleSidebar} />
-            <main
-                className={`transition-all ${expanded ? 'w-10/12' : 'w-full'}`}
-            >
+            <main className='transition-all w-full'>
                 <AdminNavbar />
 
-                <div className='p-4 flex-1 text-primary-light bg-primary-dark dark:text-primary-dark dark:bg-primary-light'>
+                <div className='min-h-screen pl-24 p-4 flex-1 text-primary-light bg-primary-dark dark:text-primary-dark dark:bg-primary-light'>
                     {children}
                 </div>
             </main>
