@@ -7,15 +7,17 @@ const customerRoutes = require('./customerRoutes');
 const sellerRoutes = require('./sellerRoutes');
 const categoryRoutes = require('./categoryRoutes.js');
 const subcategoryRoutes = require('./subcategoryRoutes.js');
+const productRoutes = require('./productRoutes.js');
 const ordersRoutes = require('./ordersRoutes.js');
-const uploadImageRoutes = require('./uploadImageRoutes');
+// const uploadImageRoutes = require('./uploadImageRoutes');
 
 router.use('/users', userRoutes);
 router.use('/customers', customerRoutes);
 router.use('/seller', sellerRoutes);
 router.use('/subcategories', subcategoryRoutes);
 router.use('/categories', categoryRoutes);
+router.use('/products', productRoutes);
 router.use('/orders', ordersRoutes);
-router.use('/', uploadImageRoutes);
+// router.use('/uploads', uploadImageRoutes);
 
 module.exports = router;
