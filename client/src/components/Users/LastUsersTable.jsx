@@ -14,6 +14,7 @@ import {
     User,
     Chip,
 } from '@nextui-org/react';
+
 import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
 import { useGetUsersQuery } from '../../app/services/usersApi';
 import { capitalize } from '../../utils/capitalize';
@@ -58,7 +59,9 @@ const LastUsersTable = () => {
                         avatarProps={{
                             radius: 'full',
                             size: 'sm',
-                            src: user.avatar,
+                            src: user.avatar
+                                ? user.avatar
+                                : 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
                         }}
                         classNames={{
                             description: 'text-default-500',

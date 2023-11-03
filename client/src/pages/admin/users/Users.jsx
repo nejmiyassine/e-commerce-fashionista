@@ -1,11 +1,10 @@
-// import UsersTable from '../../../components/Users/UsersTable';
-import UsersTableCopy from '../../../components/Users/UsersTableCopy';
+import UsersTable from '../../../components/Users/UsersTable';
 import Layout from '../../../layouts/Layout';
 
 const Users = () => {
     return (
         <Layout>
-            <UsersTableCopy />
+            <UsersTable />
         </Layout>
     );
 };
