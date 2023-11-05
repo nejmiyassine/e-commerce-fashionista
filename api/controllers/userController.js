@@ -23,15 +23,15 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.getAllUsersList = async (req, res) => {
-    const page = parseInt(req.query.page) || 0;
-    const sort = req.query.sort || 'DESC';
-    const usersPerPage = 10;
+    // const page = parseInt(req.query.page) || 1;
+    // const sort = req.query.sort || 'DESC';
+    // const usersPerPage = 5;
 
     try {
-        const users = await User.find()
-            .sort({ username: sort })
-            .skip(page * usersPerPage)
-            .limit(usersPerPage);
+        const users = await User.find();
+        // .sort({ username: sort })
+        // .skip((page - 1) * usersPerPage)
+        // .limit(usersPerPage);
 
         if (!users) {
             return res.status(404).json({ message: 'users not found' });
@@ -45,9 +45,9 @@ exports.getAllUsersList = async (req, res) => {
 
 exports.searchForUser = async (req, res) => {
     const { query } = req.query || '';
-    const page = req.query.page || 0;
+    const page = req.query.page || 1;
     const sort = req.query.sort || 'DESC';
-    const usersPerPage = 10;
+    const usersPerPage = 5;
 
     const searchCriteria = {
         $or: [
@@ -58,8 +58,10 @@ exports.searchForUser = async (req, res) => {
 
     try {
         const users = await User.find(searchCriteria)
-            .sort({ username: sort })
-            .skip(page * usersPerPage)
+            .sort({
+                username: 'DESC',
+            })
+            .skip((page - 1) * usersPerPage)
             .limit(usersPerPage);
 
         if (!users || users.length === 0) {
@@ -75,7 +77,7 @@ exports.searchForUser = async (req, res) => {
 };
 
 exports.registerUser = async (req, res) => {
-    const { firstName, lastName, userName, email, password, role } = req.body;
+    const { first_name, last_name, username, email, password, role } = req.body;
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -87,18 +89,19 @@ exports.registerUser = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = await User({
-            first_name: firstName,
-            last_name: lastName,
-            username: userName,
+            first_name,
+            last_name,
+            username,
             email,
             password: hashedPassword,
             role,
             creation_date: Date.now(),
+            last_login: Date.now(),
+            last_update: Date.now(),
         });
 
         await newUser.save();
-+
-        res.status(201).json({
+        +res.status(201).json({
             message: 'User registered successfully',
             user: newUser,
         });
@@ -140,13 +143,13 @@ exports.loginUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
     const { id } = req.params;
-    const { firstName, lastName, userName, email, password, role } = req.body;
+    const { first_name, last_name, username, email, password, role } = req.body;
 
     try {
         const updatedFields = {
-            first_name: firstName,
-            last_name: lastName,
-            username: userName,
+            first_name,
+            last_name,
+            username,
             email,
             role,
             last_update: Date.now(),

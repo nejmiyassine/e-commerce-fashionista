@@ -14,12 +14,14 @@ import {
     User,
     Chip,
 } from '@nextui-org/react';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { getAllUsers } from '../../features/usersSlice';
 import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
-import { useGetUsersQuery } from '../../app/services/usersApi';
 import { capitalize } from '../../utils/capitalize';
 import LoadingSpinner from '../LoadingSpinner';
 import ErrorsBoundaries from '../ErrorsBoundaries';
+import { sliceText } from '../../utils/sliceText';
 
 const columns = [
     { name: 'ID', uid: '_id' },
@@ -35,11 +37,19 @@ const roleColorMap = {
 const INITIAL_VISIBLE_COLUMNS = ['_id', 'username', 'role'];
 
 const LastUsersTable = () => {
-    const { error, isLoading, data } = useGetUsersQuery();
+    const dispatch = useDispatch();
+    const { error, isLoading, users } = useSelector((state) => state.users);
+    const data = React.useMemo(() => (users ? users : []), [users]);
 
     const [visibleColumns, setVisibleColumns] = React.useState(
         new Set(INITIAL_VISIBLE_COLUMNS)
     );
+
+    React.useEffect(() => {
+        dispatch(getAllUsers());
+    }, [dispatch]);
+
+    console.log(data);
 
     const headerColumns = React.useMemo(() => {
         if (visibleColumns === 'all') return columns;
@@ -83,7 +93,14 @@ const LastUsersTable = () => {
                         {cellValue}
                     </Chip>
                 );
-
+            case '_id':
+                return (
+                    <div>
+                        <p className='text-gray-500'>
+                            {sliceText(cellValue, 10)}
+                        </p>
+                    </div>
+                );
             default:
                 return cellValue;
         }
@@ -91,46 +108,42 @@ const LastUsersTable = () => {
 
     const topContent = React.useMemo(() => {
         return (
-            <div className='flex flex-col gap-4'>
-                <div className='flex justify-between gap-3 items-end'>
-                    <div className='flex gap-3'>
-                        <Dropdown>
-                            <DropdownTrigger className='hidden sm:flex'>
-                                <Button
-                                    endContent={
-                                        <ChevronDownIcon className='text-small' />
-                                    }
-                                    size='sm'
-                                    variant='flat'
-                                >
-                                    Columns
-                                </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu
-                                disallowEmptySelection
-                                aria-label='Table Columns'
-                                closeOnSelect={false}
-                                selectedKeys={visibleColumns}
-                                selectionMode='multiple'
-                                onSelectionChange={setVisibleColumns}
-                            >
-                                {columns.map((column) => (
-                                    <DropdownItem
-                                        key={column.uid}
-                                        className='capitalize'
-                                    >
-                                        {capitalize(column.name)}
-                                    </DropdownItem>
-                                ))}
-                            </DropdownMenu>
-                        </Dropdown>
-                    </div>
-                </div>
-                <div className='flex justify-between items-center'>
+            <div className='flex items-center justify-between gap-4'>
+                <div>
                     <span className='text-default-400 text-small'>
                         Total {data && data.length} users
                     </span>
                 </div>
+                <Dropdown>
+                    <DropdownTrigger className='hidden sm:flex'>
+                        <Button
+                            endContent={
+                                <ChevronDownIcon className='text-small' />
+                            }
+                            size='sm'
+                            variant='flat'
+                        >
+                            Columns
+                        </Button>
+                    </DropdownTrigger>
+                    <DropdownMenu
+                        disallowEmptySelection
+                        aria-label='Table Columns'
+                        closeOnSelect={false}
+                        selectedKeys={visibleColumns}
+                        selectionMode='multiple'
+                        onSelectionChange={setVisibleColumns}
+                    >
+                        {columns.map((column) => (
+                            <DropdownItem
+                                key={column.uid}
+                                className='capitalize'
+                            >
+                                {capitalize(column.name)}
+                            </DropdownItem>
+                        ))}
+                    </DropdownMenu>
+                </Dropdown>
             </div>
         );
     }, [data, visibleColumns]);

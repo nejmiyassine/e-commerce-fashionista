@@ -17,19 +17,21 @@ import {
     Pagination,
     useDisclosure,
 } from '@nextui-org/react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { PlusIcon } from '../../icons/PlusIcon';
 import { VerticalDotsIcon } from '../../icons/VerticalDotsIcon';
 import { SearchIcon } from '../../icons/SearchIcon';
 import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
 
-import { useGetUsersQuery } from '../../app/services/usersApi';
 import { capitalize } from '../../utils/capitalize';
-import { formatDate } from '../../utils/formatDate';
+import { sliceText } from '../../utils/sliceText';
 
+import FormatDate from '../FormatDate';
 import LoadingSpinner from '../LoadingSpinner';
 import ErrorsBoundaries from '../ErrorsBoundaries';
 import AddUserModal from '../AddUserModal';
+import { getAllUsers, updateUser, deleteUser } from '../../features/usersSlice';
 
 const columns = [
     { name: 'ID', uid: '_id', sortable: true },
@@ -38,6 +40,7 @@ const columns = [
     { name: 'USERNAME', uid: 'username', sortable: true },
     { name: 'EMAIL', uid: 'email', sortable: true },
     { name: 'ROLE', uid: 'role', sortable: true },
+    { name: 'CREATION_DATE', uid: 'creation_date', sortable: true },
     { name: 'LAST_LOGIN', uid: 'last_login', sortable: true },
     { name: 'LAST_UPDATE', uid: 'last_update', sortable: true },
     { name: 'ACTIONS', uid: 'actions' },
@@ -53,12 +56,21 @@ const statusOptions = [
     { name: 'Manager', uid: 'manager' },
 ];
 
-const INITIAL_VISIBLE_COLUMNS = ['username', 'role', '_id', 'actions'];
+const INITIAL_VISIBLE_COLUMNS = [
+    'username',
+    'first_name',
+    'last_name',
+    'role',
+    '_id',
+    'actions',
+];
 
 const UsersTable = () => {
-    const { error, isLoading, data } = useGetUsersQuery();
+    const dispatch = useDispatch();
+    const { error, isLoading, users } = useSelector((state) => state.users);
     const { onOpen, isOpen, onOpenChange } = useDisclosure();
 
+    const [selectedUser, setSelectedUser] = React.useState(null);
     const [filterValue, setFilterValue] = React.useState('');
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState(
@@ -72,9 +84,13 @@ const UsersTable = () => {
     });
     const [page, setPage] = React.useState(1);
 
-    const pages = data && Math.ceil(data.length / rowsPerPage);
+    const pages = users && Math.ceil(users.length / rowsPerPage);
 
     const hasSearchFilter = Boolean(filterValue);
+
+    React.useEffect(() => {
+        dispatch(getAllUsers());
+    }, [dispatch]);
 
     const headerColumns = React.useMemo(() => {
         if (visibleColumns === 'all') return columns;
@@ -85,16 +101,17 @@ const UsersTable = () => {
     }, [visibleColumns]);
 
     const filteredItems = React.useMemo(() => {
-        let filteredUsers = data;
+        let filteredUsers = users;
 
-        if (hasSearchFilter) {
+        if (hasSearchFilter && Array.isArray(filteredUsers)) {
             filteredUsers = filteredUsers.filter((user) =>
                 user.username.toLowerCase().includes(filterValue.toLowerCase())
             );
         }
         if (
             statusFilter !== 'all' &&
-            Array.from(statusFilter).length !== statusOptions.length
+            Array.from(statusFilter).length !== statusOptions.length &&
+            Array.isArray(filteredUsers)
         ) {
             filteredUsers = filteredUsers.filter((user) =>
                 Array.from(statusFilter).includes(user.role)
@@ -102,13 +119,14 @@ const UsersTable = () => {
         }
 
         return filteredUsers;
-    }, [data, filterValue, statusFilter, hasSearchFilter]);
+    }, [users, filterValue, statusFilter, hasSearchFilter]);
 
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
 
-        if (filteredItems) return filteredItems.slice(start, end);
+        if (Array.isArray(filteredItems))
+            return filteredItems.slice(start, end);
     }, [page, filteredItems, rowsPerPage]);
 
     const sortedItems = React.useMemo(() => {
@@ -122,93 +140,122 @@ const UsersTable = () => {
             });
     }, [sortDescriptor, items]);
 
-    const renderCell = React.useCallback((user, columnKey) => {
-        const cellValue = user[columnKey];
+    const renderCell = React.useCallback(
+        (user, columnKey) => {
+            const cellValue = user[columnKey];
 
-        switch (columnKey) {
-            case 'username':
-                return (
-                    <User
-                        avatarProps={{
-                            radius: 'full',
-                            size: 'sm',
-                            src: user.avatar,
-                        }}
-                        classNames={{
-                            description: 'text-default-500',
-                        }}
-                        description={user.email}
-                        name={cellValue}
-                    >
-                        {user.email}
-                    </User>
-                );
-            case 'role':
-                return (
-                    <Chip
-                        className='capitalize'
-                        color={roleColorMap[user.role.toLowerCase()]}
-                        size='sm'
-                        variant='flat'
-                    >
-                        {cellValue}
-                    </Chip>
-                );
-            case 'status':
-                return (
-                    <Chip
-                        className='capitalize border-none gap-1 text-default-600'
-                        color={roleColorMap[user.role]}
-                        size='sm'
-                        variant='dot'
-                    >
-                        {cellValue}
-                    </Chip>
-                );
-            case 'actions':
-                return (
-                    <div className='relative flex justify-end items-center gap-2'>
-                        <Dropdown className='bg-background border-1 border-default-200'>
-                            <DropdownTrigger>
-                                <Button
-                                    isIconOnly
-                                    radius='full'
-                                    size='sm'
-                                    variant='light'
-                                >
-                                    <VerticalDotsIcon className='text-default-400' />
-                                </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu>
-                                <DropdownItem>View</DropdownItem>
-                                <DropdownItem>Edit</DropdownItem>
-                                <DropdownItem>Delete</DropdownItem>
-                            </DropdownMenu>
-                        </Dropdown>
-                    </div>
-                );
-            case '_id':
-                return (
-                    <div>
-                        <p className='text-gray-500'>{cellValue}</p>
-                    </div>
-                );
-            case 'last_login':
-                return (
-                    <div>
-                        <p className=''>{formatDate(cellValue)}</p>
-                    </div>
-                );
-            case 'last_update':
-                return (
-                    <div>
-                        <p className=''>{formatDate(cellValue)}</p>
-                    </div>
-                );
-            default:
-                return cellValue;
-        }
-    }, []);
+            const handleDelete = (userId) => {
+                if (
+                    window.confirm('Are you sure you want to delete this user?')
+                ) {
+                    dispatch(deleteUser(userId));
+                }
+            };
+
+            const handleUpdate = (userId) => {
+                setSelectedUser(user);
+                dispatch(updateUser(userId));
+            };
+
+            switch (columnKey) {
+                case 'username':
+                    return (
+                        <User
+                            avatarProps={{
+                                radius: 'full',
+                                size: 'sm',
+                                src: user.avatar
+                                    ? user.avatar
+                                    : 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
+                            }}
+                            classNames={{
+                                description: 'text-default-500',
+                            }}
+                            description={user.email}
+                            name={cellValue}
+                        >
+                            {user.email}
+                        </User>
+                    );
+                case 'role':
+                    return (
+                        // <Chip
+                        //     className='capitalize'
+                        //     color={roleColorMap[user.role.toLowerCase()]}
+                        //     size='sm'
+                        //     variant='flat'
+                        // >
+                        <p
+                            className={`capitalize text-sm font-semibold text-${
+                                roleColorMap[user.role.toLowerCase()]
+                            }`}
+                        >
+                            {cellValue}
+                        </p>
+                        // </Chip>
+                    );
+                case 'status':
+                    return (
+                        <Chip
+                            className='capitalize border-none gap-1 text-default-600'
+                            color={roleColorMap[user.role]}
+                            size='sm'
+                            variant='dot'
+                        >
+                            {cellValue}
+                        </Chip>
+                    );
+                case 'actions':
+                    return (
+                        <div className='relative flex justify-end items-center gap-2'>
+                            <Dropdown className='bg-background border-1 border-default-200'>
+                                <DropdownTrigger>
+                                    <Button
+                                        isIconOnly
+                                        radius='full'
+                                        size='sm'
+                                        variant='light'
+                                    >
+                                        <VerticalDotsIcon className='text-default-400' />
+                                    </Button>
+                                </DropdownTrigger>
+                                <DropdownMenu>
+                                    <DropdownItem>View</DropdownItem>
+                                    <DropdownItem
+                                        onPress={() => handleUpdate(user._id)}
+                                    >
+                                        Edit
+                                    </DropdownItem>
+                                    <DropdownItem
+                                        onPress={() => handleDelete(user._id)}
+                                    >
+                                        Delete
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
+                        </div>
+                    );
+                case '_id':
+                    return (
+                        <div>
+                            <p className='text-gray-500'>
+                                {sliceText(cellValue, 10)}
+                            </p>
+                        </div>
+                    );
+                case 'creation_date':
+                    return <FormatDate cellValue={cellValue} />;
+                case 'last_login':
+                    return <FormatDate cellValue={cellValue} />;
+                case 'last_update':
+                    return <FormatDate cellValue={cellValue} />;
+
+                default:
+                    return cellValue;
+            }
+        },
+        [dispatch]
+    );
 
     const onRowsPerPageChange = React.useCallback((e) => {
         setRowsPerPage(Number(e.target.value));
@@ -317,7 +364,7 @@ const UsersTable = () => {
                 </div>
                 <div className='flex justify-between items-center'>
                     <span className='text-default-400 text-small'>
-                        Total {data && data.length} users
+                        Total {users && users.length} users
                     </span>
                     <label className='flex items-center text-default-400 text-small'>
                         Rows per page:
@@ -335,7 +382,7 @@ const UsersTable = () => {
         );
     }, [
         onOpen,
-        data,
+        users,
         filterValue,
         statusFilter,
         visibleColumns,
@@ -402,7 +449,11 @@ const UsersTable = () => {
 
     return (
         <>
-            <AddUserModal isOpen={isOpen} onOpenChange={onOpenChange} />
+            <AddUserModal
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                userData={selectedUser}
+            />
             <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>Last Users</h2>
                 <Table
@@ -443,7 +494,7 @@ const UsersTable = () => {
                     </TableHeader>
                     <TableBody
                         emptyContent={'No users found'}
-                        items={sortedItems}
+                        items={Array.isArray(sortedItems) ? sortedItems : []}
                     >
                         {(item) => (
                             <TableRow key={item._id}>
