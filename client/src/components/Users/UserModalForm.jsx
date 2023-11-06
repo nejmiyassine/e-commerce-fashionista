@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -16,11 +15,14 @@ import {
     Button,
     SelectItem,
 } from '@nextui-org/react';
+import { toast } from 'react-toastify';
+import NProgress from 'nprogress';
 
-import { MailIcon } from '../icons/MailIcon';
-import { EyeSlashFilledIcon } from '../icons/EyeSlashFilledIcon';
-import { EyeFilledIcon } from '../icons/EyeFilledIcon';
-import { addUser, updateUser } from '../features/usersSlice';
+import { EyeFilledIcon, EyeSlashFilledIcon, MailIcon } from '../../icons/Icons';
+import {
+    useAddUserMutation,
+    useUpdateUserMutation,
+} from '../../app/api/usersApi';
 
 const userRole = [
     {
@@ -51,43 +53,108 @@ const schema = yup
     })
     .required();
 
-const AddUserModal = ({ isOpen, onOpenChange, userData }) => {
-    const dispatch = useDispatch();
+const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
     const navigate = useNavigate();
+    const isEditing = !!userData;
+
+    const passwordInitialValue = isEditing ? '' : '';
+
+    const methods = useForm({
+        resolver: yupResolver(schema),
+        defaultValues: {
+            first_name: '',
+            last_name: '',
+            email: '',
+            username: '',
+            role: '',
+            password: '',
+        },
+    });
+
     const {
         register,
         handleSubmit,
         formState: { errors },
         reset,
-    } = useForm({
-        resolver: yupResolver(schema),
-    });
-    const [isVisible, setIsVisible] = React.useState(false);
+    } = methods;
 
+    const [
+        addUser,
+        {
+            isLoading: isAddLoading,
+            isError: isAddError,
+            error: addError,
+            isSuccess: isAddSuccess,
+        },
+    ] = useAddUserMutation();
+    const [
+        updateUser,
+        {
+            isLoading: isUpdateLoading,
+            isError: isUpdateError,
+            error: updateError,
+            isSuccess: isUpdateSuccess,
+        },
+    ] = useUpdateUserMutation();
+
+    const loading = isAddLoading || isUpdateLoading;
+
+    const [isVisible, setIsVisible] = React.useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
 
-    // State to track whether it's an edit operation or not
-    const isEditing = !!userData;
+    const onSubmit = (formData) => {
+        navigate('/users');
+        reset();
+        onOpenChange(false);
+
+        if (isEditing) {
+            updateUser({ userId: userData._id, updatedUser: formData });
+        } else {
+            addUser(formData);
+        }
+    };
 
     // Effect to set form data when userData prop changes
     React.useEffect(() => {
         if (userData) {
-            reset(userData);
+            reset({
+                ...userData,
+                password: passwordInitialValue,
+            });
         }
-    }, [userData, reset]);
 
-    const onSubmit = (formData) => {
-        if (isEditing) {
-            // If editing, dispatch an action to update the user
-            dispatch(updateUser({ id: userData._id, data: formData }));
-        } else {
-            // If not editing, dispatch an action to add a new user
-            dispatch(addUser(formData));
+        if (isAddSuccess) {
+            toast.success('User Added successfully');
+            NProgress.done();
         }
-        navigate('/users');
-        reset();
-        onOpenChange(false);
-    };
+
+        if (isUpdateSuccess) {
+            toast.success('User updated successfully');
+            NProgress.done();
+        }
+
+        if (isUpdateError || isAddError) {
+            NProgress.done();
+            const err = addError || updateError;
+            if (Array.isArray(err.data.error)) {
+                err.data.error.forEach((el) =>
+                    toast.error(el.message, {
+                        position: 'top-right',
+                    })
+                );
+            } else {
+                const resMessage =
+                    err.data.message ||
+                    err.data.detail ||
+                    err.message ||
+                    err.toString();
+                toast.error(resMessage, {
+                    position: 'top-right',
+                });
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userData, reset, passwordInitialValue, isAddLoading, isUpdateLoading]);
 
     return (
         <Modal
@@ -113,6 +180,7 @@ const AddUserModal = ({ isOpen, onOpenChange, userData }) => {
                                             }
                                             name='first_name'
                                             label='First Name'
+                                            aria-label='User First Name'
                                             placeholder='Enter First Name'
                                             variant='bordered'
                                             {...register('first_name')}
@@ -130,6 +198,7 @@ const AddUserModal = ({ isOpen, onOpenChange, userData }) => {
                                             }
                                             name='last_name'
                                             label='Last Name'
+                                            aria-label='User Last Name'
                                             placeholder='Enter Last Name'
                                             variant='bordered'
                                             {...register('last_name')}
@@ -149,6 +218,7 @@ const AddUserModal = ({ isOpen, onOpenChange, userData }) => {
                                         name='email'
                                         label='Email'
                                         placeholder='Enter Email'
+                                        aria-label='User Email Address'
                                         type='email'
                                         variant='bordered'
                                         {...register('email')}
@@ -166,6 +236,7 @@ const AddUserModal = ({ isOpen, onOpenChange, userData }) => {
                                         }
                                         name='username'
                                         label='Username'
+                                        aria-label='User Username'
                                         placeholder='Enter Username'
                                         variant='bordered'
                                         {...register('username')}
@@ -194,6 +265,7 @@ const AddUserModal = ({ isOpen, onOpenChange, userData }) => {
                                         type={isVisible ? 'text' : 'password'}
                                         name='password'
                                         label='Password'
+                                        aria-label='User Password'
                                         placeholder='Enter Password'
                                         variant='bordered'
                                         {...register('password')}
@@ -208,7 +280,8 @@ const AddUserModal = ({ isOpen, onOpenChange, userData }) => {
                                     <Select
                                         variant='underlined'
                                         name='role'
-                                        label='User Role'
+                                        label='Select user role'
+                                        aria-label='User Role'
                                         placeholder='Select a role'
                                         className='w-full px-2'
                                         {...register('role')}
@@ -235,12 +308,21 @@ const AddUserModal = ({ isOpen, onOpenChange, userData }) => {
                                 >
                                     Close
                                 </Button>
-                                <Button
-                                    className='bg-black text-white'
-                                    type='submit'
-                                >
-                                    {isEditing ? 'Update User' : 'Add User'}
-                                </Button>
+                                {loading ? (
+                                    <Button
+                                        className='bg-black text-white'
+                                        isDisabled
+                                    >
+                                        Loading...
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        className='bg-black text-white'
+                                        type='submit'
+                                    >
+                                        {isEditing ? 'Update User' : 'Add User'}
+                                    </Button>
+                                )}
                             </ModalFooter>
                         </form>
                     </>
@@ -250,9 +332,9 @@ const AddUserModal = ({ isOpen, onOpenChange, userData }) => {
     );
 };
 
-export default AddUserModal;
+export default UserModalForm;
 
-AddUserModal.propTypes = {
+UserModalForm.propTypes = {
     isOpen: PropTypes.bool,
     onOpenChange: PropTypes.func,
     userData: PropTypes.object,

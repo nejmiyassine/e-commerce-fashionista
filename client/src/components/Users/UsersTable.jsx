@@ -17,59 +17,48 @@ import {
     Pagination,
     useDisclosure,
 } from '@nextui-org/react';
-import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import NProgress from 'nprogress';
 
-import { PlusIcon } from '../../icons/PlusIcon';
-import { VerticalDotsIcon } from '../../icons/VerticalDotsIcon';
-import { SearchIcon } from '../../icons/SearchIcon';
-import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
+import {
+    UserPlus,
+    VerticalDotsIcon,
+    SearchIcon,
+    ChevronDownIcon,
+} from '../../icons/Icons';
 
 import { capitalize } from '../../utils/capitalize';
 import { sliceText } from '../../utils/sliceText';
+import {
+    columns,
+    roleColorMap,
+    statusOptions,
+    INITIAL_VISIBLE_COLUMNS,
+} from '../../Constants/userTableConstants';
 
 import FormatDate from '../FormatDate';
 import LoadingSpinner from '../LoadingSpinner';
-import ErrorsBoundaries from '../ErrorsBoundaries';
-import AddUserModal from '../AddUserModal';
-import { getAllUsers, updateUser, deleteUser } from '../../features/usersSlice';
+import UserModalForm from './UserModalForm';
 
-const columns = [
-    { name: 'ID', uid: '_id', sortable: true },
-    { name: 'FIRSTNAME', uid: 'first_name', sortable: true },
-    { name: 'LASTNAME', uid: 'last_name', sortable: true },
-    { name: 'USERNAME', uid: 'username', sortable: true },
-    { name: 'EMAIL', uid: 'email', sortable: true },
-    { name: 'ROLE', uid: 'role', sortable: true },
-    { name: 'CREATION_DATE', uid: 'creation_date', sortable: true },
-    { name: 'LAST_LOGIN', uid: 'last_login', sortable: true },
-    { name: 'LAST_UPDATE', uid: 'last_update', sortable: true },
-    { name: 'ACTIONS', uid: 'actions' },
-];
-
-const roleColorMap = {
-    admin: 'success',
-    manager: 'warning',
-};
-
-const statusOptions = [
-    { name: 'Admin', uid: 'admin' },
-    { name: 'Manager', uid: 'manager' },
-];
-
-const INITIAL_VISIBLE_COLUMNS = [
-    'username',
-    'first_name',
-    'last_name',
-    'role',
-    '_id',
-    'actions',
-];
+import {
+    useDeleteUserMutation,
+    useGetAllUsersQuery,
+} from '../../app/api/usersApi';
+import { Link } from 'react-router-dom';
 
 const UsersTable = () => {
-    const dispatch = useDispatch();
-    const { error, isLoading, users } = useSelector((state) => state.users);
-    const { onOpen, isOpen, onOpenChange } = useDisclosure();
+    const {
+        isLoading: isGetAllUsersLoading,
+        isFetching: isGetAllUsersFetching,
+        isError: isGetAllUsersError,
+        isSuccess: isGetAllUsersSuccess,
+        error: getAllUsersError,
+        data: users,
+    } = useGetAllUsersQuery();
+    const [deleteUser, { isLoading, isError, error, isSuccess }] =
+        useDeleteUserMutation();
 
+    const { onOpen, isOpen, onOpenChange } = useDisclosure();
     const [selectedUser, setSelectedUser] = React.useState(null);
     const [filterValue, setFilterValue] = React.useState('');
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -84,13 +73,53 @@ const UsersTable = () => {
     });
     const [page, setPage] = React.useState(1);
 
-    const pages = users && Math.ceil(users.length / rowsPerPage);
+    const pages = React.useMemo(() => {
+        return users?.length ? Math.ceil(users.length / rowsPerPage) : 0;
+    }, [users?.length, rowsPerPage]);
 
-    const hasSearchFilter = Boolean(filterValue);
+    const loadingState =
+        isGetAllUsersLoading ||
+        isGetAllUsersFetching ||
+        isLoading ||
+        users?.length === 0
+            ? 'loading'
+            : 'idle';
 
     React.useEffect(() => {
-        dispatch(getAllUsers());
-    }, [dispatch]);
+        if (isSuccess) {
+            toast.success('User deleted successfully');
+            NProgress.done();
+        }
+
+        if (isGetAllUsersSuccess) {
+            toast.success('Get All Users Successfully');
+            NProgress.done();
+        }
+
+        if (isError || isGetAllUsersError) {
+            NProgress.done();
+            const err = error || getAllUsersError;
+            if (Array.isArray(err.data.error)) {
+                err.data.error.forEach((el) =>
+                    toast.error(el.message, {
+                        position: 'top-right',
+                    })
+                );
+            } else {
+                const resMessage =
+                    err.data.message ||
+                    err.data.detail ||
+                    err.message ||
+                    err.toString();
+                toast.error(resMessage, {
+                    position: 'top-right',
+                });
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLoading, isGetAllUsersLoading]);
+
+    const hasSearchFilter = Boolean(filterValue);
 
     const headerColumns = React.useMemo(() => {
         if (visibleColumns === 'all') return columns;
@@ -148,13 +177,17 @@ const UsersTable = () => {
                 if (
                     window.confirm('Are you sure you want to delete this user?')
                 ) {
-                    dispatch(deleteUser(userId));
+                    deleteUser(userId);
+
+                    if (isSuccess) {
+                        alert('User Deleted Successfully!');
+                    }
                 }
             };
 
-            const handleUpdate = (userId) => {
+            const handleUpdate = () => {
                 setSelectedUser(user);
-                dispatch(updateUser(userId));
+                onOpenChange(true);
             };
 
             switch (columnKey) {
@@ -220,10 +253,12 @@ const UsersTable = () => {
                                     </Button>
                                 </DropdownTrigger>
                                 <DropdownMenu>
-                                    <DropdownItem>View</DropdownItem>
-                                    <DropdownItem
-                                        onPress={() => handleUpdate(user._id)}
-                                    >
+                                    <DropdownItem>
+                                        <Link to={`/users/${user._id}`}>
+                                            View
+                                        </Link>
+                                    </DropdownItem>
+                                    <DropdownItem onPress={handleUpdate}>
                                         Edit
                                     </DropdownItem>
                                     <DropdownItem
@@ -238,7 +273,7 @@ const UsersTable = () => {
                 case '_id':
                     return (
                         <div>
-                            <p className='text-gray-500'>
+                            <p className='text-gray-500 dark:text-gray-300'>
                                 {sliceText(cellValue, 10)}
                             </p>
                         </div>
@@ -254,7 +289,7 @@ const UsersTable = () => {
                     return cellValue;
             }
         },
-        [dispatch]
+        [deleteUser, isSuccess, onOpenChange]
     );
 
     const onRowsPerPageChange = React.useCallback((e) => {
@@ -352,14 +387,24 @@ const UsersTable = () => {
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        <Button
-                            className='bg-foreground text-background'
-                            endContent={<PlusIcon />}
-                            size='sm'
-                            onPress={onOpen}
-                        >
-                            Add User
-                        </Button>
+                        {isGetAllUsersLoading || isGetAllUsersFetching ? (
+                            <Button
+                                className='bg-foreground text-background'
+                                size='sm'
+                                isDisabled
+                            >
+                                Loading ...
+                            </Button>
+                        ) : (
+                            <Button
+                                className='bg-foreground text-background'
+                                endContent={<UserPlus />}
+                                size='sm'
+                                onPress={onOpen}
+                            >
+                                Add User
+                            </Button>
+                        )}
                     </div>
                 </div>
                 <div className='flex justify-between items-center'>
@@ -381,6 +426,8 @@ const UsersTable = () => {
             </div>
         );
     }, [
+        isGetAllUsersLoading,
+        isGetAllUsersFetching,
         onOpen,
         users,
         filterValue,
@@ -391,25 +438,28 @@ const UsersTable = () => {
     ]);
 
     const bottomContent = React.useMemo(() => {
-        const itemsLength = items && items.length;
         return (
             <div className='py-2 px-2 flex justify-between items-center'>
-                <Pagination
-                    showControls
-                    classNames={{
-                        cursor: 'bg-foreground text-background',
-                    }}
-                    color='default'
-                    isDisabled={hasSearchFilter}
-                    page={page}
-                    total={pages}
-                    variant='light'
-                    onChange={setPage}
-                />
+                {pages > 0 ? (
+                    <Pagination
+                        showControls
+                        classNames={{
+                            cursor: 'bg-foreground text-background',
+                        }}
+                        color='default'
+                        isDisabled={hasSearchFilter}
+                        page={page}
+                        total={pages}
+                        variant='light'
+                        onChange={setPage}
+                    />
+                ) : null}
                 <span className='text-small text-default-400'>
                     {selectedKeys === 'all'
                         ? 'All items selected'
-                        : `${selectedKeys.size} of ${itemsLength} selected`}
+                        : `${selectedKeys.size} of ${
+                              items?.length || 0
+                          } selected`}
                 </span>
             </div>
         );
@@ -439,17 +489,9 @@ const UsersTable = () => {
         []
     );
 
-    if (isLoading) {
-        return <LoadingSpinner />;
-    }
-
-    if (error) {
-        return <ErrorsBoundaries error={error} />;
-    }
-
     return (
         <>
-            <AddUserModal
+            <UserModalForm
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 userData={selectedUser}
@@ -494,12 +536,14 @@ const UsersTable = () => {
                     </TableHeader>
                     <TableBody
                         emptyContent={'No users found'}
-                        items={Array.isArray(sortedItems) ? sortedItems : []}
+                        items={sortedItems ?? []}
+                        loadingContent={<LoadingSpinner />}
+                        loadingState={loadingState}
                     >
                         {(item) => (
-                            <TableRow key={item._id}>
+                            <TableRow key={item?._id}>
                                 {(columnKey) => (
-                                    <TableCell>
+                                    <TableCell key={columnKey}>
                                         {renderCell(item, columnKey)}
                                     </TableCell>
                                 )}

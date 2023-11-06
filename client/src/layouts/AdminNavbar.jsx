@@ -6,8 +6,7 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { BellIcon } from '@heroicons/react/24/outline';
 
 import { useDarkMode } from '../hooks/useDarkMode';
-import { SunIcon } from '../icons/SunIcon';
-import { MoonIcon } from '../icons/MoonIcon';
+import { SunIcon, MoonIcon } from '../icons/Icons';
 
 const classNames = (...classes) => {
     return classes.filter(Boolean).join(' ');

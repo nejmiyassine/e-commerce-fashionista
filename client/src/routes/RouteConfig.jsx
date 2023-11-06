@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from '../pages/Home';
 import AdminDashboard from '../pages/admin/dashboard/AdminDashboard';
 import Users from '../pages/admin/users/Users';
+import UserDetails from '../pages/admin/users/UserDetails';
 
 const RouteConfig = () => {
     return (
@@ -11,6 +12,7 @@ const RouteConfig = () => {
                 <Route exact path='/' element={<Home />} />
                 <Route path='/admin-dashboard' element={<AdminDashboard />} />
                 <Route path='/users' element={<Users />} />
+                <Route path='/users/:userId' element={<UserDetails />} />
             </Routes>
         </Router>
     );

@@ -14,14 +14,14 @@ import {
     User,
     Chip,
 } from '@nextui-org/react';
-import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import NProgress from 'nprogress';
 
-import { getAllUsers } from '../../features/usersSlice';
-import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
+import { ChevronDownIcon } from '../../icons/Icons';
 import { capitalize } from '../../utils/capitalize';
 import LoadingSpinner from '../LoadingSpinner';
-import ErrorsBoundaries from '../ErrorsBoundaries';
 import { sliceText } from '../../utils/sliceText';
+import { useGetAllUsersQuery } from '../../app/api/usersApi';
 
 const columns = [
     { name: 'ID', uid: '_id' },
@@ -37,19 +37,43 @@ const roleColorMap = {
 const INITIAL_VISIBLE_COLUMNS = ['_id', 'username', 'role'];
 
 const LastUsersTable = () => {
-    const dispatch = useDispatch();
-    const { error, isLoading, users } = useSelector((state) => state.users);
+    const {
+        isLoading,
+        isFetching,
+        isError,
+        isSuccess,
+        error,
+        data: users,
+    } = useGetAllUsersQuery();
     const data = React.useMemo(() => (users ? users : []), [users]);
+
+    const loadingState =
+        isLoading || isFetching || users?.length === 0 ? 'loading' : 'idle';
 
     const [visibleColumns, setVisibleColumns] = React.useState(
         new Set(INITIAL_VISIBLE_COLUMNS)
     );
 
     React.useEffect(() => {
-        dispatch(getAllUsers());
-    }, [dispatch]);
+        if (isSuccess) {
+            toast.success('Note updated successfully');
+            NProgress.done();
+        }
 
-    console.log(data);
+        if (isError) {
+            const err = error;
+            const resMessage =
+                err.data.message ||
+                err.data.detail ||
+                err.message ||
+                err.toString();
+            toast.error(resMessage, {
+                position: 'top-right',
+            });
+            NProgress.done();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLoading]);
 
     const headerColumns = React.useMemo(() => {
         if (visibleColumns === 'all') return columns;
@@ -172,12 +196,8 @@ const LastUsersTable = () => {
         []
     );
 
-    if (isLoading) {
+    if (isLoading || isFetching) {
         return <LoadingSpinner />;
-    }
-
-    if (error) {
-        return <ErrorsBoundaries />;
     }
 
     return (
@@ -215,6 +235,8 @@ const LastUsersTable = () => {
                 <TableBody
                     emptyContent={'No users found'}
                     items={data.slice(0, 5)}
+                    loadingContent={<LoadingSpinner />}
+                    loadingState={loadingState}
                 >
                     {(item) => (
                         <TableRow key={item._id}>

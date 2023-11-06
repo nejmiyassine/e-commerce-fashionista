@@ -3,9 +3,9 @@ import { LuUsers2 } from 'react-icons/lu';
 import { BiUser } from 'react-icons/bi';
 import { MdOutlineInventory2 } from 'react-icons/md';
 import { BiTransfer } from 'react-icons/bi';
-import { PiUserListLight } from 'react-icons/pi';
 import { MdOutlineDiscount } from 'react-icons/md';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
+import { UsersIcon } from '../icons/Icons';
 
 export const sidebarItemsData = [
     {
@@ -25,7 +25,7 @@ export const sidebarItemsData = [
     },
     { icon: BiUser, text: 'Customers', path: '/admin-dashboard' },
     {
-        icon: PiUserListLight,
+        icon: UsersIcon,
         text: 'Users',
         path: '/users',
     },

@@ -1,10 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from '../features/usersSlice';
+import { setupListeners } from '@reduxjs/toolkit/query/react';
+import { usersAPI } from './api/usersApi';
 
-const store = configureStore({
+export const store = configureStore({
     reducer: {
-        users: userReducer,
+        [usersAPI.reducerPath]: usersAPI.reducer,
     },
+    devTools: import.meta.env.VITE_REACT_APP_NODE_ENV === 'development',
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({}).concat(usersAPI.middleware),
 });
+
+setupListeners(store.dispatch);
 
 export default store;

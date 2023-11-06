@@ -11,7 +11,7 @@ exports.getUserById = async (req, res) => {
 
     try {
         const user = await User.findById(id);
-
+        
         if (!user) {
             return res.status(404).json({ message: 'users not found' });
         }
@@ -156,6 +156,7 @@ exports.updateUser = async (req, res) => {
         };
 
         if (password) {
+            const salt = await bcrypt.genSalt(parseInt(saltRounds));
             const hashedPassword = await bcrypt.hash(password, salt);
             updatedFields.password = hashedPassword;
         }
@@ -165,7 +166,7 @@ exports.updateUser = async (req, res) => {
         });
 
         if (!user) {
-            return res.status(404).json({ message: 'users not found' });
+            return res.status(404).json({ message: 'User not found' });
         }
         res.status(201).json({ message: 'User updated successfully' });
     } catch (error) {
