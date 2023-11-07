@@ -1,9 +1,6 @@
-import { LuLayoutDashboard } from 'react-icons/lu';
-import { LuUsers2 } from 'react-icons/lu';
-import { BiUser } from 'react-icons/bi';
-import { MdOutlineInventory2 } from 'react-icons/md';
-import { BiTransfer } from 'react-icons/bi';
-import { MdOutlineDiscount } from 'react-icons/md';
+import { LuLayoutDashboard, LuUsers2 } from 'react-icons/lu';
+import { BiUser, BiCategory, BiTransfer } from 'react-icons/bi';
+import { MdOutlineDiscount, MdOutlineInventory2 } from 'react-icons/md';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
 import { UsersIcon } from '../icons/Icons';
 
@@ -16,22 +13,27 @@ export const sidebarItemsData = [
     {
         icon: MdOutlineDiscount,
         text: 'Products',
-        path: '/admin/dashboard',
+        path: '/admin/products',
     },
     {
         icon: HiOutlineShoppingBag,
         text: 'Orders',
-        path: '/admin/dashboard',
+        path: '/admin/orders',
     },
     {
         icon: BiUser,
         text: 'Customers',
-        path: '/admin/dashboard',
+        path: '/admin/customers',
     },
     {
         icon: UsersIcon,
         text: 'Users',
         path: '/admin/users',
+    },
+    {
+        icon: BiCategory,
+        text: 'Categories',
+        path: '/admin/categories',
     },
     {
         icon: MdOutlineInventory2,
