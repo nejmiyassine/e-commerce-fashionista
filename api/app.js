@@ -21,6 +21,9 @@ app.use(express.urlencoded({ extended: false }));
 // Passport
 app.use(express.json());
 app.use(passport.initialize());
+app.use(cors());
+
+
 require('./middleware/passport');
 // Routes
 app.use('/v1', indexRoutes);

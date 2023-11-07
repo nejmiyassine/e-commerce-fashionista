@@ -1,5 +1,4 @@
 import { Fragment } from 'react';
-// import PropTypes from 'prop-types';
 import { Switch } from '@nextui-org/react';
 
 import { Disclosure, Menu, Transition } from '@headlessui/react';
@@ -131,8 +130,3 @@ const AdminNavbar = () => {
 };
 
 export default AdminNavbar;
-
-// AdminNavbar.propTypes = {
-//     expanded: PropTypes.bool,
-//     toggleSidebar: PropTypes.func,
-// };
