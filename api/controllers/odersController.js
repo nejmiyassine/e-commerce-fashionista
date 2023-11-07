@@ -3,11 +3,6 @@ const Orders = require('../models/Orders');
 // Post Orders
 const createOrdersController = async (req, res) => {
     try {
-        // if (!req.user.emailValidated) {
-        //     return res.status(403).json({ error: 'Email not validated' });
-        // }
-        console.log('create order user: ', req.user);
-
         const newOrder = new Orders({
             customer_id: req.user._id,
             order_items: req.body.order_items,
