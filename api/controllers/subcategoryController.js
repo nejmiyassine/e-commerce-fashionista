@@ -41,7 +41,6 @@ const createSubCategoryController = async (req, res) => {
     }
 };
 
-module.exports = createSubCategoryController;
 
 //Delete sub-category
 const deleteSubCategoryController = async (req, res) => {
@@ -73,7 +72,6 @@ const deleteSubCategoryController = async (req, res) => {
     }
 };
 
-module.exports = deleteSubCategoryController;
 
 //Get by ID
 const getSubCategoryController = async (req, res) => {
@@ -94,7 +92,6 @@ const getSubCategoryController = async (req, res) => {
     }
 };
 
-module.exports = getSubCategoryController;
 
 //Get ALL
 const getAllSubCategoryController = async (req, res) => {
@@ -106,7 +103,7 @@ const getAllSubCategoryController = async (req, res) => {
         const subcategories = await Subcategory.find({})
             .limit(limit)
             .skip(skip)
-            .select('_id');
+            .select('_id name');
 
         if (subcategories.length === 0) {
             return res.status(200).send([]);
@@ -124,7 +121,6 @@ const getAllSubCategoryController = async (req, res) => {
     }
 };
 
-module.exports = getAllSubCategoryController;
 
 //Get Search Subcategories
 const getSearchSubCategoryController = async (req, res) => {
@@ -159,7 +155,6 @@ const getSearchSubCategoryController = async (req, res) => {
     }
 };
 
-module.exports = getSearchSubCategoryController;
 
 //Put Subcategory
 const updateSubCategoryController = async (req, res) => {
@@ -194,4 +189,11 @@ const updateSubCategoryController = async (req, res) => {
     }
 };
 
-module.exports = updateSubCategoryController;
+module.exports = {
+    createSubCategoryController,
+    deleteSubCategoryController,
+    getSubCategoryController,
+    getAllSubCategoryController,
+    getSearchSubCategoryController,
+    updateSubCategoryController,
+};
