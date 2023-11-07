@@ -112,7 +112,6 @@ exports.registerUser = async (req, res) => {
 
 exports.loginUser = async (req, res) => {
     const { email, password } = req.body;
-
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
@@ -134,6 +133,8 @@ exports.loginUser = async (req, res) => {
 
         const jwt = jwtHelper.issueJwt(user, JwtSecretKey);
         const { token, expires } = jwt;
+
+     console.log("connected")
 
         res.status(200).json({ user, token, expiresIn: expires });
     } catch (error) {

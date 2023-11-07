@@ -8,23 +8,27 @@ const {
     deleteCategory,
     updateCategory,
 } = require('../controllers/categoryController');
+const {
+    isAdminOrManager,
+    isCustomer,
+} = require('../middleware/authMiddleware')
 
 //Post route
-router.post('/create-category', createCategory);
+router.post('/', createCategory);
 
 //Update route
-router.put('/update-category/:id', updateCategory);
+router.put('/:id', updateCategory);
 
 //Delete route
-router.delete('/delete-category/:id', deleteCategory);
+router.delete('/:id', deleteCategory);
 
 //Get category
-router.get('/get-category/:id', getCategoryById);
+router.get('/:id', getCategoryById);
 
 //Get all categories
-router.get('/category', getAllCategories);
+router.get('/', getAllCategories);
 
 //Get Search category
-router.get('/search-category', getSearchCategory);
+router.get('/',  getSearchCategory);
 
 module.exports = router;
