@@ -2,7 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const passport = require('passport');
-
+//
+const cors = require('cors')
 const connectDb = require('./config/database');
 const PORT = require('./config/env').PORT;
 
@@ -18,6 +19,9 @@ connectDb();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(passport.initialize());
+//
+app.use(cors());
+
 
 require('./middleware/passport');
 

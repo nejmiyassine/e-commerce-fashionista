@@ -63,9 +63,12 @@ router.post(
     loginCustomer
 );
 
-router.get('/', isAdminOrManager, getAllCustomersList);
-router.get('/:id', isAdminOrManager, getCustomerById);
-router.get('/search', isAdminOrManager, searchForCustomer);
+// router.get('/', isAdminOrManager, getAllCustomersList);
+router.get('/', getAllCustomersList);
+// router.get('/:id', isAdminOrManager, getCustomerById);
+router.get('/:id',  getCustomerById);
+// router.get('/search', isAdminOrManager, searchForCustomer);
+router.get('/search', searchForCustomer);
 router.patch('/update/:id', isCustomer, updateCustomers);
 router.delete('/delete/:id', isCustomer, isAdminOrManager, deleteCustomerById);
 router.get('/profile/:id', isCustomer, getProfile);
