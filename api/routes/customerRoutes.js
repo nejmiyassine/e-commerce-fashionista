@@ -19,6 +19,7 @@ const {
     searchForCustomer,
     getProfile,
 } = require('../controllers/customerController');
+const { verifyEmail } = require('../services/authServices');
 
 router.post(
     '/',
@@ -69,5 +70,6 @@ router.get('/search', isAdminOrManager, searchForCustomer);
 router.patch('/update/:id', isCustomer, updateCustomers);
 router.delete('/delete/:id', isCustomer, isAdminOrManager, deleteCustomerById);
 router.get('/profile/:id', isCustomer, getProfile);
+router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
 
 module.exports = router;

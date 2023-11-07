@@ -1,10 +1,21 @@
 const { genSalt, hash } = require('bcrypt');
 const passport = require('passport');
+const { isValidObjectId } = require('mongoose');
 
 const JwtSecretKey = require('../config/env').JwtSecretKey;
 const jwtHelper = require('../helpers/issueJwt');
+const {
+    generateOtp,
+    mailTransport,
+    generateEmailTemplate,
+} = require('../helpers/mail');
 
-const authRegister = async (req, res, model) => {
+const VerificationToken = require('../models/VerificationToken');
+const ResetToken = require('../models/ResetToken');
+const Customer = require('../models/Customers');
+const Seller = require('../models/Seller');
+
+const authRegister = async (req, res, model, userRole) => {
     const { firstName, lastName, userName, email, password } = req.body;
 
     try {
@@ -29,6 +40,23 @@ const authRegister = async (req, res, model) => {
         if (userName) {
             user.username = userName;
         }
+
+        const OTP = generateOtp();
+        const verificationToken = new VerificationToken({
+            owner: user._id,
+            userRole,
+            token: OTP,
+        });
+
+        await verificationToken.save();
+        await user.save();
+
+        mailTransport().sendMail({
+            from: '',
+            to: user.email,
+            subject: 'Verify your email account',
+            html: generateEmailTemplate(OTP),
+        });
 
         return res
             .status(201)
@@ -55,4 +83,89 @@ const authLogin = async (req, res, next, local) => {
     })(req, res, next, local);
 };
 
-module.exports = { authRegister, authLogin };
+const verifyEmail = async (req, res) => {
+    const { userId, otp, userType } = req.body;
+
+    if (!userId || !otp.trim() || !userType) {
+        return res.status(401).json({
+            message: 'Invalid request, missing parameters!',
+        });
+    }
+
+    if (!isValidObjectId(userId)) {
+        return res.status(401).json({
+            message: 'Invalid user id!',
+        });
+    }
+
+    const userModel = userType === 'Customer' ? Customer : Seller;
+
+    try {
+        const user = await userModel.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found!',
+            });
+        }
+
+        if (user.valid_account) {
+            return res.status(200).json({
+                message: 'This account is already verified!',
+                user,
+            });
+        }
+
+        const token = await VerificationToken.findOne({ owner: userId });
+
+        if (!token) {
+            return res.status(404).json({ message: 'Sorry! Token not found.' });
+        }
+
+        const isMatched = await token.compareToken(otp);
+
+        if (!isMatched) {
+            return res.status(403).json({
+                message: 'Please provide a valid token!',
+            });
+        }
+
+        user.valid_account = true;
+
+        await VerificationToken.findByIdAndDelete(token._id);
+        await user.save();
+
+        res.status(200).json({
+            message: 'Account verified successfully',
+            user,
+        });
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+};
+
+const forgotPassword = async (req, res) => {
+    const { email, userType } = req.body;
+
+    if (!email || !userType)
+        return res
+            .status(401)
+            .json({ message: 'Invalid request, missing parameters' });
+
+    const userModel = userType === 'Customer' ? Customer : Seller;
+
+    try {
+        const user = await userModel.findOne({ email });
+        if (!user)
+            return res.status(404).json({ message: `${userType} not found!` });
+
+        const resetToken = await ResetToken.findOne({ owner: user._id });
+        if (resetToken) {
+            return res.status(404).json({
+                message: 'Only after hour you can request for another token!',
+            });
+        }
+    } catch (error) {}
+};
+
+module.exports = { authRegister, authLogin, verifyEmail, forgotPassword };

@@ -10,9 +10,9 @@ const RouteConfig = () => {
         <Router>
             <Routes>
                 <Route exact path='/' element={<Home />} />
-                <Route path='/admin-dashboard' element={<AdminDashboard />} />
-                <Route path='/users' element={<Users />} />
-                <Route path='/users/:userId' element={<UserDetails />} />
+                <Route path='/admin/dashboard' element={<AdminDashboard />} />
+                <Route path='/admin/users' element={<Users />} />
+                <Route path='/admin/users/:userId' element={<UserDetails />} />
             </Routes>
         </Router>
     );

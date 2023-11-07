@@ -5,7 +5,7 @@ const Customer = require('../models/Customers');
 const authService = require('../services/authServices');
 
 exports.registerCustomer = (req, res) => {
-    authService.authRegister(req, res, Customer);
+    authService.authRegister(req, res, Customer, 'Customer');
 };
 
 exports.loginCustomer = (req, res, next) => {

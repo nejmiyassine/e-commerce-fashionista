@@ -31,6 +31,11 @@ const SellerSchema = new Schema({
     last_update: {
         type: Date,
     },
+    valid_account: {
+        type: Boolean,
+        default: false,
+        required: true,
+    },
     active: {
         type: Boolean,
         default: true,

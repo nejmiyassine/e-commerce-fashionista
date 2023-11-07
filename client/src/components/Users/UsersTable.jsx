@@ -19,6 +19,7 @@ import {
 } from '@nextui-org/react';
 import { toast } from 'react-toastify';
 import NProgress from 'nprogress';
+import { Link } from 'react-router-dom';
 
 import {
     UserPlus,
@@ -44,7 +45,6 @@ import {
     useDeleteUserMutation,
     useGetAllUsersQuery,
 } from '../../app/api/usersApi';
-import { Link } from 'react-router-dom';
 
 const UsersTable = () => {
     const {
@@ -212,12 +212,6 @@ const UsersTable = () => {
                     );
                 case 'role':
                     return (
-                        // <Chip
-                        //     className='capitalize'
-                        //     color={roleColorMap[user.role.toLowerCase()]}
-                        //     size='sm'
-                        //     variant='flat'
-                        // >
                         <p
                             className={`capitalize text-sm font-semibold text-${
                                 roleColorMap[user.role.toLowerCase()]
@@ -225,7 +219,6 @@ const UsersTable = () => {
                         >
                             {cellValue}
                         </p>
-                        // </Chip>
                     );
                 case 'status':
                     return (
@@ -254,7 +247,7 @@ const UsersTable = () => {
                                 </DropdownTrigger>
                                 <DropdownMenu>
                                     <DropdownItem>
-                                        <Link to={`/users/${user._id}`}>
+                                        <Link to={`/admin/users/${user._id}`}>
                                             View
                                         </Link>
                                     </DropdownItem>

@@ -155,7 +155,7 @@ const UserDetails = () => {
                             </div>
                         </div>
 
-                        <Link to='/users'>
+                        <Link to='/admin/users'>
                             <Button
                                 className='mt-4 flex items-center hover:bg-[#d4d4db]/75'
                                 type='secondary'

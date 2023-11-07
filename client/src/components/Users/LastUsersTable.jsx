@@ -41,7 +41,6 @@ const LastUsersTable = () => {
         isLoading,
         isFetching,
         isError,
-        isSuccess,
         error,
         data: users,
     } = useGetAllUsersQuery();
@@ -55,17 +54,12 @@ const LastUsersTable = () => {
     );
 
     React.useEffect(() => {
-        if (isSuccess) {
-            toast.success('Note updated successfully');
-            NProgress.done();
-        }
-
         if (isError) {
             const err = error;
             const resMessage =
-                err.data.message ||
-                err.data.detail ||
-                err.message ||
+                err.data?.message ||
+                err.data?.detail ||
+                err?.message ||
                 err.toString();
             toast.error(resMessage, {
                 position: 'top-right',

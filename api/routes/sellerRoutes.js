@@ -9,7 +9,7 @@ const {
 
 router.post('/', registerSeller);
 router.post('/login', loginSeller);
-
 router.get('/:id', getSellerById);
+router.post('/verify-email', (req, res) => verifyEmail(req, res, 'seller'));
 
 module.exports = router;
