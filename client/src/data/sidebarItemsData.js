@@ -1,5 +1,5 @@
 import { LuLayoutDashboard, LuUsers2 } from 'react-icons/lu';
-import { BiUser, BiCategory, BiTransfer } from 'react-icons/bi';
+import { BiUser, BiCategory, BiCategoryAlt, BiTransfer } from 'react-icons/bi';
 import { MdOutlineDiscount, MdOutlineInventory2 } from 'react-icons/md';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
 import { UsersIcon } from '../icons/Icons';
@@ -34,6 +34,11 @@ export const sidebarItemsData = [
         icon: BiCategory,
         text: 'Categories',
         path: '/admin/categories',
+    },
+    {
+        icon: BiCategoryAlt,
+        text: 'Subcategories',
+        path: '/admin/subcategories',
     },
     {
         icon: MdOutlineInventory2,
