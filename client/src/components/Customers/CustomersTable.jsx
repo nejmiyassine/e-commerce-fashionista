@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-
 import {
     Table,
     TableHeader,
@@ -21,15 +20,14 @@ import {
 
 import { useSelector } from 'react-redux';
 
-import { PlusIcon } from '../../../icons/PlusIcon';
-import { VerticalDotsIcon } from '../../../icons/VerticalDotsIcon';
-import { SearchIcon } from '../../../icons/SearchIcon';
-import { ChevronDownIcon } from '../../../icons/ChevronDownIcon';
+import { PlusIcon } from '../../icons/PlusIcon';
+import { VerticalDotsIcon } from '../../icons/VerticalDotsIcon';
+import { SearchIcon } from '../../icons/SearchIcon';
+import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
 
-import { capitalize } from '../../../utils/capitalize';
-import EditCustomer from '../EditCustomer';
-import DeleteCustomer from '../DeleteCustomer';
-import ViewCustomerDetails from '../ViewCustomerDetails';
+import { capitalize } from '../../utils/capitalize';
+import EditCustomer from './EditCustomer';
+import DeleteCustomer from './DeleteCustomer';
 
 const columns = [
     { name: 'ID', uid: '_id', sortable: true },
@@ -226,7 +224,6 @@ const CustomersTable = () => {
                             Edit
                         </Button>
 
-                        <ViewCustomerDetails />
                         <DeleteCustomer />
                     </div>
                 );

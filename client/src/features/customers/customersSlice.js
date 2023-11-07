@@ -26,11 +26,9 @@ console.log('log', initialState.data);
 //customerById
 export const customersById = createAsyncThunk(
     'customers/customersById',
-    async () => {
+    async (id) => {
         try {
-            //    let params = useParams()
-            //    console.log('params' , params)
-            // const res = await axios.get('http://localhost:8000/v1/customers/652bba08e5edc63f2f3c3f36');
+          
             const res = await axios.get(
                 `http://localhost:8000/v1/customers/${id}`
             );
@@ -45,7 +43,7 @@ export const customersById = createAsyncThunk(
 //UpdateCustomer
 export const updateCustomer = createAsyncThunk(
     'customers/updateCustomer',
-    async () => {
+    async (id) => {
         try {
             const res = await axios.put(
                 `http://localhost:8000/v1/customers/${id}`
@@ -144,7 +142,7 @@ const customersSlice = createSlice({
             })
             .addCase(deleteCustomer.fulfilled, (state, action) => {
                 state.loading = false;
-                // state.action = action.payload;
+                 state.action = action.payload;
                 console.log('action.payload', action.payload);
                 if (id) {
                     state.customers = state.customers.filter(

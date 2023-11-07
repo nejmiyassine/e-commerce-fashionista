@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCustomers } from '../../../features/customers/customersSlice';
-import TableCustomer from './CustomersTable';
+import { fetchCustomers } from '../../features/customers/customersSlice';
+import TableCustomer from '../../components/Customers/CustomersTable';
 
-const CustomersView = () => {
+const ViewAllCustomers = () => {
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
     console.log('data from customers view', data);
@@ -30,4 +30,4 @@ const CustomersView = () => {
         </div>
     );
 };
-export default CustomersView;
+export default ViewAllCustomers;

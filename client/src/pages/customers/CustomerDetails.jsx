@@ -1,22 +1,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { customersById } from '../../features/customers/customersSlice';
-import ViewCustomerDetails from '../../components/Customers/ViewCustomerDetails';
+import DisplayCustomerDetails from '../../components/Customers/DisplayCustomerDetails';
+import { useParams } from 'react-router-dom';
 
 const CustomerDetails = () => {
+    const { id } = useParams();
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
-    console.log('details from info', data);
-
     useEffect(() => {
-        dispatch(customersById());
-        console.log('fdsfdd', dispatch(customersById()));
-    }, []);
+        dispatch(customersById(id));
+        console.log('dispatch', dispatch(customersById(id)));
+    }, [dispatch, id]);
 
-    // return (
-    // <div>
-    //     id from info page {data._id}
-    //     <ViewCustomer customerId = {data._id} />
     if (loading) {
         return <div>loading.....</div>;
     }
@@ -24,19 +20,20 @@ const CustomerDetails = () => {
         return <div>Error: {error}</div>;
     }
 
+    console.log('data' , data)
     return (
         <div>
-         
-            {/* {data.length ? (
-                 <ViewCustomerDetails customers={data} />
-                 ) : (  */}
-            <>
-                <div>customers not found</div>
+            {id ? (
+                <div>
+                    <p>customer details pass in the component data._id </p>
+                     <DisplayCustomerDetails /> 
 
-                MOVE TO VIEWCUSTOMERDETAILS COMPONENT
-                <ViewCustomerDetails customers={data} />
-            </>
-            {/* )}   */}
+                </div>
+            ) : (
+                <>
+                    <div>customers not found</div>
+                </>
+            )}
         </div>
     );
 };
