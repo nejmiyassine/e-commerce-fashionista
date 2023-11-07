@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const { Schema, model } = mongoose;
 
-const SellerSchema = new Schema({
+const sellerSchema = new Schema({
     first_name: {
         type: String,
     },
@@ -42,6 +43,11 @@ const SellerSchema = new Schema({
     },
 });
 
-const Seller = model('Seller', SellerSchema);
+sellerSchema.methods.comparePassword = async function (password) {
+    const result = await bcrypt.compareSync(password, this.password);
+    return result;
+};
+
+const Seller = model('Seller', sellerSchema);
 
 module.exports = Seller;

@@ -2,12 +2,14 @@ const { genSalt, hash } = require('bcrypt');
 const passport = require('passport');
 const { isValidObjectId } = require('mongoose');
 
-const JwtSecretKey = require('../config/env').JwtSecretKey;
+const { JwtSecretKey, BASE_URL } = require('../config/env');
 const jwtHelper = require('../helpers/issueJwt');
 const {
     generateOtp,
     mailTransport,
     generateEmailTemplate,
+    createRandomBytes,
+    generateResetPasswordTemplate,
 } = require('../helpers/mail');
 
 const VerificationToken = require('../models/VerificationToken');
@@ -52,7 +54,7 @@ const authRegister = async (req, res, model, userRole) => {
         await user.save();
 
         mailTransport().sendMail({
-            from: '',
+            from: 'emailVerification@email.com',
             to: user.email,
             subject: 'Verify your email account',
             html: generateEmailTemplate(OTP),
@@ -140,12 +142,12 @@ const verifyEmail = async (req, res) => {
             user,
         });
     } catch (error) {
-        return res.status(400).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };
 
-const forgotPassword = async (req, res) => {
-    const { email, userType } = req.body;
+const forgotPassword = async (req, res, userType) => {
+    const { email } = req.body;
 
     if (!email || !userType)
         return res
@@ -159,13 +161,74 @@ const forgotPassword = async (req, res) => {
         if (!user)
             return res.status(404).json({ message: `${userType} not found!` });
 
-        const resetToken = await ResetToken.findOne({ owner: user._id });
-        if (resetToken) {
+        const token = await ResetToken.findOne({ owner: user._id });
+        if (token) {
             return res.status(404).json({
                 message: 'Only after hour you can request for another token!',
             });
         }
-    } catch (error) {}
+
+        const randomBytes = await createRandomBytes();
+        const resetToken = new ResetToken({
+            owner: user._id,
+            token: randomBytes,
+        });
+        await resetToken.save();
+
+        mailTransport().sendMail({
+            from: 'security@email.com',
+            to: user.email,
+            subject: 'Reset your password',
+            html: generateResetPasswordTemplate(
+                `${BASE_URL}/reset-password?token=${randomBytes}&id=${user._id}`
+            ),
+        });
+
+        res.status(200).json({
+            message: 'Password reset link is sent to your email',
+        });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 };
 
-module.exports = { authRegister, authLogin, verifyEmail, forgotPassword };
+const resetPassword = async (req, res, userType) => {
+    const { password } = req.body;
+
+    const userModel = userType === 'Customer' ? Customer : Seller;
+
+    console.log(req.user);
+    try {
+        const user = await userModel.findById(req.user._id);
+        if (!user)
+            return res.status(404).json({ message: `${userType} not found` });
+
+        const isSamePassword = await user.comparePassword(password);
+        if (isSamePassword)
+            return res
+                .status(400)
+                .json({ message: 'New password must be different' });
+
+        if (password.trim().length < 8 || password.trim().length > 32)
+            return res
+                .status(400)
+                .json({ message: 'Password must be 8 to 32 characters long!' });
+
+        user.password = password.trim();
+        await user.save();
+
+        await ResetToken.findOneAndDelete({ owner: user._id });
+
+        res.status(200).json({ message: 'Password Reset Successfully!' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+module.exports = {
+    authRegister,
+    authLogin,
+    verifyEmail,
+    forgotPassword,
+    resetPassword,
+};

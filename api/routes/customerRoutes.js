@@ -8,6 +8,7 @@ const {
     isAdminOrManager,
     isCustomer,
 } = require('../middleware/authMiddleware');
+const { isResetTokenValid } = require('../middleware/resetTokenMiddleware');
 
 const {
     registerCustomer,
@@ -19,7 +20,11 @@ const {
     searchForCustomer,
     getProfile,
 } = require('../controllers/customerController');
-const { verifyEmail } = require('../services/authServices');
+const {
+    verifyEmail,
+    forgotPassword,
+    resetPassword,
+} = require('../services/authServices');
 
 router.post(
     '/',
@@ -71,5 +76,11 @@ router.patch('/update/:id', isCustomer, updateCustomers);
 router.delete('/delete/:id', isCustomer, isAdminOrManager, deleteCustomerById);
 router.get('/profile/:id', isCustomer, getProfile);
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
+router.post('/forgot-password', (req, res) =>
+    forgotPassword(req, res, 'Customer')
+);
+router.post('/reset-password', isResetTokenValid, (req, res) =>
+    resetPassword(req, res, 'Customer')
+);
 
 module.exports = router;

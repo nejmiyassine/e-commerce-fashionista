@@ -12,4 +12,6 @@ module.exports = {
 
     MAILTRAP_USERNAME: process.env.MAILTRAP_USERNAME,
     MAILTRAP_PASSWORD: process.env.MAILTRAP_PASSWORD,
+
+    BASE_URL: process.env.BASE_URL,
 };
