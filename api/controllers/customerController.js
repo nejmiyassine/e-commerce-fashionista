@@ -5,7 +5,7 @@ const Customer = require('../models/Customers');
 const authService = require('../services/authServices');
 
 exports.registerCustomer = (req, res) => {
-    authService.authRegister(req, res, Customer);
+    authService.authRegister(req, res, Customer, 'Customer');
 };
 
 exports.loginCustomer = (req, res, next) => {
@@ -14,8 +14,9 @@ exports.loginCustomer = (req, res, next) => {
 
 exports.getAllCustomersList = async (req, res) => {
     const page = req.query.page || 0;
-    const sort = req.query.sort || 'DESC';
-    const customerPerPage = 2;
+    // const sort = req.query.sort || 'DESC';
+    const sort = req.query.sort || 'ASC';
+    const customerPerPage = 13;
 
     try {
         const customers = await Customer.find()
@@ -126,6 +127,7 @@ exports.searchForCustomer = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 exports.getProfile = async (req, res) => {
     try {
         const customer = await Customer.findById(req.params.id);

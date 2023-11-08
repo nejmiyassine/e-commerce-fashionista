@@ -4,7 +4,7 @@ const Seller = require('../models/Seller');
 const authService = require('../services/authServices');
 
 exports.registerSeller = (req, res) => {
-    authService.authRegister(req, res, Seller);
+    authService.authRegister(req, res, Seller, 'Seller');
 };
 
 exports.loginSeller = (req, res, next) => {

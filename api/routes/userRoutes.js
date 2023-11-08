@@ -16,8 +16,8 @@ const {
 router.post(
     '/',
     [
-        check('firstName').notEmpty().withMessage('First name is required'),
-        check('lastName').notEmpty().withMessage('Last name is required'),
+        check('first_name').notEmpty().withMessage('First name is required'),
+        check('last_name').notEmpty().withMessage('Last name is required'),
         check('email')
             .notEmpty()
             .withMessage('Email is required')
@@ -34,7 +34,7 @@ router.post(
             .notEmpty()
             .withMessage('Role is required')
             .isIn(['manager', 'admin']),
-        check('userName')
+        check('username')
             .notEmpty()
             .withMessage('Username is required')
             .custom(async (username) => {

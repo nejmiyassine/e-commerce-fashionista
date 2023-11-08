@@ -1,12 +1,16 @@
-import RouteConfig from './routes/RouteConfig'
+import RouteConfig from './routes/RouteConfig';
+import { useDarkMode } from './hooks/useDarkMode';
+import { ToastContainer } from 'react-toastify';
 
-function App() {
+const App = () => {
+    const { darkMode } = useDarkMode();
+
     return (
-        <div>
+        <div className={`${darkMode ? 'dark' : ''}`}>
             <RouteConfig />
-            
+            <ToastContainer />
         </div>
     );
-}
+};
 
 export default App;
