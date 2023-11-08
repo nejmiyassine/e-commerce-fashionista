@@ -90,29 +90,7 @@ const getAllOrdersController = async (req, res) => {
         const limit = 10;
         const skip = (page - 1) * limit;
 
-        const orders = await Orders.aggregate([
-            {
-                $lookup: {
-                    from: 'customers',
-                    localField: 'customer_id',
-                    foreignField: '_id',
-                    as: 'customerInfo',
-                },
-            },
-            {
-                $unwind: '$customerInfo',
-            },
-            {
-                $group: {
-                    _id: '$_id',
-                    count: { $sum: 1 },
-                    itemsTotal: { $sum: '$cart_total_price' },
-                    customer: {
-                        $first: '$customerInfo',
-                    },
-                },
-            },
-        ])
+        const orders = await Orders.populate('customer_id')
             .limit(limit)
             .skip(skip);
 

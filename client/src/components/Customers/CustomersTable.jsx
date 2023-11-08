@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
     Table,
     TableHeader,
@@ -28,7 +30,6 @@ import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
 import { capitalize } from '../../utils/capitalize';
 import EditCustomer from './EditCustomer';
 import DeleteCustomer from './DeleteCustomer';
-import Layout from '../../layouts/Layout';
 
 const columns = [
     { name: 'ID', uid: '_id', sortable: true },
@@ -50,6 +51,7 @@ const verificationOptions = [
 
 const INITIAL_VISIBLE_COLUMNS = [
     'email',
+
     'first_name',
     '_id',
     'active_account',
@@ -61,7 +63,6 @@ const CustomersTable = () => {
     const { onOpen, isOpen, onOpenChange } = useDisclosure();
     const { loading, data, error } = useSelector((state) => state.customers);
 
-    //
     const [updatedCustomer, setUpdatedCustomer] = useState('');
     const [filterValue, setFilterValue] = React.useState('');
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
@@ -225,6 +226,15 @@ const CustomersTable = () => {
                             onPress={handleUpdate}
                         >
                             Edit
+                        </Button>
+
+                        <Button
+                            className='bg-foreground text-background'
+                            size='sm'
+                        >
+                            <Link to={`/admin/customers/${customer._id}`}>
+                                View
+                            </Link>
                         </Button>
 
                         <DeleteCustomer />
@@ -442,8 +452,12 @@ const CustomersTable = () => {
     }
 
     return (
-        <Layout>
-            <EditCustomer isOpen={isOpen} onOpenChange={onOpenChange} />
+        <>
+            <EditCustomer
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                updatedCustomer={updatedCustomer}
+            />
 
             <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>Last Customers</h2>
@@ -503,7 +517,7 @@ const CustomersTable = () => {
                     </TableBody>
                 </Table>
             </div>
-        </Layout>
+        </>
     );
 };
 

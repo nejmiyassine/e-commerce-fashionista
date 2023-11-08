@@ -27,17 +27,11 @@ const RouteConfig = () => {
                     element={<Subcategories />}
                 />
 
-<<<<<<< HEAD
-
-                <Route path='/customers' element={<ViewAllCustomers />} />
-                <Route path='/customer/:id' element={<CustomerDetails />} />
-=======
                 <Route path='/admin/customers' element={<ViewAllCustomers />} />
                 <Route
-                    path='/admin/customer/:id'
+                    path='/admin/customers/:id'
                     element={<CustomerDetails />}
                 />
->>>>>>> 3d59917d33644f8322ac10e780c4e9634638c771
                 {/* test */}
                 <Route
                     path='/admin/details'

@@ -20,13 +20,13 @@ const CustomerDetails = () => {
         return <div>Error: {error}</div>;
     }
 
-    console.log('data' , data)
+    console.log('data from customerDetails:' , data._id)
     return (
         <div>
-            {id ? (
+            {data._id ? (
                 <div>
-                    <p>customer details pass in the component data._id </p>
-                     <DisplayCustomerDetails /> 
+                    {/* {data._id} */}
+                     <DisplayCustomerDetails customer={data} /> 
 
                 </div>
             ) : (

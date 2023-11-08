@@ -26,10 +26,10 @@ const DeleteCustomer = () => {
                 </p>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
+                <Button className="bg-red-500 text-white" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={onClose}>
+                <Button className="bg-blue-500 text-white"  onPress={onClose}>
                   Delete
                 </Button>
               </ModalFooter>

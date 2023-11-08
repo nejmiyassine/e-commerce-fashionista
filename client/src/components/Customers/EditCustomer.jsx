@@ -12,36 +12,64 @@ import {
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-
+import { updateCustomer } from '../../features/customers/customersSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object({
-    firstName: yup.string().required('First Name is required'),
-    lastName: yup.string().required('Last Name is required'),
+    first_name: yup.string().required('First Name is required'),
+    last_name: yup.string().required('Last Name is required'),
     email: yup.string().email().required('Email is required'),
-    password: yup.string().min(6 , 'Password must have at least 6 characters').max(10).required(),
+    password: yup
+        .string()
+        .min(6, 'Password must have at least 6 characters')
+        .max(10)
+        .required(),
 });
 
-const EditCustomer = ({ isOpen, onOpenChange }) => {
-    
+const EditCustomer = ({ isOpen, onOpenChange, updatedCustomer }) => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const isEditing = !!updatedCustomer;
+    const passwordInitialValue = isEditing ? '' : '';
+
     const {
         register,
         handleSubmit,
         formState: { errors },
+        reset,
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            firstName: '',
-            lastName: '',
+            first_name: '',
+            last_name: '',
             email: '',
             password: '',
         },
     });
 
-    const onSubmit = (data) => {
-        onOpenChange(false);
-        console.log('data', data);
+    const onSubmit = (formData) => {
+        if (isEditing) {
+            navigate('/admin/customers');
+            onOpenChange(false);
+            reset();
+
+            console.log(updatedCustomer._id);
+            dispatch(
+                updateCustomer({
+                    customerId: updatedCustomer._id,
+                    updatedCustomerData: formData,
+                })
+            );
+        }
     };
 
+    React.useEffect(() => {
+        if (updatedCustomer) {
+            reset({ ...updatedCustomer, password: passwordInitialValue });
+        }
+    }, [dispatch, updatedCustomer]);
 
     return (
         <Modal
@@ -60,78 +88,95 @@ const EditCustomer = ({ isOpen, onOpenChange }) => {
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <ModalBody>
                                 <div className='flex flex-col gap-2'>
-                                <Input
-                                    autoFocus
-                                    label='Customer ID'
-                                    placeholder='customerID'
-                                    isReadOnly
-                                    variant='bordered'
-                                />
-
-                                <div>
                                     <Input
-                                        autoFocus
-                                        label='First Name'
-                                        placeholder='First Name'
+                                        label='Customer ID'
+                                        placeholder='Customer ID'
+                                        isReadOnly
                                         variant='bordered'
-                                        {...register('firstName')}
+                                        {...register('_id')}
+                                        isDisabled
                                     />
-                                    <p className ='text-red-500'>{errors.firstName?.message}</p>
-                                </div>
 
-                                <div>
+                                    <div className='flex items-center gap-3'>
+                                        <div className='flex-1'>
+                                            <Input
+                                                autoFocus
+                                                label='First Name'
+                                                placeholder='First Name'
+                                                variant='bordered'
+                                                {...register('first_name')}
+                                            />
+                                            <p className='text-red-500'>
+                                                {errors.firstName?.message}
+                                            </p>
+                                        </div>
+
+                                        <div className='flex-1'>
+                                            <Input
+                                                label='last Name'
+                                                placeholder='LastName'
+                                                type='text'
+                                                variant='bordered'
+                                                {...register('last_name')}
+                                            />
+                                            <p className='text-red-500'>
+                                                {errors.lastName?.message}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <Input
+                                            label='email'
+                                            placeholder='email'
+                                            type='text'
+                                            variant='bordered'
+                                            {...register('email')}
+                                        />
+                                        <p className='text-red-500'>
+                                            {errors.email?.message}
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <Input
+                                            label='Password'
+                                            placeholder='password'
+                                            type='password'
+                                            variant='bordered'
+                                            {...register('password')}
+                                        />
+                                        <p className='text-red-500'>
+                                            {errors.password?.message}
+                                        </p>
+                                    </div>
+
                                     <Input
-                                        label='last Name'
-                                        placeholder='LastName'
-                                        type='text'
+                                        label='creation date'
+                                        placeholder='creattion Date'
+                                        isReadOnly
                                         variant='bordered'
-                                        {...register('lastName')}
+                                        {...register('creation_date')}
+                                        isDisabled
                                     />
-                                    <p className ='text-red-500'>{errors.lastName?.message}</p>
-                                </div>
 
-                                <div>
                                     <Input
-                                        label='Password'
-                                        placeholder='password'
-                                        type='password'
+                                        label='Last login date'
+                                        placeholder='last login'
+                                        isReadOnly
                                         variant='bordered'
-                                        {...register('password')}
+                                        {...register('last_login')}
+                                        isDisabled
                                     />
-                                    <p className ='text-red-500'>{errors.password?.message}</p>
-                                </div>
 
-                                <div>
                                     <Input
-                                        label='email'
-                                        placeholder='email'
-                                        type='text'
+                                        label='Valid Account'
+                                        placeholder='Valid Account'
+                                        isReadOnly
                                         variant='bordered'
-                                        {...register('email')}
+                                        {...register('last_update')}
+                                        isDisabled
                                     />
-                                    <p className ='text-red-500'>{errors.email?.message}</p>
-                                </div>
-
-                                <Input
-                                    label='creation date'
-                                    placeholder='creattion Date'
-                                    isReadOnly
-                                    variant='bordered'
-                                />
-
-                                <Input
-                                    label='Last login date'
-                                    placeholder='last login'
-                                    isReadOnly
-                                    variant='bordered'
-                                />
-
-                                <Input
-                                    label='Valid Account'
-                                    placeholder='Valid Account'
-                                    isReadOnly
-                                    variant='bordered'
-                                />
                                 </div>
                             </ModalBody>
 
@@ -142,9 +187,13 @@ const EditCustomer = ({ isOpen, onOpenChange }) => {
                                     onPress={onClose}
                                 >
                                     Close
-                                </Button> 
+                                </Button>
 
-                                <Button color='primary' type='submit' >
+                                <Button
+                                    className='bg-blue-500'
+                                    color='danger'
+                                    type='submit'
+                                >
                                     Update Customer
                                 </Button>
                             </ModalFooter>

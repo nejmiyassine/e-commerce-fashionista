@@ -29,8 +29,8 @@ const {
 router.post(
     '/',
     [
-        check('firstName').notEmpty().withMessage('First name is required'),
-        check('lastName').notEmpty().withMessage('Last name is required'),
+        check('first_name').notEmpty().withMessage('First name is required'),
+        check('last_name').notEmpty().withMessage('Last name is required'),
         check('email')
             .notEmpty()
             .withMessage('Email is required')
@@ -72,11 +72,11 @@ router.post(
 // router.get('/', isAdminOrManager, getAllCustomersList);
 router.get('/', getAllCustomersList);
 // router.get('/:id', isAdminOrManager, getCustomerById);
-router.get('/:id',  getCustomerById);
+router.get('/:id', getCustomerById);
 // router.get('/search', isAdminOrManager, searchForCustomer);
 router.get('/search', searchForCustomer);
-router.patch('/update/:id', isCustomer, updateCustomers);
-router.delete('/delete/:id', isCustomer, isAdminOrManager, deleteCustomerById);
+router.put('/:id', updateCustomers);
+router.delete('/:id', isCustomer, isAdminOrManager, deleteCustomerById);
 router.get('/profile/:id', isCustomer, getProfile);
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
 router.post('/forgot-password', (req, res) =>

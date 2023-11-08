@@ -13,9 +13,13 @@ const initialState = {
 export const fetchCustomers = createAsyncThunk(
     'customers/fetchCustomers',
     async () => {
+        try {
         const res = await axios.get('http://localhost:8000/v1/customers');
         console.log('data from axios', res.data);
         return res.data;
+    } catch (error) {
+        rejectWithValue(error.response.data);
+    }
     }
 );
 
@@ -28,14 +32,13 @@ export const customersById = createAsyncThunk(
     'customers/customersById',
     async (id) => {
         try {
-          
             const res = await axios.get(
                 `http://localhost:8000/v1/customers/${id}`
             );
             console.log('customer details from axios', res.data);
             return res.data;
         } catch (error) {
-            console.log('error', error.message);
+            rejectWithValue(error.response.data);
         }
     }
 );
@@ -43,15 +46,16 @@ export const customersById = createAsyncThunk(
 //UpdateCustomer
 export const updateCustomer = createAsyncThunk(
     'customers/updateCustomer',
-    async (id) => {
+    async ({ customerId, updatedCustomerData }, { rejectWithValue }) => {
         try {
             const res = await axios.put(
-                `http://localhost:8000/v1/customers/${id}`
+                `http://localhost:8000/v1/customers/${customerId}`,
+                updatedCustomerData
             );
-            console.log('update customer', res.data);
+            console.log('updated customer', res.data);
             return res.data;
         } catch (error) {
-            console.log('error', error.message);
+            rejectWithValue(error.response.data);
         }
     }
 );
@@ -67,7 +71,7 @@ export const deleteCustomer = createAsyncThunk(
             console.log('delete from slice', res.data);
             return res.data;
         } catch (error) {
-            console.log('error', error.message);
+            rejectWithValue(error.response.data);
         }
     }
 );
@@ -121,10 +125,14 @@ const customersSlice = createSlice({
             })
             .addCase(updateCustomer.fulfilled, (state, action) => {
                 state.loading = false;
+                const {
+                    arg: { customerId },
+                } = action.meta;
+                console.log(action.meta);
                 // state.data = action.payload
-                if (id) {
-                    state.customers = state.customers.map((customer) =>
-                        customer._id === id ? action.payload : customer
+                if (customerId) {
+                    state.data = state.data?.map((customer) =>
+                        customer._id === customerId ? action.payload : customer
                     );
                 }
                 state.error = null;
@@ -142,7 +150,7 @@ const customersSlice = createSlice({
             })
             .addCase(deleteCustomer.fulfilled, (state, action) => {
                 state.loading = false;
-                 state.action = action.payload;
+                state.action = action.payload;
                 console.log('action.payload', action.payload);
                 if (id) {
                     state.customers = state.customers.filter(

@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCustomers } from '../../features/customers/customersSlice';
 import TableCustomer from '../../components/Customers/CustomersTable';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import Layout from '../../layouts/Layout';
 
 const ViewAllCustomers = () => {
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
     console.log('data from customers view', data);
-    
 
     useEffect(() => {
         dispatch(fetchCustomers());
@@ -23,6 +23,6 @@ const ViewAllCustomers = () => {
         return <div>Error: {error}</div>;
     }
 
-    return <div>{data && <TableCustomer customers={data} />}</div>;
+    return <Layout>{data && <TableCustomer customers={data} />}</Layout>;
 };
 export default ViewAllCustomers;

@@ -61,7 +61,7 @@ exports.deleteCustomerById = async (req, res) => {
 };
 
 exports.updateCustomers = async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
+    const { first_name, last_name, email, password } = req.body;
 
     try {
         const salt = await bcrypt.genSalt(parseInt(saltRounds));
@@ -69,8 +69,8 @@ exports.updateCustomers = async (req, res) => {
 
         const id = { _id: req.params.id };
         const updatedFields = {
-            first_name: firstName,
-            last_name: lastName,
+            first_name,
+            last_name,
             email,
             password,
         };
