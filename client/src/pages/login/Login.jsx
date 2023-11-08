@@ -17,9 +17,10 @@ const Login = () => {
 
     // Automatically close the modal after 5 seconds
     setTimeout(() => {
-      setModalOpen(false);
       setLoginMessage(""); // Clear the message
-    }, 5000);
+      setModalOpen(false);
+    }, 1000);
+
   };
 
   const handleSubmit = async (e) => {

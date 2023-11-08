@@ -6,12 +6,19 @@ const initialState = {
     categories: [],
     deletedCategory: null,
     editedCategory: null,
+    categoryById: null,
     isLoading: true,
     error: null,
 }
 
 //Get All Categories
 export const getAllCategories = createAsyncThunk('categories/getAllCategories', async () => {
+    const response = await axios.get('v1/categories');
+    console.log(response.data);
+    return response.data.data;
+})
+
+export const getCategoryById = createAsyncThunk('category/getCategoryById', async () => {
     const response = await axios.get('v1/categories');
     console.log(response.data);
     return response.data.data;
@@ -112,6 +119,22 @@ export const categoriesSlice = createSlice({
                 state.isLoading = false;
                 state.error = action.error;
             })
+            // Get Category By Id
+            .addCase(getCategoryById.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(getCategoryById.fulfilled, (state, action) => {
+                state.isLoading = false;
+                // Handle the response from the API accordingly
+                state.categoryById = action.payload;
+                state.error = null;
+            })
+            .addCase(getCategoryById.rejected, (state, action) => {
+                state.isLoading = false;
+                state.categoryById = null;
+                state.error = action.error;
+            });
     },
 });
 

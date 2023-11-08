@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllCategories, editCategory, deleteCategory, createCategory } from "../../features/categories/categoriesSlice";
-import AdminNavbar from "../../layouts/AdminNavbar"
+import AdminNavbar from "../../layouts/AdminNavbar";
 
-const CreateCategory = () => {
+const ManageCategories = () => {
     const dispatch = useDispatch();
     const [name, setName] = useState("");
     const [updatedName, setUpdatedName] = useState("");
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [confirmDelete, setConfirmDelete] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [isAddingCategory, setIsAddingCategory] = useState(false);
     const listCategories = useSelector(state => state.categories.categories);
 
     useEffect(() => {
@@ -27,6 +29,8 @@ const CreateCategory = () => {
             if (data?.success) {
                 setName("");
                 console.log("Category has been successfully created");
+                dispatch(getAllCategories());
+                setIsAddingCategory(false);
             } else {
                 console.error("Error creating a category");
             }
@@ -76,31 +80,80 @@ const CreateCategory = () => {
         }
     };
 
+    // Function to open the add category modal
+    const openAddCategoryModal = () => {
+        setIsAddingCategory(true);
+    };
+
+    // Function to close the add category modal
+    const closeAddCategoryModal = () => {
+        setIsAddingCategory(false);
+    };
+
+    const filteredCategories = listCategories.filter(category => category.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
     return (
         <div className="container mx-auto p-6">
-                    <AdminNavbar/>
+            <AdminNavbar />
 
             <h1 className="text-3xl font-bold text-center">Manage Categories</h1>
-            <div className="mt-4 mb-8 text-center">
-                <form onSubmit={handleSubmit} className="flex justify-center">
+            <div className="flex justify-between items-center mt-4 mb-8">
+                <div>
+                    {/* Search input on the far left */}
                     <input
                         type="text"
-                        className="border rounded-l p-2"
-                        placeholder="Enter new category"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Search Categories"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="border p-2 rounded"
                     />
-                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-r">
-                        Submit
+                </div>
+                <div>
+                    {/* Button to open the add category modal on the far right */}
+                    <button
+                        onClick={openAddCategoryModal}
+                        className="bg-blue-500 text-white px-4 py-2 rounded"
+                    >
+                        Add a Category
                     </button>
-                </form>
+                </div>
             </div>
+
+            {/* Add Category Modal */}
+            {isAddingCategory && (
+                <div className="fixed inset-0 flex items-center justify-center">
+                    <div className="relative bg-white p-6 shadow-lg rounded-lg">
+                        <form onSubmit={handleSubmit}>
+                            <div className="input-group mb-3">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Enter new category"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                                <button type="submit" className="btn btn-primary bg-blue-500 text-black px-4 py-2 rounded-md">
+                                    Submit
+                                </button>
+                            </div>
+                            <button
+                                onClick={closeAddCategoryModal}
+                                className="bg-red-500 text-white px-4 py-2 items-center rounded-md mt-2"
+                            >
+                                Close
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* List of Categories */}
             <div className="min-w-full bg-white border rounded-lg shadow-md">
                 <table className="min-w-full leading-normal">
                     <thead>
                         <tr>
                             <th className="py-3 border-b-2 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                                Item
+                                Category
                             </th>
                             <th className="py-3 border-b-2 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                                 Actions
@@ -108,7 +161,7 @@ const CreateCategory = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {listCategories.map((category) => (
+                        {filteredCategories.map((category) => (
                             <tr key={category._id} className="bg-white">
                                 <td className="py-5 border-b border-gray-200 text-sm px-4">
                                     {category.name}
@@ -118,14 +171,14 @@ const CreateCategory = () => {
                                         <button
                                             type="button"
                                             onClick={() => setSelectedCategory(category)}
-                                            className="text-blue-500 hover:text-blue-700 mx-2"
+                                            className=" hover:text-blue-700 mx-2 bg-green-500 text-white px-4 py-2 rounded-lg"
                                         >
                                             Edit
                                         </button>
                                         <button
                                             type="button"
                                             onClick={() => setConfirmDelete(category._id)}
-                                            className="text-red-500 hover:text-red-700 mx-2"
+                                            className="hover:text-blue-700 mx-2 bg-red-500 text-white px-4 py-2 rounded-lg"
                                         >
                                             Delete
                                         </button>
@@ -136,6 +189,8 @@ const CreateCategory = () => {
                     </tbody>
                 </table>
             </div>
+
+            {/* Edit Category Modal */}
             {selectedCategory && (
                 <div className="fixed inset-0 flex items-center justify-center">
                     <div className="relative bg-white p-6 shadow-lg rounded-lg">
@@ -148,20 +203,23 @@ const CreateCategory = () => {
                                     value={updatedName}
                                     onChange={(e) => setUpdatedName(e.target.value)}
                                 />
-                                <button type="submit" className="btn btn-primary">
+                                <button type="submit" className="btn btn-primary bg-blue-500 text-black px-4 py-2 rounded-md ">
                                     Update
                                 </button>
                             </div>
+                            <button
+                                onClick={() => setSelectedCategory(null)}
+                                className="bg-red-500 text-white px-4 py-2 rounded-md mt-2"
+                            >
+                                Close
+                            </button>
                         </form>
-                        <button
-                            onClick={() => setSelectedCategory(null)}
-                            className="bg-gray-500 text-white px-4 py-2 rounded-md mt-2"
-                        >
-                            Close
-                        </button>
                     </div>
                 </div>
-            )}
+            )
+            }
+
+            {/* Delete Category Confirmation Modal */}
             {confirmDelete && (
                 <div className="fixed inset-0 flex items-center justify-center">
                     <div className="relative bg-white p-6 shadow-lg rounded-lg">
@@ -177,9 +235,10 @@ const CreateCategory = () => {
                         </button>
                     </div>
                 </div>
-            )}
+            )
+            }
         </div>
     );
 };
 
-export default CreateCategory;
+export default ManageCategories;
