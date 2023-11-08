@@ -6,7 +6,8 @@ const cors = require('cors');
 
 const connectDb = require('./config/database');
 const PORT = require('./config/env').PORT;
-// const cors = require('cors');
+
+
 
 const indexRoutes = require('./routes/index.routes');
 
@@ -23,7 +24,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(passport.initialize());
 require('./middleware/passport');
-
+// Routes
+app.use('/v1', indexRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);

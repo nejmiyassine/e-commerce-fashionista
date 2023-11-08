@@ -1,4 +1,4 @@
-const Orders = require('../models/orders');
+const Orders = require('../models/Orders');
 
 // Post Orders
 const createOrdersController = async (req, res) => {

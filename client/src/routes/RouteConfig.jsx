@@ -18,19 +18,32 @@ const RouteConfig = () => {
         <Router>
             <Routes>
                 <Route exact path='/' element={<Home />} />
-                <Route path='/admin-dashboard' element={<AdminDashboard />} />
-                <Route path='/login' element={<Login />} />
-                <Route path='logout' element={<Logout />} />
-                <Route path='/products' element={<Products />} />
-                <Route path='/categories' element={<Categories />} />
-                <Route path='/Subcategories' element={<Subcategories/>}/>
+                <Route path='/admin/login' element={<Login />} />
+                <Route path='/admin/logout' element={<Logout />} />
+                <Route path='/admin/products' element={<Products />} />
+                <Route path='/admin/categories' element={<Categories />} />
+                <Route
+                    path='/admin/subcategories'
+                    element={<Subcategories />}
+                />
 
+<<<<<<< HEAD
 
                 <Route path='/customers' element={<ViewAllCustomers />} />
                 <Route path='/customer/:id' element={<CustomerDetails />} />
+=======
+                <Route path='/admin/customers' element={<ViewAllCustomers />} />
+                <Route
+                    path='/admin/customer/:id'
+                    element={<CustomerDetails />}
+                />
+>>>>>>> 3d59917d33644f8322ac10e780c4e9634638c771
                 {/* test */}
-                <Route path='/details' element={<DisplayCustomerDetails />} />
-                  
+                <Route
+                    path='/admin/details'
+                    element={<DisplayCustomerDetails />}
+                />
+
                 <Route path='/admin/dashboard' element={<AdminDashboard />} />
                 <Route path='/admin/users' element={<Users />} />
                 <Route path='/admin/users/:userId' element={<UserDetails />} />

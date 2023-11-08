@@ -28,6 +28,7 @@ import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
 import { capitalize } from '../../utils/capitalize';
 import EditCustomer from './EditCustomer';
 import DeleteCustomer from './DeleteCustomer';
+import Layout from '../../layouts/Layout';
 
 const columns = [
     { name: 'ID', uid: '_id', sortable: true },
@@ -154,7 +155,9 @@ const CustomersTable = () => {
                         avatarProps={{
                             radius: 'full',
                             size: 'sm',
-                            src: customer.avatar,
+                            src: customer.avatar
+                                ? customer.avatar
+                                : 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
                         }}
                         classNames={{
                             description: 'text-default-500',
@@ -193,7 +196,7 @@ const CustomersTable = () => {
                                     variant='light'
                                 >
                                     <VerticalDotsIcon className='text-default-400' />
-                                </Button> 
+                                </Button>
                             </DropdownTrigger> */}
 
                         {/* <DropdownMenu> */}
@@ -202,18 +205,18 @@ const CustomersTable = () => {
                                 </DropdownItem>
 
                                 {/* <DropdownItem >
-                                {/* <Link to ={'/customer/:id'}  >Edit Customer</Link> 
-                                 {/* </DropdownItem> 
+                                {/* <Link to ={'/customer/:id'}  >Edit Customer</Link>
+                                 {/* </DropdownItem>
 
                                 <DropdownItem onPress={handleUpdate}>
                                     Edit
                                 </DropdownItem>
 
                             <DropdownItem
-                                className="text-danger" 
+                                className="text-danger"
                                 onPress={() => handleDelete(customer._id)}
                                 >
-                                    Delete      
+                                    Delete
                            </DropdownItem>  */}
 
                         <Button
@@ -439,7 +442,7 @@ const CustomersTable = () => {
     }
 
     return (
-        <>
+        <Layout>
             <EditCustomer isOpen={isOpen} onOpenChange={onOpenChange} />
 
             <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
@@ -500,7 +503,7 @@ const CustomersTable = () => {
                     </TableBody>
                 </Table>
             </div>
-        </>
+        </Layout>
     );
 };
 
