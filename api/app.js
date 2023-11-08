@@ -6,7 +6,7 @@ const cors = require('cors');
 
 const connectDb = require('./config/database');
 const PORT = require('./config/env').PORT;
-const cors = require('cors');
+// const cors = require('cors');
 
 const indexRoutes = require('./routes/index.routes');
 

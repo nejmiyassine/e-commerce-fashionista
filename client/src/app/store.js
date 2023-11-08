@@ -3,6 +3,8 @@ import { setupListeners } from '@reduxjs/toolkit/query/react';
 
 import categoriesReducer from '../features/categories/categoriesSlice';
 import subcategoriesReducer from '../features/subcategories/subcategoriesSlice';
+//
+import customersReducer from '../features/customers/customersSlice'
 import { usersAPI } from './api/usersApi';
 
 const store = configureStore({

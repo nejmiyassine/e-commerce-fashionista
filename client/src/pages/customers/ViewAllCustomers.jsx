@@ -7,6 +7,7 @@ const ViewAllCustomers = () => {
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
     console.log('data from customers view', data);
+    
 
     useEffect(() => {
         dispatch(fetchCustomers());

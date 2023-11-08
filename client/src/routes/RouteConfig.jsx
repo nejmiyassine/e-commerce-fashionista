@@ -26,8 +26,6 @@ const RouteConfig = () => {
                 <Route path='/Subcategories' element={<Subcategories/>}/>
 
 
-
-
                 <Route path='/customers' element={<ViewAllCustomers />} />
                 <Route path='/customer/:id' element={<CustomerDetails />} />
                 {/* test */}
