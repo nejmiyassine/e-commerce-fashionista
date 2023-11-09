@@ -14,19 +14,19 @@ const customFields = {
     passwordField: 'password',
 };
 
-const verifyCbModel = async (email, password, done, model) => {
-    try {
-        const user = await model.findOne({ email });
+// const verifyCbModel = async (email, password, done, model) => {
+//     try {
+//         const user = await model.findOne({ email });
 
-        if (!user || !(await bcrypt.compare(password, user.password))) {
-            return done(null, false, { message: 'Invalid credentials' });
-        }
+//         if (!user || !(await bcrypt.compare(password, user.password))) {
+//             return done(null, false, { message: 'Invalid credentials' });
+//         }
 
-        return done(null, user);
-    } catch (error) {
-        done(error);
-    }
-};
+//         return done(null, user);
+//     } catch (error) {
+//         done(error);
+//     }
+// };
 
 // Local strategies
 const createLocalStrategy = (model, name) => {

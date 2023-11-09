@@ -1,19 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const createSubCategoryController = require('../controllers/subcategoryController');
-const deleteSubCategoryController = require('../controllers/subcategoryController');
-const getSubCategoryController = require('../controllers/subcategoryController');
-const getAllSubCategoryController = require('../controllers/subcategoryController');
-const getSearchSubCategoryController = require('../controllers/subcategoryController');
-const updateSubCategoryController = require('../controllers/subcategoryController');
+const subcategoryController = require('../controllers/subcategoryController'); // Import the object containing controllers
+const {
+    isAdminOrManager,
+    isCustomer,
+} = require('../middleware/authMiddleware');
 
-
-
-router.post('/create-subcategory', createSubCategoryController);
-router.delete('/delete-subcategory', deleteSubCategoryController);
-router.get('/get-subcategory', getSubCategoryController);
-router.get('/get-allsubcategory', getAllSubCategoryController)
-router.get('/get-SearchSubCategory', getSearchSubCategoryController)
-router.put('/put-subcategory', updateSubCategoryController)
+router.post('/', subcategoryController.createSubCategoryController); // Use the correct controller from the object
+router.delete('/:id', subcategoryController.deleteSubCategoryController);
+router.get('/:id', subcategoryController.getSubCategoryController);
+router.get('/', subcategoryController.getAllSubCategoryController);
+router.get('/search', subcategoryController.getSearchSubCategoryController); // Use a different route path for search
+router.put('/:id', subcategoryController.updateSubCategoryController);
 
 module.exports = router;
