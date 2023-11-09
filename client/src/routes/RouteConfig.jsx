@@ -18,6 +18,7 @@ const RouteConfig = () => {
         <Router>
             <Routes>
                 <Route exact path='/' element={<Home />} />
+                <Route exact path='/admin/products' element={<Products />} />
                 <Route path='/admin/login' element={<Login />} />
                 <Route path='/admin/logout' element={<Logout />} />
                 <Route path='/admin/products' element={<Products />} />
