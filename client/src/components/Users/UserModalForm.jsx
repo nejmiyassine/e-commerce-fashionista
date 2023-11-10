@@ -103,7 +103,7 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
     const toggleVisibility = () => setIsVisible(!isVisible);
 
     const onSubmit = (formData) => {
-        navigate('/users');
+        navigate('/admin/users');
         reset();
         onOpenChange(false);
 

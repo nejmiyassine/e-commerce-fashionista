@@ -2,12 +2,12 @@ import { Spinner } from '@nextui-org/react';
 
 const LoadingSpinner = () => {
     return (
-        <div className='min-h-screen flex justify-center items-center'>
+        <div className='flex justify-center items-center'>
             <Spinner
                 size='lg'
-                color='warning'
+                color='success'
                 label='Loading...'
-                labelColor='warning'
+                labelColor='success'
             />
         </div>
     );

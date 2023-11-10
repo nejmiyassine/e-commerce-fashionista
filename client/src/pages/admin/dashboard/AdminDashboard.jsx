@@ -1,4 +1,3 @@
-import AdminNavbar from '../../../layouts/AdminNavbar';
 import DashboardWelcome from '../../../components/Dashboard/DashboardWelcome';
 import DashboardCard from '../../../components/Dashboard/DashboardCard';
 import VerticalChart from '../../../components/Dashboard/VerticalChart';

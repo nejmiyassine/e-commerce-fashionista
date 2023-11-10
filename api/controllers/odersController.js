@@ -2,12 +2,15 @@ const Orders = require('../models/Orders');
 
 // Post Orders
 const createOrdersController = async (req, res) => {
+    const customer_id = req.user._id;
+    const { order_items, cart_total_price } = req.body;
+
     try {
         const newOrder = new Orders({
-            customer_id: req.user._id,
-            order_items: req.body.order_items,
+            customer_id,
+            order_items,
             order_date: new Date(),
-            cart_total_price: req.body.cart_total_price,
+            cart_total_price,
             status: 'open',
         });
 
@@ -15,7 +18,7 @@ const createOrdersController = async (req, res) => {
 
         res.status(201).json({
             message: 'Order created successfully',
-            createdOrder: createdOrder,
+            createdOrder,
         });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -81,46 +84,26 @@ const getOrderByIdController = async (req, res) => {
 //Get All Orders
 
 const getAllOrdersController = async (req, res) => {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+
     try {
         // if (!req.user.emailValidated) {
         //     return res.status(403).json({ error: 'Forbidden' });
         // }
 
-        const page = parseInt(req.query.page) || 1;
-        const limit = 10;
-        const skip = (page - 1) * limit;
-
-        const orders = await Orders.aggregate([
-            {
-                $lookup: {
-                    from: 'customers',
-                    localField: 'customer_id',
-                    foreignField: '_id',
-                    as: 'customerInfo',
-                },
-            },
-            {
-                $unwind: '$customerInfo',
-            },
-            {
-                $group: {
-                    _id: '$_id',
-                    count: { $sum: 1 },
-                    itemsTotal: { $sum: '$cart_total_price' },
-                    customer: {
-                        $first: '$customerInfo',
-                    },
-                },
-            },
-        ])
+        const orders = await Orders.find()
+            .populate('customer_id')
             .limit(limit)
-            .skip(skip);
+            .skip(skip)
+            .exec();
 
         if (orders.length === 0) {
-            return res.status(200).send([]);
+            return res.status(200).json([]);
         }
 
-        res.status(200).send(orders);
+        res.status(200).json({ orders });
     } catch (error) {
         res.status(500).send({
             success: false,

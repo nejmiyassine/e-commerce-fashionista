@@ -41,17 +41,17 @@ const DashboardCard = () => {
                                 </div>
                                 <div className='w-full border-b border-dash' />
                                 <div
-                                    className={`p-4 flex items-center gap-2 text-sm ${
+                                    className={`p-4 flex items-center text-sm gap-1 text-sm ${
                                         parseInt(percentage) >= 0
                                             ? 'text-green-600 dark:text-green-500'
                                             : 'text-red-600 dark:text-red-500'
                                     }  font-semibold`}
                                 >
-                                    <div className='flex items-center gap-1'>
+                                    <div className='flex items-center'>
                                         <p>{percentage}</p>
                                         {percentageIcon}
                                     </div>
-                                    <p>From last year</p>
+                                    <p>From last week</p>
                                 </div>
                             </div>
                         );

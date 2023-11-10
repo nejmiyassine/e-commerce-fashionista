@@ -59,6 +59,7 @@ const UsersTable = () => {
         useDeleteUserMutation();
 
     const { onOpen, isOpen, onOpenChange } = useDisclosure();
+
     const [selectedUser, setSelectedUser] = React.useState(null);
     const [filterValue, setFilterValue] = React.useState('');
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));

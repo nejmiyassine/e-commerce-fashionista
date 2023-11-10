@@ -14,7 +14,7 @@ const {
 
 router.post('/', isCustomer, createOrdersController);
 router.get('/:id', isCustomer, getOrderByIdController);
-router.get('/', isAdminOrManager, getAllOrdersController);
+router.get('/', getAllOrdersController);
 router.put('/:id', isAdminOrManager, updateOrdersController);
 
 module.exports = router;
