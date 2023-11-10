@@ -76,7 +76,8 @@ router.get('/:id', getCustomerById);
 // router.get('/search', isAdminOrManager, searchForCustomer);
 router.get('/search', searchForCustomer);
 router.put('/:id', updateCustomers);
-router.delete('/:id', isCustomer, isAdminOrManager, deleteCustomerById);
+// router.delete('/:id', isCustomer, isAdminOrManager, deleteCustomerById);
+router.delete('/:id', deleteCustomerById);
 router.get('/profile/:id', isCustomer, getProfile);
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
 router.post('/forgot-password', (req, res) =>

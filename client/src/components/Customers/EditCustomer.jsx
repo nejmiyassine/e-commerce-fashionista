@@ -65,12 +65,13 @@ const EditCustomer = ({ isOpen, onOpenChange, updatedCustomer }) => {
         }
     };
 
-    React.useEffect(() => {
+    React.useEffect(() => { 
         if (updatedCustomer) {
             reset({ ...updatedCustomer, password: passwordInitialValue });
         }
     }, [dispatch, updatedCustomer]);
 
+    console.log('display edit')
     return (
         <Modal
             isOpen={isOpen}

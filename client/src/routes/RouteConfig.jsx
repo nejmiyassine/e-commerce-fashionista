@@ -32,11 +32,12 @@ const RouteConfig = () => {
                     path='/admin/customers/:id'
                     element={<CustomerDetails />}
                 />
-                {/* test */}
+                 {/* test  */}
                 <Route
                     path='/admin/details'
                     element={<DisplayCustomerDetails />}
                 />
+                
 
                 <Route path='/admin/dashboard' element={<AdminDashboard />} />
                 <Route path='/admin/users' element={<Users />} />

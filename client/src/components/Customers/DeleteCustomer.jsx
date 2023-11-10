@@ -1,46 +1,37 @@
-import React from "react";
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
-
-const DeleteCustomer = () => {
-  const {isOpen, onOpen, onOpenChange} = useDisclosure();
-
-  return (
-    <>
-      <Button onPress={onOpen} className='bg-danger text-background' size='sm'> Delete</Button>
-      <Modal 
-        backdrop="blur" 
-        isOpen={isOpen} 
-        onOpenChange={onOpenChange}
-        classNames={{
-          // backdrop: "bg-gradient-to-t from-zinc-900 to-zinc-900/10 backdrop-opacity-20"
-        }}
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">Delete customer</ModalHeader>
-              <ModalBody>
-              
-                <p>
-                  Are you sure you want to delete the customer
-                </p>
-              </ModalBody>
-              <ModalFooter>
-                <Button className="bg-red-500 text-white" onPress={onClose}>
-                  Close
-                </Button>
-                <Button className="bg-blue-500 text-white"  onPress={onClose}>
-                  Delete
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-    </>
-  );
-}
+import React from 'react';
 
 
+import { deleteCustomer } from '../../features/customers/customersSlice';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-export default DeleteCustomer
+const DeleteCustomer = ({ deletedCustomer }) => {
+
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const isDeleting = !!deletedCustomer;
+    console.log('deletedCustomer', isDeleting);
+
+    React.useEffect(() => {
+        if (isDeleting) {
+            navigate('/admin/customers');
+            dispatch(
+                deleteCustomer({
+                    id: deletedCustomer._id,
+                })
+            );
+            console.log('try to delete');
+        }
+    }, [dispatch, deletedCustomer]);
+
+   
+
+    return (
+        <>
+        
+                 </>
+    );
+};
+
+export default DeleteCustomer;

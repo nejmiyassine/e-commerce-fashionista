@@ -52,11 +52,12 @@ exports.deleteCustomerById = async (req, res) => {
     try {
         const customer = await Customer.findByIdAndDelete(req.params.id);
         if (!customer) res.status(404).json({ message: 'Customer not found' });
-        return res
-            .status(200)
-            .json({ message: 'Customer deleted successfully' });
+         return res
+             .status(200)
+           .json({ message: 'Customer deleted successfully' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.log('error from customerController : '  ,error)
+         res.status(500).json({ message: error.message });
     }
 };
 

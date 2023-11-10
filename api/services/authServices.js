@@ -39,8 +39,8 @@ const authRegister = async (req, res, model, userRole) => {
             password: hashedPassword,
         });
 
-        if (userName) {
-            user.username = userName;
+        if (username) {
+            user.username = username;
         }
 
         const OTP = generateOtp();

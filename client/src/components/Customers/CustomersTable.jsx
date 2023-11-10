@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+
 import {
     Table,
     TableHeader,
@@ -38,7 +39,7 @@ const columns = [
     { name: 'EMAIL', uid: 'email', sortable: true },
     { name: 'LAST_LOGIN', uid: 'last_login', sortable: true },
     { name: 'CREATION_DATE', uid: 'creation_date', sortable: true },
-    //
+    
     { name: 'VALID_ACCOUNT', uid: 'valid_account' },
     { name: 'ACTIVE', uid: 'active' },
     { name: '', uid: 'actions' },
@@ -51,7 +52,6 @@ const verificationOptions = [
 
 const INITIAL_VISIBLE_COLUMNS = [
     'email',
-
     'first_name',
     '_id',
     'active_account',
@@ -60,10 +60,11 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 const CustomersTable = () => {
-    const { onOpen, isOpen, onOpenChange } = useDisclosure();
+    const {  isOpen, onOpenChange } = useDisclosure();
     const { loading, data, error } = useSelector((state) => state.customers);
 
     const [updatedCustomer, setUpdatedCustomer] = useState('');
+    const [deletedCustomer, setDeletedCustomer] = useState('');
     const [filterValue, setFilterValue] = React.useState('');
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
@@ -92,7 +93,6 @@ const CustomersTable = () => {
         );
     }, [visibleColumns]);
 
-    // filter
     const filteredItems = React.useMemo(() => {
         let filteredCustomers = data;
 
@@ -143,10 +143,21 @@ const CustomersTable = () => {
     const renderCell = React.useCallback((customer, columnKey) => {
         const cellValue = customer[columnKey];
 
-        //
+        
         const handleUpdate = () => {
             setUpdatedCustomer(customer);
             onOpenChange(true);
+        };
+
+      
+        const handleDelete = () => {
+            if (
+                window.confirm('Are you sure you want to delete this customer?')
+            ) {
+                setDeletedCustomer(customer);
+
+             
+            }
         };
 
         switch (columnKey) {
@@ -229,7 +240,7 @@ const CustomersTable = () => {
                         </Button>
 
                         <Button
-                            className='bg-foreground text-background'
+                            className='bg-blue-600 text-background w-14'
                             size='sm'
                         >
                             <Link to={`/admin/customers/${customer._id}`}>
@@ -237,7 +248,14 @@ const CustomersTable = () => {
                             </Link>
                         </Button>
 
-                        <DeleteCustomer />
+
+                        <Button
+                            size='sm'
+                            onPress = {handleDelete}
+                            className='bg-danger text-background'
+                        >
+                            Delete
+                        </Button>
                     </div>
                 );
 
@@ -457,6 +475,12 @@ const CustomersTable = () => {
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}
                 updatedCustomer={updatedCustomer}
+            />
+
+            <DeleteCustomer
+                //  isOpen={isOpen}
+                //  onOpenChange={onOpenChange}
+                deletedCustomer={deletedCustomer}
             />
 
             <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
