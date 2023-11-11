@@ -11,7 +11,7 @@ const createOrdersController = async (req, res) => {
             order_items,
             order_date: new Date(),
             cart_total_price,
-            status: 'open',
+            status: 'pending',
         });
 
         const createdOrder = await newOrder.save();

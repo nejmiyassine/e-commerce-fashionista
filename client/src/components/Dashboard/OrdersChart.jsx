@@ -1,8 +1,10 @@
 import React from 'react';
-import { useGetAllOrdersQuery } from '../../app/api/ordersApi';
 import { toast } from 'react-toastify';
 import NProgress from 'nprogress';
-import AreaChartCopy from './AreaChartCopy';
+
+import { useGetAllOrdersQuery } from '../../app/api/ordersApi';
+import OrdersLineChart from './OrdersLineChart';
+import LoadingSpinner from '../LoadingSpinner';
 
 const OrdersChart = () => {
     const { isLoading, isError, error, data: orders } = useGetAllOrdersQuery();
@@ -24,39 +26,67 @@ const OrdersChart = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoading]);
 
-    const selectOrdersLast7Days = () => {
-        const orders = data;
-        const last7Days = new Date();
-        last7Days.setDate(last7Days.getDate() - 7);
-
-        return orders.filter(
-            (order) => new Date(order.order_date) >= last7Days
-        );
+    const getDayName = (date) => {
+        const daysOfWeek = [
+            'Sunday',
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+        ];
+        return daysOfWeek[new Date(date).getDay()];
     };
 
-    const selectOrdersLastMonth = () => {
-        const orders = data;
-        const lastMonth = new Date();
-        lastMonth.setMonth(lastMonth.getMonth() - 1);
+    const generateLast7Days = () => {
+        const last7Days = [];
+        for (let i = 6; i >= 0; i--) {
+            const currentDate = new Date();
+            currentDate.setDate(currentDate.getDate() - i);
+            last7Days.push({
+                date: currentDate.toLocaleDateString(),
+                dayName: getDayName(currentDate),
+            });
+        }
+        // console.log('last7Days: ', last7Days);
+        return last7Days;
+    };
 
-        return orders.filter(
-            (order) => new Date(order.order_date) >= lastMonth
-        );
+    const selectOrdersLast7Days = (data) => {
+        const orders = data;
+        const last7Days = generateLast7Days();
+        return last7Days.map((day) => {
+            const ordersForDay = orders.filter(
+                (order) =>
+                    new Date(order.order_date).toLocaleDateString() === day.date
+            );
+
+            return {
+                date: day.date,
+                dayName: day.dayName,
+                orders: ordersForDay,
+            };
+        });
     };
 
     const selectOrdersCountByDay = (orders) => {
         const countByDay = {};
-        orders.forEach((order) => {
-            const date = new Date(order.order_date).toLocaleDateString();
-            countByDay[date] = (countByDay[date] || 0) + 1;
+        orders.forEach((day) => {
+            const date = day.dayName;
+            countByDay[date] = day.orders.length;
         });
         return countByDay;
     };
 
-    const last7DaysOrders = selectOrdersLast7Days;
+    const last7DaysOrders = selectOrdersLast7Days(data);
     const ordersCountByDay = selectOrdersCountByDay(last7DaysOrders);
 
-    return <AreaChartCopy data={ordersCountByDay} />;
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
+
+    return <OrdersLineChart className='flex-2' data={ordersCountByDay} />;
 };
 
 export default OrdersChart;

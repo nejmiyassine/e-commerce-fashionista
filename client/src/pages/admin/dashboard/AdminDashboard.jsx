@@ -1,7 +1,8 @@
 import DashboardWelcome from '../../../components/Dashboard/DashboardWelcome';
 import DashboardCard from '../../../components/Dashboard/DashboardCard';
 import VerticalChart from '../../../components/Dashboard/VerticalChart';
-import AreaChart from '../../../components/Dashboard/AreaChart';
+// import AreaChart from '../../../components/Dashboard/AreaChart';
+import OrdersChart from '../../../components/Dashboard/OrdersChart';
 import LastUsersTable from '../../../components/Users/LastUsersTable';
 import LastOrders from '../../../components/LastOrders';
 import Layout from '../../../layouts/Layout';
@@ -17,7 +18,7 @@ const AdminDashboard = () => {
                         <VerticalChart />
                     </div>
                     <div className='w-full lg:w-1/2 rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
-                        <AreaChart />
+                        <OrdersChart />
                     </div>
                 </div>
                 <div className='mt-6 flex gap-4'>
