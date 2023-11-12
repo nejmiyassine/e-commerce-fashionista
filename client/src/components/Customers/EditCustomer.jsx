@@ -16,6 +16,8 @@ import { updateCustomer } from '../../features/customers/customersSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import {toast} from 'react-toastify'
+
 const schema = yup.object({
     first_name: yup.string().required('First Name is required'),
     last_name: yup.string().required('Last Name is required'),
@@ -62,6 +64,7 @@ const EditCustomer = ({ isOpen, onOpenChange, updatedCustomer }) => {
                     updatedCustomerData: formData,
                 })
             );
+            toast.success('Updated successfully')
         }
     };
 

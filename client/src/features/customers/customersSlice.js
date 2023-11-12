@@ -1,18 +1,13 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
 
-const initialState = {
-    isLoading: false,
-    data: [],
-    error: '',
-};
+import API from '../../app/api/api';
 
 //all customers
 export const fetchCustomers = createAsyncThunk(
     'customers/fetchCustomers',
     async (_, { rejectWithValue }) => {
         try {
-            const res = await axios.get('http://localhost:8000/v1/customers');
+            const res = await API.get('/customers');
             console.log('data from axios', res.data);
             return res.data;
         } catch (error) {
@@ -26,9 +21,8 @@ export const customersById = createAsyncThunk(
     'customers/customersById',
     async (id, { rejectWithValue }) => {
         try {
-            const res = await axios.get(
-                `http://localhost:8000/v1/customers/${id}`
-            );
+            const res = await API.get(`/customers/${id}`);
+
             console.log('customer details from axios', res.data);
             return res.data;
         } catch (error) {
@@ -42,10 +36,8 @@ export const updateCustomer = createAsyncThunk(
     'customers/updateCustomer',
     async ({ customerId, updatedCustomerData }, { rejectWithValue }) => {
         try {
-            const res = await axios.put(
-                `http://localhost:8000/v1/customers/${customerId}`,
-                updatedCustomerData
-            );
+            const res = await API.put( `customers/${customerId}`, updatedCustomerData );
+
             console.log('updated customer', res.data);
             return res.data;
         } catch (error) {
@@ -59,10 +51,8 @@ export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
     async ({ id, deletedCustomer }, { rejectWithValue }) => {
         try {
-            const res = await axios.delete(
-                `http://localhost:8000/v1/customers/${id}`,
-                deletedCustomer
-            );
+            const res = await API.delete(`customers/${id}`, deletedCustomer);
+
             console.log('delete from slice', res.data);
             return res.data;
         } catch (error) {
@@ -70,6 +60,12 @@ export const deleteCustomer = createAsyncThunk(
         }
     }
 );
+
+const initialState = {
+    isLoading: false,
+    data: [],
+    error: '',
+};
 
 const customersSlice = createSlice({
     name: 'customers',
@@ -123,8 +119,7 @@ const customersSlice = createSlice({
                 const {
                     arg: { customerId },
                 } = action.meta;
-                console.log('action.meta' , action.meta);
-
+                console.log('action.meta', action.meta);
 
                 if (customerId) {
                     state.data = state.data?.map((customer) =>
@@ -145,26 +140,22 @@ const customersSlice = createSlice({
                 console.log('pending');
             });
 
-    
         console.log('next step from customerSlice');
         builder
             .addCase(deleteCustomer.fulfilled, (state, action) => {
                 state.isLoading = false;
-
-        
 
                 const {
                     arg: { id },
                 } = action.meta;
                 console.log('action.meta', action.meta);
 
-
                 if (id) {
                     state.isLoading = false;
                     state.data = state.data.filter(
                         (customer) => customer._id !== id
                     );
-                    console.log('state.data' , state.data)
+                    console.log('state.data', state.data);
                 }
 
                 state.error = '';

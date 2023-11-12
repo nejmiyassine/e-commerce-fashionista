@@ -5,6 +5,9 @@ import { deleteCustomer } from '../../features/customers/customersSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
+import { toast } from 'react-toastify';
+
+
 const DeleteCustomer = ({ deletedCustomer }) => {
 
     const navigate = useNavigate();
@@ -22,6 +25,7 @@ const DeleteCustomer = ({ deletedCustomer }) => {
                 })
             );
             console.log('try to delete');
+            toast.success('Customer is deleted successfully')
         }
     }, [dispatch, deletedCustomer]);
 
