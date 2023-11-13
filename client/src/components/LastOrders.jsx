@@ -35,7 +35,6 @@ const statusColorMap = {
 const LastOrders = () => {
     const { isLoading, isError, error, data: orders } = useGetAllOrdersQuery();
     const data = React.useMemo(() => (orders ? orders.orders : []), [orders]);
-    // Status of orders [pending, shipped, fulfilled, canceled, refunded]
     const loadingState = isLoading || data?.length === 0 ? 'loading' : 'idle';
 
     React.useEffect(() => {
@@ -143,7 +142,7 @@ const LastOrders = () => {
 
             <Table
                 aria-label='Last orders table'
-                className='overflow-y-hidden'
+                className='overflow-x-hidden'
                 isCompact
                 removeWrapper
                 classNames={classNames}
@@ -163,7 +162,7 @@ const LastOrders = () => {
                 </TableHeader>
                 <TableBody
                     emptyContent={'No order found'}
-                    items={data ?? []}
+                    items={data.slice(0, 5) ?? []}
                     loadingContent={<LoadingSpinner />}
                     loadingState={loadingState}
                 >

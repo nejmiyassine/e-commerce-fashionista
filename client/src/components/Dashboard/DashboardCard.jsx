@@ -2,7 +2,7 @@ import { cardItemsData } from '../../data/cardItemsData';
 
 const DashboardCard = () => {
     return (
-        <div className='flex justify-between gap-4 mt-4'>
+        <div className='grid grid-rows-4 grid-flow-col md:grid-rows-2 lg:grid-rows-1 gap-4 mt-4'>
             {cardItemsData &&
                 cardItemsData.map(
                     (

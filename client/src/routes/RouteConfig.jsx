@@ -12,6 +12,7 @@ import DisplayCustomerDetails from '../components/Customers/DisplayCustomerDetai
 import ViewAllCustomers from '../pages/customers/ViewAllCustomers';
 import Users from '../pages/admin/users/Users';
 import UserDetails from '../pages/admin/users/UserDetails';
+import Orders from '../pages/Orders/Orders';
 
 const RouteConfig = () => {
     return (
@@ -22,6 +23,7 @@ const RouteConfig = () => {
                 <Route path='/admin/logout' element={<Logout />} />
                 <Route path='/admin/products' element={<Products />} />
                 <Route path='/admin/categories' element={<Categories />} />
+                <Route path='/admin/orders' element={<Orders />} />
                 <Route
                     path='/admin/subcategories'
                     element={<Subcategories />}

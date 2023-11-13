@@ -11,16 +11,6 @@ export const sidebarItemsData = [
         path: '/admin/dashboard',
     },
     {
-        icon: MdOutlineDiscount,
-        text: 'Products',
-        path: '/admin/products',
-    },
-    {
-        icon: HiOutlineShoppingBag,
-        text: 'Orders',
-        path: '/admin/orders',
-    },
-    {
         icon: BiUser,
         text: 'Customers',
         path: '/admin/customers',
@@ -29,6 +19,16 @@ export const sidebarItemsData = [
         icon: UsersIcon,
         text: 'Users',
         path: '/admin/users',
+    },
+    {
+        icon: MdOutlineDiscount,
+        text: 'Products',
+        path: '/admin/products',
+    },
+    {
+        icon: HiOutlineShoppingBag,
+        text: 'Orders',
+        path: '/admin/orders',
     },
     {
         icon: BiCategory,

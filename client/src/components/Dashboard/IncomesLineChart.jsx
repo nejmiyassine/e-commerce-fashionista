@@ -9,6 +9,7 @@ import {
     Title,
     Tooltip,
     Legend,
+    Filler,
     TimeScale,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
@@ -23,31 +24,32 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
+    Filler,
     TimeScale
 );
 
-const OrdersLineChart = ({ data }) => {
+const IncomesLineChart = ({ data }) => {
     const { darkMode } = useDarkMode();
 
     const labels = Object.keys(data);
-    const ordersData = Object.values(data);
+    const incomesData = Object.values(data);
 
     const chartData = () => {
         return {
             labels,
             datasets: [
                 {
-                    label: 'Orders Count',
-                    data: ordersData,
+                    label: '$ Incomes',
+                    data: incomesData,
                     fill: 'start',
                     backgroundColor: (context) => {
                         const ctx = context.chart.ctx;
                         const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-                        gradient.addColorStop(0, 'rgba(75,192,192, 1)');
-                        gradient.addColorStop(1, 'rgba(75,192,192,0.2)');
+                        gradient.addColorStop(0, 'rgba(144, 238, 144, 1)');
+                        gradient.addColorStop(1, 'rgba(144, 238, 144, 0.2)');
                         return gradient;
                     },
-                    borderColor: 'rgba(75,192,192,1)',
+                    borderColor: 'rgba(34, 139, 34, .7)',
                     borderWidth: 1,
                 },
             ],
@@ -111,8 +113,8 @@ const OrdersLineChart = ({ data }) => {
     return <Line data={chartData()} options={chartOptions} />;
 };
 
-export default OrdersLineChart;
+export default IncomesLineChart;
 
-OrdersLineChart.propTypes = {
+IncomesLineChart.propTypes = {
     data: PropTypes.any,
 };

@@ -1,66 +1,69 @@
 import React from 'react';
-import {
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
-    Input,
-    Button,
-    DropdownTrigger,
-    Dropdown,
-    DropdownMenu,
-    DropdownItem,
-    Chip,
-    User,
-    Pagination,
-    useDisclosure,
-} from '@nextui-org/react';
 import { toast } from 'react-toastify';
 import NProgress from 'nprogress';
-import { Link } from 'react-router-dom';
 
-import {
-    UserPlus,
-    VerticalDotsIcon,
-    SearchIcon,
-    ChevronDownIcon,
-} from '../../icons/Icons';
-
-import { capitalize } from '../../utils/capitalize';
+import { useGetAllOrdersQuery } from '../../app/api/ordersApi';
+import Layout from '../../layouts/Layout';
+import FormatDate from '../../components/FormatDate';
 import { sliceText } from '../../utils/sliceText';
 import {
-    columns,
-    roleColorMap,
-    statusOptions,
-    INITIAL_VISIBLE_COLUMNS,
-} from '../../Constants/userTableConstants';
+    Button,
+    Chip,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownTrigger,
+    Input,
+    Pagination,
+    Table,
+    TableBody,
+    TableCell,
+    TableColumn,
+    TableHeader,
+    TableRow,
+} from '@nextui-org/react';
+import { ChevronDownIcon, SearchIcon } from '../../icons/Icons';
+import { capitalize } from '../../utils/capitalize';
+import LoadingSpinner from '../../components/LoadingSpinner';
+import { BiSolidCircle } from 'react-icons/bi';
 
-import FormatDate from '../FormatDate';
-import LoadingSpinner from '../LoadingSpinner';
-import UserModalForm from './UserModalForm';
+const INITIAL_VISIBLE_COLUMNS = [
+    '_id',
+    'order_items',
+    'cart_total_price',
+    'status',
+    'order_date',
+];
 
-import {
-    useDeleteUserMutation,
-    useGetAllUsersQuery,
-} from '../../app/api/usersApi';
+const columns = [
+    { name: 'ID', uid: '_id' },
+    { name: 'NAME', uid: 'order_items' },
+    { name: 'PRICE', uid: 'cart_total_price', sortable: true },
+    { name: 'STATUS', uid: 'status' },
+    { name: 'ORDER DATE', uid: 'order_date', sortable: true },
+];
 
-const UsersTable = () => {
-    const {
-        isLoading: isGetAllUsersLoading,
-        isFetching: isGetAllUsersFetching,
-        isError: isGetAllUsersError,
-        isSuccess: isGetAllUsersSuccess,
-        error: getAllUsersError,
-        data: users,
-    } = useGetAllUsersQuery();
-    const [deleteUser, { isLoading, isError, error, isSuccess }] =
-        useDeleteUserMutation();
+const orderStatus = [
+    { name: 'Pending', uid: 'pending' },
+    { name: 'Processing', uid: 'processing' },
+    { name: 'Shipped', uid: 'shipped' },
+    { name: 'Delivered', uid: 'delivered' },
+    { name: 'Refunded', uid: 'refunded' },
+    { name: 'Canceled', uid: 'canceled' },
+];
 
-    const { onOpen, isOpen, onOpenChange } = useDisclosure();
+const statusColorMap = {
+    pending: 'warning',
+    processing: 'warning',
+    shipped: 'success',
+    delivered: 'success',
+    refunded: 'danger',
+    canceled: 'danger',
+};
 
-    const [selectedUser, setSelectedUser] = React.useState(null);
+const Orders = () => {
+    const { isLoading, isError, error, data: orders } = useGetAllOrdersQuery();
+    const data = React.useMemo(() => (orders ? orders.orders : []), [orders]);
     const [filterValue, setFilterValue] = React.useState('');
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
     const [visibleColumns, setVisibleColumns] = React.useState(
@@ -69,37 +72,21 @@ const UsersTable = () => {
     const [statusFilter, setStatusFilter] = React.useState('all');
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [sortDescriptor, setSortDescriptor] = React.useState({
-        column: 'username',
+        column: 'order_date',
         direction: 'ascending',
     });
     const [page, setPage] = React.useState(1);
 
     const pages = React.useMemo(() => {
-        return users?.length ? Math.ceil(users.length / rowsPerPage) : 0;
-    }, [users?.length, rowsPerPage]);
+        return data?.length ? Math.ceil(data.length / rowsPerPage) : 0;
+    }, [data?.length, rowsPerPage]);
 
-    const loadingState =
-        isGetAllUsersLoading ||
-        isGetAllUsersFetching ||
-        isLoading ||
-        users?.length === 0
-            ? 'loading'
-            : 'idle';
+    const loadingState = isLoading || data?.length === 0 ? 'loading' : 'idle';
 
     React.useEffect(() => {
-        if (isSuccess) {
-            toast.success('User deleted successfully');
+        if (isError) {
             NProgress.done();
-        }
-
-        if (isGetAllUsersSuccess) {
-            toast.success('Get All Users Successfully');
-            NProgress.done();
-        }
-
-        if (isError || isGetAllUsersError) {
-            NProgress.done();
-            const err = error || getAllUsersError;
+            const err = error;
             if (Array.isArray(err.data.error)) {
                 err.data.error.forEach((el) =>
                     toast.error(el.message, {
@@ -118,7 +105,7 @@ const UsersTable = () => {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoading, isGetAllUsersLoading]);
+    }, [isLoading]);
 
     const hasSearchFilter = Boolean(filterValue);
 
@@ -131,25 +118,28 @@ const UsersTable = () => {
     }, [visibleColumns]);
 
     const filteredItems = React.useMemo(() => {
-        let filteredUsers = users;
+        let filteredOrders = data;
 
-        if (hasSearchFilter && Array.isArray(filteredUsers)) {
-            filteredUsers = filteredUsers.filter((user) =>
-                user.username.toLowerCase().includes(filterValue.toLowerCase())
+        if (hasSearchFilter && Array.isArray(filteredOrders)) {
+            filteredOrders = filteredOrders.filter((order) =>
+                order.order_items[0]
+                    .toLowerCase()
+                    .includes(filterValue.toLowerCase())
             );
         }
+
         if (
             statusFilter !== 'all' &&
-            Array.from(statusFilter).length !== statusOptions.length &&
-            Array.isArray(filteredUsers)
+            Array.from(statusFilter).length !== orderStatus.length &&
+            Array.isArray(filteredOrders)
         ) {
-            filteredUsers = filteredUsers.filter((user) =>
-                Array.from(statusFilter).includes(user.role)
+            filteredOrders = filteredOrders.filter((order) =>
+                Array.from(statusFilter).includes(order.status)
             );
         }
 
-        return filteredUsers;
-    }, [users, filterValue, statusFilter, hasSearchFilter]);
+        return filteredOrders;
+    }, [data, filterValue, statusFilter, hasSearchFilter]);
 
     const items = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
@@ -170,121 +160,48 @@ const UsersTable = () => {
             });
     }, [sortDescriptor, items]);
 
-    const renderCell = React.useCallback(
-        (user, columnKey) => {
-            const cellValue = user[columnKey];
-
-            const handleDelete = (userId) => {
-                if (
-                    window.confirm('Are you sure you want to delete this user?')
-                ) {
-                    deleteUser(userId);
-
-                    if (isSuccess) {
-                        alert('User Deleted Successfully!');
-                    }
-                }
-            };
-
-            const handleUpdate = () => {
-                setSelectedUser(user);
-                onOpenChange(true);
-            };
-
-            switch (columnKey) {
-                case 'username':
-                    return (
-                        <User
-                            avatarProps={{
-                                radius: 'full',
-                                size: 'sm',
-                                src: user.avatar
-                                    ? user.avatar
-                                    : 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
-                            }}
-                            classNames={{
-                                description: 'text-default-500',
-                            }}
-                            description={user.email}
-                            name={cellValue}
-                        >
-                            {user.email}
-                        </User>
-                    );
-                case 'role':
-                    return (
-                        <p
-                            className={`capitalize text-sm font-semibold text-${
-                                roleColorMap[user.role.toLowerCase()]
-                            }`}
-                        >
-                            {cellValue}
+    const renderCell = React.useCallback((order, columnKey) => {
+        const cellValue = order[columnKey];
+        switch (columnKey) {
+            case '_id':
+                return (
+                    <div>
+                        <p className='text-gray-500 dark:text-gray-300'>
+                            {sliceText(cellValue, 10)}
                         </p>
-                    );
-                case 'status':
-                    return (
-                        <Chip
-                            className='capitalize border-none gap-1 text-default-600'
-                            color={roleColorMap[user.role]}
-                            size='sm'
-                            variant='dot'
-                        >
-                            {cellValue}
-                        </Chip>
-                    );
-                case 'actions':
-                    return (
-                        <div className='relative flex justify-end items-center gap-2'>
-                            <Dropdown className='bg-background border-1 border-default-200'>
-                                <DropdownTrigger>
-                                    <Button
-                                        isIconOnly
-                                        radius='full'
-                                        size='sm'
-                                        variant='light'
-                                    >
-                                        <VerticalDotsIcon className='text-default-400' />
-                                    </Button>
-                                </DropdownTrigger>
-                                <DropdownMenu>
-                                    <DropdownItem>
-                                        <Link to={`/admin/users/${user._id}`}>
-                                            View
-                                        </Link>
-                                    </DropdownItem>
-                                    <DropdownItem onPress={handleUpdate}>
-                                        Edit
-                                    </DropdownItem>
-                                    <DropdownItem
-                                        onPress={() => handleDelete(user._id)}
-                                    >
-                                        Delete
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                        </div>
-                    );
-                case '_id':
-                    return (
-                        <div>
-                            <p className='text-gray-500 dark:text-gray-300'>
-                                {sliceText(cellValue, 10)}
-                            </p>
-                        </div>
-                    );
-                case 'creation_date':
-                    return <FormatDate cellValue={cellValue} />;
-                case 'last_login':
-                    return <FormatDate cellValue={cellValue} />;
-                case 'last_update':
-                    return <FormatDate cellValue={cellValue} />;
+                    </div>
+                );
 
-                default:
-                    return cellValue;
-            }
-        },
-        [deleteUser, isSuccess, onOpenChange]
-    );
+            case 'order_items':
+                return (
+                    <p className='font-semibold'>{capitalize(cellValue[0])}</p>
+                );
+
+            case 'cart_total_price':
+                return <p className='font-semibold'>$ {cellValue}</p>;
+
+            case 'status':
+                return (
+                    <Chip
+                        className='capitalize'
+                        color={statusColorMap[order.status.toLowerCase()]}
+                        size='sm'
+                        variant='flat'
+                    >
+                        <div className='flex items-center gap-1'>
+                            <BiSolidCircle size={8} />
+                            <p>{cellValue}</p>
+                        </div>
+                    </Chip>
+                );
+
+            case 'order_date':
+                return <FormatDate cellValue={cellValue} />;
+
+            default:
+                return cellValue;
+        }
+    }, []);
 
     const onRowsPerPageChange = React.useCallback((e) => {
         setRowsPerPage(Number(e.target.value));
@@ -330,7 +247,7 @@ const UsersTable = () => {
                                     size='sm'
                                     variant='flat'
                                 >
-                                    Role
+                                    Order Status
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu
@@ -341,7 +258,7 @@ const UsersTable = () => {
                                 selectionMode='multiple'
                                 onSelectionChange={setStatusFilter}
                             >
-                                {statusOptions.map((status) => (
+                                {orderStatus.map((status) => (
                                     <DropdownItem
                                         key={status.uid}
                                         className='capitalize'
@@ -381,29 +298,11 @@ const UsersTable = () => {
                                 ))}
                             </DropdownMenu>
                         </Dropdown>
-                        {isGetAllUsersLoading || isGetAllUsersFetching ? (
-                            <Button
-                                className='bg-foreground text-background'
-                                size='sm'
-                                isDisabled
-                            >
-                                Loading ...
-                            </Button>
-                        ) : (
-                            <Button
-                                className='bg-foreground text-background'
-                                endContent={<UserPlus />}
-                                size='sm'
-                                onPress={onOpen}
-                            >
-                                Add User
-                            </Button>
-                        )}
                     </div>
                 </div>
                 <div className='flex justify-between items-center'>
                     <span className='text-default-400 text-small'>
-                        Total {users && users.length} users
+                        Total {data ? data.length : 0} orders
                     </span>
                     <label className='flex items-center text-default-400 text-small'>
                         Rows per page:
@@ -420,10 +319,7 @@ const UsersTable = () => {
             </div>
         );
     }, [
-        isGetAllUsersLoading,
-        isGetAllUsersFetching,
-        onOpen,
-        users,
+        data,
         filterValue,
         statusFilter,
         visibleColumns,
@@ -471,33 +367,29 @@ const UsersTable = () => {
             td: [
                 // changing the rows border radius
                 // first
-                'group-data-[first=true]:first:before:rounded-none',
-                'group-data-[first=true]:last:before:rounded-none',
+                'group-data-[first=true]:first:before:rounded-none py-2',
+                'group-data-[first=true]:last:before:rounded-none py-2',
                 // middle
-                'group-data-[middle=true]:before:rounded-none',
+                'group-data-[middle=true]:before:rounded-none py-2',
                 // last
-                'group-data-[last=true]:first:before:rounded-none',
-                'group-data-[last=true]:last:before:rounded-none',
+                'group-data-[last=true]:first:before:rounded-none py-2',
+                'group-data-[last=true]:last:before:rounded-none py-2',
             ],
         }),
         []
     );
 
     return (
-        <>
-            <UserModalForm
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-                userData={selectedUser}
-            />
-            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
-                <h2 className='font-bold text-xl mb-4'>All Users</h2>
+        <Layout>
+            <div className='rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
+                <h2 className='font-bold text-xl mb-4'>All Orders</h2>
                 <Table
                     isCompact
                     removeWrapper
                     aria-label='Example table with custom cells, pagination and sorting'
                     bottomContent={bottomContent}
                     bottomContentPlacement='outside'
+                    className='overflow-hidden'
                     checkboxesProps={{
                         classNames: {
                             wrapper:
@@ -529,7 +421,7 @@ const UsersTable = () => {
                         )}
                     </TableHeader>
                     <TableBody
-                        emptyContent={'No users found'}
+                        emptyContent={'No orders found'}
                         items={sortedItems ?? []}
                         loadingContent={<LoadingSpinner />}
                         loadingState={loadingState}
@@ -546,8 +438,8 @@ const UsersTable = () => {
                     </TableBody>
                 </Table>
             </div>
-        </>
+        </Layout>
     );
 };
 
-export default UsersTable;
+export default Orders;

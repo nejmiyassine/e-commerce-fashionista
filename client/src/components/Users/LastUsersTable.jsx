@@ -22,17 +22,13 @@ import { capitalize } from '../../utils/capitalize';
 import LoadingSpinner from '../LoadingSpinner';
 import { sliceText } from '../../utils/sliceText';
 import { useGetAllUsersQuery } from '../../app/api/usersApi';
+import { roleColorMap } from '../../Constants/userTableConstants';
 
 const columns = [
     { name: 'ID', uid: '_id' },
     { name: 'USERNAME', uid: 'username' },
     { name: 'ROLE', uid: 'role' },
 ];
-
-const roleColorMap = {
-    admin: 'success',
-    manager: 'warning',
-};
 
 const INITIAL_VISIBLE_COLUMNS = ['_id', 'username', 'role'];
 
