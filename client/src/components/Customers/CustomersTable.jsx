@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-
 import {
     Table,
     TableHeader,
@@ -39,7 +38,7 @@ const columns = [
     { name: 'EMAIL', uid: 'email', sortable: true },
     { name: 'LAST_LOGIN', uid: 'last_login', sortable: true },
     { name: 'CREATION_DATE', uid: 'creation_date', sortable: true },
-    
+
     { name: 'VALID_ACCOUNT', uid: 'valid_account' },
     { name: 'ACTIVE', uid: 'active' },
     { name: '', uid: 'actions' },
@@ -60,7 +59,7 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 const CustomersTable = () => {
-    const {  isOpen, onOpenChange } = useDisclosure();
+    const { isOpen, onOpenChange } = useDisclosure();
     const { loading, data, error } = useSelector((state) => state.customers);
 
     const [updatedCustomer, setUpdatedCustomer] = useState('');
@@ -143,20 +142,16 @@ const CustomersTable = () => {
     const renderCell = React.useCallback((customer, columnKey) => {
         const cellValue = customer[columnKey];
 
-        
         const handleUpdate = () => {
             setUpdatedCustomer(customer);
             onOpenChange(true);
         };
 
-      
         const handleDelete = () => {
             if (
                 window.confirm('Are you sure you want to delete this customer?')
             ) {
                 setDeletedCustomer(customer);
-
-             
             }
         };
 
@@ -198,39 +193,6 @@ const CustomersTable = () => {
             case 'actions':
                 return (
                     <div className='relative flex justify-end items-center gap-2'>
-                        {/* <Dropdown className='bg-background border-1 border-default-200'> */}
-                        {/* three vertical buttons */}
-                        {/* <DropdownTrigger>
-                                <Button
-                                    isIconOnly
-                                    radius='full'
-                                    size='sm'
-                                    variant='light'
-                                >
-                                    <VerticalDotsIcon className='text-default-400' />
-                                </Button>
-                            </DropdownTrigger> */}
-
-                        {/* <DropdownMenu> */}
-                        {/* <DropdownItem>
-                                    <Link to={'/customer/:id'}>View</Link>
-                                </DropdownItem>
-
-                                {/* <DropdownItem >
-                                {/* <Link to ={'/customer/:id'}  >Edit Customer</Link>
-                                 {/* </DropdownItem>
-
-                                <DropdownItem onPress={handleUpdate}>
-                                    Edit
-                                </DropdownItem>
-
-                            <DropdownItem
-                                className="text-danger"
-                                onPress={() => handleDelete(customer._id)}
-                                >
-                                    Delete
-                           </DropdownItem>  */}
-
                         <Button
                             className='bg-foreground text-background'
                             size='sm'
@@ -248,10 +210,9 @@ const CustomersTable = () => {
                             </Link>
                         </Button>
 
-
                         <Button
                             size='sm'
-                            onPress = {handleDelete}
+                            onPress={handleDelete}
                             className='bg-danger text-background'
                         >
                             Delete

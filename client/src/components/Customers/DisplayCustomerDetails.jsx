@@ -1,60 +1,89 @@
 import { React, useEffect } from 'react';
-import { Link  ,useParams } from 'react-router-dom';
-import {
-    Table,
-    TableHeader,
-    TableColumn,
-    TableBody,
-    TableRow,
-    TableCell,
-} from '@nextui-org/react';
+import { Link, useParams } from 'react-router-dom';
+
 import Layout from '../../layouts/Layout';
 import { Button } from '@nextui-org/react';
 import { BiSolidCalendar } from 'react-icons/bi';
 import { BsArrowLeftShort } from 'react-icons/bs';
 import { formatDate } from '../../utils/formatDate';
 import { MailIcon } from '../../icons/Icons';
+import { AiOutlineDollar } from 'react-icons/ai';
+import { AiOutlineShopping } from 'react-icons/ai';
+import { MdOutlineTaskAlt } from 'react-icons/md';
+import { MdOutlineCancel } from 'react-icons/md';
 
-
-
-
-// const DeleteCustomer = () => {
-//     const { onOpen} = useDisclosure();
-//     return (
-//         <>
-//              {/* <Button
-//                 onPress={onOpen}
-//                 className='bg-foreground text-background'
-//                 size='sm'
-//             >
-//                 View
-//             </Button>  */}
-
-const DisplayCustomerDetails = ( {customer} ) => {
-
+const DisplayCustomerDetails = ({ customer }) => {
     return (
         <Layout>
-                <div className='bg-white dark:bg-primary-deepDark'>
-                {/* <Table removeWrapper aria-label='Example  collection table'>
-                    <TableHeader>
-                        <TableColumn>PRODUCT ID</TableColumn>
-                        <TableColumn>PRODUCT NAME</TableColumn>
-                        <TableColumn>STATUS</TableColumn>
-                        <TableColumn>PRICE</TableColumn>
-                        <TableColumn>PAYMENT</TableColumn>
-                    </TableHeader>
+            {/* customers static */}
 
-                    <TableBody>
-                        <TableRow key='1'>
-                            <TableCell>Product</TableCell>
-                            <TableCell>Product</TableCell>
-                            <TableCell>Orders</TableCell>
-                            <TableCell>Active</TableCell>
-                            <TableCell>Active</TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table> */}
+            <div className='flex mt-14   text-gray-800 py-5  '>
+                <div className=' w-full'>
+                    <div className='grid grid-cols-12 gap-4'>
+                        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+                            <div className='flex flex-row bg-white shadow-sm rounded p-4'>
+                                <div className='flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-blue-100 text-blue-500'>
+                                    <AiOutlineDollar className='w-10 h-12' />
+                                </div>
+                                <div className='flex flex-col flex-grow ml-4'>
+                                    <div className='text-sm text-gray-500'>
+                                        Total Costs
+                                    </div>
+                                    <div className='font-bold text-lg'>
+                                        12K ${' '}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+                            <div className='flex flex-row bg-white shadow-sm rounded p-4'>
+                                <div className='flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-green-100 text-green-500'>
+                                    <AiOutlineShopping className='w-10 h-12' />
+                                </div>
+                                <div className='flex flex-col flex-grow ml-4'>
+                                    <div className='text-sm text-gray-500'>
+                                        Total Order
+                                    </div>
+                                    <div className='font-bold text-lg'>
+                                        2307
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+                            <div className='flex flex-row bg-white shadow-sm rounded p-4'>
+                                <div className='flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-orange-100 text-orange-500'>
+                                    <MdOutlineTaskAlt className='w-10 h-12' />
+                                </div>
+                                <div className='flex flex-col flex-grow ml-4'>
+                                    <div className='text-sm text-gray-500'>
+                                        Completed
+                                    </div>
+                                    <div className='font-bold text-lg'>
+                                        1934
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
+                            <div className='flex flex-row bg-white shadow-sm rounded p-4'>
+                                <div className='flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-red-100 text-red-500'>
+                                    <MdOutlineCancel className='w-10 h-12' />
+                                </div>
+                                <div className='flex flex-col flex-grow ml-4'>
+                                    <div className='text-sm text-gray-500'>
+                                        Canceled
+                                    </div>
+                                    <div className='font-bold text-lg'>235</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            {/* customers info */}
+            <div className='bg-white dark:bg-primary-deepDark'>
                 <div className='rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
                     <h2 className='text-lg font-semibold'>Customer Details</h2>
                     {customer ? (
@@ -79,7 +108,6 @@ const DisplayCustomerDetails = ( {customer} ) => {
                             </div>
 
                             <div className='flex justify-between gap-4'>
-                               
                                 <div className='flex flex-col flex-1 py-1'>
                                     <p className='font-semibold p-1'>Email</p>
                                     <p className='flex justify-between items-center rounded-md border p-2 text-sm text-gray-500 dark:text-gray-100'>
@@ -92,7 +120,6 @@ const DisplayCustomerDetails = ( {customer} ) => {
                             </div>
 
                             <div className='flex justify-between gap-4'>
-                               
                                 <div className='flex flex-col flex-1 py-1'>
                                     <p className='font-semibold p-1'>Status</p>
                                     <p className='flex items-center gap-2 rounded-md border p-2 text-sm text-gray-500 dark:text-gray-100'>
@@ -143,13 +170,11 @@ const DisplayCustomerDetails = ( {customer} ) => {
                                         </span>
                                     </p>
                                 </div>
-
-                               
                             </div>
 
                             <Link to='/admin/customers'>
                                 <Button
-                                    className='mt-4 flex items-center hover:bg-[#d4d4db]/75'
+                                    className=' bg-blue-300 mt-4 flex items-center hover:bg-blue-500'
                                     type='secondary'
                                 >
                                     <BsArrowLeftShort size={20} />
@@ -161,8 +186,8 @@ const DisplayCustomerDetails = ( {customer} ) => {
                         <p>Customer not found</p>
                     )}
                 </div>
-        </div>
-            </Layout>
+            </div>
+        </Layout>
     );
 };
 
