@@ -16,36 +16,48 @@ const ManageSubcategories = () => {
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isAddingSubcategory, setIsAddingSubcategory] = useState(false);
-  const subcategories = useSelector(state => state.subcategories.subcategories);
+  const {subcategories,isLoading,error} = useSelector(state => state.subcategories);
 
   useEffect(() => {
+    if (error) {
+      toast.error(error.data.message);
+    }
+    
     dispatch(getAllSubcategories());
-  }, [dispatch]);
+    
+  }, [dispatch, error]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name) {
-      console.error("Subcategory Name is Required");
-      return;
-    }
-
+  
     try {
-      const { data } = await dispatch(createSubcategory(name));
-      if (data && data.success) {
-        setName("");
-        console.log("Subcategory has been successfully created");
-        dispatch(getAllSubcategories());
-        setIsAddingSubcategory(false);
-      } else if (data) {
-        console.error(data.message);
+      const response = await dispatch(createSubcategory(name));
+      console.log("Create Subcategory Response:", response);
+  
+      if (response?.meta?.requestStatus === 'fulfilled') {
+        const { success, subcategory } = response.payload;
+  
+        console.log("Success:", success);
+        console.log("Subcategory:", subcategory);
+  
+        if (success) {
+          console.log("Subcategory created successfully");
+          dispatch(getAllSubcategories());
+          setName("");
+          setIsAddingSubcategory(false);
+        } else {
+          console.error("Subcategory creation failed. Unexpected payload:", response.payload);
+        }
       } else {
-        console.error("Error creating a subcategory");
+        console.error("Subcategory creation failed. Response:", response);
       }
     } catch (error) {
       console.error("Something went wrong in the input form", error);
     }
   };
-
+  
+  
+  
   const handleUpdate = async () => {
     if (!selectedSubcategory) {
       console.error("No subcategory selected for update");
@@ -54,7 +66,8 @@ const ManageSubcategories = () => {
 
     try {
       const { data } = await dispatch(editSubcategory({ id: selectedSubcategory._id, name: updatedName }));
-      if (data.success) {
+
+      if (data?.succes) {
         setUpdatedName("");
         setSelectedSubcategory(null);
         dispatch(getAllSubcategories());
@@ -68,17 +81,20 @@ const ManageSubcategories = () => {
 
   const handleDelete = async (subcategoryId) => {
     try {
-      const { data } = await dispatch(deleteSubcategory(subcategoryId));
-      if (data.success) {
+      const response = await dispatch(deleteSubcategory(subcategoryId));
+  
+      if (response?.meta?.requestStatus === 'fulfilled') {
         console.log("Subcategory deleted");
         dispatch(getAllSubcategories());
       } else {
-        console.error(data.message);
+        console.error(response?.payload || "Unknown error");
       }
     } catch (error) {
       console.error("Error during subcategory deletion", error);
     }
   };
+  
+  
 
   const handleConfirmDelete = () => {
     if (confirmDelete) {
@@ -97,7 +113,9 @@ const ManageSubcategories = () => {
     setIsAddingSubcategory(false);
   };
 
-  const filteredSubcategories = subcategories.filter(subcategory => subcategory.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredSubcategories = subcategories.filter(subcategory => subcategory && subcategory.name && subcategory.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
+  if (isLoading) return <p>Loading...</p>
 
   return (
     <Layout>
@@ -106,7 +124,6 @@ const ManageSubcategories = () => {
       <h1 className="text-3xl font-bold text-center">Manage Subcategories</h1>
       <div className="flex justify-between items-center mt-4 mb-8">
         <div>
-          {/* Search input on the far left */}
           <input
             type="text"
             placeholder="Search Subcategories"
@@ -116,7 +133,6 @@ const ManageSubcategories = () => {
           />
         </div>
         <div>
-          {/* Button to open the add subcategory modal on the far right */}
           <button
             onClick={openAddSubcategoryModal}
             className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -198,7 +214,6 @@ const ManageSubcategories = () => {
         </table>
       </div>
 
-      {/* Edit Subcategory Modal */}
       {selectedSubcategory && (
         <div className="fixed inset-0 flex items-center justify-center">
           <div className="relative bg-white p-6 shadow-lg rounded-lg">

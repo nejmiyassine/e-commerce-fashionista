@@ -10,37 +10,67 @@ const initialState = {
 }
 
 // Get All Subcategories
-export const getAllSubcategories = createAsyncThunk('subcategories/getAllSubcategories', async () => {
-    const response = await axios.get('v1/subcategories');
-    console.log(response.data);
-    return response.data.data;
-})
-
-// Edit Subcategory
-export const editSubcategory = createAsyncThunk('subcategories/editSubcategory', async ({ id, name }) => {
-    const response = await axios.put(`v1/subcategories/${id}`, { name });
-    console.log(response.data);
-    return response.data.data;
-})
-
-// Delete Subcategory Slice
-export const deleteSubcategory = createAsyncThunk('subcategories/deleteSubcategory', async (id) => {
-    const response = await axios.delete(`v1/subcategories/${id}`);
-    console.log(response.data);
-    return response.data.data;
-})
-
-// Post Subcategory Slice
-export const createSubcategory = createAsyncThunk('subcategories/createSubcategory', async (name) => {
-    try {
-        const response = await axios.post('v1/subcategories', { name });
+export const getAllSubcategories = createAsyncThunk(
+    'subcategories/getAllSubcategories',
+    async (_, { rejectWithValue }) => {
+      try {
+        const response = await axios.get('v1/subcategories');
         console.log(response.data);
         return response.data.data;
-    } catch (error) {
-        throw error;
+      } catch (error) {
+        return rejectWithValue(error?.response?.data);
+      }
     }
-});
-
+  );
+  
+  // Edit Subcategory
+  export const editSubcategory = createAsyncThunk(
+    'subcategories/editSubcategory',
+    async ({ id, name }, { rejectWithValue }) => {
+      try {
+        const response = await axios.put(`v1/subcategories/${id}`, { name });
+        console.log(response.data);
+        return response.data.data;
+      } catch (error) {
+        return rejectWithValue(error?.response?.data);
+      }
+    }
+  );
+  
+  // Delete Subcategory
+  export const deleteSubcategory = createAsyncThunk(
+    'subcategories/deleteSubcategory',
+    async (id, { rejectWithValue }) => {
+      try {
+        const response = await axios.delete(`v1/subcategories/${id}`);
+        console.log(response.data);
+        return response.data.data;
+      } catch (error) {
+        return rejectWithValue(error?.response?.data);
+      }
+    }
+  );
+  
+  // Create Subcategory
+  export const createSubcategory = createAsyncThunk(
+    'subcategories/createSubcategory',
+    async (name, { rejectWithValue }) => {
+      try {
+        const response = await axios.post('v1/subcategories', { name });
+        console.log('createSubcategory response:', response);
+  
+        if (response.data.success) {
+          return { success: true, subcategory: response.data.subcategory };
+        } else {
+          return rejectWithValue(response.data);
+        }
+      } catch (error) {
+        return rejectWithValue(error?.response?.data);
+      }
+    }
+  );
+  
+  
 export const subcategoriesSlice = createSlice({
     name: 'subcategories',
     initialState,

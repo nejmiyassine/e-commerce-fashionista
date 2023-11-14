@@ -24,25 +24,32 @@ const ManageCategories = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!name) {
-            console.error("Category Name is Required");
-            return;
-        }
-
+      
         try {
-            const { data } = await dispatch(createCategory(name));
-            if (data?.success) {
-                setName("");
-                console.log("Category has been successfully created");
-                dispatch(getAllCategories());
-                setIsAddingCategory(false);
+          const response = await dispatch(createCategory(name));
+          console.log("Create Category Response:", response);
+      
+          if (response?.meta?.requestStatus === 'fulfilled') {
+            const payload = response.payload;
+      
+            if (payload !== undefined && payload.success) {
+              console.log("Category created successfully");
+              dispatch(getAllCategories());
+              setName("");
+              setIsAddingCategory(false);
+            } else if (payload !== undefined && payload.message) {
+              console.error("Category creation failed. Message:", payload.message);
             } else {
-                console.error("Error creating a category");
+              console.error("Category creation failed. Unexpected payload:", payload);
             }
+          } else {
+            console.error("Category creation failed. Response:", response);
+          }
         } catch (error) {
-            console.error("Something went wrong in the input form", error);
+          console.error("Something went wrong in the input form", error);
         }
-    };
+      };
+      
 
     const handleUpdate = async () => {
         if (!selectedCategory) {
@@ -66,17 +73,18 @@ const ManageCategories = () => {
 
     const handleDelete = async (categoryId) => {
         try {
-            const { data } = await dispatch(deleteCategory(categoryId));
-            if (data?.success) {
-                console.log("Category deleted");
-                dispatch(getAllCategories());
-            } else {
-                console.error(data.message);
-            }
+          const response = await dispatch(deleteCategory(categoryId));
+      
+          if (response?.meta?.requestStatus === 'fulfilled') {
+            console.log('Category deleted');
+            dispatch(getAllCategories());
+          } else {
+            console.error(response?.payload || 'Unknown error');
+          }
         } catch (error) {
-            console.error("Something went wrong during category deletion", error);
+          console.error('Error during category deletion', error);
         }
-    };
+      };
 
     const handleConfirmDelete = () => {
         if (confirmDelete) {
@@ -95,7 +103,7 @@ const ManageCategories = () => {
         setIsAddingCategory(false);
     };
 
-    const filteredCategories = listCategories.filter(category => category.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    const filteredCategories = listCategories.filter(category => category?.name?.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return (
         <Layout>
@@ -165,31 +173,32 @@ const ManageCategories = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredCategories.map((category) => (
-                            <tr key={category._id} className="bg-white">
-                                <td className="py-5 border-b border-gray-200 text-sm px-4">
-                                    {category.name}
-                                </td>
-                                <td className="py-5 border-b border-gray-200 text-sm">
-                                    <div className="flex justify-center">
-                                        <button
-                                            type="button"
-                                            onClick={() => setSelectedCategory(category)}
-                                            className=" hover:text-blue-700 mx-2 bg-green-500 text-white px-4 py-2 rounded-lg"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            type="button"
-                                            onClick={() => setConfirmDelete(category._id)}
-                                            className="hover:text-blue-700 mx-2 bg-red-500 text-white px-4 py-2 rounded-lg"
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
+                    {filteredCategories.map((category) => (
+    <tr key={category._id} className="bg-white">
+        <td className="py-5 border-b border-gray-200 text-sm px-4">
+            {category && category.name ? category.name : 'N/A'}
+        </td>
+        <td className="py-5 border-b border-gray-200 text-sm">
+            <div className="flex justify-center">
+                <button
+                    type="button"
+                    onClick={() => setSelectedCategory(category)}
+                    className="hover:text-blue-700 mx-2 bg-green-500 text-white px-4 py-2 rounded-lg"
+                >
+                    Edit
+                </button>
+                <button
+                    type="button"
+                    onClick={() => setConfirmDelete(category._id)}
+                    className="hover:text-blue-700 mx-2 bg-red-500 text-white px-4 py-2 rounded-lg"
+                >
+                    Delete
+                </button>
+            </div>
+        </td>
+    </tr>
+))}
+
                     </tbody>
                 </table>
             </div>
