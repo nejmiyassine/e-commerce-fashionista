@@ -5,13 +5,12 @@ import DisplayCustomerDetails from '../../components/Customers/DisplayCustomerDe
 import { useParams } from 'react-router-dom';
 
 const CustomerDetails = () => {
-    const { id } = useParams();
+    const { customerId } = useParams();
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
     useEffect(() => {
-        dispatch(customersById(id));
-        console.log('dispatch', dispatch(customersById(id)));
-    }, [dispatch, id]);
+        dispatch(customersById(customerId));
+    }, [dispatch, customerId]);
 
     if (loading) {
         return <div>loading.....</div>;
@@ -20,14 +19,13 @@ const CustomerDetails = () => {
         return <div>Error: {error}</div>;
     }
 
-    console.log('data from customerDetails:' , data._id)
+    console.log('data from customerDetails:', data._id);
     return (
         <div>
             {data._id ? (
                 <div>
                     {/* {data._id} */}
-                     <DisplayCustomerDetails customer={data} /> 
-
+                    <DisplayCustomerDetails customer={data} />
                 </div>
             ) : (
                 <>

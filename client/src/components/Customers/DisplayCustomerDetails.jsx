@@ -17,7 +17,7 @@ const DisplayCustomerDetails = ({ customer }) => {
         <Layout>
             {/* customers static */}
 
-            <div className='flex mt-14   text-gray-800 py-5  '>
+            <div className='flex    text-gray-800 py-5  '>
                 <div className=' w-full'>
                     <div className='grid grid-cols-12 gap-4'>
                         <div className='col-span-12 sm:col-span-6 md:col-span-3'>

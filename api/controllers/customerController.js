@@ -13,16 +13,15 @@ exports.loginCustomer = (req, res, next) => {
 };
 
 exports.getAllCustomersList = async (req, res) => {
-    const page = req.query.page || 0;
-    // const sort = req.query.sort || 'DESC';
-    const sort = req.query.sort || 'ASC';
-    const customerPerPage = 13;
+    // const page = req.query.page || 0;
+    //  const sort = req.query.sort || 'DESC';
+    //  const customerPerPage = 10;
 
     try {
         const customers = await Customer.find()
-            .skip(page * customerPerPage)
-            .sort({ first_name: sort })
-            .limit(customerPerPage);
+        //      .skip(page * customerPerPage)
+        //      .sort({ first_name: sort })
+        //    .limit(customerPerPage);
 
         if (!customers) {
             return res.status(404).json({ message: 'customers not found' });

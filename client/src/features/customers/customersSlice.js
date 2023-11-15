@@ -19,9 +19,9 @@ export const fetchCustomers = createAsyncThunk(
 //customerById
 export const customersById = createAsyncThunk(
     'customers/customersById',
-    async (id, { rejectWithValue }) => {
+    async (customerId, { rejectWithValue }) => {
         try {
-            const res = await API.get(`/customers/${id}`);
+            const res = await API.get(`/customers/${customerId}`);
 
             console.log('customer details from axios', res.data);
             return res.data;
@@ -36,7 +36,10 @@ export const updateCustomer = createAsyncThunk(
     'customers/updateCustomer',
     async ({ customerId, updatedCustomerData }, { rejectWithValue }) => {
         try {
-            const res = await API.put( `customers/${customerId}`, updatedCustomerData );
+            const res = await API.put(
+                `customers/${customerId}`,
+                updatedCustomerData
+            );
 
             console.log('updated customer', res.data);
             return res.data;
@@ -49,9 +52,9 @@ export const updateCustomer = createAsyncThunk(
 //delete Customer
 export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
-    async ({ id, deletedCustomer }, { rejectWithValue }) => {
+    async ({ customerId, deletedCustomer }, { rejectWithValue }) => {
         try {
-            const res = await API.delete(`customers/${id}`, deletedCustomer);
+            const res = await API.delete(`customers/${customerId}`, deletedCustomer);
 
             console.log('delete from slice', res.data);
             return res.data;
@@ -140,20 +143,19 @@ const customersSlice = createSlice({
                 console.log('pending');
             });
 
-        console.log('next step from customerSlice');
         builder
             .addCase(deleteCustomer.fulfilled, (state, action) => {
                 state.isLoading = false;
 
                 const {
-                    arg: { id },
+                    arg: { customerId },
                 } = action.meta;
                 console.log('action.meta', action.meta);
 
-                if (id) {
+                if (customerId) {
                     state.isLoading = false;
                     state.data = state.data.filter(
-                        (customer) => customer._id !== id
+                        (customer) => customer._id !== customerId
                     );
                     console.log('state.data', state.data);
                 }

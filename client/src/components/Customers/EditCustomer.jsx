@@ -64,7 +64,7 @@ const EditCustomer = ({ isOpen, onOpenChange, updatedCustomer }) => {
                     updatedCustomerData: formData,
                 })
             );
-            toast.success('Updated successfully')
+            toast.success('Customer is updated successfully')
         }
     };
 

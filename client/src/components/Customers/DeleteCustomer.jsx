@@ -21,7 +21,7 @@ const DeleteCustomer = ({ deletedCustomer }) => {
             navigate('/admin/customers');
             dispatch(
                 deleteCustomer({
-                    id: deletedCustomer._id,
+                    customerId: deletedCustomer._id,
                 })
             );
             console.log('try to delete');
