@@ -11,15 +11,19 @@ import { getAllProducts } from '../../features/products/productsSlice';
 const Products = () => {
     const dispatch = useDispatch();
     const products = useSelector((state) => state.products.products);
-    const [search, setSearch] = useState('');
+    // console.log("this is product id " + products); 
+    const [search, setSearch] = useState(''); 
     const [showModel, setShowModel] = useState(false);
     const [deleteModel, setDeleteModel] = useState('');
     const [editModel, setEditModel] = useState();
+
+    
 
     useEffect(() => {
         dispatch(getAllProducts());
     }, [dispatch]);
 
+    // console.log(products)
     // console.log(JSON.stringify(products, null, 2));
     return (
         <Layout>
@@ -59,7 +63,7 @@ const Products = () => {
                                 .map((product) => (
                                     <tr className='hover:bg-gray-50'>
                                         <td className='px-4 py-3'>{product?.product_name}</td>
-                                        <td className='px-4 py-3'>{product?.category_id?.name}</td>
+                                        <td className='px-4 py-3'>{product?.category_id.name}</td>
                                         <td className='px-4 py-3'>{product?.price}</td>
                                         <td className='px-4 py-3 text-red-500'>{product?.quantity}</td>
                                         <td className='px-4 py-3'>

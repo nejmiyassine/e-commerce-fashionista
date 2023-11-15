@@ -88,7 +88,7 @@ exports.searchforProduct = async (req, res) => {
 exports.getProductID = async (req, res) => {
 try {
   const id = req.params.id;
-  const product = await Product.findById(id)
+  const product = await Product.findById(id).populate('category_id').exec();
   if (!product){
     res.status(404).json({message: "ProductiD not found"})
   }
@@ -112,7 +112,7 @@ exports.listProduct = async (req, res) => {
         const skip = (pageNumber - 1) * itemsPerPage;
     
     
-        const products = await Product.find().skip(skip).limit(itemsPerPage);
+        const products = await Product.find().populate('category_id').skip(skip).limit(itemsPerPage);
       
         return res.status(200).json({
           status: 200,
@@ -131,6 +131,7 @@ exports.updateProduct = async (req, res) => {
   try {
     const idProduct = req.params.id
     const updatedProduct = req.body
+    console.log(updatedProduct)
     const product= await  Product.findOneAndUpdate({_id:idProduct},updatedProduct,{new:true});
     if (!product){
       return res.status(404).json({ message: "product not found" });
@@ -158,6 +159,7 @@ exports.deleteProduct = async (req, res) => {
         }
       return res.status(200).json({ 
         status:200,
+        data: deletedproduct,
         message: "Product deleted successfully" });
     
   } catch (error) {

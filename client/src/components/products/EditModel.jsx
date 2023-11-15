@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { BiX } from 'react-icons/bi';
 import { editProduct } from '../../features/products/productsSlice';
+import { getAllCategories } from '../../features/categories/categoriesSlice';
 
 function EditModel({ showModel, setShowModel, getProducts }) {
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.products.isLoading);
     const categories = useSelector((state) => state.categories.categories);
+    // console.log("this is categories" + categories)
 
     const [name, setName] = useState(showModel.product_name || '');
     const [sku, setSku] = useState(showModel.sku || '');
@@ -27,6 +29,9 @@ function EditModel({ showModel, setShowModel, getProducts }) {
             setCharOptions('');
         }
     }, [charOptions]);
+    useEffect(() => {
+        dispatch(getAllCategories());
+    }, [dispatch]);
 
     const updateProduct = () => {
         const data = {
@@ -168,7 +173,9 @@ function EditModel({ showModel, setShowModel, getProducts }) {
                         categories
                         .filter((cat)=>cat._id !== category._id)
                         .map((category)=>(
-                            <option value={category._id}>{category.name}</option>
+                            <option value={category._id}>
+                                {category.name}
+                            </option>
                         ))
                     }
                 </select>

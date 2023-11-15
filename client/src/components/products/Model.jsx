@@ -58,7 +58,7 @@ function AddModel({ setShowModel, getProducts }) {
         <div className='absolute z-10 top-0 left-0 w-full min-h-screen bg-black bg-opacity-50 p-10 flex place-content-center place-items-center'>
             <div className='bg-white rounded p-4 md:min-w-[500px] min-w-full '>
                 <h1 className='text-2xl font-bold mb-3'>Add Product</h1>
-                {/* ... rest of your form */}
+                
                 <div className='mb-3'>
                 <label className='block text-gray-700 text-sm font-bold ' htmlFor='name'>
                     Name
