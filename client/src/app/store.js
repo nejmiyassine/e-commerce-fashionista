@@ -4,6 +4,7 @@ import { setupListeners } from '@reduxjs/toolkit/query/react';
 import customersReducer from '../features/customers/customersSlice';
 import categoriesReducer from '../features/categories/categoriesSlice';
 import subcategoriesReducer from '../features/subcategories/subcategoriesSlice';
+import productsReducers from '../features/products/productsSlice'
 import { usersAPI } from './api/usersApi';
 
 const store = configureStore({
@@ -11,6 +12,7 @@ const store = configureStore({
         [usersAPI.reducerPath]: usersAPI.reducer,
         customers: customersReducer,
         categories: categoriesReducer,
+        products: productsReducers,
         subcategories: subcategoriesReducer,
     },
     devTools: import.meta.env.VITE_REACT_APP_NODE_ENV === 'development',

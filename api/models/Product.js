@@ -3,31 +3,39 @@ const Schema = mongoose.Schema;
 
 let productSchema = new Schema({
   sku: {
-     type: String 
+     type: String ,
+    required: true
   },
   product_image: {
-     type: String 
+     type: String ,
   },
   product_name: { 
-    type: String 
+    type: String ,
+    required: true
   },
   category_id: { 
-    type: Number 
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true
   },
   short_description: {
-     type: String 
+     type: String ,
+    required: true
   },
   long_description: {
-     type: String 
+     type: String ,
+    required: true
   },
   price: {
-     type: Number 
+     type: Number ,
+    required: true
   },
   quantity: {
-     type: Number 
+     type: Number
   },
   discount_price: {
-     type: Number 
+    type: Number ,
+    required: true
   },
   options: {
      type: Array 
