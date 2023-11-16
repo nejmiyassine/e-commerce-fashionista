@@ -12,7 +12,7 @@ function EditModel({ showModel, setShowModel, getProducts }) {
     // console.log("this is categories" + categories)
 
     const [name, setName] = useState(showModel.product_name || '');
-    const [sku, setSku] = useState(showModel.sku || '');
+    // const [sku, setSku] = useState(showModel.sku || '');
     const [price, setPrice] = useState(showModel.price || '');
     const [discount_price, setDiscount_price] = useState(showModel.discount_price || '');
     const [options, setOptions] = useState(showModel.options || []);
@@ -36,7 +36,7 @@ function EditModel({ showModel, setShowModel, getProducts }) {
     const updateProduct = () => {
         const data = {
             product_name: name,
-            sku,
+            // sku,
             price,
             discount_price,
             options,
@@ -72,19 +72,7 @@ function EditModel({ showModel, setShowModel, getProducts }) {
                     onChange={(e)=>setName(e.target.value)}
                 />
             </div>
-            <div className='mb-3'>
-                <label className='block text-gray-700 text-sm font-bold ' htmlFor='sku'>
-                    sku
-                </label>
-                <input
-                    className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                    id='sku'
-                    type='text'
-                    placeholder='Product sku'
-                    value={sku}
-                    onChange={(e)=>setSku(e.target.value)}
-                />
-            </div>
+            
             <div className='mb-3'>
                 <label className='block text-gray-700 text-sm font-bold ' htmlFor='price'>
                     Quantity
@@ -160,25 +148,25 @@ function EditModel({ showModel, setShowModel, getProducts }) {
                     category
                 </label>
                 <select
-                    className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                    id='category'
-                    type='text'
-                    placeholder='Product category'
-                    onChange={(e)=>setCategory(e.target.value)}
-                >
-                    <option value=''>Select Category</option>
-                    <option value={category._id}>{category.name}</option>
-                    {
-                        categories &&
-                        categories
-                        .filter((cat)=>cat._id !== category._id)
-                        .map((category)=>(
-                            <option value={category._id}>
-                                {category.name}
-                            </option>
-                        ))
-                    }
-                </select>
+                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        id='category'
+                        type='text'
+                        placeholder='Product category'
+                        onChange={(e) => setCategory(e.target.value)}
+                    >
+                        <option value=''>Select Category</option>
+                        {showModel.category_id && (
+                            <option value={showModel.category_id._id}>{showModel.category_id.name}</option>
+                        )}
+                        {categories &&
+                            categories
+                                .filter((cat) => cat._id !== (showModel.category_id ? showModel.category_id._id : ''))
+                                .map((category) => (
+                                    <option key={category._id} value={category._id}>
+                                        {category.name}
+                                    </option>
+                                ))}
+                    </select>
                 </div>
 
             <div className='mb-3'>

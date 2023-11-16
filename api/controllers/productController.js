@@ -1,42 +1,5 @@
 const Product = require("../models/Product");
 
-// exports.addProduct = async (req, res) => {
-//   const {
-//     sku,
-//     categoryID,
-//     product_image,
-//     product_name,
-//     short_description,
-//     long_description,
-//     price,
-//     discount_price,
-//     options,
-//   } = req.body;
-
-//   try {
-    
-//     const newProduct = await Product.create({
-//       sku,
-//       category_id: categoryID,
-//       product_image: product_image,
-//       product_name: product_name,
-//       short_description: short_description,
-//       long_description: long_description,
-//       price: price,
-//       discount_price: discount_price,
-//       options,
-//       active: false,
-//     });
-//     return res.status(200).json({
-//       status: 200,
-//       message: "product created successfully",
-//       data: newProduct,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     return res.json({message: error?.message});
-//   }
-// };
 exports.addProduct = async (req, res) => {
   try {
     const newProduct = await Product.create(req.body);
@@ -88,7 +51,8 @@ exports.searchforProduct = async (req, res) => {
 exports.getProductID = async (req, res) => {
 try {
   const id = req.params.id;
-  const product = await Product.findById(id).populate('category_id').exec();
+  const product = await Product.findById(id)
+  .populate('category_id').exec();
   if (!product){
     res.status(404).json({message: "ProductiD not found"})
   }
@@ -112,7 +76,9 @@ exports.listProduct = async (req, res) => {
         const skip = (pageNumber - 1) * itemsPerPage;
     
     
-        const products = await Product.find().populate('category_id').skip(skip).limit(itemsPerPage);
+        const products = await Product.find()
+        .populate('category_id')
+        .skip(skip).limit(itemsPerPage);
       
         return res.status(200).json({
           status: 200,
