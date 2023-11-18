@@ -53,20 +53,23 @@ router.post('/image', upload.single('image'), async (req, res) => {
     res.status(200).json({ message: 'Image uploaded successfully' });
 });
 
-// router.get('/getImage', async (req, res) => {
-//     const products = await Product.find();
-//     for (const product of products) {
-//         const getObjectParams = {
-//             bucket: bucketName,
-//             key: product.imageName,
-//         };
-//         const command = new GetObjectCommand(getObjectParams);
-//         const url = await s3.getSignedUrl(s3, command, { expiresIn: 3600 });
-//         product.imageUrl = url;
-//     }
+router.get('/image', async (req, res) => {
+    const { imageName } = req.body;
 
-//     res.send(products)
-// });
+    // const products = await Product.find();
+    // for (const product of products) {
+    const getObjectParams = {
+        bucket: awsBucketName,
+        // key: product.imageName,
+        key: imageName,
+    };
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await s3.getSignedUrl(s3, command, { expiresIn: 3600 });
+    // product.imageUrl = url;
+    // }
+
+    res.status(200).json({ image: url });
+});
 
 // router.delete('/image/:id', async (req, res) => {
 //     const { id } = req.params;

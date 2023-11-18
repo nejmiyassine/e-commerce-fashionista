@@ -492,6 +492,7 @@ const UsersTable = () => {
             />
             <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>All Users</h2>
+                
                 <Table
                     isCompact
                     removeWrapper
