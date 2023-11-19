@@ -20,6 +20,7 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "faker": "^5.5.3",
     "framer-motion": "^10.16.4",
+    "lucide-react": "^0.292.0",
     "moment": "^2.29.4",
     "nprogress": "^0.2.0",
     "prop-types": "^15.8.1",

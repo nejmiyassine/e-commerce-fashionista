@@ -1,10 +1,8 @@
 import DashboardWelcome from '../../../components/Dashboard/DashboardWelcome';
 import DashboardCard from '../../../components/Dashboard/DashboardCard';
-// import VerticalChart from '../../../components/Dashboard/VerticalChart';
-// import AreaChart from '../../../components/Dashboard/AreaChart';
 import OrdersChart from '../../../components/Dashboard/OrdersChart';
 import LastUsersTable from '../../../components/Users/LastUsersTable';
-import LastOrders from '../../../components/LastOrders';
+import LastOrders from '../../../components/Orders/LastOrders';
 import Layout from '../../../layouts/Layout';
 
 const AdminDashboard = () => {

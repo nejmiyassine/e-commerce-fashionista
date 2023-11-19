@@ -66,6 +66,7 @@ const OrdersLineChart = ({ data }) => {
                 grid: {
                     color: '#E5E5E5',
                 },
+                min: 0,
             },
         },
         elements: {
@@ -92,6 +93,7 @@ const OrdersLineChart = ({ data }) => {
                 grid: {
                     color: 'rgba(251, 251, 251, .2)',
                 },
+                min: 0,
             },
         },
         elements: {

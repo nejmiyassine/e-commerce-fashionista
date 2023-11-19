@@ -8,7 +8,7 @@ const sellerRoutes = require('./sellerRoutes');
 const categoryRoutes = require('./categoryRoutes.js');
 const subcategoryRoutes = require('./subcategoryRoutes.js');
 const ordersRoutes = require('./ordersRoutes.js');
-const uploadImageRoutes = require('./uploadImageRoutes');
+const uploadImageRoutes = require('./uploadImageRoutesCopy.js');
 
 router.use('/users', userRoutes);
 router.use('/customers', customerRoutes);

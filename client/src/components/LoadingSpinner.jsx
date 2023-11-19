@@ -1,13 +1,16 @@
+import PropTypes from 'prop-types';
 import { Spinner } from '@nextui-org/react';
-// import DashboardSkeleton from './DashboardSkeleton';
 
-const LoadingSpinner = () => {
+const LoadingSpinner = ({ size = 'lg' }) => {
     return (
         <div className='flex justify-center items-center'>
-            <Spinner size='lg' />
-            {/* <DashboardSkeleton /> */}
+            <Spinner size={size} />
         </div>
     );
 };
 
 export default LoadingSpinner;
+
+LoadingSpinner.propTypes = {
+    size: PropTypes.string,
+};

@@ -5,9 +5,8 @@ import NProgress from 'nprogress';
 
 import { useGetAllOrdersQuery } from '../../app/api/ordersApi';
 import OrdersLineChart from './OrdersLineChart';
-// import LoadingSpinner from '../LoadingSpinner';
+import LoadingSpinner from '../LoadingSpinner';
 import IncomesLineChart from './IncomesLineChart';
-import ChartSkeleton from '../ChartSkeleton';
 
 const OrdersChart = () => {
     const { isLoading, isError, error, data: orders } = useGetAllOrdersQuery();
@@ -176,56 +175,50 @@ const OrdersChart = () => {
 
     return (
         <div className='w-full flex flex-col lg:flex-row items-center justify-between gap-4 pt-4'>
-            {isLoading ? (
-                <ChartSkeleton />
-            ) : (
-                <>
-                    <div className='w-full lg:w-1/2 rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
-                        <div className='flex justify-between items-center'>
-                            <h3 className='text-md font-bold pb-2'>
-                                Total Incomes for the last 7 days
-                            </h3>
-                            <h3
-                                className={`text-md font-bold pb-2 text-default-500 ${
-                                    incomesPercentageDifference > 0 &&
-                                    'text-green-500'
-                                } ${
-                                    incomesPercentageDifference < 0 &&
-                                    'text-red-500'
-                                }`}
-                            >
-                                {incomesPercentageDifference}%
-                            </h3>
-                        </div>
-                        <IncomesLineChart
-                            className='flex-2'
-                            data={incomesCountByDay}
-                        />
-                    </div>
-                    <div className='w-full lg:w-1/2 rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
-                        <div className='flex justify-between items-center'>
-                            <h3 className='text-md font-bold pb-2'>
-                                Total Orders for the last 7 days
-                            </h3>
-                            <h3
-                                className={`text-md font-bold pb-2 text-default-500 ${
-                                    ordersPercentageDifference > 0 &&
-                                    'text-green-500'
-                                } ${
-                                    ordersPercentageDifference < 0 &&
-                                    'text-red-500'
-                                }`}
-                            >
-                                {ordersPercentageDifference}%
-                            </h3>
-                        </div>
-                        <OrdersLineChart
-                            className='flex-2'
-                            data={ordersCountByDay}
-                        />
-                    </div>
-                </>
-            )}
+            <div className='w-full lg:w-1/2 rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
+                <div className='flex justify-between items-center'>
+                    <h3 className='text-md font-bold pb-2'>
+                        Total Incomes for the last 7 days
+                    </h3>
+                    <h3
+                        className={`text-md font-bold pb-2 text-default-500 ${
+                            incomesPercentageDifference > 0 && 'text-green-500'
+                        } ${incomesPercentageDifference < 0 && 'text-red-500'}`}
+                    >
+                        {incomesPercentageDifference}%
+                    </h3>
+                </div>
+                {isLoading ? (
+                    <LoadingSpinner />
+                ) : (
+                    <IncomesLineChart
+                        className='flex-2'
+                        data={incomesCountByDay}
+                    />
+                )}
+            </div>
+            <div className='w-full lg:w-1/2 rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
+                <div className='flex justify-between items-center'>
+                    <h3 className='text-md font-bold pb-2'>
+                        Total Orders for the last 7 days
+                    </h3>
+                    <h3
+                        className={`text-md font-bold pb-2 text-default-500 ${
+                            ordersPercentageDifference > 0 && 'text-green-500'
+                        } ${ordersPercentageDifference < 0 && 'text-red-500'}`}
+                    >
+                        {ordersPercentageDifference}%
+                    </h3>
+                </div>
+                {isLoading ? (
+                    <LoadingSpinner />
+                ) : (
+                    <OrdersLineChart
+                        className='flex-2'
+                        data={ordersCountByDay}
+                    />
+                )}
+            </div>
         </div>
     );
 };

@@ -6,15 +6,16 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Chip,
 } from '@nextui-org/react';
 import { toast } from 'react-toastify';
 import NProgress from 'nprogress';
-import { BiSolidCircle } from 'react-icons/bi';
 
-import { useGetAllOrdersQuery } from '../app/api/ordersApi';
-import LoadingSpinner from './LoadingSpinner';
-import { formatDateFromNow } from '../utils/formatDate';
+import { useGetAllOrdersQuery } from '../../app/api/ordersApi';
+import { formatDateFromNow } from '../../utils/formatDate';
+
+import OrderStatusChip from '../OrderStatusChip';
+import FormatPrice from '../FormatPrice';
+import LoadingContent from '../LoadingContent';
 
 const columns = [
     { name: 'NAME', uid: 'name' },
@@ -23,18 +24,11 @@ const columns = [
     { name: 'ORDER DATE', uid: 'order_date' },
 ];
 
-const statusColorMap = {
-    pending: 'warning',
-    processing: 'warning',
-    shipped: 'success',
-    delivered: 'success',
-    refunded: 'danger',
-    canceled: 'danger',
-};
-
 const LastOrders = () => {
     const { isLoading, isError, error, data: orders } = useGetAllOrdersQuery();
+
     const data = React.useMemo(() => (orders ? orders.orders : []), [orders]);
+
     const loadingState = isLoading || data?.length === 0 ? 'loading' : 'idle';
 
     React.useEffect(() => {
@@ -67,26 +61,10 @@ const LastOrders = () => {
                 );
 
             case 'price':
-                return (
-                    <div className=''>
-                        <p className=''>${order.cart_total_price}</p>
-                    </div>
-                );
+                return <FormatPrice price={order.cart_total_price} />;
 
             case 'status':
-                return (
-                    <Chip
-                        className='capitalize'
-                        color={statusColorMap[order.status.toLowerCase()]}
-                        size='sm'
-                        variant='flat'
-                    >
-                        <div className='flex items-center gap-1'>
-                            <BiSolidCircle size={8} />
-                            <p>{cellValue}</p>
-                        </div>
-                    </Chip>
-                );
+                return <OrderStatusChip status={order.status} />;
 
             case 'order_date':
                 return (
@@ -102,12 +80,11 @@ const LastOrders = () => {
 
     const topContent = React.useMemo(() => {
         return (
-            <div className='flex items-center justify-between gap-4'>
-                <div>
-                    <span className='text-default-400 text-small'>
-                        Total {data && data.length} orders
-                    </span>
-                </div>
+            <div className='flex items-center justify-between px-2 gap-4'>
+                <h2 className='font-bold text-xl mb-4'>Last orders</h2>
+                <span className='text-default-400 text-small'>
+                    Total {data && data.length} orders
+                </span>
             </div>
         );
     }, [data]);
@@ -137,47 +114,41 @@ const LastOrders = () => {
     );
 
     return (
-        <>
-            <h2 className='font-bold text-xl mb-4'>Last Orders</h2>
-
-            <Table
-                aria-label='Last orders table'
-                className='overflow-x-hidden'
-                isCompact
-                removeWrapper
-                classNames={classNames}
-                topContent={topContent}
+        <Table
+            aria-label='Last orders table'
+            className='overflow-x-hidden'
+            isCompact
+            removeWrapper
+            classNames={classNames}
+            topContent={topContent}
+        >
+            <TableHeader columns={columns}>
+                {(column) => (
+                    <TableColumn
+                        key={column.uid}
+                        align={column.uid === 'actions' ? 'center' : 'start'}
+                    >
+                        {column.name}
+                    </TableColumn>
+                )}
+            </TableHeader>
+            <TableBody
+                emptyContent={'No order found'}
+                items={data.slice(0, 5) ?? []}
+                loadingContent={<LoadingContent loadingState={loadingState} />}
+                loadingState={loadingState}
             >
-                <TableHeader columns={columns}>
-                    {(column) => (
-                        <TableColumn
-                            key={column.uid}
-                            align={
-                                column.uid === 'actions' ? 'center' : 'start'
-                            }
-                        >
-                            {column.name}
-                        </TableColumn>
-                    )}
-                </TableHeader>
-                <TableBody
-                    emptyContent={'No order found'}
-                    items={data.slice(0, 5) ?? []}
-                    loadingContent={<LoadingSpinner />}
-                    loadingState={loadingState}
-                >
-                    {(order) => (
-                        <TableRow key={order._id}>
-                            {(columnKey) => (
-                                <TableCell>
-                                    {renderCell(order, columnKey)}
-                                </TableCell>
-                            )}
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-        </>
+                {(order) => (
+                    <TableRow key={order._id}>
+                        {(columnKey) => (
+                            <TableCell>
+                                {renderCell(order, columnKey)}
+                            </TableCell>
+                        )}
+                    </TableRow>
+                )}
+            </TableBody>
+        </Table>
     );
 };
 
