@@ -8,11 +8,11 @@ const { addProduct,
     } = require("../controllers/productController");
 const {isAdminOrManager} = require("../middleware/authMiddleware");
 
-router.post("/",isAdminOrManager, addProduct);
-router.get("/",isAdminOrManager, listProduct);
-router.get("/:name",isAdminOrManager, searchforProduct); 
-router.get("/:id",isAdminOrManager, getProductID);
-router.delete("/:id",isAdminOrManager, deleteProduct);
-router.put("/:id",isAdminOrManager, updateProduct);
+router.post("/", addProduct);
+router.get("/", listProduct);
+router.get("/:name", searchforProduct); 
+router.get("/:id", getProductID);
+router.delete("/:id", deleteProduct);
+router.put("/:id", updateProduct);
 
 module.exports = router;
