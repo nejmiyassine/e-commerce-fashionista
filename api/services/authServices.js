@@ -1,4 +1,4 @@
-const { genSalt, hash } = require('bcrypt');
+    const { genSalt, hash } = require('bcrypt');
 const passport = require('passport');
 const { isValidObjectId } = require('mongoose');
 
@@ -18,7 +18,7 @@ const Customer = require('../models/Customers');
 const Seller = require('../models/Seller');
 
 const authRegister = async (req, res, model, userRole) => {
-    const { firstName, lastName, userName, email, password } = req.body;
+    const { first_name, last_name, username, email, password } = req.body;
 
     try {
         const salt = await genSalt(10);
@@ -33,14 +33,14 @@ const authRegister = async (req, res, model, userRole) => {
         }
 
         const user = await model.create({
-            first_name: firstName,
-            last_name: lastName,
+            first_name,
+            last_name,
             email,
             password: hashedPassword,
         });
 
-        if (userName) {
-            user.username = userName;
+        if (username) {
+            user.username = username;
         }
 
         const OTP = generateOtp();

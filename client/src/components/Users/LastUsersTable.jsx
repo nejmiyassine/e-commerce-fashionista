@@ -6,33 +6,22 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Button,
-    DropdownTrigger,
-    Dropdown,
-    DropdownMenu,
-    DropdownItem,
     User,
     Chip,
 } from '@nextui-org/react';
 import { toast } from 'react-toastify';
 import NProgress from 'nprogress';
 
-import { ChevronDownIcon } from '../../icons/Icons';
-import { capitalize } from '../../utils/capitalize';
 import LoadingSpinner from '../LoadingSpinner';
 import { sliceText } from '../../utils/sliceText';
 import { useGetAllUsersQuery } from '../../app/api/usersApi';
+import { roleColorMap } from '../../Constants/userTableConstants';
 
 const columns = [
     { name: 'ID', uid: '_id' },
     { name: 'USERNAME', uid: 'username' },
     { name: 'ROLE', uid: 'role' },
 ];
-
-const roleColorMap = {
-    admin: 'success',
-    manager: 'warning',
-};
 
 const INITIAL_VISIBLE_COLUMNS = ['_id', 'username', 'role'];
 
@@ -49,9 +38,7 @@ const LastUsersTable = () => {
     const loadingState =
         isLoading || isFetching || users?.length === 0 ? 'loading' : 'idle';
 
-    const [visibleColumns, setVisibleColumns] = React.useState(
-        new Set(INITIAL_VISIBLE_COLUMNS)
-    );
+    const [visibleColumns] = React.useState(new Set(INITIAL_VISIBLE_COLUMNS));
 
     React.useEffect(() => {
         if (isError) {
@@ -126,45 +113,14 @@ const LastUsersTable = () => {
 
     const topContent = React.useMemo(() => {
         return (
-            <div className='flex items-center justify-between gap-4'>
-                <div>
-                    <span className='text-default-400 text-small'>
-                        Total {data && data.length} users
-                    </span>
-                </div>
-                <Dropdown>
-                    <DropdownTrigger className='hidden sm:flex'>
-                        <Button
-                            endContent={
-                                <ChevronDownIcon className='text-small' />
-                            }
-                            size='sm'
-                            variant='flat'
-                        >
-                            Columns
-                        </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                        disallowEmptySelection
-                        aria-label='Table Columns'
-                        closeOnSelect={false}
-                        selectedKeys={visibleColumns}
-                        selectionMode='multiple'
-                        onSelectionChange={setVisibleColumns}
-                    >
-                        {columns.map((column) => (
-                            <DropdownItem
-                                key={column.uid}
-                                className='capitalize'
-                            >
-                                {capitalize(column.name)}
-                            </DropdownItem>
-                        ))}
-                    </DropdownMenu>
-                </Dropdown>
+            <div className='flex items-center justify-between px-2 gap-4 mb-2'>
+                <h2 className='font-bold text-xl'>Last Users</h2>
+                <span className='text-default-400 text-small'>
+                    Total {data && data.length} users
+                </span>
             </div>
         );
-    }, [data, visibleColumns]);
+    }, [data]);
 
     const classNames = React.useMemo(
         () => ({
@@ -190,60 +146,49 @@ const LastUsersTable = () => {
         []
     );
 
-    if (isLoading || isFetching) {
-        return <LoadingSpinner />;
-    }
-
     return (
-        <>
-            <h2 className='font-bold text-xl mb-4'>Last Users</h2>
-
-            <Table
-                isCompact
-                removeWrapper
-                aria-label='Example table with custom cells'
-                checkboxesProps={{
-                    classNames: {
-                        wrapper:
-                            'after:bg-foreground after:text-background text-background',
-                    },
-                }}
-                classNames={classNames}
-                selectionMode='multiple'
-                topContent={topContent}
-                topContentPlacement='outside'
+        <Table
+            isCompact
+            removeWrapper
+            aria-label='Last users table'
+            checkboxesProps={{
+                classNames: {
+                    wrapper:
+                        'after:bg-foreground after:text-background text-background',
+                },
+            }}
+            classNames={classNames}
+            className='overflow-x-scroll lg:overflow-x-hidden'
+            selectionMode='multiple'
+            topContent={topContent}
+            topContentPlacement='outside'
+        >
+            <TableHeader columns={headerColumns}>
+                {(column) => (
+                    <TableColumn
+                        key={column.uid}
+                        align={column.uid === 'actions' ? 'center' : 'start'}
+                        allowsSorting={column.sortable}
+                    >
+                        {column.name}
+                    </TableColumn>
+                )}
+            </TableHeader>
+            <TableBody
+                emptyContent={'No users found'}
+                items={data.slice(0, 5) ?? []}
+                loadingContent={<LoadingSpinner />}
+                loadingState={loadingState}
             >
-                <TableHeader columns={headerColumns}>
-                    {(column) => (
-                        <TableColumn
-                            key={column.uid}
-                            align={
-                                column.uid === 'actions' ? 'center' : 'start'
-                            }
-                            allowsSorting={column.sortable}
-                        >
-                            {column.name}
-                        </TableColumn>
-                    )}
-                </TableHeader>
-                <TableBody
-                    emptyContent={'No users found'}
-                    items={data.slice(0, 5)}
-                    loadingContent={<LoadingSpinner />}
-                    loadingState={loadingState}
-                >
-                    {(item) => (
-                        <TableRow key={item._id}>
-                            {(columnKey) => (
-                                <TableCell>
-                                    {renderCell(item, columnKey)}
-                                </TableCell>
-                            )}
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
-        </>
+                {(item) => (
+                    <TableRow key={item._id}>
+                        {(columnKey) => (
+                            <TableCell>{renderCell(item, columnKey)}</TableCell>
+                        )}
+                    </TableRow>
+                )}
+            </TableBody>
+        </Table>
     );
 };
 

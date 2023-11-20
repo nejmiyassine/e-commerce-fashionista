@@ -6,7 +6,7 @@ import NProgress from 'nprogress';
 import { BiSolidCalendar } from 'react-icons/bi';
 import { BsArrowLeftShort } from 'react-icons/bs';
 
-import LoadingSpinner from '../../../components/LoadingSpinner';
+import UserDetailsSkeleton from '../../../components/UserDetailsSkeleton';
 import Layout from '../../../layouts/Layout';
 
 import { useGetUserByIdQuery } from '../../../app/api/usersApi';
@@ -47,13 +47,14 @@ const UserDetails = () => {
     }, [isLoading, isFetching]);
 
     if (isLoading || isFetching) {
-        return <LoadingSpinner />;
+        return <UserDetailsSkeleton />;
     }
 
     return (
         <Layout>
             <div className='rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
                 <h2 className='text-lg font-semibold'>User Details</h2>
+                {isLoading || (isFetching && <UserDetailsSkeleton />)}
                 {user ? (
                     <div className='mt-2'>
                         <div className='flex justify-between gap-4'>
