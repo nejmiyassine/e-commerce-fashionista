@@ -5,7 +5,9 @@ import DisplayCustomerDetails from '../../components/Customers/DisplayCustomerDe
 import { useParams } from 'react-router-dom';
 
 const CustomerDetails = () => {
+
     const { customerId } = useParams();
+    console.log('customerID' , customerId)
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
     useEffect(() => {

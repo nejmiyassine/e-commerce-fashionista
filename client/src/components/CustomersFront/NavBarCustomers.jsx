@@ -87,7 +87,7 @@ const NavbarCustomers = ({customer}) => {
                                     className='bg-color-none'
                                 >
                                     Log out
-                                </Button>{' '}
+                                </Button>
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>

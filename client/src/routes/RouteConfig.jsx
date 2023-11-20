@@ -39,14 +39,17 @@ const RouteConfig = () => {
                         path='/admin/customers'
                         element={<ViewAllCustomers />}
                     />
+
                     <Route
-                        path='/admin/customer/:id'
+                        path='/admin/customers/:customerId'
                         element={<CustomerDetails />}
                     />
+
                     <Route
                         path='/admin/dashboard'
                         element={<AdminDashboard />}
                     />
+
                     <Route path='/admin/users' element={<Users />} />
                     <Route
                         path='/admin/users/:userId'
