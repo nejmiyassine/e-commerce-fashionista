@@ -2,7 +2,9 @@ const mongoose = require('mongoose');
 
 const ordersSchema = new mongoose.Schema({
     customer_id: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Customer',  
+        required: false,
         description: 'The customer ID',
     },
     order_items: {
@@ -16,7 +18,6 @@ const ordersSchema = new mongoose.Schema({
     cart_total_price: {
         type: Number,
         required: true,
-        description: 'The customer ID',
     },
     status: {
         type: String,

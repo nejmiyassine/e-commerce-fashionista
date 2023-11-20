@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../../features/users/usersSlice';
 import axios from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const Login = () => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginMessage, setLoginMessage] = useState('');
@@ -29,22 +32,23 @@ const Login = () => {
                 email,
                 password,
             });
-
+    
             if (res.status === 200) {
                 const user = res.data.user;
                 dispatch(login(user));
                 openModalWithMessage('Login successful');
+    
+                // Redirect to the '/admin/dashboard' route
+                navigate('/admin/dashboard');
             } else {
-                openModalWithMessage(
-                    'Login unsuccessful: email or password incorrect'
-                );
+                openModalWithMessage('Login unsuccessful: email or password incorrect');
             }
         } catch (error) {
             console.error('An error occurred:', error);
             openModalWithMessage('An error occurred while logging in');
         }
     };
-
+    
     return (
         <section className='bg-gray-50 min-h-screen flex items-center justify-center'>
             <div className='bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5 items-center'>
