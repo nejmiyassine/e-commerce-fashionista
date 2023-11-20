@@ -7,7 +7,6 @@ import Categories from '../pages/Categories/Categories';
 import Subcategories from '../pages/SubCategories/Subcategories';
 import AdminDashboard from '../pages/admin/dashboard/AdminDashboard';
 import CustomerDetails from '../pages/customers/CustomerDetails';
-import DisplayCustomerDetails from '../components/Customers/DisplayCustomerDetails';
 import ViewAllCustomers from '../pages/customers/ViewAllCustomers';
 import Users from '../pages/admin/users/Users';
 import UserDetails from '../pages/admin/users/UserDetails';
