@@ -13,16 +13,15 @@ exports.loginCustomer = (req, res, next) => {
 };
 
 exports.getAllCustomersList = async (req, res) => {
-    const page = req.query.page || 0;
-    // const sort = req.query.sort || 'DESC';
-    const sort = req.query.sort || 'ASC';
-    const customerPerPage = 13;
+    // const page = req.query.page || 0;
+    //  const sort = req.query.sort || 'DESC';
+    //  const customerPerPage = 10;
 
     try {
         const customers = await Customer.find()
-            .skip(page * customerPerPage)
-            .sort({ first_name: sort })
-            .limit(customerPerPage);
+        //      .skip(page * customerPerPage)
+        //      .sort({ first_name: sort })
+        //    .limit(customerPerPage);
 
         if (!customers) {
             return res.status(404).json({ message: 'customers not found' });
@@ -52,16 +51,17 @@ exports.deleteCustomerById = async (req, res) => {
     try {
         const customer = await Customer.findByIdAndDelete(req.params.id);
         if (!customer) res.status(404).json({ message: 'Customer not found' });
-        return res
-            .status(200)
-            .json({ message: 'Customer deleted successfully' });
+         return res
+             .status(200)
+           .json({ message: 'Customer deleted successfully' });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.log('error from customerController : '  ,error)
+         res.status(500).json({ message: error.message });
     }
 };
 
 exports.updateCustomers = async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
+    const { first_name, last_name, email, password } = req.body;
 
     try {
         const salt = await bcrypt.genSalt(parseInt(saltRounds));
@@ -69,8 +69,8 @@ exports.updateCustomers = async (req, res) => {
 
         const id = { _id: req.params.id };
         const updatedFields = {
-            first_name: firstName,
-            last_name: lastName,
+            first_name,
+            last_name,
             email,
             password,
         };

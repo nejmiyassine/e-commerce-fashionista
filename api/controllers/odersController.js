@@ -92,9 +92,7 @@ const getAllOrdersController = async (req, res) => {
         const limit = 10;
         const skip = (page - 1) * limit;
 
-        const orders = await Orders.aggregate([
-            // Your aggregation stages here
-        ])
+        const orders = await Orders.populate('customer_id')
             .limit(limit)
             .skip(skip);
 
