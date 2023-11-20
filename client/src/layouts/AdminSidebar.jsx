@@ -9,7 +9,7 @@ const AdminSidebar = ({ expanded, toggleSidebar }) => {
     return (
         <aside
             className={`fixed z-50 h-screen transition-all ${
-                expanded ? 'w-2/12' : 'w-18'
+                expanded ? 'w-52' : 'w-18'
             }`}
         >
             <nav className='h-full flex flex-col border-r border-gray-300 dark:border-gray-600 shadow-sm bg-white dark:bg-primary-deepDark dark:text-primary-dark'>

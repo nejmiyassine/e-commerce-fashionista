@@ -2,32 +2,26 @@ const Orders = require('../models/Orders');
 
 // Create a new order
 const createOrdersController = async (req, res) => {
-    try {
-        const { order_items, cart_total_price } = req.body;
+    const customer_id = req.user._id;
+    const { order_items, cart_total_price } = req.body;
 
+    try {
         if (!order_items || !cart_total_price) {
             return res.status(400).send({ message: 'Missing required fields' });
         }
 
-        const existingOrder = await Orders.findOne({ order_items, cart_total_price });
-
-        if (existingOrder) {
-            return res.status(200).send({
-                success: true,
-                message: 'Order already exists',
-            });
-        }
-
-        const newOrder = await Orders.create({
-            order_items,
-            cart_total_price,
-        });
-
-        res.status(201).send({
-            success: true,
-            message: 'New Order created',
-            order: newOrder,
-        });
+        const newOrder = new Orders({
+              customer_id,
+              order_items,
+              order_date: new Date(),
+              cart_total_price,
+              status: 'pending',
+          });
+      
+          res.status(201).json({
+              message: 'Order created successfully',
+              createdOrder,
+          });
     } catch (error) {
         console.error(error);
         res.status(500).send({
@@ -87,20 +81,26 @@ const getOrderByIdController = async (req, res) => {
 
 // Get a list of all orders
 const getAllOrdersController = async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = 10;
-        const skip = (page - 1) * limit;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
 
-        const orders = await Orders.populate('customer_id')
-            .limit(limit)
-            .skip(skip);
+    try {
+        // if (!req.user.emailValidated) {
+        //     return res.status(403).json({ error: 'Forbidden' });
+        // }
+
+        const orders = await Orders.find()
+              .populate('customer_id')
+            // .limit(limit)
+            // .skip(skip)
+            // .exec();
 
         if (orders.length === 0) {
             return res.status(200).json([]);
         }
 
-        res.status(200).json(orders);
+        res.status(200).json({ orders });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });

@@ -6,7 +6,7 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Input,
+    // Input,
     Button,
     DropdownTrigger,
     Dropdown,
@@ -14,7 +14,6 @@ import {
     DropdownItem,
     Chip,
     User,
-    Pagination,
     useDisclosure,
 } from '@nextui-org/react';
 import { toast } from 'react-toastify';
@@ -22,13 +21,13 @@ import NProgress from 'nprogress';
 import { Link } from 'react-router-dom';
 
 import {
-    UserPlus,
+    // UserPlus,
     VerticalDotsIcon,
-    SearchIcon,
-    ChevronDownIcon,
+    // SearchIcon,
+    // ChevronDownIcon,
 } from '../../icons/Icons';
 
-import { capitalize } from '../../utils/capitalize';
+// import { capitalize } from '../../utils/capitalize';
 import { sliceText } from '../../utils/sliceText';
 import {
     columns,
@@ -45,13 +44,15 @@ import {
     useDeleteUserMutation,
     useGetAllUsersQuery,
 } from '../../app/api/usersApi';
+import useTableFeatures from '../../hooks/useTableFeatures';
+import TableTopContent from '../TableTopContent';
+import TableBottomContent from '../TableBottomContent';
 
 const UsersTable = () => {
     const {
         isLoading: isGetAllUsersLoading,
         isFetching: isGetAllUsersFetching,
         isError: isGetAllUsersError,
-        isSuccess: isGetAllUsersSuccess,
         error: getAllUsersError,
         data: users,
     } = useGetAllUsersQuery();
@@ -59,23 +60,27 @@ const UsersTable = () => {
         useDeleteUserMutation();
 
     const { onOpen, isOpen, onOpenChange } = useDisclosure();
-    const [selectedUser, setSelectedUser] = React.useState(null);
-    const [filterValue, setFilterValue] = React.useState('');
-    const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
-    const [visibleColumns, setVisibleColumns] = React.useState(
-        new Set(INITIAL_VISIBLE_COLUMNS)
-    );
-    const [statusFilter, setStatusFilter] = React.useState('all');
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [sortDescriptor, setSortDescriptor] = React.useState({
-        column: 'username',
-        direction: 'ascending',
-    });
-    const [page, setPage] = React.useState(1);
 
-    const pages = React.useMemo(() => {
-        return users?.length ? Math.ceil(users.length / rowsPerPage) : 0;
-    }, [users?.length, rowsPerPage]);
+    const [selectedUser, setSelectedUser] = React.useState(null);
+
+    const {
+        filterValue,
+        setFilterValue,
+        selectedKeys,
+        setSelectedKeys,
+        visibleColumns,
+        setVisibleColumns,
+        statusFilter,
+        setStatusFilter,
+        rowsPerPage,
+        sortDescriptor,
+        setSortDescriptor,
+        page,
+        setPage,
+        pages,
+        onRowsPerPageChange,
+        onSearchChange,
+    } = useTableFeatures(INITIAL_VISIBLE_COLUMNS, columns, users);
 
     const loadingState =
         isGetAllUsersLoading ||
@@ -88,11 +93,6 @@ const UsersTable = () => {
     React.useEffect(() => {
         if (isSuccess) {
             toast.success('User deleted successfully');
-            NProgress.done();
-        }
-
-        if (isGetAllUsersSuccess) {
-            toast.success('Get All Users Successfully');
             NProgress.done();
         }
 
@@ -285,178 +285,51 @@ const UsersTable = () => {
         [deleteUser, isSuccess, onOpenChange]
     );
 
-    const onRowsPerPageChange = React.useCallback((e) => {
-        setRowsPerPage(Number(e.target.value));
-        setPage(1);
-    }, []);
-
-    const onSearchChange = React.useCallback((value) => {
-        if (value) {
-            setFilterValue(value);
-            setPage(1);
-        } else {
-            setFilterValue('');
-        }
-    }, []);
-
     const topContent = React.useMemo(() => {
         return (
-            <div className='flex flex-col gap-4'>
-                <div className='flex justify-between gap-3 items-end'>
-                    <Input
-                        isClearable
-                        classNames={{
-                            base: 'w-full sm:max-w-[44%]',
-                            inputWrapper: 'border-1',
-                        }}
-                        placeholder='Search by name...'
-                        size='sm'
-                        startContent={
-                            <SearchIcon className='text-default-300' />
-                        }
-                        value={filterValue}
-                        variant='bordered'
-                        onClear={() => setFilterValue('')}
-                        onValueChange={onSearchChange}
-                    />
-                    <div className='flex gap-3'>
-                        <Dropdown>
-                            <DropdownTrigger className='hidden sm:flex'>
-                                <Button
-                                    endContent={
-                                        <ChevronDownIcon className='text-small' />
-                                    }
-                                    size='sm'
-                                    variant='flat'
-                                >
-                                    Role
-                                </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu
-                                disallowEmptySelection
-                                aria-label='Table Columns'
-                                closeOnSelect={false}
-                                selectedKeys={statusFilter}
-                                selectionMode='multiple'
-                                onSelectionChange={setStatusFilter}
-                            >
-                                {statusOptions.map((status) => (
-                                    <DropdownItem
-                                        key={status.uid}
-                                        className='capitalize'
-                                    >
-                                        {capitalize(status.name)}
-                                    </DropdownItem>
-                                ))}
-                            </DropdownMenu>
-                        </Dropdown>
-                        <Dropdown>
-                            <DropdownTrigger className='hidden sm:flex'>
-                                <Button
-                                    endContent={
-                                        <ChevronDownIcon className='text-small' />
-                                    }
-                                    size='sm'
-                                    variant='flat'
-                                >
-                                    Columns
-                                </Button>
-                            </DropdownTrigger>
-                            <DropdownMenu
-                                disallowEmptySelection
-                                aria-label='Table Columns'
-                                closeOnSelect={false}
-                                selectedKeys={visibleColumns}
-                                selectionMode='multiple'
-                                onSelectionChange={setVisibleColumns}
-                            >
-                                {columns.map((column) => (
-                                    <DropdownItem
-                                        key={column.uid}
-                                        className='capitalize'
-                                    >
-                                        {capitalize(column.name)}
-                                    </DropdownItem>
-                                ))}
-                            </DropdownMenu>
-                        </Dropdown>
-                        {isGetAllUsersLoading || isGetAllUsersFetching ? (
-                            <Button
-                                className='bg-foreground text-background'
-                                size='sm'
-                                isDisabled
-                            >
-                                Loading ...
-                            </Button>
-                        ) : (
-                            <Button
-                                className='bg-foreground text-background'
-                                endContent={<UserPlus />}
-                                size='sm'
-                                onPress={onOpen}
-                            >
-                                Add User
-                            </Button>
-                        )}
-                    </div>
-                </div>
-                <div className='flex justify-between items-center'>
-                    <span className='text-default-400 text-small'>
-                        Total {users && users.length} users
-                    </span>
-                    <label className='flex items-center text-default-400 text-small'>
-                        Rows per page:
-                        <select
-                            className='bg-transparent outline-none text-default-400 text-small'
-                            onChange={onRowsPerPageChange}
-                        >
-                            <option value='5'>5</option>
-                            <option value='10'>10</option>
-                            <option value='15'>15</option>
-                        </select>
-                    </label>
-                </div>
-            </div>
+            <TableTopContent
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+                statusFilter={statusFilter}
+                setStatusFilter={setStatusFilter}
+                visibleColumns={visibleColumns}
+                setVisibleColumns={setVisibleColumns}
+                onSearchChange={onSearchChange}
+                onRowsPerPageChange={onRowsPerPageChange}
+                onOpen={onOpen}
+                statusOptions={statusOptions}
+                columns={columns}
+                loading={isGetAllUsersLoading || isGetAllUsersFetching}
+                data={users}
+            />
         );
     }, [
-        isGetAllUsersLoading,
-        isGetAllUsersFetching,
-        onOpen,
-        users,
         filterValue,
+        setFilterValue,
         statusFilter,
+        setStatusFilter,
         visibleColumns,
+        setVisibleColumns,
         onSearchChange,
         onRowsPerPageChange,
+        onOpen,
+        isGetAllUsersLoading,
+        isGetAllUsersFetching,
+        users,
     ]);
 
     const bottomContent = React.useMemo(() => {
         return (
-            <div className='py-2 px-2 flex justify-between items-center'>
-                {pages > 0 ? (
-                    <Pagination
-                        showControls
-                        classNames={{
-                            cursor: 'bg-foreground text-background',
-                        }}
-                        color='default'
-                        isDisabled={hasSearchFilter}
-                        page={page}
-                        total={pages}
-                        variant='light'
-                        onChange={setPage}
-                    />
-                ) : null}
-                <span className='text-small text-default-400'>
-                    {selectedKeys === 'all'
-                        ? 'All items selected'
-                        : `${selectedKeys.size} of ${
-                              items?.length || 0
-                          } selected`}
-                </span>
-            </div>
+            <TableBottomContent
+                pages={pages}
+                hasSearchFilter={hasSearchFilter}
+                selectedKeys={selectedKeys}
+                items={items}
+                page={page}
+                setPage={setPage}
+            />
         );
-    }, [selectedKeys, items, page, pages, hasSearchFilter]);
+    }, [pages, hasSearchFilter, selectedKeys, items, page, setPage]);
 
     const classNames = React.useMemo(
         () => ({
@@ -490,7 +363,8 @@ const UsersTable = () => {
                 userData={selectedUser}
             />
             <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
-                <h2 className='font-bold text-xl mb-4'>Last Users</h2>
+                <h2 className='font-bold text-xl mb-4'>All Users</h2>
+
                 <Table
                     isCompact
                     removeWrapper
