@@ -1,32 +1,8 @@
 const Product = require("../models/Product");
 
 exports.addProduct = async (req, res) => {
-  const {
-    sku,
-    categoryID,
-    product_image,
-    product_name,
-    short_description,
-    long_description,
-    price,
-    discount_price,
-    options,
-  } = req.body;
-
   try {
-    
-    const newProduct = await Product.create({
-      sku,
-      category_id: categoryID,
-      product_image: product_image,
-      product_name: product_name,
-      short_description: short_description,
-      long_description: long_description,
-      price: price,
-      discount_price: discount_price,
-      options,
-      active: false,
-    });
+    const newProduct = await Product.create(req.body);
     return res.status(200).json({
       status: 200,
       message: "product created successfully",
@@ -37,7 +13,6 @@ exports.addProduct = async (req, res) => {
     return res.json({message: error?.message});
   }
 };
-
 //search for products
 exports.searchforProduct = async (req, res) => {
   try {
@@ -77,6 +52,7 @@ exports.getProductID = async (req, res) => {
 try {
   const id = req.params.id;
   const product = await Product.findById(id)
+  .populate('category_id').exec();
   if (!product){
     res.status(404).json({message: "ProductiD not found"})
   }
@@ -100,7 +76,9 @@ exports.listProduct = async (req, res) => {
         const skip = (pageNumber - 1) * itemsPerPage;
     
     
-        const products = await Product.find().skip(skip).limit(itemsPerPage);
+        const products = await Product.find()
+        .populate('category_id')
+        .skip(skip).limit(itemsPerPage);
       
         return res.status(200).json({
           status: 200,
@@ -119,6 +97,7 @@ exports.updateProduct = async (req, res) => {
   try {
     const idProduct = req.params.id
     const updatedProduct = req.body
+    console.log(updatedProduct)
     const product= await  Product.findOneAndUpdate({_id:idProduct},updatedProduct,{new:true});
     if (!product){
       return res.status(404).json({ message: "product not found" });
@@ -146,6 +125,7 @@ exports.deleteProduct = async (req, res) => {
         }
       return res.status(200).json({ 
         status:200,
+        data: deletedproduct,
         message: "Product deleted successfully" });
     
   } catch (error) {

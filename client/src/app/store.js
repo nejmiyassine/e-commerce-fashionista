@@ -6,6 +6,7 @@ import storage from 'redux-persist/lib/storage';
 import customersReducer from '../features/customers/customersSlice';
 import categoriesReducer from '../features/categories/categoriesSlice';
 import subcategoriesReducer from '../features/subcategories/subcategoriesSlice';
+import productsReducers from '../features/products/productsSlice'
 import usersReducer from '../features/users/usersSlice';
 
 import { usersAPI } from './api/usersApi';
@@ -22,6 +23,7 @@ const reducers = combineReducers({
     categories: categoriesReducer,
     subcategories: subcategoriesReducer,
     users: usersReducer,
+    products: productsReducers,
     [usersAPI.reducerPath]: usersAPI.reducer,
     [ordersAPI.reducerPath]: ordersAPI.reducer,
 });
