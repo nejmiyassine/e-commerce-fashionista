@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
     Table,
     TableHeader,
@@ -28,7 +30,6 @@ import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
 import { capitalize } from '../../utils/capitalize';
 import EditCustomer from './EditCustomer';
 import DeleteCustomer from './DeleteCustomer';
-import Layout from '../../layouts/Layout';
 
 const columns = [
     { name: 'ID', uid: '_id', sortable: true },
@@ -37,7 +38,7 @@ const columns = [
     { name: 'EMAIL', uid: 'email', sortable: true },
     { name: 'LAST_LOGIN', uid: 'last_login', sortable: true },
     { name: 'CREATION_DATE', uid: 'creation_date', sortable: true },
-    //
+
     { name: 'VALID_ACCOUNT', uid: 'valid_account' },
     { name: 'ACTIVE', uid: 'active' },
     { name: '', uid: 'actions' },
@@ -58,11 +59,11 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 const CustomersTable = () => {
-    const { onOpen, isOpen, onOpenChange } = useDisclosure();
+    const { isOpen, onOpenChange } = useDisclosure();
     const { loading, data, error } = useSelector((state) => state.customers);
 
-    //
     const [updatedCustomer, setUpdatedCustomer] = useState('');
+    const [deletedCustomer, setDeletedCustomer] = useState('');
     const [filterValue, setFilterValue] = React.useState('');
     const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
 
@@ -91,7 +92,6 @@ const CustomersTable = () => {
         );
     }, [visibleColumns]);
 
-    // filter
     const filteredItems = React.useMemo(() => {
         let filteredCustomers = data;
 
@@ -142,10 +142,17 @@ const CustomersTable = () => {
     const renderCell = React.useCallback((customer, columnKey) => {
         const cellValue = customer[columnKey];
 
-        //
         const handleUpdate = () => {
             setUpdatedCustomer(customer);
             onOpenChange(true);
+        };
+
+        const handleDelete = () => {
+            if (
+                window.confirm('Are you sure you want to delete this customer?')
+            ) {
+                setDeletedCustomer(customer);
+            }
         };
 
         switch (columnKey) {
@@ -186,39 +193,6 @@ const CustomersTable = () => {
             case 'actions':
                 return (
                     <div className='relative flex justify-end items-center gap-2'>
-                        {/* <Dropdown className='bg-background border-1 border-default-200'> */}
-                        {/* three vertical buttons */}
-                        {/* <DropdownTrigger>
-                                <Button
-                                    isIconOnly
-                                    radius='full'
-                                    size='sm'
-                                    variant='light'
-                                >
-                                    <VerticalDotsIcon className='text-default-400' />
-                                </Button>
-                            </DropdownTrigger> */}
-
-                        {/* <DropdownMenu> */}
-                        {/* <DropdownItem>
-                                    <Link to={'/customer/:id'}>View</Link>
-                                </DropdownItem>
-
-                                {/* <DropdownItem >
-                                {/* <Link to ={'/customer/:id'}  >Edit Customer</Link>
-                                 {/* </DropdownItem>
-
-                                <DropdownItem onPress={handleUpdate}>
-                                    Edit
-                                </DropdownItem>
-
-                            <DropdownItem
-                                className="text-danger"
-                                onPress={() => handleDelete(customer._id)}
-                                >
-                                    Delete
-                           </DropdownItem>  */}
-
                         <Button
                             className='bg-foreground text-background'
                             size='sm'
@@ -227,7 +201,22 @@ const CustomersTable = () => {
                             Edit
                         </Button>
 
-                        <DeleteCustomer />
+                        <Button
+                            className='bg-blue-600 text-background w-14'
+                            size='sm'
+                        >
+                            <Link to={`/admin/customers/${customer._id}`}>
+                                View
+                            </Link>
+                        </Button>
+
+                        <Button
+                            size='sm'
+                            onPress={handleDelete}
+                            className='bg-danger text-background'
+                        >
+                            Delete
+                        </Button>
                     </div>
                 );
 
@@ -442,8 +431,18 @@ const CustomersTable = () => {
     }
 
     return (
-        <Layout>
-            <EditCustomer isOpen={isOpen} onOpenChange={onOpenChange} />
+        <>
+            <EditCustomer
+                isOpen={isOpen}
+                onOpenChange={onOpenChange}
+                updatedCustomer={updatedCustomer}
+            />
+
+            <DeleteCustomer
+                //  isOpen={isOpen}
+                //  onOpenChange={onOpenChange}
+                deletedCustomer={deletedCustomer}
+            />
 
             <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>Last Customers</h2>
@@ -503,7 +502,7 @@ const CustomersTable = () => {
                     </TableBody>
                 </Table>
             </div>
-        </Layout>
+        </>
     );
 };
 
