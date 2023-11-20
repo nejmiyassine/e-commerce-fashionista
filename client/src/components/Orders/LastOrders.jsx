@@ -80,8 +80,8 @@ const LastOrders = () => {
 
     const topContent = React.useMemo(() => {
         return (
-            <div className='flex items-center justify-between px-2 gap-4'>
-                <h2 className='font-bold text-xl mb-4'>Last orders</h2>
+            <div className='flex items-center justify-between px-2 gap-4 mb-2'>
+                <h2 className='font-bold text-xl'>Last orders</h2>
                 <span className='text-default-400 text-small'>
                     Total {data && data.length} orders
                 </span>

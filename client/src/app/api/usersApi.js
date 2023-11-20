@@ -9,7 +9,11 @@ export const usersAPI = createApi({
     tagTypes: ['Users'],
     endpoints: (builder) => ({
         getAllUsers: builder.query({
-            query: () => 'users',
+            query: () => ({
+                url: 'users',
+                method: 'GET',
+                credentials: 'include',
+            }),
             providesTags: (result) =>
                 result
                     ? [
@@ -25,12 +29,11 @@ export const usersAPI = createApi({
             },
         }),
         getUserById: builder.query({
-            query: (id) => {
-                return {
-                    url: `users/${id}`,
-                    credentials: 'include',
-                };
-            },
+            query: (id) => ({
+                url: `users/${id}`,
+                method: 'GET',
+                credentials: 'include',
+            }),
             providesTags: (result, error, id) => [{ type: 'Users', id }],
         }),
         addUser: builder.mutation({
@@ -58,6 +61,7 @@ export const usersAPI = createApi({
             query: (userId) => ({
                 url: `users/${userId}`,
                 method: 'DELETE',
+                credentials: 'include',
             }),
             invalidatesTags: [{ type: 'Users', id: 'LIST' }],
             onQueryStarted() {

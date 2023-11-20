@@ -9,7 +9,11 @@ export const ordersAPI = createApi({
     tagTypes: ['Orders'],
     endpoints: (builder) => ({
         getAllOrders: builder.query({
-            query: () => 'orders',
+            query: () => ({
+                url: 'orders',
+                credentials: 'include',
+                method: 'GET',
+            }),
             onQueryStarted() {
                 NProgress.start();
             },
