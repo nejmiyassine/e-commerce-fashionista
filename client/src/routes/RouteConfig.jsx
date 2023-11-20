@@ -42,12 +42,6 @@ const RouteConfig = () => {
                         path='/admin/customer/:id'
                         element={<CustomerDetails />}
                     />
-                    {/* test */}
-                    <Route
-                        path='/admin/details'
-                        element={<DisplayCustomerDetails />}
-                    />
-
                     <Route
                         path='/admin/dashboard'
                         element={<AdminDashboard />}

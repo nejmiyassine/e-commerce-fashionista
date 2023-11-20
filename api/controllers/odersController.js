@@ -1,35 +1,41 @@
 const Orders = require('../models/Orders');
 
-// Post Orders
+// Create a new order
 const createOrdersController = async (req, res) => {
     const customer_id = req.user._id;
     const { order_items, cart_total_price } = req.body;
 
     try {
+        if (!order_items || !cart_total_price) {
+            return res.status(400).send({ message: 'Missing required fields' });
+        }
+
         const newOrder = new Orders({
-            customer_id,
-            order_items,
-            order_date: new Date(),
-            cart_total_price,
-            status: 'pending',
-        });
-
-        const createdOrder = await newOrder.save();
-
-        res.status(201).json({
-            message: 'Order created successfully',
-            createdOrder,
-        });
+              customer_id,
+              order_items,
+              order_date: new Date(),
+              cart_total_price,
+              status: 'pending',
+          });
+      
+          res.status(201).json({
+              message: 'Order created successfully',
+              createdOrder,
+          });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error(error);
+        res.status(500).send({
+            success: false,
+            error: error.message,
+            message: 'Error creating order',
+        });
     }
 };
 
-//Put Orders
+// Update an order by ID
 const updateOrdersController = async (req, res) => {
     const orderId = req.params.id;
     try {
-        // if (!req.user.emailValidated) {
         if (!orderId) {
             return res.status(404).json({ error: 'Order not found' });
         }
@@ -42,24 +48,18 @@ const updateOrdersController = async (req, res) => {
             return res.status(404).json({ error: 'Order not found' });
         }
 
-        res.status(204).json({
+        res.status(200).json({
             message: 'Order updated successfully',
             order,
         });
-        // } else {
-        //     return res.status(403).json({ error: 'Not authorized' });
-        // }
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
-//Get Orders by ID
+// Get an order by ID
 const getOrderByIdController = async (req, res) => {
-    // if (!req.user.emailValidated) {
-    //     return res.status(403).json({ error: 'Forbidden' });
-    // }
-
     const { id } = req.params;
 
     try {
@@ -74,15 +74,12 @@ const getOrderByIdController = async (req, res) => {
             order,
         });
     } catch (error) {
-        res.status(500).send({
-            success: false,
-            message: error.message,
-        });
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
-//Get All Orders
-
+// Get a list of all orders
 const getAllOrdersController = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
@@ -94,10 +91,10 @@ const getAllOrdersController = async (req, res) => {
         // }
 
         const orders = await Orders.find()
-            .populate('customer_id')
-            .limit(limit)
-            .skip(skip)
-            .exec();
+              .populate('customer_id')
+            // .limit(limit)
+            // .skip(skip)
+            // .exec();
 
         if (orders.length === 0) {
             return res.status(200).json([]);
@@ -105,10 +102,8 @@ const getAllOrdersController = async (req, res) => {
 
         res.status(200).json({ orders });
     } catch (error) {
-        res.status(500).send({
-            success: false,
-            message: error.message,
-        });
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
