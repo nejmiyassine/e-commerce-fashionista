@@ -13,7 +13,7 @@ const ProtectedRoutes = ({ allowedRoles }) => {
 
     if (error) {
         toast({
-            description: 'Unauthorized',
+            description: 'Unauthorized user',
         });
         return <LoadingSpinner />;
     }
