@@ -113,8 +113,8 @@ const LastUsersTable = () => {
 
     const topContent = React.useMemo(() => {
         return (
-            <div className='flex items-center justify-between px-2 gap-4'>
-                <h2 className='font-bold text-xl mb-4'>Last Users</h2>
+            <div className='flex items-center justify-between px-2 gap-4 mb-2'>
+                <h2 className='font-bold text-xl'>Last Users</h2>
                 <span className='text-default-400 text-small'>
                     Total {data && data.length} users
                 </span>
@@ -158,6 +158,7 @@ const LastUsersTable = () => {
                 },
             }}
             classNames={classNames}
+            className='overflow-x-scroll lg:overflow-x-hidden'
             selectionMode='multiple'
             topContent={topContent}
             topContentPlacement='outside'

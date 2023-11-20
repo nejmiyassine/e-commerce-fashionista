@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-
 import API from '../../app/api/api';
 
 //all customers
@@ -22,7 +21,6 @@ export const customersById = createAsyncThunk(
     async (customerId, { rejectWithValue }) => {
         try {
             const res = await API.get(`/customers/${customerId}`);
-
             console.log('customer details from axios', res.data);
             return res.data;
         } catch (error) {
@@ -146,14 +144,11 @@ const customersSlice = createSlice({
         builder
             .addCase(deleteCustomer.fulfilled, (state, action) => {
                 state.isLoading = false;
-
                 const {
                     arg: { customerId },
                 } = action.meta;
                 console.log('action.meta', action.meta);
-
                 if (customerId) {
-                    state.isLoading = false;
                     state.data = state.data.filter(
                         (customer) => customer._id !== customerId
                     );

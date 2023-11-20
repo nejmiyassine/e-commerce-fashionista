@@ -46,7 +46,7 @@ const ManageCategories = () => {
             console.error("Category creation failed. Response:", response);
           }
         } catch (error) {
-          console.error("Something went wrong in the input form", error);
+            console.error('Something went wrong: ', error);
         }
       };
       
