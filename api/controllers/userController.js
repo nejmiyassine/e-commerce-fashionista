@@ -11,7 +11,7 @@ exports.getUserById = async (req, res) => {
 
     try {
         const user = await User.findById(id);
-        
+
         if (!user) {
             return res.status(404).json({ message: 'users not found' });
         }
@@ -134,7 +134,7 @@ exports.loginUser = async (req, res) => {
         const jwt = jwtHelper.issueJwt(user, JwtSecretKey);
         const { token, expires } = jwt;
 
-     console.log("connected")
+        console.log('connected');
 
         res.status(200).json({ user, token, expiresIn: expires });
     } catch (error) {

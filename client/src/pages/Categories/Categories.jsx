@@ -36,7 +36,7 @@ const CreateCategory = () => {
                 console.error('Error creating a category');
             }
         } catch (error) {
-            console.error('Something went wrong in the input form', error);
+            console.error('Something went wrong: ', error);
         }
     };
 

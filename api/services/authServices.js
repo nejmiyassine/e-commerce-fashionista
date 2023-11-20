@@ -1,4 +1,4 @@
-const { genSalt, hash } = require('bcrypt');
+    const { genSalt, hash } = require('bcrypt');
 const passport = require('passport');
 const { isValidObjectId } = require('mongoose');
 

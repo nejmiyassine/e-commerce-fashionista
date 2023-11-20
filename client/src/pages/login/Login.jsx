@@ -2,13 +2,16 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { login } from '../../features/users/usersSlice';
 import axios from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginMessage, setLoginMessage] = useState('');
     const [isModalOpen, setModalOpen] = useState(false);
-    const dispatch = useDispatch();
 
     // Function to open the modal with a message
     const openModalWithMessage = (message) => {
@@ -34,6 +37,7 @@ const Login = () => {
                 const user = res.data.user;
                 dispatch(login(user));
                 openModalWithMessage('Login successful');
+                navigate('/admin/dashboard');
             } else {
                 openModalWithMessage(
                     'Login unsuccessful: email or password incorrect'
@@ -49,12 +53,8 @@ const Login = () => {
         <section className='bg-gray-50 min-h-screen flex items-center justify-center'>
             <div className='bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5 items-center'>
                 <div className='md:w-1/2 px-8 md:px-16'>
-                    <h2 className='font-bold text-2xl text-[#002D74]'>
-                        Welcome Back!
-                    </h2>
-                    <p className='text-sm mt-4 text-[#002D74]'>
-                        Log in to your account
-                    </p>
+                    <h2 className='font-bold text-2xl'>Welcome Back!</h2>
+                    <p className='text-sm mt-4'>Log in to your account</p>
                     <form
                         className='flex flex-col gap-4'
                         onSubmit={handleSubmit}

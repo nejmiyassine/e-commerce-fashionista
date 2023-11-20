@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
 
 const initialState = {
     loading: false,
@@ -28,7 +27,6 @@ export const customersById = createAsyncThunk(
     'customers/customersById',
     async (id) => {
         try {
-          
             const res = await axios.get(
                 `http://localhost:8000/v1/customers/${id}`
             );
@@ -142,7 +140,7 @@ const customersSlice = createSlice({
             })
             .addCase(deleteCustomer.fulfilled, (state, action) => {
                 state.loading = false;
-                 state.action = action.payload;
+                state.action = action.payload;
                 console.log('action.payload', action.payload);
                 if (id) {
                     state.customers = state.customers.filter(
