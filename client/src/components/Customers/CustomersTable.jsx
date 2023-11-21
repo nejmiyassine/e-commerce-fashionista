@@ -22,8 +22,6 @@ import {
 
 import { useSelector } from 'react-redux';
 
-import { PlusIcon } from '../../icons/PlusIcon';
-import { VerticalDotsIcon } from '../../icons/VerticalDotsIcon';
 import { SearchIcon } from '../../icons/SearchIcon';
 import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
 
@@ -235,7 +233,7 @@ const CustomersTable = () => {
             default:
                 return cellValue;
         }
-    }, []);
+    }, [onOpenChange]);
 
     const onRowsPerPageChange = React.useCallback((e) => {
         setRowsPerPage(Number(e.target.value));

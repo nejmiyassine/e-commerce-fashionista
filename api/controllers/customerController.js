@@ -4,21 +4,13 @@ const saltRounds = require('../config/env').SALT;
 const Customer = require('../models/Customers');
 const authService = require('../services/authServices');
 
-exports.registerCustomer = (req, res) => {
-    authService.authRegister(req, res, Customer, 'Customer');
-};
-
-exports.loginCustomer = (req, res, next) => {
-    authService.authLogin(req, res, next, 'local-customer');
-};
-
 exports.getAllCustomersList = async (req, res) => {
     // const page = req.query.page || 0;
     //  const sort = req.query.sort || 'DESC';
     //  const customerPerPage = 10;
 
     try {
-        const customers = await Customer.find()
+        const customers = await Customer.find();
         //      .skip(page * customerPerPage)
         //      .sort({ first_name: sort })
         //    .limit(customerPerPage);
@@ -51,12 +43,12 @@ exports.deleteCustomerById = async (req, res) => {
     try {
         const customer = await Customer.findByIdAndDelete(req.params.id);
         if (!customer) res.status(404).json({ message: 'Customer not found' });
-         return res
-             .status(200)
-           .json({ message: 'Customer deleted successfully' });
+        return res
+            .status(200)
+            .json({ message: 'Customer deleted successfully' });
     } catch (error) {
-        console.log('error from customerController : '  ,error)
-         res.status(500).json({ message: error.message });
+        console.log('error from customerController : ', error);
+        res.status(500).json({ message: error.message });
     }
 };
 

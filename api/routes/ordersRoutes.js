@@ -12,9 +12,9 @@ const {
     isCustomer,
 } = require('../middleware/authMiddleware');
 
-router.post('/',  createOrdersController);
+router.post('/', isCustomer, createOrdersController);
 router.get('/:id', getOrderByIdController);
 router.get('/', getAllOrdersController);
-router.put('/:id', updateOrdersController);
+router.put('/:id', isCustomer, updateOrdersController);
 
 module.exports = router;

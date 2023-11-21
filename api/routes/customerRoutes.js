@@ -5,15 +5,15 @@ const { check } = require('express-validator');
 
 const Customer = require('../models/Customers');
 const {
-    isAdminOrManager,
+    // isAdminOrManager,
     isCustomer,
 } = require('../middleware/authMiddleware');
 const { isResetTokenValid } = require('../middleware/resetTokenMiddleware');
 
 const {
-    registerCustomer,
+    // registerCustomer,
+    // loginCustomer,
     getAllCustomersList,
-    loginCustomer,
     getCustomerById,
     deleteCustomerById,
     updateCustomers,
@@ -25,6 +25,14 @@ const {
     forgotPassword,
     resetPassword,
 } = require('../services/authServices');
+const {
+    registerHandler,
+    loginHandler,
+    logoutHandler,
+} = require('../controllers/authController');
+
+const deserializeUser = require('../middleware/deserializeUser');
+const requireUser = require('../middleware/requireUser');
 
 router.post(
     '/',
@@ -49,7 +57,7 @@ router.post(
             .isLength({ min: 8 })
             .withMessage('Password must be at least 8 characters long'),
     ],
-    registerCustomer
+    registerHandler
 );
 
 router.post(
@@ -66,8 +74,11 @@ router.post(
             .isLength({ min: 8 })
             .withMessage('Password must be at least 8 characters long'),
     ],
-    loginCustomer
+    loginHandler
 );
+
+router.use(deserializeUser, requireUser);
+router.get('/logout', logoutHandler);
 
 // router.get('/', isAdminOrManager, getAllCustomersList);
 router.get('/', getAllCustomersList);

@@ -14,5 +14,7 @@ module.exports = {
     MAILTRAP_PASSWORD: process.env.MAILTRAP_PASSWORD,
 
     BASE_URL: process.env.BASE_URL,
-    
+
+    ACCESS_TOKEN_PRIVATE_KEY: process.env.ACCESS_TOKEN_PRIVATE_KEY,
+    ACCESS_TOKEN_PUBLIC_KEY: process.env.ACCESS_TOKEN_PUBLIC_KEY,
 };

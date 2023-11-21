@@ -2,6 +2,7 @@ const Orders = require('../models/Orders');
 
 // Create a new order
 const createOrdersController = async (req, res) => {
+    console.log(req.user);
     const customer_id = req.user._id;
     const { order_items, cart_total_price } = req.body;
 
@@ -11,17 +12,17 @@ const createOrdersController = async (req, res) => {
         }
 
         const newOrder = new Orders({
-              customer_id,
-              order_items,
-              order_date: new Date(),
-              cart_total_price,
-              status: 'pending',
-          });
-      
-          res.status(201).json({
-              message: 'Order created successfully',
-              createdOrder,
-          });
+            customer_id,
+            order_items,
+            order_date: new Date(),
+            cart_total_price,
+            status: 'pending',
+        });
+
+        res.status(201).json({
+            message: 'Order created successfully',
+            newOrder,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).send({
@@ -90,11 +91,10 @@ const getAllOrdersController = async (req, res) => {
         //     return res.status(403).json({ error: 'Forbidden' });
         // }
 
-        const orders = await Orders.find()
-              .populate('customer_id')
-            // .limit(limit)
-            // .skip(skip)
-            // .exec();
+        const orders = await Orders.find().populate('customer_id');
+        // .limit(limit)
+        // .skip(skip)
+        // .exec();
 
         if (orders.length === 0) {
             return res.status(200).json([]);
