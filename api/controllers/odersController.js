@@ -11,7 +11,7 @@ const createOrdersController = async (req, res) => {
             return res.status(400).send({ message: 'Missing required fields' });
         }
 
-        const newOrder = new Orders({
+        const newOrder = await Orders.create({
             customer_id,
             order_items,
             order_date: new Date(),

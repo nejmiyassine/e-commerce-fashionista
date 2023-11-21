@@ -114,7 +114,10 @@ const logout = (res) => {
 
 exports.logoutHandler = (req, res, next) => {
     try {
-        logout(res);
+        res.cookie('access_token', '', { maxAge: 1 });
+        res.cookie('logged_in', '', {
+            maxAge: 1,
+        });
         return res.status(200).json({
             status: 'success',
             message: 'You logged out successfully.',

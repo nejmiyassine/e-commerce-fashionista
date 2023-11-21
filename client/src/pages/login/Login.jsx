@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import {
+    // Navigate,
+    useLocation,
+    useNavigate,
+} from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Spacer, Button, Input } from '@nextui-org/react';
 import { useForm } from 'react-hook-form';
@@ -11,8 +14,9 @@ import { IoMdMail } from 'react-icons/io';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { RiLockPasswordFill } from 'react-icons/ri';
 
-import LoadingSpinner from '../../components/LoadingSpinner';
+// import LoadingSpinner from '../../components/LoadingSpinner';
 import { useLoginUserMutation } from '../../app/api/authApi';
+// import { useGetMyProfileDataQuery } from '../../app/api/usersApi';
 
 const userSchema = yup
     .object({
@@ -26,18 +30,17 @@ const userSchema = yup
     .required();
 
 const Login = () => {
-    const navigate = useNavigate();
-    const [
-        loginUser,
-        {
-            isLoading: isLoginUserLoading,
-            isError,
-            error: errorLoginUser,
-            isSuccess,
-        },
-    ] = useLoginUserMutation();
+    const [isVisible, setIsVisible] = useState(false);
 
-    const { user, isLoading, error } = useSelector((state) => state.users);
+    const toggleVisibility = () => setIsVisible(!isVisible);
+
+    const [loginUser, { isLoading, isError, error, isSuccess }] =
+        useLoginUserMutation();
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = location.state?.from.pathname || '/admin/dashboard';
 
     const methods = useForm({
         resolver: yupResolver(userSchema),
@@ -50,73 +53,43 @@ const Login = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitSuccessful },
         reset,
     } = methods;
 
-    // const [email, setEmail] = useState('');
-    // const [password, setPassword] = useState('');
-    const [loginMessage, setLoginMessage] = useState('');
-    const [isVisible, setIsVisible] = useState(false);
-
-    const toggleVisibility = () => setIsVisible(!isVisible);
-
-    // Function to open the modal with a message
-    const openModalWithMessage = (message) => {
-        setLoginMessage(message);
-
-        // Automatically close the modal after 4 seconds
-        setTimeout(() => {
-            setLoginMessage(''); // Clear the message
-        }, 4000);
-    };
-
     useEffect(() => {
         if (isSuccess) {
-            reset('');
-            toast({
-                title: 'User Logged In Successfully!',
-            });
-            navigate('/admin/dashboard');
+            toast.success('You successfully logged in');
+            navigate(from);
         }
-
         if (isError) {
-            if (Array.isArray(error).data.error) {
+            if (Array.isArray(error.data.error)) {
                 error.data.error.forEach((el) =>
-                    toast({ title: el.message, variant: 'destructive' })
+                    toast.error(el.message, {
+                        position: 'top-right',
+                    })
                 );
             } else {
-                toast({ title: error.data.message, variant: 'destructive' });
+                toast.error(error.data.message, {
+                    position: 'top-right',
+                });
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoading]);
 
-    const onSubmit = async (values) => {
-        try {
-            loginUser({ ...values, account_type: 'user' });
-            navigate('/admin/dashboard');
-        } catch (error) {
-            console.error('An error occurred:', error);
-            openModalWithMessage('Invalid Credentials');
+    useEffect(() => {
+        if (isSubmitSuccessful) {
+            reset();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isSubmitSuccessful]);
+
+    const onSubmit = async (values) => {
+        loginUser({ ...values, account_type: 'user' });
     };
 
-    if (isLoading || isLoginUserLoading) {
-        return <LoadingSpinner />;
-    }
-
-    if (error || errorLoginUser) {
-        toast({
-            variant: 'destructive',
-            description: 'Something went wrong',
-        });
-        return <LoadingSpinner />;
-    }
-
-    return user && user.role ? (
-        <Navigate to='/admin/dashboard' />
-    ) : (
+    return (
         <div className='flex items-center min-h-screen bg-white text-primary-light dark:bg-primary-deepDark dark:text-primary-dark'>
             <div className='w-full lg:w-1/2 p-20'>
                 <div className='px-8 py-6 md:px-16'>
@@ -128,14 +101,6 @@ const Login = () => {
                             Please enter your details
                         </p>
                     </div>
-
-                    {loginMessage && (
-                        <div className='text-center text-sm'>
-                            <p className='text-red-500 text-xl font-semibold'>
-                                {loginMessage}
-                            </p>
-                        </div>
-                    )}
 
                     <form
                         className='flex flex-col gap-4'

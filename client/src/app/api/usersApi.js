@@ -59,6 +59,7 @@ export const usersAPI = api.injectEndpoints({
                 url: 'users',
                 method: 'POST',
                 body: userData,
+                credentials: 'include',
             }),
             invalidatesTags: [{ type: 'Users', id: 'LIST' }],
             onQueryStarted() {
@@ -70,6 +71,7 @@ export const usersAPI = api.injectEndpoints({
                 url: `users/${userId}`,
                 method: 'PUT',
                 body: updatedUser,
+                credentials: 'include',
             }),
             onQueryStarted() {
                 NProgress.start();
