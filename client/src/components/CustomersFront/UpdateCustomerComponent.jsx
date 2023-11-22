@@ -140,11 +140,13 @@ const UpdateCustomerComponent = ({ customer }) => {
                             placeholder='password'
                             type='password'
                             variant='bordered'
-                            disabled
+                            
                             // {...register('password')}
                         />
-                         <div>
-                            <Button
+
+                        <div>
+                             {/*
+                             <Button
                                 className='bg-transparent text-blue-500 border-none p-0'
                                 onPress={onOpen}
                             >
@@ -193,8 +195,10 @@ const UpdateCustomerComponent = ({ customer }) => {
                                         </>
                                     )}
                                 </ModalContent>
-                            </Modal>
+                            </Modal>  */}
                         </div>
+                       
+
                         <p className='text-red-500'>
                             {errors.password?.message}
                         </p>

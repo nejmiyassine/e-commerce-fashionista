@@ -147,7 +147,7 @@ const CustomersTable = () => {
             onOpenChange(true);
         };
 
-        const handleDelete = () => {
+       const handleDelete = () => {
             if (
                 window.confirm('Are you sure you want to delete this customer?')
             ) {
