@@ -18,9 +18,12 @@ export const usersAPI = api.injectEndpoints({
                 try {
                     const { data: user } = await queryFulfilled;
                     const { data } = await args;
+                    console.log(user);
+                    console.log(data);
 
-                    dispatch();
-                    setUser({ user: user, access_token: data.access_token });
+                    dispatch(
+                        setUser({ user: user, access_token: data.access_token })
+                    );
                 } catch (error) {
                     /* Empty */
                 }

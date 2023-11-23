@@ -5,8 +5,8 @@ import {
     editCategory,
     deleteCategory,
     createCategory,
-} from '../../features/categories/categoriesSlice';
-import Layout from '../../layouts/Layout';
+} from '../../../features/categories/categoriesSlice';
+import Layout from '../../../layouts/Layout';
 
 const ManageCategories = () => {
     const dispatch = useDispatch();
@@ -24,14 +24,14 @@ const ManageCategories = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-      
+
         try {
           const response = await dispatch(createCategory(name));
           console.log("Create Category Response:", response);
-      
+
           if (response?.meta?.requestStatus === 'fulfilled') {
             const payload = response.payload;
-      
+
             if (payload !== undefined && payload.success) {
               console.log("Category created successfully");
               dispatch(getAllCategories());
@@ -49,7 +49,7 @@ const ManageCategories = () => {
             console.error('Something went wrong: ', error);
         }
       };
-      
+
 
     const handleUpdate = async () => {
         if (!selectedCategory) {
@@ -74,7 +74,7 @@ const ManageCategories = () => {
     const handleDelete = async (categoryId) => {
         try {
           const response = await dispatch(deleteCategory(categoryId));
-      
+
           if (response?.meta?.requestStatus === 'fulfilled') {
             console.log('Category deleted');
             dispatch(getAllCategories());

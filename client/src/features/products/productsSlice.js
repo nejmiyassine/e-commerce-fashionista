@@ -1,57 +1,69 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // import axios from "../../api/axios";/
 import axios from '../../api/axios';
-import Products from './../../pages/Products/Products';
+
 const initialState = {
     products: [],
     isLoading: true,
     // editedProduct: null,
     error: null,
-}
+};
 
 // Get All Products
-export const getAllProducts = createAsyncThunk('products/getAllProducts', async (_, {rejectWithValue}) => {
-    try {
-        const response = await axios.get('v1/products');
-        console.log(response.data);
-        return response.data.data;
-    } catch (error) {
-        rejectWithValue (error);
+export const getAllProducts = createAsyncThunk(
+    'products/getAllProducts',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get('v1/products');
+            console.log(response.data);
+            return response.data.data;
+        } catch (error) {
+            rejectWithValue(error);
+        }
     }
-});
+);
 
 // Edit Product
-export const editProduct = createAsyncThunk('products/editProduct', async ({ id, data } , {rejectWithValue}) => {
-    try {
-        const response = await axios.put(`v1/products/${id}`, data);
-        console.log(response.data);
-        return response.data.data;
-    } catch (error) {
-        rejectWithValue (error);
+export const editProduct = createAsyncThunk(
+    'products/editProduct',
+    async ({ id, data }, { rejectWithValue }) => {
+        try {
+            const response = await axios.put(`v1/products/${id}`, data);
+            console.log(response.data);
+            return response.data.data;
+        } catch (error) {
+            rejectWithValue(error);
+        }
     }
-});
+);
 
 // Delete Product
-export const deleteProduct = createAsyncThunk('products/deleteProduct', async (id, {rejectWithValue}) => {
-    try {
-        const response = await axios.delete(`v1/products/${id}`);
-        console.log(response.data);
-        return response.data.data;
-    } catch (error) {
-        rejectWithValue (error);
+export const deleteProduct = createAsyncThunk(
+    'products/deleteProduct',
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await axios.delete(`v1/products/${id}`);
+            console.log(response.data);
+            return response.data.data;
+        } catch (error) {
+            rejectWithValue(error);
+        }
     }
-});
+);
 
 // Create Product
-export const createProduct = createAsyncThunk('products/createProduct', async (productData, {rejectWithValue}) => {
-    try {
-        const response = await axios.post('v1/products', productData);
-        console.log(response.data);
-        return response.data.data;
-    } catch (error) {
-        rejectWithValue (error);
+export const createProduct = createAsyncThunk(
+    'products/createProduct',
+    async (productData, { rejectWithValue }) => {
+        try {
+            const response = await axios.post('v1/products', productData);
+            console.log(response.data);
+            return response.data.data;
+        } catch (error) {
+            rejectWithValue(error);
+        }
     }
-});
+);
 
 export const productsSlice = createSlice({
     name: 'products',
@@ -81,9 +93,11 @@ export const productsSlice = createSlice({
             .addCase(editProduct.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.products = state.products.map((Product) =>
-                    Product._id === action.payload._id ? action.payload : Product
+                    Product._id === action.payload._id
+                        ? action.payload
+                        : Product
                 );
-                
+
                 state.error = null;
             })
             .addCase(editProduct.rejected, (state, action) => {
@@ -100,13 +114,14 @@ export const productsSlice = createSlice({
                 state.isLoading = false;
                 const deletedProductId = action.payload._id;
                 // console.log(" deleeeeted" + deletedProductId)
-            
-                state.products = state.products.filter(product => product._id !== deletedProductId);
-                
+
+                state.products = state.products.filter(
+                    (product) => product._id !== deletedProductId
+                );
+
                 state.error = null;
             })
-            
-            
+
             .addCase(deleteProduct.rejected, (state, action) => {
                 state.isLoading = false;
                 // state.deletedProduct = null;

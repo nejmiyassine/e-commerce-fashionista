@@ -17,7 +17,7 @@ exports.findUser = async (query, options = {}) => {
 
 exports.signToken = async (user) => {
     const access_token = signJwt(
-        { sub: user._id },
+        { sub: user._id, account_type: user.account_type },
         {
             expiresIn: '1d',
         }

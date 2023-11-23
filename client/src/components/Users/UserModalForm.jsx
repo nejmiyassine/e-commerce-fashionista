@@ -113,7 +113,7 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
                 updatedUser: { ...formData, account_type: 'user' },
             });
         } else {
-            addUser(formData);
+            addUser({ ...formData, account_type: 'user' });
         }
     };
 

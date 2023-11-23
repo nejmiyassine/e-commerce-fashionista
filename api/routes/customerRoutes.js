@@ -11,13 +11,12 @@ const {
 const { isResetTokenValid } = require('../middleware/resetTokenMiddleware');
 
 const {
-    // registerCustomer,
-    // loginCustomer,
     getAllCustomersList,
     getCustomerById,
     deleteCustomerById,
     updateCustomers,
     searchForCustomer,
+    getCustomerProfileData,
     getProfile,
 } = require('../controllers/customerController');
 const {
@@ -80,6 +79,7 @@ router.post(
 router.use(deserializeUser, requireUser);
 router.get('/logout', logoutHandler);
 
+router.get('/profile', getCustomerProfileData);
 // router.get('/', isAdminOrManager, getAllCustomersList);
 router.get('/', getAllCustomersList);
 // router.get('/:id', isAdminOrManager, getCustomerById);

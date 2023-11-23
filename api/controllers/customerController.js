@@ -2,7 +2,20 @@ const bcrypt = require('bcrypt');
 
 const saltRounds = require('../config/env').SALT;
 const Customer = require('../models/Customers');
-const authService = require('../services/authServices');
+
+exports.getCustomerProfileData = async (req, res, next) => {
+    try {
+        const user = res.locals.user;
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 exports.getAllCustomersList = async (req, res) => {
     // const page = req.query.page || 0;

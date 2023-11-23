@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { customersById } from '../../features/customers/customersSlice';
-import DisplayCustomerDetails from '../../components/Customers/DisplayCustomerDetails';
 import { useParams } from 'react-router-dom';
+
+import { customersById } from '../../../features/customers/customersSlice';
+import DisplayCustomerDetails from '../../../components/Customers/DisplayCustomerDetails';
 
 const CustomerDetails = () => {
     const { customerId } = useParams();

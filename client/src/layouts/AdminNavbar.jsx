@@ -56,7 +56,9 @@ const AdminNavbar = () => {
 
     const handleLogout = () => {
         logoutUser();
-        toast.success('See you soon 👋!');
+        toast.success('See you soon 👋!', {
+            position: 'bottom-right',
+        });
     };
 
     return (

@@ -1,4 +1,6 @@
 const { findUserById } = require('../services/userServices');
+const { findCustomerById } = require('../services/customerServices');
+
 const { verifyJwt } = require('../helpers/jwt');
 const CustomError = require('../helpers/customError');
 
@@ -26,7 +28,13 @@ const deserializeUser = async (req, res, next) => {
             );
         }
 
-        const user = await findUserById(decoded.sub);
+        let user;
+
+        if (decoded.account_type === 'customer') {
+            user = await findCustomerById(decoded.sub);
+        } else {
+            user = await findUserById(decoded.sub);
+        }
 
         if (!user) {
             return next(

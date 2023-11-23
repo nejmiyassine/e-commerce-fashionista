@@ -1,29 +1,41 @@
 import PropTypes from 'prop-types';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useGetMyProfileDataQuery } from '../app/api/usersApi';
+import { useGetCustomerProfileDataQuery } from '../app/api/customerApi';
 
 const ProtectedRoutes = ({ allowedRoles }) => {
     const [cookies] = useCookies(['logged_in']);
     const isLoggedIn = cookies.logged_in;
-    const location = useLocation();
 
     const { data: user, isLoading, isFetching } = useGetMyProfileDataQuery();
+    const {
+        data: customer,
+        isLoading: isLoadingCustomer,
+        isFetching: isFetchingCustomer,
+    } = useGetCustomerProfileDataQuery();
 
-    const loading = isLoading || isFetching;
+    console.log(user);
+    console.log(customer);
+
+    const loading =
+        isLoading || isFetching || isLoadingCustomer || isFetchingCustomer;
 
     if (loading) {
         return <LoadingSpinner />;
     }
 
-    return (isLoggedIn || user) && allowedRoles.includes(user.role) ? (
+    return isLoggedIn && user && allowedRoles.includes(user.role) ? (
         <Outlet />
+    ) : isLoggedIn && customer ? (
+        <Navigate to='/unauthorized' />
     ) : (
-        <Navigate to='/admin/login' state={{ from: location }} replace />
+        <Navigate to='/admin/login' />
     );
 };
+
 export default ProtectedRoutes;
 
 ProtectedRoutes.propTypes = {

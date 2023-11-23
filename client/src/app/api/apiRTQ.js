@@ -12,6 +12,6 @@ const baseQueryWithRetry = retry(baseQuery, { maxRetries: 6 });
 export const api = createApi({
     // reducerPath: 'ecommerce-arkx-api',
     baseQuery: baseQueryWithRetry,
-    tagTypes: ['Users', 'Auth', 'Orders'],
+    tagTypes: ['Users', 'Auth', 'Orders', 'Customers'],
     endpoints: () => ({}),
 });
