@@ -6,7 +6,9 @@ exports.createCategory = async (req, res) => {
         const { name, active } = req.body;
 
         if (!name) {
-            return res.status(401).send({ message: 'Category Name is Required' });
+            return res
+                .status(401)
+                .send({ message: 'Category Name is Required' });
         }
 
         const existingCategory = await Category.findOne({ name });
@@ -36,7 +38,6 @@ exports.createCategory = async (req, res) => {
         });
     }
 };
-
 
 //Put
 exports.updateCategory = async (req, res) => {
@@ -70,7 +71,7 @@ exports.updateCategory = async (req, res) => {
 //Delete
 exports.deleteCategory = async (req, res) => {
     try {
-        const { id } = req.params
+        const { id } = req.params;
         console.log(id);
         await Category.findByIdAndDelete(id);
         res.status(200).send({
@@ -134,7 +135,6 @@ exports.getAllCategories = async (req, res) => {
         });
     }
 };
-
 
 //Get Search Category
 exports.getSearchCategory = async (req, res) => {

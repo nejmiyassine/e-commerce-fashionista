@@ -1,16 +1,26 @@
-// import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox, CheckboxGroup } from '@nextui-org/react';
-import { useSelector } from 'react-redux';
+import { FaChevronUp } from 'react-icons/fa';
+
+import { getAllCategories } from '../../features/categories/categoriesSlice';
 import LoadingSpinner from '../LoadingSpinner';
 
 const CatalogSidebar = () => {
+    const dispatch = useDispatch();
     const { categories, isLoading } = useSelector((state) => state.categories);
 
-    // const [selected, setSelected] = useState([]);
+    const [isOpen, setIsOpen] = useState(true);
+    const [selected, setSelected] = useState([]);
 
-    // useEffect(() => {}, [])
+    useEffect(() => {
+        dispatch(getAllCategories());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dispatch]);
 
-    console.log(categories);
+    const handleToggle = () => {
+        setIsOpen(!isOpen);
+    };
 
     if (isLoading) {
         return <LoadingSpinner />;
@@ -18,20 +28,45 @@ const CatalogSidebar = () => {
 
     return (
         <div className='flex flex-col gap-3'>
-            {categories.map(({ _id, category_name }) => (
-                <CheckboxGroup
-                    key={_id}
-                    label='Select cities'
-                    color='warning'
-                    value={category_name}
-                    // onValueChange={setSelected}
-                >
-                    <Checkbox value={category_name}>{category_name}</Checkbox>
-                </CheckboxGroup>
-            ))}
-            {/* <p className='text-default-500 text-small'>
-                Selected: {selected.join(', ')}
-            </p> */}
+            <div
+                className='flex items-center justify-between cursor-pointer'
+                onClick={handleToggle}
+            >
+                <h2 className='text-lg font-semibold'>All Categories</h2>
+                <FaChevronUp
+                    size={12}
+                    className={`transform transition ${
+                        !isOpen && 'rotate-180'
+                    } text-gray-400`}
+                />
+            </div>
+
+            {isOpen && (
+                <div className='mt-2 transition'>
+                    <CheckboxGroup value={selected} onChange={setSelected}>
+                        {!isLoading &&
+                            categories &&
+                            categories.map(({ _id, name }) => (
+                                <div
+                                    key={_id}
+                                    className='flex items-center justify-between capitalize gap-2 pb-3'
+                                >
+                                    <Checkbox
+                                        color='warning'
+                                        value={name}
+                                        size='md'
+                                    >
+                                        <span>{name}</span>
+                                    </Checkbox>
+                                    <p className='text-gray-400 text-sm'>32</p>
+                                </div>
+                            ))}
+                    </CheckboxGroup>
+
+                    <div className='pt-3' />
+                    <hr />
+                </div>
+            )}
         </div>
     );
 };
