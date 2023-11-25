@@ -15,8 +15,8 @@ let productSchema = new Schema({
      type: String ,
       unique: true
   },
-  product_image: {
-     type: String ,
+  product_images: {
+     type: Array ,
   },
   product_name: { 
     type: String ,
