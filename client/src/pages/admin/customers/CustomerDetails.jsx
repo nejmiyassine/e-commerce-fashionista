@@ -6,7 +6,9 @@ import { customersById } from '../../../features/customers/customersSlice';
 import DisplayCustomerDetails from '../../../components/Customers/DisplayCustomerDetails';
 
 const CustomerDetails = () => {
+
     const { customerId } = useParams();
+    console.log('customerID' , customerId)
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
     useEffect(() => {

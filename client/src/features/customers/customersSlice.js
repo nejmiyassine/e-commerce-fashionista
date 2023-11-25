@@ -21,7 +21,8 @@ export const customersById = createAsyncThunk(
     async (customerId, { rejectWithValue }) => {
         try {
             const res = await API.get(`/customers/${customerId}`);
-            console.log('customer details from axios', res.data);
+            console.log('customer details from axios' , res.data );
+
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -39,13 +40,24 @@ export const updateCustomer = createAsyncThunk(
                 updatedCustomerData
             );
 
-            console.log('updated customer', res.data);
+            console.log('updated customer from customerSlice', res.data);
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
         }
     }
 );
+
+//patch Customer
+export const patchCustomer = createAsyncThunk(
+    'customers/patchCustomer',
+async ({customerId , patchedcustomer}) => {
+    try {
+
+    } catch (error) {
+
+    }
+})
 
 //delete Customer
 export const deleteCustomer = createAsyncThunk(
@@ -64,6 +76,9 @@ export const deleteCustomer = createAsyncThunk(
         }
     }
 );
+
+
+
 
 const initialState = {
     isLoading: false,

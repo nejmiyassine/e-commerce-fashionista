@@ -17,6 +17,8 @@ import AuthRegister from '../pages/auth/AuthRegister';
 import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
 
+import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
+
 const RouteConfig = () => {
     return (
         <Router>
@@ -50,20 +52,29 @@ const RouteConfig = () => {
                         path='/admin/customers'
                         element={<ViewAllCustomers />}
                     />
+
                     <Route
-                        path='/admin/customer/:id'
+                        path='/admin/customers/:customerId'
                         element={<CustomerDetails />}
                     />
+
                     <Route
                         path='/admin/dashboard'
                         element={<AdminDashboard />}
                     />
+
                     <Route path='/admin/users' element={<Users />} />
                     <Route
                         path='/admin/users/:userId'
                         element={<UserDetails />}
                     />
                 </Route>
+
+                {/* front-store */}
+                <Route
+                    path='/customersProfile/:customerId'
+                    element={<UpdateCustomerInfo />}
+                />
             </Routes>
         </Router>
     );

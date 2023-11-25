@@ -22,7 +22,7 @@ const ViewAllCustomers = () => {
     if (!loading && error) {
         return <div>Error: {error}</div>;
     }
-
+    console.log('customer from view all customer' , data)
     return <Layout>{data && <TableCustomer customers={data} />}</Layout>;
 };
 export default ViewAllCustomers;

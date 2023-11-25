@@ -82,9 +82,9 @@ const getOrderByIdController = async (req, res) => {
 
 // Get a list of all orders
 const getAllOrdersController = async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 10;
-    const skip = (page - 1) * limit;
+    // const page = parseInt(req.query.page) || 1;
+    // const limit = 10;
+    // const skip = (page - 1) * limit;
 
     try {
         // if (!req.user.emailValidated) {
