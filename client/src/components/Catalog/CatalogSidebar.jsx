@@ -54,7 +54,7 @@ const CatalogSidebar = () => {
                                     <Checkbox
                                         color='warning'
                                         value={name}
-                                        size='md'
+                                        size='sm'
                                     >
                                         <span>{name}</span>
                                     </Checkbox>

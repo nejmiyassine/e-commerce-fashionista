@@ -1,3 +1,4 @@
+import CatalogProducts from '../../components/Catalog/CatalogProducts';
 import CatalogSidebar from '../../components/Catalog/CatalogSidebar';
 
 const Catalog = () => {
@@ -6,7 +7,9 @@ const Catalog = () => {
             <aside className='w-1/6'>
                 <CatalogSidebar />
             </aside>
-            <div className='w-5/6'>hello</div>
+            <div className='w-5/6'>
+                <CatalogProducts />
+            </div>
         </div>
     );
 };
