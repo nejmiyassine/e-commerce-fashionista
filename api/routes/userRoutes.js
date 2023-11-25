@@ -3,15 +3,23 @@ const router = express.Router();
 const { check } = require('express-validator');
 
 const User = require('../models/User');
+
 const {
+    getMyProfileData,
     getAllUsersList,
     getUserById,
     searchForUser,
-    loginUser,
-    registerUser,
     updateUser,
     deleteUser,
 } = require('../controllers/userController');
+const {
+    registerHandler,
+    loginHandler,
+    logoutHandler,
+} = require('../controllers/authController');
+
+const deserializeUser = require('../middleware/deserializeUser');
+const requireUser = require('../middleware/requireUser');
 
 router.post(
     '/',
@@ -50,7 +58,7 @@ router.post(
             .isLength({ min: 8 })
             .withMessage('Password must be at least 8 characters long'),
     ],
-    registerUser
+    registerHandler
 );
 
 router.post(
@@ -59,15 +67,17 @@ router.post(
         check('email').notEmpty().isEmail().withMessage('Email is required'),
         check('password').notEmpty().withMessage('Password is required'),
     ],
-    loginUser
+    loginHandler
 );
 
+router.use(deserializeUser, requireUser);
+
+router.get('/logout', logoutHandler);
+
+router.get('/profile', getMyProfileData);
 router.get('/', getAllUsersList);
 router.get('/search', searchForUser);
 router.get('/:id', getUserById);
-
 router.put('/:id', updateUser);
-
 router.delete('/:id', deleteUser);
-
 module.exports = router;

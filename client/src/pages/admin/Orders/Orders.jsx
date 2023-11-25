@@ -1,5 +1,5 @@
-import OrdersTable from '../../components/Orders/OrdersTable';
-import Layout from '../../layouts/Layout';
+import OrdersTable from '../../../components/Orders/OrdersTable';
+import Layout from '../../../layouts/Layout';
 
 const Orders = () => {
     return (

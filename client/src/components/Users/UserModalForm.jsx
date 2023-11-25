@@ -35,7 +35,7 @@ const userRole = [
     },
 ];
 
-const schema = yup
+const userSchema = yup
     .object({
         first_name: yup.string().required('Please enter a first name'),
         last_name: yup.string().required('Please enter a last name'),
@@ -60,7 +60,7 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
     const passwordInitialValue = isEditing ? '' : '';
 
     const methods = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(userSchema),
         defaultValues: {
             first_name: '',
             last_name: '',
@@ -108,9 +108,12 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
         onOpenChange(false);
 
         if (isEditing) {
-            updateUser({ userId: userData._id, updatedUser: formData });
+            updateUser({
+                userId: userData._id,
+                updatedUser: { ...formData, account_type: 'user' },
+            });
         } else {
-            addUser(formData);
+            addUser({ ...formData, account_type: 'user' });
         }
     };
 
@@ -167,7 +170,7 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
                 {(onClose) => (
                     <>
                         <ModalHeader className='flex flex-col gap-1'>
-                            Add User
+                            {userData ? 'Edit User' : 'Add User'}
                         </ModalHeader>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <ModalBody>

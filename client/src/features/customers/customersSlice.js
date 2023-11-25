@@ -52,7 +52,10 @@ export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
     async ({ customerId, deletedCustomer }, { rejectWithValue }) => {
         try {
-            const res = await API.delete(`customers/${customerId}`, deletedCustomer);
+            const res = await API.delete(
+                `customers/${customerId}`,
+                deletedCustomer
+            );
 
             console.log('delete from slice', res.data);
             return res.data;
@@ -66,12 +69,21 @@ const initialState = {
     isLoading: false,
     data: [],
     error: '',
+    customer: null,
+    access_token: '',
 };
 
 const customersSlice = createSlice({
     name: 'customers',
     initialState,
-    reducers: {},
+    reducers: {
+        setCustomer: (state, action) => {
+            console.log(action.payload);
+            state.customer = action.payload.user;
+            state.access_token = action.payload.access_token;
+        },
+        logout: () => ({ ...initialState, customer: null, access_token: '' }),
+    },
     extraReducers: (builder) => {
         builder
 
@@ -165,5 +177,7 @@ const customersSlice = createSlice({
             });
     },
 });
+
+export const { setCustomer, logout } = customersSlice.actions;
 
 export default customersSlice.reducer;
