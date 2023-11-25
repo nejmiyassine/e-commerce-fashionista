@@ -2,6 +2,7 @@ const Orders = require('../models/Orders');
 
 // Create a new order
 const createOrdersController = async (req, res) => {
+    console.log(req.user);
     const customer_id = req.user._id;
     const { order_items, cart_total_price } = req.body;
 

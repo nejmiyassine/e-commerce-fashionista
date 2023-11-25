@@ -1,5 +1,4 @@
 import DashboardWelcome from '../../../components/Dashboard/DashboardWelcome';
-// import DashboardCard from '../../../components/Dashboard/DashboardCard';
 import OrdersChart from '../../../components/Dashboard/OrdersChart';
 import LastUsersTable from '../../../components/Users/LastUsersTable';
 import LastOrders from '../../../components/Orders/LastOrders';
@@ -10,7 +9,6 @@ const AdminDashboard = () => {
         <Layout>
             <div className='container mx-auto'>
                 <DashboardWelcome />
-                {/* <DashboardCard /> */}
                 <OrdersChart />
 
                 <div className='mt-6 flex flex-col lg:flex-row gap-4'>

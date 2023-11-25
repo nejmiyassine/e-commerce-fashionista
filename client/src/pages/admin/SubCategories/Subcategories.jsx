@@ -5,8 +5,8 @@ import {
   editSubcategory,
   deleteSubcategory,
   createSubcategory,
-} from '../../features/subcategories/subcategoriesSlice';
-import Layout from '../../layouts/Layout';
+} from '../../../features/subcategories/subcategoriesSlice';
+import Layout from '../../../layouts/Layout';
 
 const ManageSubcategories = () => {
   const dispatch = useDispatch();
@@ -22,24 +22,24 @@ const ManageSubcategories = () => {
     if (error) {
       toast.error(error.data.message);
     }
-    
+
     dispatch(getAllSubcategories());
-    
+
   }, [dispatch, error]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await dispatch(createSubcategory(name));
       console.log("Create Subcategory Response:", response);
-  
+
       if (response?.meta?.requestStatus === 'fulfilled') {
         const { success, subcategory } = response.payload;
-  
+
         console.log("Success:", success);
         console.log("Subcategory:", subcategory);
-  
+
         if (success) {
           console.log("Subcategory created successfully");
           dispatch(getAllSubcategories());
@@ -55,9 +55,9 @@ const ManageSubcategories = () => {
       console.error("Something went wrong in the input form", error);
     }
   };
-  
-  
-  
+
+
+
   const handleUpdate = async () => {
     if (!selectedSubcategory) {
       console.error("No subcategory selected for update");
@@ -82,7 +82,7 @@ const ManageSubcategories = () => {
   const handleDelete = async (subcategoryId) => {
     try {
       const response = await dispatch(deleteSubcategory(subcategoryId));
-  
+
       if (response?.meta?.requestStatus === 'fulfilled') {
         console.log("Subcategory deleted");
         dispatch(getAllSubcategories());
@@ -93,8 +93,8 @@ const ManageSubcategories = () => {
       console.error("Error during subcategory deletion", error);
     }
   };
-  
-  
+
+
 
   const handleConfirmDelete = () => {
     if (confirmDelete) {
@@ -219,7 +219,7 @@ const ManageSubcategories = () => {
           <div className="relative bg-white p-6 shadow-lg rounded-lg">
             <form onSubmit={handleUpdate}>
               <div className="input-group mb-4">
-                
+
                 <input
                   type="text"
                   className="form-control"
