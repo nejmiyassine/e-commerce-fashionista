@@ -1,17 +1,43 @@
 const Product = require('../models/Product');
 
+// exports.addProduct = async (req, res) => {
+//   try {
+//     const newProduct = await Product.create(req.body);
+//     return res.status(200).json({
+//       status: 200,
+//       message: "product created successfully",
+//       data: newProduct,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     return res.json({message: error?.message});
+//   }
+// };
 exports.addProduct = async (req, res) => {
-    try {
-        const newProduct = await Product.create(req.body);
-        return res.status(200).json({
-            status: 200,
-            message: 'product created successfully',
-            data: newProduct,
-        });
-    } catch (error) {
-        console.log(error);
-        return res.json({ message: error?.message });
-    }
+  try {
+    const { product_name, price, discount_price, options, category_id, short_description, long_description, quantity, product_images } = req.body;
+
+    const newProduct = await Product.create({
+      product_name,
+      price,
+      discount_price,
+      options,
+      category_id,
+      short_description,
+      long_description,
+      quantity,
+      product_images, // Make sure product_images is an array of URLs
+    });
+
+    return res.status(200).json({
+      status: 200,
+      message: "Product created successfully",
+      data: newProduct,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({ message: error?.message });
+  }
 };
 //search for products
 exports.searchforProduct = async (req, res) => {

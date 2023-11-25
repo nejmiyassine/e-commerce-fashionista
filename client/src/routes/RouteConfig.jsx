@@ -1,17 +1,21 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 import Home from '../pages/Home';
-import Login from '../pages/login/Login copy';
-import Products from '../pages/Products/Products';
-import Categories from '../pages/Categories/Categories';
-import Subcategories from '../pages/SubCategories/Subcategories';
+import AdminLogin from '../pages/admin/Login/AdminLogin';
+import Products from '../pages/admin/Products/Products';
+import Categories from '../pages/admin/Categories/Categories';
+import Subcategories from '../pages/admin/SubCategories/Subcategories';
 import AdminDashboard from '../pages/admin/dashboard/AdminDashboard';
-import CustomerDetails from '../pages/customers/CustomerDetails';
-import ViewAllCustomers from '../pages/customers/ViewAllCustomers';
+import CustomerDetails from '../pages/admin/customers/CustomerDetails';
+import ViewAllCustomers from '../pages/admin/customers/ViewAllCustomers';
 import Users from '../pages/admin/users/Users';
 import UserDetails from '../pages/admin/users/UserDetails';
-import Orders from '../pages/Orders/Orders';
+import Orders from '../pages/admin/Orders/Orders';
 import ProtectedRoutes from './ProtectedRoutes';
+import AuthLogin from '../pages/auth/AuthLogin';
+import AuthRegister from '../pages/auth/AuthRegister';
+import Unauthorized from '../pages/Unauthorized';
+import Catalog from '../pages/catalog/Catalog';
 
 import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
 
@@ -19,14 +23,23 @@ const RouteConfig = () => {
     return (
         <Router>
             <Routes>
-                <Route path='/admin/login' element={<Login />} />
+                {/* Unauthorized */}
+                <Route path='/unauthorized' element={<Unauthorized />} />
 
+                <Route exact path='/' element={<Home />} />
+                <Route path='/catalog' element={<Catalog />} />
+
+                {/* Authentication */}
+                <Route path='/register' element={<AuthRegister />} />
+                <Route path='/login' element={<AuthLogin />} />
+                <Route path='/admin/login' element={<AdminLogin />} />
+
+                {/* Admin Protected Routes */}
                 <Route
                     element={
                         <ProtectedRoutes allowedRoles={['admin', 'manager']} />
                     }
                 >
-                    <Route exact path='/' element={<Home />} />
                     <Route path='/admin/products' element={<Products />} />
                     <Route path='/admin/categories' element={<Categories />} />
                     <Route path='/admin/orders' element={<Orders />} />

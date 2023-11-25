@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCustomers } from '../../features/customers/customersSlice';
-import TableCustomer from '../../components/Customers/CustomersTable';
-import LoadingSpinner from '../../components/LoadingSpinner';
-import Layout from '../../layouts/Layout';
+import { fetchCustomers } from '../../../features/customers/customersSlice';
+import TableCustomer from '../../../components/Customers/CustomersTable';
+import LoadingSpinner from '../../../components/LoadingSpinner';
+import Layout from '../../../layouts/Layout';
 
 const ViewAllCustomers = () => {
     const dispatch = useDispatch();

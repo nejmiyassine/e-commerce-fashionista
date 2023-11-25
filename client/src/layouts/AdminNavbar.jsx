@@ -1,40 +1,64 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Switch } from '@nextui-org/react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 
 import { useDarkMode } from '../hooks/useDarkMode';
 import { SunIcon, MoonIcon } from '../icons/Icons';
-import LoadingSpinner from '../components/LoadingSpinner';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { logout } from '../features/users/usersSlice';
+import { useGetMyProfileDataQuery } from '../app/api/usersApi';
+import { useLogoutUserMutation } from '../app/api/authApi';
 
 const classNames = (...classes) => {
     return classes.filter(Boolean).join(' ');
 };
 
 const AdminNavbar = () => {
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { toggleDarkMode } = useDarkMode();
-    const { user, isLoading, error } = useSelector((state) => state.users);
 
-    if (isLoading) {
-        return <LoadingSpinner />;
-    }
+    const [
+        logoutUser,
+        {
+            isLoading: isLogoutLoading,
+            isSuccess,
+            error: logoutError,
+            isError: isLogoutError,
+        },
+    ] = useLogoutUserMutation();
 
-    if (error) {
-        toast({
-            variant: 'destructive',
-            description: 'Something went wrong',
-        });
-        return <LoadingSpinner />;
-    }
+    const {
+        data: user,
+        isLoading,
+        isError,
+        error,
+    } = useGetMyProfileDataQuery();
+
+    const loading = isLogoutLoading || isLoading;
+    const isErrorLog = isLogoutError || isError;
+    const errorLog = logoutError || error;
+
+    useEffect(() => {
+        if (isSuccess) {
+            navigate('/admin/login');
+        }
+
+        if (isErrorLog) {
+            if (Array.isArray(errorLog).data.error) {
+                errorLog.data.error.forEach((el) => toast.error(el.message));
+            } else {
+                toast.error(errorLog.data.message);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loading]);
 
     const handleLogout = () => {
-        dispatch(logout());
-        toast.success('See you soon 👋!');
+        logoutUser();
+        toast.success('See you soon 👋!', {
+            position: 'bottom-right',
+        });
     };
 
     return (
