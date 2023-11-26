@@ -21,6 +21,7 @@ const deserializeUser = async (req, res, next) => {
         }
 
         const decoded = verifyJwt(access_token);
+        console.log('decoded' ,decoded)
 
         if (!decoded) {
             return next(

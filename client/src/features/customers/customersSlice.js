@@ -10,10 +10,12 @@ export const fetchCustomers = createAsyncThunk(
             console.log('data from axios', res.data);
             return res.data;
         } catch (error) {
-            rejectWithValue(error.res.data);
+            rejectWithValue('reject' ,error.res.data);
         }
     }
 );
+
+
 
 //customerById
 export const customersById = createAsyncThunk(
