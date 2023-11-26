@@ -1,4 +1,5 @@
 const Product = require('../models/Product');
+const Category = require('../models/Category');
 
 // exports.addProduct = async (req, res) => {
 //   try {
@@ -14,30 +15,40 @@ const Product = require('../models/Product');
 //   }
 // };
 exports.addProduct = async (req, res) => {
-  try {
-    const { product_name, price, discount_price, options, category_id, short_description, long_description, quantity, product_images } = req.body;
+    try {
+        const {
+            product_name,
+            price,
+            discount_price,
+            options,
+            category_id,
+            short_description,
+            long_description,
+            quantity,
+            product_images,
+        } = req.body;
 
-    const newProduct = await Product.create({
-      product_name,
-      price,
-      discount_price,
-      options,
-      category_id,
-      short_description,
-      long_description,
-      quantity,
-      product_images, // Make sure product_images is an array of URLs
-    });
+        const newProduct = await Product.create({
+            product_name,
+            price,
+            discount_price,
+            options,
+            category_id,
+            short_description,
+            long_description,
+            quantity,
+            product_images, // Make sure product_images is an array of URLs
+        });
 
-    return res.status(200).json({
-      status: 200,
-      message: "Product created successfully",
-      data: newProduct,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.json({ message: error?.message });
-  }
+        return res.status(200).json({
+            status: 200,
+            message: 'Product created successfully',
+            data: newProduct,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.json({ message: error?.message });
+    }
 };
 //search for products
 exports.searchforProduct = async (req, res) => {
@@ -79,6 +90,7 @@ exports.getProductID = async (req, res) => {
         const product = await Product.findById(id)
             .populate('category_id')
             .exec();
+
         if (!product) {
             res.status(404).json({ message: 'ProductiD not found' });
         }
@@ -116,7 +128,42 @@ exports.listProduct = async (req, res) => {
         return res.json({ message: error?.message });
     }
 };
+// Get Products By Category Name
+exports.listProductsByCategoryName = async (req, res) => {
+    const { categories } = req.body;
 
+    try {
+        const category = await Category.find({
+            name: { $in: categories ? categories : ['watch'] },
+        });
+
+        if (category.length === 0) {
+            throw new Error('Categories not found');
+        }
+
+        const categoryIds = category.map((category) => category._id);
+
+        const products = await Product.find({
+            category_id: { $in: categoryIds },
+        });
+
+        if (!products) {
+            return res.status(404).json({
+                message: 'There is no product for those categories',
+            });
+        }
+
+        return res.status(200).json({
+            status: 200,
+            category,
+            data: products,
+            categoryIds,
+            message: 'Products by category name retrieved successfully',
+        });
+    } catch (error) {
+        return res.json({ message: error?.message });
+    }
+};
 // update product
 exports.updateProduct = async (req, res) => {
     try {

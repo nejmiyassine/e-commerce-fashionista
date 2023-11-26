@@ -2,8 +2,8 @@ const Orders = require('../models/Orders');
 
 // Create a new order
 const createOrdersController = async (req, res) => {
-    console.log(req.user);
-    const customer_id = req.user._id;
+    console.log(res.locals.user);
+    const customer_id = res.locals.user._id;
     const { order_items, cart_total_price } = req.body;
 
     try {
@@ -24,7 +24,6 @@ const createOrdersController = async (req, res) => {
             newOrder,
         });
     } catch (error) {
-        console.error(error);
         res.status(500).send({
             success: false,
             error: error.message,

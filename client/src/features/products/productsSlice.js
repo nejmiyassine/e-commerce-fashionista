@@ -65,6 +65,21 @@ export const createProduct = createAsyncThunk(
     }
 );
 
+export const fetchProductsByCategory = createAsyncThunk(
+    'products/fetchByCategory',
+    async (categories, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(
+                'v1/products/categories',
+                categories
+            );
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 export const productsSlice = createSlice({
     name: 'products',
     initialState,
@@ -92,10 +107,10 @@ export const productsSlice = createSlice({
             })
             .addCase(editProduct.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.products = state.products.map((Product) =>
-                    Product._id === action.payload._id
+                state.products = state.products.map((product) =>
+                    product._id === action.payload._id
                         ? action.payload
-                        : Product
+                        : product
                 );
 
                 state.error = null;
@@ -139,6 +154,22 @@ export const productsSlice = createSlice({
             .addCase(createProduct.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error;
+            })
+
+            // Fetch Product By Category Name
+            .addCase(fetchProductsByCategory.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.products = action.payload.data;
+                state.error = null;
+            })
+            .addCase(fetchProductsByCategory.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload
+                    ? action.payload.message
+                    : 'Failed to fetch products';
             });
     },
 });

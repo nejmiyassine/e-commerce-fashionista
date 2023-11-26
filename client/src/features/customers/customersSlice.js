@@ -1,12 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import API from '../../app/api/api';
+import axios from '../../api/axios';
 
 //all customers
 export const fetchCustomers = createAsyncThunk(
     'customers/fetchCustomers',
     async (_, { rejectWithValue }) => {
         try {
-            const res = await API.get('/customers');
+            const res = await axios.get('v1/customers', {
+                withCredentials: true,
+            });
             console.log('data from axios', res.data);
             return res.data;
         } catch (error) {
@@ -23,7 +26,7 @@ export const customersById = createAsyncThunk(
     async (customerId, { rejectWithValue }) => {
         try {
             const res = await API.get(`/customers/${customerId}`);
-            console.log('customer details from axios' , res.data );
+            console.log('customer details from axios', res.data);
 
             return res.data;
         } catch (error) {
@@ -50,17 +53,6 @@ export const updateCustomer = createAsyncThunk(
     }
 );
 
-//patch Customer
-export const patchCustomer = createAsyncThunk(
-    'customers/patchCustomer',
-async ({customerId , patchedcustomer}) => {
-    try {
-
-    } catch (error) {
-
-    }
-})
-
 //delete Customer
 export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
@@ -78,9 +70,6 @@ export const deleteCustomer = createAsyncThunk(
         }
     }
 );
-
-
-
 
 const initialState = {
     isLoading: false,
@@ -107,6 +96,8 @@ const customersSlice = createSlice({
             //all customers
             .addCase(fetchCustomers.pending, (state) => {
                 state.isLoading = true;
+                state.data = [];
+                state.error = '';
             })
             .addCase(fetchCustomers.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -116,7 +107,7 @@ const customersSlice = createSlice({
             })
             .addCase(fetchCustomers.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.state.error = action.error.message;
             })
 
             // customers by id

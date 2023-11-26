@@ -1,9 +1,31 @@
+import NProgress from 'nprogress';
+
 import { api } from './apiRTQ';
 import { setCustomer } from '../../features/customers/customersSlice';
 
 export const customerAPI = api.injectEndpoints({
     tagTypes: ['Customers'],
     endpoints: (builder) => ({
+        getAllCustomers: builder.query({
+            query: () => ({
+                url: 'customers',
+                method: 'GET',
+                credentials: 'include',
+            }),
+            providesTags: (result) =>
+                result
+                    ? [
+                          ...result.map(({ id }) => ({
+                              type: 'Customers',
+                              id,
+                          })),
+                          { type: 'Customers', id: 'LIST' },
+                      ]
+                    : [{ type: 'Customers', id: 'LIST' }],
+            onQueryStarted() {
+                NProgress.start();
+            },
+        }),
         getCustomerProfileData: builder.query({
             query() {
                 return {
@@ -31,4 +53,5 @@ export const customerAPI = api.injectEndpoints({
     }),
 });
 
-export const { useGetCustomerProfileDataQuery } = customerAPI;
+export const { useGetCustomerProfileDataQuery, useGetAllCustomersQuery } =
+    customerAPI;

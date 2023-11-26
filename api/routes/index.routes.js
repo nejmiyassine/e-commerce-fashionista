@@ -11,7 +11,7 @@ const productRoutes = require('./productRoutes.js');
 const ordersRoutes = require('./ordersRoutes.js');
 const uploadImageRoutes = require('./uploadImageRoutesCopy.js');
 //
-const favoritesRoutes = require('./favoritesRoutes.js')
+const favoritesRoutes = require('./favoritesRoutes.js');
 
 router.use('/users', userRoutes);
 router.use('/customers', customerRoutes);
@@ -21,6 +21,6 @@ router.use('/categories', categoryRoutes);
 router.use('/products', productRoutes);
 router.use('/orders', ordersRoutes);
 router.use('/uploads', uploadImageRoutes);
-//
-router.use('/favorites' , favoritesRoutes);
+
+router.use('/favorites', favoritesRoutes);
 module.exports = router;

@@ -52,6 +52,7 @@ const UsersTable = () => {
         error: getAllUsersError,
         data: users,
     } = useGetAllUsersQuery();
+    
     const [deleteUser, { isLoading, isError, error, isSuccess }] =
         useDeleteUserMutation();
 

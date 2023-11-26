@@ -6,13 +6,14 @@ const CustomError = require('../helpers/customError');
 
 const deserializeUser = async (req, res, next) => {
     try {
+        // const authHeader = req.headers['authorization'];
+
         let access_token;
-        if (
-            req.headers.authorization &&
-            req.headers.authorization.startsWith('Bearer')
-        ) {
-            access_token = req.headers.authorization.split(' ')[1];
-        } else if (req.cookies.access_token) {
+
+        // if (authHeader && authHeader.startsWith('Bearer')) {
+        //     access_token = authHeader.split(' ')[1];
+        // } else
+        if (req.cookies.access_token) {
             access_token = req.cookies.access_token;
         }
 
@@ -28,6 +29,7 @@ const deserializeUser = async (req, res, next) => {
                 new CustomError("Invalid token or user doesn't exist", 401)
             );
         }
+
 
         let user;
 

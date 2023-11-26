@@ -57,7 +57,6 @@ exports.getAllUsersList = async (req, res) => {
 exports.searchForUser = async (req, res) => {
     const { query } = req.query || '';
     const page = req.query.page || 1;
-    const sort = req.query.sort || 'DESC';
     const usersPerPage = 5;
 
     const searchCriteria = {
