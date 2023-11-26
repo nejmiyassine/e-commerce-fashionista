@@ -4,10 +4,6 @@ const router = express.Router();
 const { check } = require('express-validator');
 
 const Customer = require('../models/Customers');
-const {
-    // isAdminOrManager,
-    isCustomer,
-} = require('../middleware/authMiddleware');
 const { isResetTokenValid } = require('../middleware/resetTokenMiddleware');
 
 const {
@@ -32,6 +28,12 @@ const {
 
 const deserializeUser = require('../middleware/deserializeUser');
 const requireUser = require('../middleware/requireUser');
+const {
+    restrictTo,
+    restrictToCustomer,
+} = require('../middleware/restrictMiddleware');
+
+router.use(deserializeUser, requireUser);
 
 router.post(
     '/',
@@ -76,20 +78,19 @@ router.post(
     loginHandler
 );
 
-router.use(deserializeUser, requireUser);
 router.get('/logout', logoutHandler);
 
-router.get('/profile', getCustomerProfileData);
+router.get('/profile', restrictToCustomer, getCustomerProfileData);
 // router.get('/', isAdminOrManager, getAllCustomersList);
-router.get('/', getAllCustomersList);
+router.get('/', restrictTo('admin', 'manager'), getAllCustomersList);
 // router.get('/:id', isAdminOrManager, getCustomerById);
-router.get('/:id', getCustomerById);
+router.get('/:id', restrictTo('admin', 'manager'), getCustomerById);
 // router.get('/search', isAdminOrManager, searchForCustomer);
 router.get('/search', searchForCustomer);
 router.put('/:id', updateCustomers);
 // router.delete('/:id', isCustomer, isAdminOrManager, deleteCustomerById);
 router.delete('/:id', deleteCustomerById);
-router.get('/profile/:id', isCustomer, getProfile);
+router.get('/profile/:id', restrictToCustomer, getProfile);
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
 router.post('/forgot-password', (req, res) =>
     forgotPassword(req, res, 'Customer')

@@ -1,12 +1,13 @@
-const { genSalt, compare, hash } = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 const CustomError = require('../helpers/customError');
 
-const { createUser, findUser, signToken } = require('../services/userServices');
+const { createUser, findUser } = require('../services/userServices');
 const {
     createCustomer,
     findCustomer,
 } = require('../services/customerServices');
+const { signToken } = require('../helpers/jwt');
 
 const accessTokenCookieOptions = {
     expires: new Date(Date.now() * 86400 * 1000),
@@ -22,8 +23,8 @@ exports.registerHandler = async (req, res, next) => {
     const { account_type, password } = req.body;
 
     try {
-        const salt = await genSalt(12);
-        const hashedPassword = await hash(password, salt);
+        const salt = await bcrypt.genSalt(12);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         let newUser = {};
 
@@ -79,10 +80,8 @@ exports.loginHandler = async (req, res, next) => {
             user = await findCustomer({ email });
         }
 
-        const isPasswordValid = compare(user.password, password);
-
         // Check if user exist and password is correct
-        if (!user || !isPasswordValid) {
+        if (!user || !(await bcrypt.compare(password, user.password))) {
             return next(new CustomError('Invalid email or password', 401));
         }
 
@@ -114,10 +113,8 @@ const logout = (res) => {
 
 exports.logoutHandler = (req, res, next) => {
     try {
-        res.cookie('access_token', '', { maxAge: 1 });
-        res.cookie('logged_in', '', {
-            maxAge: 1,
-        });
+        logout(res);
+
         return res.status(200).json({
             status: 'success',
             message: 'You logged out successfully.',

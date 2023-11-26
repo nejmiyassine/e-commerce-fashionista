@@ -4,24 +4,14 @@ import { useCookies } from 'react-cookie';
 
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useGetMyProfileDataQuery } from '../app/api/usersApi';
-import { useGetCustomerProfileDataQuery } from '../app/api/customerApi';
 
 const ProtectedRoutes = ({ allowedRoles }) => {
     const [cookies] = useCookies(['logged_in']);
     const isLoggedIn = cookies.logged_in;
 
     const { data: user, isLoading, isFetching } = useGetMyProfileDataQuery();
-    const {
-        data: customer,
-        isLoading: isLoadingCustomer,
-        isFetching: isFetchingCustomer,
-    } = useGetCustomerProfileDataQuery();
 
-    console.log(user);
-    console.log(customer);
-
-    const loading =
-        isLoading || isFetching || isLoadingCustomer || isFetchingCustomer;
+    const loading = isLoading || isFetching;
 
     if (loading) {
         return <LoadingSpinner />;
@@ -29,7 +19,7 @@ const ProtectedRoutes = ({ allowedRoles }) => {
 
     return isLoggedIn && user && allowedRoles.includes(user.role) ? (
         <Outlet />
-    ) : isLoggedIn && customer ? (
+    ) : isLoggedIn && !user ? (
         <Navigate to='/unauthorized' />
     ) : (
         <Navigate to='/admin/login' />
