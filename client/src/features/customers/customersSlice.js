@@ -1,33 +1,30 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import API from '../../app/api/api';
-import axios from '../../api/axios';
 
 //all customers
 export const fetchCustomers = createAsyncThunk(
     'customers/fetchCustomers',
     async (_, { rejectWithValue }) => {
         try {
-            const res = await axios.get('v1/customers', {
+            const res = await API.get('customers', {
                 withCredentials: true,
             });
             console.log('data from axios', res.data);
             return res.data;
         } catch (error) {
-            rejectWithValue('reject' ,error.res.data);
+            rejectWithValue(error.res.data);
         }
     }
 );
-
-
 
 //customerById
 export const customersById = createAsyncThunk(
     'customers/customersById',
     async (customerId, { rejectWithValue }) => {
         try {
-            const res = await API.get(`/customers/${customerId}`);
-            console.log('customer details from axios', res.data);
-
+            const res = await API.get(`customers/${customerId}`, {
+                withCredentials: true,
+            });
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -42,7 +39,10 @@ export const updateCustomer = createAsyncThunk(
         try {
             const res = await API.put(
                 `customers/${customerId}`,
-                updatedCustomerData
+                updatedCustomerData,
+                {
+                    withCredentials: true,
+                }
             );
 
             console.log('updated customer from customerSlice', res.data);
@@ -56,12 +56,11 @@ export const updateCustomer = createAsyncThunk(
 //delete Customer
 export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
-    async ({ customerId, deletedCustomer }, { rejectWithValue }) => {
+    async ({ customerId }, { rejectWithValue }) => {
         try {
-            const res = await API.delete(
-                `customers/${customerId}`,
-                deletedCustomer
-            );
+            const res = await API.delete(`customers/${customerId}`, {
+                withCredentials: true,
+            });
 
             console.log('delete from slice', res.data);
             return res.data;
