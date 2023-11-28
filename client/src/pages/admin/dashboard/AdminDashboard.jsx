@@ -12,10 +12,10 @@ const AdminDashboard = () => {
                 <OrdersChart />
 
                 <div className='mt-6 flex flex-col lg:flex-row gap-4'>
-                    <div className='w-full lg:w-3/5 rounded-md p-4 bg-white dark:bg-primary-deepDark'>
+                    <div className='w-full lg:w-3/5 rounded-md p-4 bg-white dark:bg-primaryColor-deepDark'>
                         <LastUsersTable />
                     </div>
-                    <div className='w-full lg:w-2/5 rounded-md p-4 bg-white dark:bg-primary-deepDark'>
+                    <div className='w-full lg:w-2/5 rounded-md p-4 bg-white dark:bg-primaryColor-deepDark'>
                         <LastOrders />
                     </div>
                 </div>

@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -14,7 +12,7 @@ import {
     Link,
 } from '@nextui-org/react';
 
-const NavbarCustomers = ({customer}) => {
+const NavbarCustomers = ({ customer }) => {
     const navigate = useNavigate();
 
     return (
@@ -46,7 +44,7 @@ const NavbarCustomers = ({customer}) => {
                                 isBordered
                                 as='button'
                                 className='transition-transform'
-                                color='secondary'
+                                color='secondaryColor'
                                 name='Jason Hughes'
                                 size='sm'
                                 src='https://i.pravatar.cc/150?u=a042581f4e29026704d'
@@ -82,10 +80,12 @@ const NavbarCustomers = ({customer}) => {
                                 {/* <Settings isOpen={isOpen} onOpenChange={onOpenChange} /> */}
                             </DropdownItem>
 
-                            <DropdownItem key='logout' color='danger' className='h-8'>
-                                <Button
-                                    className='bg-color-none'
-                                >
+                            <DropdownItem
+                                key='logout'
+                                color='danger'
+                                className='h-8'
+                            >
+                                <Button className='bg-color-none'>
                                     Log out
                                 </Button>
                             </DropdownItem>

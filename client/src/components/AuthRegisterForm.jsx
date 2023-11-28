@@ -204,7 +204,7 @@ const AuthRegisterForm = ({ account_type }) => {
             />
 
             <Button
-                className='mt-4 bg-primary-deepDark text-primary-dark dark:bg-white dark:text-primary-light'
+                className='mt-4 bg-primaryColor-deepDark text-primaryColor-dark dark:bg-white dark:text-primaryColor-light'
                 type='submit'
             >
                 Create account

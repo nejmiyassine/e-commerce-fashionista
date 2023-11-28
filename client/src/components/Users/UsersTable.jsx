@@ -52,7 +52,7 @@ const UsersTable = () => {
         error: getAllUsersError,
         data: users,
     } = useGetAllUsersQuery();
-    
+
     const [deleteUser, { isLoading, isError, error, isSuccess }] =
         useDeleteUserMutation();
 
@@ -134,6 +134,7 @@ const UsersTable = () => {
                 user.username.toLowerCase().includes(filterValue.toLowerCase())
             );
         }
+
         if (
             statusFilter !== 'all' &&
             Array.from(statusFilter).length !== statusOptions.length &&
@@ -372,7 +373,7 @@ const UsersTable = () => {
                 onOpenChange={onOpenChange}
                 userData={selectedUser}
             />
-            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
+            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primaryColor-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>All Users</h2>
 
                 <Table

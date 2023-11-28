@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const BASE_URL = import.meta.env.VITE_REACT_APP_BASEURL;
 
@@ -7,11 +7,9 @@ const baseQuery = fetchBaseQuery({
     baseUrl: BASE_URL,
 });
 
-const baseQueryWithRetry = retry(baseQuery, { maxRetries: 6 });
-
 export const api = createApi({
     // reducerPath: 'ecommerce-arkx-api',
-    baseQuery: baseQueryWithRetry,
+    baseQuery,
     tagTypes: ['Users', 'Auth', 'Orders', 'Customers'],
     endpoints: () => ({}),
 });

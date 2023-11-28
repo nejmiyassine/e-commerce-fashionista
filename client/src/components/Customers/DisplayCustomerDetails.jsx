@@ -1,5 +1,5 @@
-import { React, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+/* eslint-disable react/prop-types */
+import { Link } from 'react-router-dom';
 
 import Layout from '../../layouts/Layout';
 import { Button } from '@nextui-org/react';
@@ -15,8 +15,6 @@ import { MdOutlineCancel } from 'react-icons/md';
 const DisplayCustomerDetails = ({ customer }) => {
     return (
         <Layout>
-            {/* customers static */}
-
             <div className='flex    text-gray-800 py-5  '>
                 <div className=' w-full'>
                     <div className='grid grid-cols-12 gap-4'>
@@ -83,8 +81,8 @@ const DisplayCustomerDetails = ({ customer }) => {
             </div>
 
             {/* customers info */}
-            <div className='bg-white dark:bg-primary-deepDark'>
-                <div className='rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
+            <div className='bg-white dark:bg-primaryColor-deepDark'>
+                <div className='rounded-md p-4 shadow-sm bg-white dark:bg-primaryColor-deepDark'>
                     <h2 className='text-lg font-semibold'>Customer Details</h2>
                     {customer ? (
                         <div className='mt-2'>
@@ -175,7 +173,7 @@ const DisplayCustomerDetails = ({ customer }) => {
                             <Link to='/admin/customers'>
                                 <Button
                                     className=' bg-blue-300 mt-4 flex items-center hover:bg-blue-500'
-                                    type='secondary'
+                                    type='secondaryColor'
                                 >
                                     <BsArrowLeftShort size={20} />
                                     <span>Back to Customers</span>

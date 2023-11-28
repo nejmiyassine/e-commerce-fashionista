@@ -34,15 +34,8 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.getAllUsersList = async (req, res) => {
-    // const page = parseInt(req.query.page) || 1;
-    // const sort = req.query.sort || 'DESC';
-    // const usersPerPage = 5;
-
     try {
         const users = await User.find();
-        // .sort({ username: sort })
-        // .skip((page - 1) * usersPerPage)
-        // .limit(usersPerPage);
 
         if (!users) {
             return res.status(404).json({ message: 'users not found' });
