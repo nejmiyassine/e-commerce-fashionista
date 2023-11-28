@@ -175,7 +175,7 @@ const OrdersChart = () => {
 
     return (
         <div className='w-full flex flex-col lg:flex-row items-center justify-between gap-4 pt-4'>
-            <div className='w-full lg:w-1/2 rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
+            <div className='w-full lg:w-1/2 rounded-md p-4 shadow-sm bg-white dark:bg-primaryColor-deepDark'>
                 <div className='flex justify-between items-center'>
                     <h3 className='text-md font-bold pb-2'>
                         Total Incomes for the last 7 days
@@ -197,7 +197,7 @@ const OrdersChart = () => {
                     />
                 )}
             </div>
-            <div className='w-full lg:w-1/2 rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
+            <div className='w-full lg:w-1/2 rounded-md p-4 shadow-sm bg-white dark:bg-primaryColor-deepDark'>
                 <div className='flex justify-between items-center'>
                     <h3 className='text-md font-bold pb-2'>
                         Total Orders for the last 7 days

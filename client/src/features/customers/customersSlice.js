@@ -7,7 +7,7 @@ export const fetchCustomers = createAsyncThunk(
     'customers/fetchCustomers',
     async (_, { rejectWithValue }) => {
         try {
-            const res = await axios.get('v1/customers', {
+            const res = await API.get('v1/customers', {
                 withCredentials: true,
             });
             console.log('data from axios', res.data);
@@ -23,9 +23,9 @@ export const customersById = createAsyncThunk(
     'customers/customersById',
     async (customerId, { rejectWithValue }) => {
         try {
-            const res = await API.get(`/customers/${customerId}`);
-            console.log('customer details from axios', res.data);
-
+            const res = await API.get(`customers/${customerId}`, {
+                withCredentials: true,
+            });
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -38,9 +38,12 @@ export const updateCustomer = createAsyncThunk(
     'customers/updateCustomer',
     async ({ customerId, updatedCustomerData }, { rejectWithValue }) => {
         try {
-            const res = await API.put(
-                `customers/${customerId}`,
-                updatedCustomerData
+            const res = await axios.put(
+                `v1/customers/${customerId}`,
+                updatedCustomerData,
+                {
+                    withCredentials: true,
+                }
             );
 
             console.log('updated customer from customerSlice', res.data);
@@ -56,9 +59,12 @@ export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
     async ({ customerId, deletedCustomer }, { rejectWithValue }) => {
         try {
-            const res = await API.delete(
-                `customers/${customerId}`,
-                deletedCustomer
+            const res = await axios.delete(
+                `v1/customers/${customerId}`,
+                deletedCustomer,
+                {
+                    withCredentials: true,
+                }
             );
 
             console.log('delete from slice', res.data);
@@ -82,7 +88,6 @@ const customersSlice = createSlice({
     initialState,
     reducers: {
         setCustomer: (state, action) => {
-            console.log(action.payload);
             state.customer = action.payload.user;
             state.access_token = action.payload.access_token;
         },
@@ -90,7 +95,6 @@ const customersSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-
             //all customers
             .addCase(fetchCustomers.pending, (state) => {
                 state.isLoading = true;

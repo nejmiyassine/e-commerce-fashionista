@@ -134,7 +134,7 @@ exports.listProductsByCategoryName = async (req, res) => {
 
     try {
         const category = await Category.find({
-            name: { $in: categories ? categories : ['watch'] },
+            name: { $in: categories },
         });
 
         if (category.length === 0) {

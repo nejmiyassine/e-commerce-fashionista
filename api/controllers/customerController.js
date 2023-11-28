@@ -6,6 +6,7 @@ const Customer = require('../models/Customers');
 exports.getCustomerProfileData = async (req, res, next) => {
     try {
         const user = res.locals.user;
+
         res.status(200).json({
             status: 'success',
             data: {
@@ -18,15 +19,8 @@ exports.getCustomerProfileData = async (req, res, next) => {
 };
 
 exports.getAllCustomersList = async (req, res) => {
-    // const page = req.query.page || 0;
-    //  const sort = req.query.sort || 'DESC';
-    //  const customerPerPage = 10;
-
     try {
         const customers = await Customer.find();
-        //      .skip(page * customerPerPage)
-        //      .sort({ first_name: sort })
-        //    .limit(customerPerPage);
 
         if (!customers) {
             return res.status(404).json({ message: 'customers not found' });

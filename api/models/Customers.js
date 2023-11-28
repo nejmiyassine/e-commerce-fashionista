@@ -42,10 +42,5 @@ const customerSchema = new mongoose.Schema({
     },
 });
 
-// customerSchema.methods.comparePassword = async function (password) {
-//     const result = await bcrypt.compareSync(password, this.password);
-//     return result;
-// };
-
 const Customer = mongoose.model('Customer', customerSchema);
 module.exports = Customer;

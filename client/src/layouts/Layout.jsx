@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
             <main className='transition-all w-full'>
                 <AdminNavbar />
 
-                <div className='min-h-screen pl-24 p-4 flex-1 text-primary-light bg-primary-dark dark:text-primary-dark dark:bg-primary-light'>
+                <div className='min-h-screen pl-24 p-4 flex-1 text-primaryColor-light bg-primaryColor-dark dark:text-primaryColor-dark dark:bg-primaryColor-light'>
                     {children}
                 </div>
             </main>

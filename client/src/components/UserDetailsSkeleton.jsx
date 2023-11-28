@@ -5,7 +5,7 @@ import Layout from '../layouts/Layout';
 const UserDetailsSkeleton = () => {
     return (
         <Layout>
-            <div className='mt-2 rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
+            <div className='mt-2 rounded-md p-4 shadow-sm bg-white dark:bg-primaryColor-deepDark'>
                 <div className='flex justify-between gap-4'>
                     <div className='flex flex-col flex-1 py-1'>
                         <p className='font-semibold p-1'>

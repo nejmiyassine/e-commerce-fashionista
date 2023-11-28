@@ -23,7 +23,7 @@ const DashboardCard = () => {
                         return (
                             <div
                                 key={idx}
-                                className='w-1/4 rounded-md w-full shadow-sm bg-white text-primary-light dark:bg-primary-deepDark dark:text-primary-dark'
+                                className='w-1/4 rounded-md w-full shadow-sm bg-white text-primaryColor-light dark:bg-primaryColor-deepDark dark:text-primaryColor-dark'
                             >
                                 <div className='p-4 flex items-center justify-between'>
                                     <div>
@@ -35,7 +35,7 @@ const DashboardCard = () => {
                                         </span>
                                         <p></p>
                                     </div>
-                                    <div className='rounded-full bg-primary-blueCyan text-white dark:bg-primary-dark dark:text-primary-deepDark p-3'>
+                                    <div className='rounded-full bg-primaryColor-blueCyan text-white dark:bg-primaryColor-dark dark:text-primaryColor-deepDark p-3'>
                                         {icon}
                                     </div>
                                 </div>
