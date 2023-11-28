@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createProduct } from '../../features/products/productsSlice';
 // import { fetchCategories } from '../path-to-your-categories-slice';
 import { getAllCategories } from '../../features/categories/categoriesSlice';
 import { BiX } from 'react-icons/bi';
 import axios from 'axios';
-function AddModel({ setShowModel, getProducts }) {
+
+function AddModel({ setShowModel }) {
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.products.isLoading);
     const categories = useSelector((state) => state.categories.categories);
@@ -26,10 +28,15 @@ function AddModel({ setShowModel, getProducts }) {
     }, [dispatch]);
 
     useEffect(() => {
-        if (charOptions.includes(' ') && charOptions.split(' ')[0] !== '' && options.length < 3) {
+        if (
+            charOptions.includes(' ') &&
+            charOptions.split(' ')[0] !== '' &&
+            options.length < 3
+        ) {
             setOptions((option) => [...option, charOptions.split(' ')[0]]);
             setCharOptions('');
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [charOptions]);
 
     const addProduct = async () => {
@@ -38,10 +45,13 @@ function AddModel({ setShowModel, getProducts }) {
             const imageUrls = await Promise.all(
                 images.map(async (file) => {
                     const formData = new FormData();
-                    formData.append("file", file);
-                    formData.append("upload_preset", "tjbjycer");
+                    formData.append('file', file);
+                    formData.append('upload_preset', 'tjbjycer');
 
-                    const response = await axios.post("https://api.cloudinary.com/v1_1/dgbwl69xi/image/upload", formData);
+                    const response = await axios.post(
+                        'https://api.cloudinary.com/v1_1/dgbwl69xi/image/upload',
+                        formData
+                    );
                     return response.data.secure_url;
                 })
             );
@@ -57,17 +67,16 @@ function AddModel({ setShowModel, getProducts }) {
                 quantity,
                 product_images: imageUrls, // Add the image URL to the product data
             };
-            console.log("Product Data:", productData);
+            console.log('Product Data:', productData);
             // Dispatch the createProduct action with product data
             dispatch(createProduct(productData));
-    
+
             // Close the modal
             setShowModel(false);
         } catch (error) {
-            console.error("Error adding product:", error);
+            console.error('Error adding product:', error);
         }
     };
-    
 
     const handleCancel = () => {
         setShowModel(false);
@@ -79,164 +88,213 @@ function AddModel({ setShowModel, getProducts }) {
                 {/* Display uploaded images */}
                 {images.length > 0 && (
                     <div className='mb-3'>
-                        <label className='block text-gray-700 text-sm font-bold'>Uploaded Images</label>
+                        <label className='block text-gray-700 text-sm font-bold'>
+                            Uploaded Images
+                        </label>
                         <div className='flex space-x-2'>
                             {images.map((file, index) => (
                                 <div key={index} className='relative'>
                                     <span
                                         className='bg-red-300 p-2 cursor-pointer flex place-content-center place-items-center'
-                                        onClick={() => setImages(images.filter((img, i) => i !== index))}
+                                        onClick={() =>
+                                            setImages(
+                                                images.filter(
+                                                    (img, i) => i !== index
+                                                )
+                                            )
+                                        }
                                     >
                                         <BiX />
                                     </span>
-                                    <img src={URL.createObjectURL(file)} alt={`uploaded-${index}`} className='w-20 h-20 object-cover rounded' />
+                                    <img
+                                        src={URL.createObjectURL(file)}
+                                        alt={`uploaded-${index}`}
+                                        className='w-20 h-20 object-cover rounded'
+                                    />
                                 </div>
                             ))}
                         </div>
                     </div>
                 )}
-                
+
                 <div className='mb-3'>
-                <label className='block text-gray-700 text-sm font-bold ' htmlFor='name'>
-                    Name
-                </label>
-                <input
-                    className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                    id='name'
-                    type='text'
-                    placeholder='Product Name'
-                    onChange={(e)=>setName(e.target.value)}
-                />
-            </div>
-            <div className='mb-3'>
-                <label className='block text-gray-700 text-sm font-bold ' htmlFor='price'>
-                    Quantity
-                </label>
-                <input
-                    className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                    id='price'
-                    type='number'
-                    placeholder='Product quantity'
-                    onChange={(e)=>setQuantity(e.target.value)}
-                />
-            </div>
-            <div className='mb-3'>
-                <label className='block text-gray-700 text-sm font-bold ' htmlFor='price'>
-                    price
-                </label>
-                <input
-                    className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                    id='price'
-                    type='number'
-                    placeholder='Product price'
-                    onChange={(e)=>setPrice(e.target.value)}
-                />
-            </div>
-            <div className='mb-3'>
-                <label className='block text-gray-700 text-sm font-bold ' htmlFor='discount_price'>
-                    discount_price
-                </label>
-                <input
-                    className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                    id='discount_price'
-                    type='number'
-                    placeholder='Product discount_price'
-                    onChange={(e)=>setDiscount_price(e.target.value)}
-                />
-            </div>  
-            <div className='mb-3'>
-                <label className='block text-gray-700 text-sm font-bold ' htmlFor='options'>
-                    options
-                </label>
-                <div className='shadow appearance-none border rounded w-full flex py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
-                <div className='flex space-x-2'>
-                    {
-                        options &&
-                        options.map((option)=>(
-                            <span className='bg-gray-200 relative flex'>
-                                <span className='bg-red-300 p-2 cursor-pointer flex place-content-center place-items-center' onClick={()=>setOptions(options.filter((opt)=>opt !== option))}>
-                                    <BiX />
-                                </span>
-                                <span className='p-2'>{option}</span>
-                            </span>
-                        ))
-                    }
+                    <label
+                        className='block text-gray-700 text-sm font-bold '
+                        htmlFor='name'
+                    >
+                        Name
+                    </label>
+                    <input
+                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        id='name'
+                        type='text'
+                        placeholder='Product Name'
+                        onChange={(e) => setName(e.target.value)}
+                    />
                 </div>
-                <input
-                    className='outline-none ml-2 '
-                    onChange={(e)=>setCharOptions(e.target.value)}
-                    value={charOptions}
-                    id='options'
-                    type='text'
-                    placeholder='...'
-                    disabled={options.length === 3}
+                <div className='mb-3'>
+                    <label
+                        className='block text-gray-700 text-sm font-bold '
+                        htmlFor='price'
+                    >
+                        Quantity
+                    </label>
+                    <input
+                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        id='price'
+                        type='number'
+                        placeholder='Product quantity'
+                        onChange={(e) => setQuantity(e.target.value)}
+                    />
+                </div>
+                <div className='mb-3'>
+                    <label
+                        className='block text-gray-700 text-sm font-bold '
+                        htmlFor='price'
+                    >
+                        price
+                    </label>
+                    <input
+                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        id='price'
+                        type='number'
+                        placeholder='Product price'
+                        onChange={(e) => setPrice(e.target.value)}
+                    />
+                </div>
+                <div className='mb-3'>
+                    <label
+                        className='block text-gray-700 text-sm font-bold '
+                        htmlFor='discount_price'
+                    >
+                        discount_price
+                    </label>
+                    <input
+                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        id='discount_price'
+                        type='number'
+                        placeholder='Product discount_price'
+                        onChange={(e) => setDiscount_price(e.target.value)}
+                    />
+                </div>
+                <div className='mb-3'>
+                    <label
+                        className='block text-gray-700 text-sm font-bold '
+                        htmlFor='options'
+                    >
+                        options
+                    </label>
+                    <div className='shadow appearance-none border rounded w-full flex py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
+                        <div className='flex space-x-2'>
+                            {options &&
+                                options.map((option) => (
+                                    <span
+                                        key={option}
+                                        className='bg-gray-200 relative flex'
+                                    >
+                                        <span
+                                            className='bg-red-300 p-2 cursor-pointer flex place-content-center place-items-center'
+                                            onClick={() =>
+                                                setOptions(
+                                                    options.filter(
+                                                        (opt) => opt !== option
+                                                    )
+                                                )
+                                            }
+                                        >
+                                            <BiX />
+                                        </span>
+                                        <span className='p-2'>{option}</span>
+                                    </span>
+                                ))}
+                        </div>
+                        <input
+                            className='outline-none ml-2 '
+                            onChange={(e) => setCharOptions(e.target.value)}
+                            value={charOptions}
+                            id='options'
+                            type='text'
+                            placeholder='...'
+                            disabled={options.length === 3}
+                        />
+                    </div>
+                </div>
+
+                <div className='mb-3'>
+                    <label
+                        className='block text-gray-700 text-sm font-bold '
+                        htmlFor='category'
+                    >
+                        category
+                    </label>
+                    <select
+                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        id='category'
+                        type='text'
+                        placeholder='Product category'
+                        onChange={(e) => setCategory(e.target.value)}
+                    >
+                        <option value=''>Select Category</option>
+                        {categories &&
+                            categories.map((category) => (
+                                <option key={category._id} value={category._id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                    </select>
+                </div>
+
+                <div className='mb-3'>
+                    <label
+                        className='block text-gray-700 text-sm font-bold '
+                        htmlFor='short_description'
+                    >
+                        short_description
+                    </label>
+                    <textarea
+                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        id='short_description'
+                        type='text'
+                        placeholder='Product short_description'
+                        onChange={(e) => setShort_description(e.target.value)}
+                    />
+                </div>
+                <div className='mb-3'>
+                    <label
+                        className='block text-gray-700 text-sm font-bold '
+                        htmlFor='long_description'
+                    >
+                        long_description
+                    </label>
+                    <textarea
+                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        id='long_description'
+                        type='text'
+                        placeholder='Product long_description'
+                        onChange={(e) => setLong_description(e.target.value)}
                     />
                 </div>
 
-            </div>  
-
-            <div className='mb-3'>
-                <label className='block text-gray-700 text-sm font-bold ' htmlFor='category'>
-                    category
-                </label>
-                <select
-                    className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                    id='category'
-                    type='text'
-                    placeholder='Product category'
-                    onChange={(e)=>setCategory(e.target.value)}
-                >
-                    <option value=''>Select Category</option>
-                    {
-                        categories &&
-                        categories.map((category)=>(
-                            <option value={category._id}>{category.name}</option>
-                        ))
-                    }
-                </select>
+                <div className='mb-3'>
+                    <label
+                        className='block text-gray-700 text-sm font-bold'
+                        htmlFor='image'
+                    >
+                        Add Images
+                    </label>
+                    <input
+                        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                        id='product_image'
+                        type='file'
+                        onChange={(event) =>
+                            setImages((prevImages) => [
+                                ...prevImages,
+                                event.target.files[0],
+                            ])
+                        }
+                        multiple
+                    />
                 </div>
-
-            <div className='mb-3'>
-                <label className='block text-gray-700 text-sm font-bold ' htmlFor='short_description'>
-                    short_description
-                </label>
-                <textarea
-                    className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                    id='short_description'
-                    type='text'
-                    placeholder='Product short_description'
-                    onChange={(e)=>setShort_description(e.target.value)}
-                />
-
-            </div>
-            <div className='mb-3'>
-                <label className='block text-gray-700 text-sm font-bold ' htmlFor='long_description'>
-                    long_description
-                </label>
-                <textarea
-                    className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-                    id='long_description'
-                    type='text'
-                    placeholder='Product long_description'
-                    onChange={(e)=>setLong_description(e.target.value)}
-                />
-
-            </div>
-
-            <div className='mb-3'>
-    <label className='block text-gray-700 text-sm font-bold' htmlFor='image'>
-        Add Images
-    </label>
-    <input
-        className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-        id='product_image'
-        type='file'
-        onChange={(event) =>
-            setImages((prevImages) => [...prevImages, event.target.files[0]])
-        }
-        multiple
-    />
-</div>
                 <div className='flex justify-between space-x-3'>
                     <button
                         onClick={handleCancel}

@@ -11,18 +11,16 @@ const verifyJwt = (token) => {
     try {
         return jwt.verify(token, JwtSecretKey);
     } catch (error) {
-        console.log(error);
+        console.log('error jwt verify:', error);
         return null;
     }
 };
 
 const signToken = async (user) => {
-    const access_token = signJwt(
-        { sub: user._id, account_type: user.account_type },
-        {
-            expiresIn: '1d',
-        }
-    );
+    const access_token = signJwt({
+        sub: user._id,
+        account_type: user.account_type,
+    });
 
     return { access_token };
 };

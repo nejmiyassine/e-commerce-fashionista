@@ -1,11 +1,14 @@
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+
+import LoadingSpinner from '../../components/LoadingSpinner';
 import CatalogProducts from '../../components/Catalog/CatalogProducts';
 import CatalogSidebar from '../../components/Catalog/CatalogSidebar';
-import { useEffect, useMemo } from 'react';
-import LoadingSpinner from '../../components/LoadingSpinner';
+
+// import { fetchProducts } from '../../features/products/productsThunk';
 import { getAllCategories } from '../../features/categories/categoriesSlice';
-import { fetchProducts } from '../../features/products/productsThunk';
-import { toast } from 'react-toastify';
+import { getAllProducts } from '../../features/products/productsSlice';
 
 const Catalog = () => {
     const dispatch = useDispatch();
@@ -13,25 +16,43 @@ const Catalog = () => {
         (state) => state.products
     );
     const { categories, isLoading } = useSelector((state) => state.categories);
-    const memoizedCategories = useMemo(() => categories, [categories]);
+
+    const [selected, setSelected] = useState(['watch']);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 await dispatch(getAllCategories());
-                await dispatch(fetchProducts(categories));
+                await dispatch(getAllProducts());
             } catch (error) {
                 // Handle errors
                 toast.error(error.data.message, {
                     position: 'bottom-right',
                 });
-                console.log(error.data);
             }
         };
 
         fetchData();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch]);
+
+    const filteredProduct = useMemo(() => {
+        let filteredProducts = products;
+
+        // if (hasSearchFilter && Array.isArray(filteredProducts)) {
+        //     filteredProducts = filteredProducts.filter((user) =>
+        //         user.username.toLowerCase().includes(filterValue.toLowerCase())
+        //     );
+        // }
+
+        if (Array.isArray(filteredProducts)) {
+            filteredProducts = filteredProducts.filter((product) =>
+                Array.from(selected).includes(product.category_id.name)
+            );
+        }
+
+        return filteredProducts;
+    }, [products, selected]);
 
     if (isLoading || isProductsLoading) {
         return <LoadingSpinner />;
@@ -40,12 +61,21 @@ const Catalog = () => {
     return (
         <div className='flex gap-4 p-6'>
             <aside className='w-1/6'>
-                <CatalogSidebar categories={memoizedCategories} />
+                <CatalogSidebar
+                    categories={categories}
+                    selected={selected}
+                    setSelected={setSelected}
+                />
             </aside>
             <div className='w-5/6'>
-                {products.map((product) => (
-                    <CatalogProducts key={product._id} product={product} />
-                ))}
+                {filteredProduct.length ? (
+                    <CatalogProducts
+                        selected={selected}
+                        products={filteredProduct}
+                    />
+                ) : (
+                    <CatalogProducts selected={selected} products={products} />
+                )}
             </div>
         </div>
     );

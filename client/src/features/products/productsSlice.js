@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import axios from "../../api/axios";/
 import axios from '../../api/axios';
 
 const initialState = {
@@ -73,6 +72,7 @@ export const fetchProductsByCategory = createAsyncThunk(
                 'v1/products/categories',
                 categories
             );
+            console.log(response.data);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);
@@ -159,6 +159,8 @@ export const productsSlice = createSlice({
             // Fetch Product By Category Name
             .addCase(fetchProductsByCategory.pending, (state) => {
                 state.isLoading = true;
+                state.products = [];
+                state.error = null;
             })
             .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -167,6 +169,7 @@ export const productsSlice = createSlice({
             })
             .addCase(fetchProductsByCategory.rejected, (state, action) => {
                 state.isLoading = false;
+                state.products = [];
                 state.error = action.payload
                     ? action.payload.message
                     : 'Failed to fetch products';

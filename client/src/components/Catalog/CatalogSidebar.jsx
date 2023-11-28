@@ -3,9 +3,8 @@ import { useState } from 'react';
 import { Checkbox, CheckboxGroup } from '@nextui-org/react';
 import { FaChevronUp } from 'react-icons/fa';
 
-const CatalogSidebar = ({ categories }) => {
+const CatalogSidebar = ({ categories, selected, setSelected }) => {
     const [isOpen, setIsOpen] = useState(true);
-    const [selected, setSelected] = useState(['watch']);
 
     const handleToggle = () => {
         setIsOpen(!isOpen);
@@ -34,11 +33,7 @@ const CatalogSidebar = ({ categories }) => {
                                 key={_id}
                                 className='flex items-center justify-between capitalize gap-2 pb-3'
                             >
-                                <Checkbox
-                                    color='warning'
-                                    value={name}
-                                    size='sm'
-                                >
+                                <Checkbox value={name} size='sm'>
                                     <span>{name}</span>
                                 </Checkbox>
                                 <p className='text-gray-400 text-sm'>32</p>
@@ -58,4 +53,6 @@ export default CatalogSidebar;
 
 CatalogSidebar.propTypes = {
     categories: PropTypes.array,
+    selected: PropTypes.array,
+    setSelected: PropTypes.func,
 };

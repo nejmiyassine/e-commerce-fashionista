@@ -4,7 +4,7 @@ import AuthRegisterForm from '../../components/AuthRegisterForm';
 
 const AuthRegister = () => {
     return (
-        <div className='flex items-center h-screen overflow-y-hidden bg-white text-primary-light dark:bg-primary-deepDark dark:text-primary-dark'>
+        <div className='flex items-center h-screen overflow-y-hidden bg-white text-primaryColor-light dark:bg-primaryColor-deepDark dark:text-primaryColor-dark'>
             <div className='w-full lg:w-1/2 p-20'>
                 <div className='px-8 py-6 md:px-16'>
                     <div className='mb-6 text-center'>

@@ -52,7 +52,7 @@ const UserDetails = () => {
 
     return (
         <Layout>
-            <div className='rounded-md p-4 shadow-sm bg-white dark:bg-primary-deepDark'>
+            <div className='rounded-md p-4 shadow-sm bg-white dark:bg-primaryColor-deepDark'>
                 <h2 className='text-lg font-semibold'>User Details</h2>
                 {isLoading || (isFetching && <UserDetailsSkeleton />)}
                 {user ? (
@@ -159,7 +159,7 @@ const UserDetails = () => {
                         <Link to='/admin/users'>
                             <Button
                                 className='mt-4 flex items-center hover:bg-[#d4d4db]/75'
-                                type='secondary'
+                                type='secondaryColor'
                             >
                                 <BsArrowLeftShort size={20} />
                                 <span>Back to Users</span>

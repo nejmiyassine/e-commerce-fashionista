@@ -1,7 +1,7 @@
 const AuthImage = () => {
     return (
         <div
-            className={`relative flex hidden lg:flex lg:w-1/2 h-screen bg-gradient-to-r from-cyan-500 to-blue-500 overflow-hidden bg-no-repeat bg-center`}
+            className={`relative flex hidden lg:flex h-screen lg:w-1/2 bg-gradient-to-r from-cyan-500 to-blue-500 overflow-hidden bg-no-repeat bg-center`}
         >
             <div className='absolute top-0 left-0 w-full h-full bg-black/40'></div>
             <img

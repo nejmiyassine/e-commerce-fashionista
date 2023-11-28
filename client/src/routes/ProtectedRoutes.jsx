@@ -19,7 +19,7 @@ const ProtectedRoutes = ({ allowedRoles }) => {
 
     return isLoggedIn && user && allowedRoles.includes(user.role) ? (
         <Outlet />
-    ) : isLoggedIn && !user ? (
+    ) : isLoggedIn && !allowedRoles.includes(user.role) ? (
         <Navigate to='/unauthorized' />
     ) : (
         <Navigate to='/admin/login' />

@@ -32,16 +32,15 @@ const AuthLoginForm = ({ account_type }) => {
 
     const toggleVisibility = () => setIsVisible(!isVisible);
 
-    const [loginUser, { isLoading, isError, error, isSuccess }] =
+    const [loginUser, { isLoading, isSuccess, isError }] =
         useLoginUserMutation();
 
     const [
         loginCustomer,
         {
             isLoading: isLoadingCustomer,
-            isError: isErrorCustomer,
-            error: errorCustomer,
             isSuccess: isSuccessCustomer,
+            isError: isErrorCustomer,
         },
     ] = useLoginCustomerMutation();
 
@@ -62,31 +61,37 @@ const AuthLoginForm = ({ account_type }) => {
         reset,
     } = methods;
 
-    const loading = isLoading || isLoadingCustomer;
-
     useEffect(() => {
-        if (isSuccess || isSuccessCustomer) {
+        if (isSuccess) {
             toast.success('You successfully logged in', {
                 position: 'bottom-right',
             });
-            navigate(account_type === 'user' ? '/admin/dashboard' : '/');
+            navigate('/admin/dashboard');
         }
 
-        if (isError || isErrorCustomer) {
-            if (Array.isArray(error.data.error)) {
-                (error || errorCustomer).data.error.forEach((el) =>
-                    toast.error(el.message, {
-                        position: 'bottom-right',
-                    })
-                );
-            } else {
-                toast.error((error || errorCustomer).data.message, {
-                    position: 'bottom-right',
-                });
-            }
+        if (isError) {
+            toast.error('Invalid Credentials!', {
+                position: 'bottom-right',
+            });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loading]);
+    }, [isLoading, isError]);
+
+    useEffect(() => {
+        if (isSuccessCustomer) {
+            toast.success('You successfully logged in', {
+                position: 'bottom-right',
+            });
+            navigate('/');
+        }
+
+        if (isErrorCustomer) {
+            toast.error('Invalid Credentials!', {
+                position: 'bottom-right',
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLoadingCustomer, isErrorCustomer]);
 
     useEffect(() => {
         if (isSubmitSuccessful) {
@@ -96,10 +101,26 @@ const AuthLoginForm = ({ account_type }) => {
     }, [isSubmitSuccessful]);
 
     const onSubmit = async (values) => {
-        {
-            account_type === 'user'
-                ? loginUser({ ...values, account_type })
-                : loginCustomer({ ...values, account_type });
+        try {
+            if (account_type === 'user') {
+                await loginUser({ ...values, account_type });
+            } else {
+                await loginCustomer({ ...values, account_type });
+            }
+        } catch (error) {
+            // If login is not successful, show the error message
+            if (error instanceof Error && error.response) {
+                // Access the error message from the API response
+                const errorMessage = error.response.data.message;
+                toast.error(errorMessage, {
+                    position: 'bottom-right',
+                });
+            } else {
+                // Handle other types of errors (network issues, etc.)
+                toast.error('An error occurred. Please try again.', {
+                    position: 'bottom-right',
+                });
+            }
         }
     };
 
@@ -175,8 +196,9 @@ const AuthLoginForm = ({ account_type }) => {
             )}
 
             <Button
-                className='mt-4 bg-primary-deepDark text-primary-dark dark:bg-white dark:text-primary-light'
+                className='mt-4 bg-primaryColor-deepDark text-primaryColor-dark dark:bg-white dark:text-primaryColor-light'
                 type='submit'
+                isLoading={isLoading || isLoadingCustomer}
             >
                 Sign in
             </Button>
