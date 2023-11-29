@@ -12,6 +12,7 @@ import ViewAllCustomers from '../pages/customers/ViewAllCustomers';
 import Users from '../pages/admin/users/Users';
 import UserDetails from '../pages/admin/users/UserDetails';
 import Orders from '../pages/Orders/Orders';
+import LandingP from '../pages/LandingPage/LandingP';
 import ProtectedRoutes from './ProtectedRoutes';
 
 const RouteConfig = () => {
@@ -50,6 +51,10 @@ const RouteConfig = () => {
                     <Route
                         path='/admin/users/:userId'
                         element={<UserDetails />}
+                    />
+                    <Route
+                        path='/landingPage'
+                        element={<LandingP />}
                     />
                 </Route>
             </Routes>

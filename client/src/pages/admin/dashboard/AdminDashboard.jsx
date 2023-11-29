@@ -1,4 +1,4 @@
-import DashboardWelcome from '../../../components/Dashboard/DashboardWelcome';
+// import DashboardWelcome from '../../../components/Dashboard/DashboardWelcome';
 import DashboardCard from '../../../components/Dashboard/DashboardCard';
 import OrdersChart from '../../../components/Dashboard/OrdersChart';
 import LastUsersTable from '../../../components/Users/LastUsersTable';
@@ -9,7 +9,7 @@ const AdminDashboard = () => {
     return (
         <Layout>
             <div className='container mx-auto'>
-                <DashboardWelcome />
+                {/* <DashboardWelcome /> */}
                 <DashboardCard />
                 <OrdersChart />
 
