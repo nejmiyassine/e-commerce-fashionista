@@ -14,6 +14,7 @@ const {
     searchForCustomer,
     getCustomerProfileData,
     getProfile,
+    updateCustomerProfile,
 } = require('../controllers/customerController');
 const {
     verifyEmail,
@@ -84,7 +85,8 @@ router.get('/profile', getCustomerProfileData);
 router.get('/', restrictTo('admin', 'manager'), getAllCustomersList);
 router.get('/:id', restrictTo('admin', 'manager'), getCustomerById);
 router.get('/search', searchForCustomer);
-router.put('/:id', updateCustomers);
+router.put('/:id', restrictToCustomer, updateCustomers);
+router.patch('/:id', restrictToCustomer, updateCustomerProfile);
 router.delete('/:id', restrictTo('admin', 'manager'), deleteCustomerById);
 router.get('/profile/:id', restrictToCustomer, getProfile);
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
