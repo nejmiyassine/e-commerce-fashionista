@@ -64,7 +64,7 @@ const AdminNavbar = () => {
     return (
         <Disclosure as='nav'>
             <>
-                <div className='h-14 mx-auto px-2 sm:px-6 lg:px-8 border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-primary-deepDark dark:text-primary-dark'>
+                <div className='h-14 mx-auto px-2 sm:px-6 lg:px-8 border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-primaryColor-deepDark dark:text-primaryColor-dark'>
                     <div className='relative flex h-full gap-4 items-center items-center justify-end'>
                         <Switch
                             defaultSelected
@@ -82,7 +82,7 @@ const AdminNavbar = () => {
                                         Open user menu
                                     </span>
                                     <img
-                                        className='h-8 w-8 rounded-full ring ring-primary ring-2 ring-offset-2'
+                                        className='h-8 w-8 rounded-full ring ring-primaryColor ring-2 ring-offset-2'
                                         src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
                                         alt=''
                                     />

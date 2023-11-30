@@ -61,7 +61,6 @@ export const deleteCustomer = createAsyncThunk(
             const res = await API.delete(`customers/${customerId}`, {
                 withCredentials: true,
             });
-
             console.log('delete from slice', res.data);
             return res.data;
         } catch (error) {
@@ -83,7 +82,6 @@ const customersSlice = createSlice({
     initialState,
     reducers: {
         setCustomer: (state, action) => {
-            console.log(action.payload);
             state.customer = action.payload.user;
             state.access_token = action.payload.access_token;
         },
@@ -91,7 +89,6 @@ const customersSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-
             //all customers
             .addCase(fetchCustomers.pending, (state) => {
                 state.isLoading = true;

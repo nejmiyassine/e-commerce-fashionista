@@ -24,6 +24,7 @@ const Home = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isLoading]);
 
+    // eslint-disable-next-line no-unused-vars
     const handleLogout = () => {
         logoutCustomer();
         toast.success('See you soon 👋!', {
@@ -59,13 +60,13 @@ const Home = () => {
                 >
                     Catalog
                 </Link>
-                <Link
+                {/* <Link
                     to='/admin/login'
                     onClick={handleLogout}
                     className='text-blue-600 underline underline-offset-4'
                 >
                     Log out
-                </Link>
+                </Link> */}
             </div>
         </div>
     );

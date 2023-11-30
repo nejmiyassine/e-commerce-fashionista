@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import axios from "../../api/axios";/
 import axios from '../../api/axios';
 
 const initialState = {
@@ -15,7 +14,6 @@ export const getAllProducts = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const response = await axios.get('v1/products');
-            console.log(response.data);
             return response.data.data;
         } catch (error) {
             rejectWithValue(error);
@@ -29,7 +27,6 @@ export const editProduct = createAsyncThunk(
     async ({ id, data }, { rejectWithValue }) => {
         try {
             const response = await axios.put(`v1/products/${id}`, data);
-            console.log(response.data);
             return response.data.data;
         } catch (error) {
             rejectWithValue(error);
@@ -43,7 +40,6 @@ export const deleteProduct = createAsyncThunk(
     async (id, { rejectWithValue }) => {
         try {
             const response = await axios.delete(`v1/products/${id}`);
-            console.log(response.data);
             return response.data.data;
         } catch (error) {
             rejectWithValue(error);
@@ -57,7 +53,6 @@ export const createProduct = createAsyncThunk(
     async (productData, { rejectWithValue }) => {
         try {
             const response = await axios.post('v1/products', productData);
-            console.log(response.data);
             return response.data.data;
         } catch (error) {
             rejectWithValue(error);
@@ -159,6 +154,8 @@ export const productsSlice = createSlice({
             // Fetch Product By Category Name
             .addCase(fetchProductsByCategory.pending, (state) => {
                 state.isLoading = true;
+                state.products = [];
+                state.error = null;
             })
             .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -167,6 +164,7 @@ export const productsSlice = createSlice({
             })
             .addCase(fetchProductsByCategory.rejected, (state, action) => {
                 state.isLoading = false;
+                state.products = [];
                 state.error = action.payload
                     ? action.payload.message
                     : 'Failed to fetch products';

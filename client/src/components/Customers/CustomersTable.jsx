@@ -452,7 +452,7 @@ const CustomersTable = ({ data, error, loading }) => {
             />
 
 
-            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
+            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primaryColor-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>Customers</h2>
 
                 <Table

@@ -1,43 +1,92 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { TbColumns2, TbColumns3 } from 'react-icons/tb';
+import { Input } from '@nextui-org/react';
+import { CiSearch } from 'react-icons/ci';
 
 import ProductCard from '../products/ProductCard';
+import Line from '../Line';
+import CatalogChangeLayout from './CatalogChangeLayout';
 
-const CatalogProducts = ({ product }) => {
-    const [cols, setCols] = useState(4);
-
-    const handleChangeCols = (numOfCols) => {
-        setCols(numOfCols);
-    };
-
+const CatalogProducts = ({
+    selected,
+    selectedPrice,
+    products,
+    filterValue,
+    onSearchChange,
+    cols,
+    handleChangeCols,
+}) => {
     return (
         <section className='px-4 border-l'>
-            <div className='flex items-center justify-between mb-4'>
-                <h2 className='font-bold text-xl'>CatalogProducts</h2>
-
-                <div className='flex items-center gap-4'>
-                    <TbColumns2
-                        size={20}
-                        className='cursor-pointer'
-                        onClick={() => handleChangeCols(2)}
-                    />
-                    <TbColumns3
-                        size={20}
-                        className='cursor-pointer'
-                        onClick={() => handleChangeCols(3)}
-                    />
-                    <div
-                        className='cursor-pointer text-sm'
-                        onClick={() => handleChangeCols(4)}
+            <div className='text-sm flex items-center gap-2'>
+                <span className='text-gray-500'>Selected Filters: </span>
+                {selected.map((select) => (
+                    <span
+                        key={select}
+                        className='font-semibold capitalize p-1 bg-gray-300/50 rounded-md'
                     >
-                        Default
-                    </div>
-                </div>
+                        {select}
+                    </span>
+                ))}
+                {selectedPrice.map((select) => (
+                    <span
+                        key={select}
+                        className='font-semibold capitalize p-1 bg-gray-300/50 rounded-md'
+                    >
+                        ${select}
+                    </span>
+                ))}
             </div>
 
-            <div className='products'>
-                <ProductCard cols={cols} product={product} />
+            <Line />
+
+            <div className='flex items-center justify-between'>
+                <h2 className='font-bold text-2xl capitalize'>
+                    {selected.length ? selected[0] : 'All Products'}
+                </h2>
+
+                <div className='flex'>
+                    <Input
+                        isClearable
+                        // variant='bordered'
+                        fullWidth
+                        aria-label='product_name'
+                        labelPlacement='outside'
+                        type='text'
+                        name='search'
+                        value={filterValue}
+                        onValueChange={onSearchChange}
+                        placeholder='Product Name'
+                        startContent={
+                            <CiSearch
+                                size={20}
+                                className='text-2xl text-default-400 pointer-events-none flex-shrink-0'
+                            />
+                        }
+                    />
+                </div>
+
+                <CatalogChangeLayout
+                    cols={cols}
+                    handleChangeCols={handleChangeCols}
+                />
+            </div>
+
+            <Line />
+
+            <div className={`grid grid-cols-3 gap-4`}>
+                {products.length ? (
+                    products.map((product) => (
+                        <ProductCard
+                            key={product._id}
+                            cols={cols}
+                            product={product}
+                        />
+                    ))
+                ) : (
+                    <div>
+                        <p>There are no product matching the search!</p>
+                    </div>
+                )}
             </div>
         </section>
     );
@@ -46,5 +95,11 @@ const CatalogProducts = ({ product }) => {
 export default CatalogProducts;
 
 CatalogProducts.propTypes = {
-    product: PropTypes.object,
+    products: PropTypes.array,
+    selected: PropTypes.array,
+    selectedPrice: PropTypes.array,
+    filterValue: PropTypes.string,
+    onSearchChange: PropTypes.any,
+    cols: PropTypes.any,
+    handleChangeCols: PropTypes.any,
 };

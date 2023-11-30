@@ -101,6 +101,47 @@ exports.updateCustomers = async (req, res) => {
     }
 };
 
+exports.updateCustomerProfile = async (req, res) => {
+    const { first_name, last_name, email, password } = req.body;
+
+    try {
+        const salt = await bcrypt.genSalt(parseInt(saltRounds));
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const id = { _id: req.params.id };
+        const updatedFields = {
+            first_name,
+            last_name,
+            email,
+            password,
+        };
+
+        if (email) {
+            const exists = await Customer.findOne({ email });
+            if (exists) {
+                return res
+                    .status(400)
+                    .json({ message: 'email is already existed' });
+            }
+        }
+        if (password) {
+            updatedFields.password = hashedPassword;
+        }
+
+        const updatedCustomer = await Customer.findByIdAndUpdate(
+            id,
+            updatedFields,
+            { new: true }
+        );
+        if (!updatedCustomer) {
+            return res.status(404).json({ message: 'Customer not found' });
+        }
+        res.json(updatedCustomer);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 exports.searchForCustomer = async (req, res) => {
     const query = req.query.first_name || '';
     const page = req.query.page || 0;

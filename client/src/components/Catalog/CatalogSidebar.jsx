@@ -1,55 +1,54 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
-import { Checkbox, CheckboxGroup } from '@nextui-org/react';
-import { FaChevronUp } from 'react-icons/fa';
+import { Checkbox, CheckboxGroup, Radio, RadioGroup } from '@nextui-org/react';
 
-const CatalogSidebar = ({ categories }) => {
-    const [isOpen, setIsOpen] = useState(true);
-    const [selected, setSelected] = useState(['watch']);
+import CatalogSidebarItem from './CatalogSidebarItem';
+import { prices } from '../../data/prices';
 
-    const handleToggle = () => {
-        setIsOpen(!isOpen);
-    };
-
+const CatalogSidebar = ({
+    categories,
+    selected,
+    setSelected,
+    selectedPrice,
+    setSelectedPrice,
+}) => {
     return (
         <div className='flex flex-col gap-3'>
-            <div
-                className='flex items-center justify-between cursor-pointer'
-                onClick={handleToggle}
-            >
-                <h2 className='text-lg font-semibold'>All Categories</h2>
-                <FaChevronUp
-                    size={12}
-                    className={`transform transition ${
-                        !isOpen && 'rotate-180'
-                    } text-gray-400`}
-                />
-            </div>
+            {/* All Categories */}
+            <CatalogSidebarItem title='Filter By Categories'>
+                <CheckboxGroup value={selected} onValueChange={setSelected}>
+                    {categories.map(({ _id, name }) => (
+                        <div
+                            key={_id}
+                            className='flex items-center justify-between capitalize gap-2 pb-3'
+                        >
+                            <Checkbox value={name} size='sm' color='warning'>
+                                <span>{name}</span>
+                            </Checkbox>
+                            <p className='text-gray-400 text-sm'>32</p>
+                        </div>
+                    ))}
+                </CheckboxGroup>
+            </CatalogSidebarItem>
 
-            {isOpen && (
-                <div className='mt-2 transition'>
-                    <CheckboxGroup value={selected} onChange={setSelected}>
-                        {categories.map(({ _id, name }) => (
+            {/* Price Filter */}
+            <CatalogSidebarItem title='Filter By Price'>
+                <RadioGroup
+                    value={selectedPrice}
+                    onValueChange={setSelectedPrice}
+                >
+                    {prices &&
+                        prices?.map(({ _id, name, range }) => (
                             <div
                                 key={_id}
                                 className='flex items-center justify-between capitalize gap-2 pb-3'
                             >
-                                <Checkbox
-                                    color='warning'
-                                    value={name}
-                                    size='sm'
-                                >
-                                    <span>{name}</span>
-                                </Checkbox>
-                                <p className='text-gray-400 text-sm'>32</p>
+                                <Radio value={range} size='sm' color='warning'>
+                                    {name}
+                                </Radio>
                             </div>
                         ))}
-                    </CheckboxGroup>
-
-                    <div className='pt-3' />
-                    <hr />
-                </div>
-            )}
+                </RadioGroup>
+            </CatalogSidebarItem>
         </div>
     );
 };
@@ -58,4 +57,8 @@ export default CatalogSidebar;
 
 CatalogSidebar.propTypes = {
     categories: PropTypes.array,
+    selected: PropTypes.array,
+    setSelected: PropTypes.func,
+    selectedPrice: PropTypes.array,
+    setSelectedPrice: PropTypes.func,
 };
