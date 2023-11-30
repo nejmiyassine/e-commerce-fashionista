@@ -5,7 +5,7 @@ import support from '../../assets/support.png';
 
 const Features = () => {
   return (
-    <div className='container mx-auto py-16'>
+    <div className='container mx-8 py-16'>
       <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 justify-center'>
         <div className="border border-purple-600 rounded-sm p-4 flex flex-col items-center mb-4">
           <img src={delivery} className='w-12 h-12 object-cover mb-2' alt='Delivery Icon' />

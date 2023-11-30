@@ -21,9 +21,9 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full bg-black p-2 flex justify-between items-center text-white">
+    <div className="w-full bg-black py-1 flex justify-between items-center text-white">
       <div className="flex items-center">
-        <img src={Logo} alt="Logo" className="h-10" />
+        <img src={Logo} alt="Logo" className="h-12" />
       </div>
 
       <div className="hidden sm:flex items-center">
@@ -51,7 +51,7 @@ const Navbar = () => {
       </div>
       
 
-      <div className="flex items-center justify-center space-x-2">
+      <div className="flex items-center justify-center space-x-2 px-3">
                 {[
                     { icon: faShoppingBag, label: 'Cart', count: 0 },
                     { icon: farUser, label: 'Account' },

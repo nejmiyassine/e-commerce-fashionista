@@ -5,11 +5,9 @@ import Unisex from '../../assets/unisex.jpg';
 
 const Category = ({ title, imageSrc }) => {
   const handleMouseEnter = () => {
-    // Add your hover effects here
   };
 
   const handleMouseLeave = () => {
-    // Reset hover effects here
   };
 
   return (
@@ -20,7 +18,7 @@ const Category = ({ title, imageSrc }) => {
         onMouseLeave={handleMouseLeave}
       >
         <div
-          className="absolute inset-0 m-0 h-full w-full bg-no-repeat overflow-hidden rounded-none bg-transparent bg-cover bg-clip-border bg-center text-gray-700 shadow-none transition-opacity duration-300 ease-in-out"
+          className="cursor-pointer absolute inset-0 m-0 h-full w-full bg-no-repeat overflow-hidden rounded-none bg-transparent bg-cover bg-clip-border bg-center text-gray-700 shadow-none transition-opacity duration-300 ease-in-out"
           style={{ backgroundImage: `url(${imageSrc})` }}
         >
           <div className="absolute inset-0 w-full h-full to-bg-black-10 bg-gradient-to-t from-black/80 via-black/50"></div>
