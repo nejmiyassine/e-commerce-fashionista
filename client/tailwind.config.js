@@ -9,6 +9,17 @@ export default {
     ],
     darkMode: 'class',
     theme: {
+        screens:{
+            sm:'578px',
+            md: '770px',
+            lg: '992px',
+            xl: '1200px'
+        },
+        container:{
+            center: true,
+            padding: '1rem'
+
+        },
         extend: {
             colors: {
                 primaryColor: {

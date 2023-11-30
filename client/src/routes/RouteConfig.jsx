@@ -10,6 +10,7 @@ import CustomerDetails from '../pages/admin/customers/CustomerDetails';
 import ViewAllCustomers from '../pages/admin/customers/ViewAllCustomers';
 import Users from '../pages/admin/users/Users';
 import UserDetails from '../pages/admin/users/UserDetails';
+import LandingP from '../pages/LandingPage/LandingP';
 import Orders from '../pages/admin/Orders/Orders';
 import ProtectedRoutes from './ProtectedRoutes';
 import AuthLogin from '../pages/auth/AuthLogin';
@@ -68,6 +69,10 @@ const RouteConfig = () => {
                     <Route
                         path='/admin/users/:userId'
                         element={<UserDetails />}
+                    />
+                    <Route
+                        path='/landingPage'
+                        element={<LandingP />}
                     />
                 </Route>
 
