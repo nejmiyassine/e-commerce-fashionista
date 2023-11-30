@@ -6,6 +6,7 @@ const Customer = require('../models/Customers');
 exports.getCustomerProfileData = async (req, res, next) => {
     try {
         const user = res.locals.user;
+
         res.status(200).json({
             status: 'success',
             data: {
@@ -18,15 +19,8 @@ exports.getCustomerProfileData = async (req, res, next) => {
 };
 
 exports.getAllCustomersList = async (req, res) => {
-    // const page = req.query.page || 0;
-    //  const sort = req.query.sort || 'DESC';
-    //  const customerPerPage = 10;
-
     try {
         const customers = await Customer.find();
-        //      .skip(page * customerPerPage)
-        //      .sort({ first_name: sort })
-        //    .limit(customerPerPage);
 
         if (!customers) {
             return res.status(404).json({ message: 'customers not found' });
@@ -39,8 +33,9 @@ exports.getAllCustomersList = async (req, res) => {
 };
 
 exports.getCustomerById = async (req, res) => {
+    const { id } = req.params;
     try {
-        const customer = await Customer.findById(req.params.id);
+        const customer = await Customer.findById(id);
 
         if (!customer) {
             return res.status(404).json({ message: 'customer not found' });
@@ -133,11 +128,56 @@ exports.searchForCustomer = async (req, res) => {
     }
 };
 
-exports.getProfile = async (req, res) => {
+// exports.getProfile = async (req, res) => {
+//     try {
+    
+//         const customerId = res.locals.user._id;
+
+//         const customer = await Customer.findById(customerId);
+
+//          if (!customer) res.status(404).json({ message: 'Customers not found' });
+//         return res.status(200).json(customer);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
+
+exports.customerCanUpdate = async (req, res) => {
+    const { first_name, last_name, email, password } = req.body;
+
     try {
-        const customer = await Customer.findById(req.params.id);
-        if (!customer) res.status(404).json({ message: 'Customer not found' });
-        return res.status(200).json(customer);
+        const salt = await bcrypt.genSalt(parseInt(saltRounds));
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const id = { _id: req.params.id };
+        const updatedFields = {
+            first_name,
+            last_name,
+            email,
+            password,
+        };
+
+        if (email) {
+            const exists = await Customer.findOne({ email });
+            if (exists) {
+                return res
+                    .status(400)
+                    .json({ message: 'email is already existed' });
+            }
+        }
+        if (password) {
+            updatedFields.password = hashedPassword;
+        }
+
+        const updatedCustomer = await Customer.findByIdAndUpdate(
+            id,
+            updatedFields,
+            { new: true }
+        );
+        if (!updatedCustomer) {
+            return res.status(404).json({ message: 'Customer not found' });
+        }
+        res.json(updatedCustomer);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
