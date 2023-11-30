@@ -11,7 +11,7 @@ const CustomerDetails = () => {
 
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
-
+  
     useEffect(() => {
         dispatch(customersById(customerId));
     }, [dispatch, customerId]);

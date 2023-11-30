@@ -18,6 +18,7 @@ import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
 
 import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
+import CustomerProfile from '../pages/FrontCustomers/customerProfile';
 
 const RouteConfig = () => {
     return (
@@ -72,8 +73,12 @@ const RouteConfig = () => {
 
                 {/* front-store */}
                 <Route
-                    path='/customersProfile/:customerId'
+                    path='/updateProfile/:customerId'
                     element={<UpdateCustomerInfo />}
+                />
+                <Route
+                    path='/customerProfile/:customerId'
+                    element={<CustomerProfile />}
                 />
             </Routes>
         </Router>

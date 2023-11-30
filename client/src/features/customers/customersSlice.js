@@ -1,13 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import API from '../../app/api/api';
-import axios from '../../api/axios';
 
 //all customers
 export const fetchCustomers = createAsyncThunk(
     'customers/fetchCustomers',
     async (_, { rejectWithValue }) => {
         try {
-            const res = await API.get('v1/customers', {
+            const res = await API.get('customers', {
                 withCredentials: true,
             });
             console.log('data from axios', res.data);
@@ -38,8 +37,8 @@ export const updateCustomer = createAsyncThunk(
     'customers/updateCustomer',
     async ({ customerId, updatedCustomerData }, { rejectWithValue }) => {
         try {
-            const res = await axios.put(
-                `v1/customers/${customerId}`,
+            const res = await API.put(
+                `customers/${customerId}`,
                 updatedCustomerData,
                 {
                     withCredentials: true,
@@ -57,16 +56,11 @@ export const updateCustomer = createAsyncThunk(
 //delete Customer
 export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
-    async ({ customerId, deletedCustomer }, { rejectWithValue }) => {
+    async ({ customerId }, { rejectWithValue }) => {
         try {
-            const res = await axios.delete(
-                `v1/customers/${customerId}`,
-                deletedCustomer,
-                {
-                    withCredentials: true,
-                }
-            );
-
+            const res = await API.delete(`customers/${customerId}`, {
+                withCredentials: true,
+            });
             console.log('delete from slice', res.data);
             return res.data;
         } catch (error) {

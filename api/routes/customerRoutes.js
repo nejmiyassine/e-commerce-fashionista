@@ -14,6 +14,7 @@ const {
     searchForCustomer,
     getCustomerProfileData,
     getProfile,
+    customerCanUpdate,
     updateCustomerProfile,
 } = require('../controllers/customerController');
 const {
@@ -86,9 +87,11 @@ router.get('/', restrictTo('admin', 'manager'), getAllCustomersList);
 router.get('/:id', restrictTo('admin', 'manager'), getCustomerById);
 router.get('/search', searchForCustomer);
 router.put('/:id', restrictToCustomer, updateCustomers);
-router.patch('/:id', restrictToCustomer, updateCustomerProfile);
+router.patch('/:id', customerCanUpdate);
+// router.patch('/:id', restrictToCustomer, updateCustomerProfile);
 router.delete('/:id', restrictTo('admin', 'manager'), deleteCustomerById);
 router.get('/profile/:id', restrictToCustomer, getProfile);
+
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
 router.post('/forgot-password', (req, res) =>
     forgotPassword(req, res, 'Customer')

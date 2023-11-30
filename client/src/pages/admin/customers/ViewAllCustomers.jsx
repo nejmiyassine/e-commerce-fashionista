@@ -12,7 +12,6 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 const ViewAllCustomers = () => {
     const dispatch = useDispatch();
     const { isLoading, data, error } = useSelector((state) => state.customers);
-    console.log('data from customers view', data);
 
     // const { isLoading, isFetching, isError, error, data } =
     //     useGetAllCustomersQuery();
