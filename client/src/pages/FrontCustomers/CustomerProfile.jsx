@@ -1,20 +1,19 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import UpdateCustomerComponent from '../../components/CustomersFront/UpdateCustomerComponent';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { useDispatch, useSelector } from 'react-redux';
-import { customersById } from '../../features/customers/customersSlice';
+import { getCustomerProfile } from '../../features/customers/frontCustomerSlice';
 
 import NavbarCustomers from '../../components/CustomersFront/NavBarCustomers';
 
-const UpdateCustomerInfo = () => {
+const CustomerProfile = () => {
     const { customerId } = useParams();
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
     console.log('data from updateCustomerInfo', data);
 
     useEffect(() => {
-        dispatch(customersById(customerId));
+        dispatch(getCustomerProfile(customerId));
     }, [dispatch, customerId]);
 
     if (loading) {
@@ -23,13 +22,16 @@ const UpdateCustomerInfo = () => {
     if (!loading && error) {
         return <div>Error: {error}</div>;
     }
-
+    
     return (
         <div>
-            <NavbarCustomers customer={data} />
-            <UpdateCustomerComponent customer={data} />
+            
+            {data._id ? (
+                <NavbarCustomers customer={data} />
+            ) : (
+                <div>no customer found</div>
+            )}
         </div>
     );
 };
-
-export default UpdateCustomerInfo;
+export default CustomerProfile;

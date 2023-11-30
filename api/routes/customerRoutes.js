@@ -14,6 +14,7 @@ const {
     searchForCustomer,
     getCustomerProfileData,
     getProfile,
+    customerCanUpdate,
 } = require('../controllers/customerController');
 const {
     verifyEmail,
@@ -80,13 +81,19 @@ router.use(deserializeUser, requireUser);
 
 router.get('/logout', logoutHandler);
 
-router.get('/profile', getCustomerProfileData);
+// router.get('/profile', getCustomerProfileData);
+ router.get('/profile/:id', restrictToCustomer , getCustomerProfileData);
+
 router.get('/', restrictTo('admin', 'manager'), getAllCustomersList);
 router.get('/:id', restrictTo('admin', 'manager'), getCustomerById);
 router.get('/search', searchForCustomer);
 router.put('/:id', updateCustomers);
 router.delete('/:id', restrictTo('admin', 'manager'), deleteCustomerById);
-router.get('/profile/:id', restrictToCustomer, getProfile);
+// router.get('/profile',getProfile);
+
+//
+router.patch('/:id', customerCanUpdate);
+
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
 router.post('/forgot-password', (req, res) =>
     forgotPassword(req, res, 'Customer')

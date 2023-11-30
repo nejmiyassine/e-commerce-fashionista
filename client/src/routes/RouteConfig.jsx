@@ -17,7 +17,9 @@ import AuthRegister from '../pages/auth/AuthRegister';
 import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
 
-import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
+import ProtectedRoutesCustomer from './ProtectedRoutesCustomer';
+import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo';
+import CustomerProfile from '../pages/FrontCustomers/CustomerProfile';
 
 const RouteConfig = () => {
     return (
@@ -70,11 +72,20 @@ const RouteConfig = () => {
                     />
                 </Route>
 
+
                 {/* front-store */}
-                <Route
-                    path='/customersProfile/:customerId'
-                    element={<UpdateCustomerInfo />}
-                />
+                <Route>
+                    <Route element={<ProtectedRoutesCustomer />} >
+
+                    <Route
+                        path='/updateProfile/:customerId'
+                        element={<UpdateCustomerInfo />}
+                    />
+                </Route>
+                
+                </Route>
+                    <Route path='/customer/:customerId' element = {<CustomerProfile />} />
+
             </Routes>
         </Router>
     );

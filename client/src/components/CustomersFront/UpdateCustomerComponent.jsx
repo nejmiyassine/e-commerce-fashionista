@@ -53,7 +53,7 @@ const UpdateCustomerComponent = ({ customer }) => {
 
     const onSubmit = (formData) => {
         if (isEditing) {
-            navigate('/admin/customers');
+            // navigate('/admin/customers');
             reset();
 
             console.log(customer._id);
@@ -127,25 +127,23 @@ const UpdateCustomerComponent = ({ customer }) => {
                             {...register('email')}
                         />
 
-                        <div>
-
-                        </div>
+                        <div></div>
                         <p className='text-red-500'>{errors.email?.message}</p>
-                    {/* </div> */}
+                        {/* </div> */}
 
-                    {/* <div> */}
+                        {/* <div> */}
                         <div>Password</div>
                         <input
                             className='border-black border-1 rounded-md w-[700px]'
                             placeholder='password'
                             type='password'
                             variant='bordered'
-                            
+
                             // {...register('password')}
                         />
 
                         <div>
-                             {/*
+                            {/*
                              <Button
                                 className='bg-transparent text-blue-500 border-none p-0'
                                 onPress={onOpen}
@@ -197,14 +195,13 @@ const UpdateCustomerComponent = ({ customer }) => {
                                 </ModalContent>
                             </Modal>  */}
                         </div>
-                       
 
                         <p className='text-red-500'>
                             {errors.password?.message}
                         </p>
-                    {/* </div> */}
+                        {/* </div> */}
 
-                    {/* <div> */}
+                        {/* <div> */}
                         <div>Creation Date</div>
                         <input
                             className='border-black border-1 rounded-md w-[700px]'

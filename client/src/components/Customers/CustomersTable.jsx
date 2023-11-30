@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
     Table,
@@ -26,7 +26,9 @@ import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
 
 import { capitalize } from '../../utils/capitalize';
 import EditCustomer from './EditCustomer';
-import DeleteCustomer from './DeleteCustomer';
+import { useDispatch } from 'react-redux';
+import { deleteCustomer } from '../../features/customers/customersSlice';
+import { toast } from 'react-toastify';
 
 const columns = [
     { name: 'ID', uid: '_id', sortable: true },
@@ -58,8 +60,10 @@ const INITIAL_VISIBLE_COLUMNS = [
 const CustomersTable = ({ data, error, loading }) => {
     const { isOpen, onOpenChange } = useDisclosure();
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const [updatedCustomer, setUpdatedCustomer] = useState('');
-    const [deletedCustomer, setDeletedCustomer] = useState('');
     const [filterValue, setFilterValue] = useState('');
     const [selectedKeys, setSelectedKeys] = useState(new Set([]));
 
@@ -150,7 +154,14 @@ const CustomersTable = ({ data, error, loading }) => {
                         'Are you sure you want to delete this customer?'
                     )
                 ) {
-                    setDeletedCustomer(customer);
+                    console.log(customer._id);
+                    dispatch(
+                        deleteCustomer({
+                            customerId: customer._id,
+                        })
+                    );
+                    toast.success('Customer is deleted successfully');
+                    navigate('/admin/customers');
                 }
             };
 
@@ -440,13 +451,8 @@ const CustomersTable = ({ data, error, loading }) => {
                 updatedCustomer={updatedCustomer}
             />
 
-            <DeleteCustomer
-                //  isOpen={isOpen}
-                //  onOpenChange={onOpenChange}
-                deletedCustomer={deletedCustomer}
-            />
 
-            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primaryColor-deepDark'>
+            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>Customers</h2>
 
                 <Table

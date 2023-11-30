@@ -29,7 +29,7 @@ const CustomerDetails = () => {
             {data._id ? (
                 <DisplayCustomerDetails customer={data} />
             ) : (
-                <div>customers not found</div>
+                <div>customer not found</div>
             )}
         </div>
     );
