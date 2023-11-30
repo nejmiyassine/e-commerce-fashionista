@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import {
-    IoIosArrowDropleftCircle,
-    IoIosArrowDroprightCircle,
-} from 'react-icons/io';
+
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
+import { MdFavorite } from 'react-icons/md';
 
 const ProductCard = ({ product }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -33,19 +32,28 @@ const ProductCard = ({ product }) => {
                     className={`h-[350px] w-full object-cover fade-out`}
                 />
 
+                <div className='opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
+                    <button
+                        onClick={handleNextClick}
+                        className='absolute top-10 right-6 transform -translate-y-1/2'
+                    >
+                        <MdFavorite className='text-red-500/50 transition-all hover:text-red-500 w-6 h-6' />
+                    </button>
+                </div>
+
                 {product.product_images.length > 0 && (
                     <div className='opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
                         <button
                             onClick={handlePrevClick}
                             className='absolute top-1/2 left-4 transform -translate-y-1/2'
                         >
-                            <IoIosArrowDropleftCircle className='text-primaryColor-blueCyan w-6 h-6' />
+                            <IoIosArrowBack className='text-primaryColor-orange w-6 h-6' />
                         </button>
                         <button
                             onClick={handleNextClick}
                             className='absolute top-1/2 right-4 transform -translate-y-1/2'
                         >
-                            <IoIosArrowDroprightCircle className='text-primaryColor-blueCyan w-6 h-6' />
+                            <IoIosArrowForward className='text-primaryColor-orange w-6 h-6' />
                         </button>
                     </div>
                 )}
@@ -62,14 +70,14 @@ const ProductCard = ({ product }) => {
                 </div>
             </div>
 
-            <div className='flex items-center justify-between gap-2 py-2 font-semibold'>
-                <h3 className='text-lg'>{product.product_name}</h3>
-                <p className='text-sm text-right text-primary'>
+            <div className='flex items-center justify-between gap-2 py-2'>
+                <h3 className='text-lg font-bold'>{product.product_name}</h3>
+                <p className='font-semibold text-sm text-right text-primaryColor-orange'>
                     ${product.price}
                 </p>
             </div>
 
-            <button className='font-semibold transition-all hover:bg-primaryColor-blueCyan hover:text-white py-2 border w-full mx-auto px-4'>
+            <button className='font-semibold transition-all hover:bg-primaryColor-orange hover:text-white py-2 border w-full mx-auto px-4'>
                 Add to cart
             </button>
         </div>
