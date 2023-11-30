@@ -1,13 +1,34 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import NProgress from 'nprogress';
 
-export const usersAPI = createApi({
-    reducerPath: 'usersAPI',
-    baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_REACT_APP_BASEURL,
-    }),
+import { api } from './apiRTQ';
+import { setUser } from '../../features/users/usersSlice';
+
+export const usersAPI = api.injectEndpoints({
     tagTypes: ['Users'],
     endpoints: (builder) => ({
+        getMyProfileData: builder.query({
+            query() {
+                return {
+                    url: 'users/profile',
+                    credentials: 'include',
+                };
+            },
+            transformResponse: (result) => result.data.user,
+            async onQueryStarted(args, { dispatch, queryFulfilled }) {
+                try {
+                    const { data: user } = await queryFulfilled;
+                    const { data } = await args;
+                    console.log(user);
+                    console.log(data);
+
+                    dispatch(
+                        setUser({ user: user, access_token: data.access_token })
+                    );
+                } catch (error) {
+                    /* Empty */
+                }
+            },
+        }),
         getAllUsers: builder.query({
             query: () => ({
                 url: 'users',
@@ -41,6 +62,7 @@ export const usersAPI = createApi({
                 url: 'users',
                 method: 'POST',
                 body: userData,
+                credentials: 'include',
             }),
             invalidatesTags: [{ type: 'Users', id: 'LIST' }],
             onQueryStarted() {
@@ -52,6 +74,7 @@ export const usersAPI = createApi({
                 url: `users/${userId}`,
                 method: 'PUT',
                 body: updatedUser,
+                credentials: 'include',
             }),
             onQueryStarted() {
                 NProgress.start();
@@ -72,6 +95,7 @@ export const usersAPI = createApi({
 });
 
 export const {
+    useGetMyProfileDataQuery,
     useGetAllUsersQuery,
     useGetUserByIdQuery,
     useAddUserMutation,

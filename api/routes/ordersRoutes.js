@@ -7,12 +7,16 @@ const {
     getOrderByIdController,
     getAllOrdersController,
 } = require('../controllers/odersController');
+const deserializeUser = require('../middleware/deserializeUser');
+const requireUser = require('../middleware/requireUser');
 const {
-    isAdminOrManager,
-    isCustomer,
-} = require('../middleware/authMiddleware');
+    restrictTo,
+    restrictToCustomer,
+} = require('../middleware/restrictMiddleware');
 
-router.post('/',  createOrdersController);
+router.use(deserializeUser, requireUser);
+
+router.post('/', restrictToCustomer, createOrdersController);
 router.get('/:id', getOrderByIdController);
 router.get('/', getAllOrdersController);
 router.put('/:id', updateOrdersController);

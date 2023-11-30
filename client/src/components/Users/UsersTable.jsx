@@ -6,7 +6,6 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    // Input,
     Button,
     DropdownTrigger,
     Dropdown,
@@ -20,14 +19,11 @@ import { toast } from 'react-toastify';
 import NProgress from 'nprogress';
 import { Link } from 'react-router-dom';
 
-import {
-    // UserPlus,
-    VerticalDotsIcon,
-    // SearchIcon,
-    // ChevronDownIcon,
-} from '../../icons/Icons';
+import { MdModeEditOutline } from 'react-icons/md';
+import { FaEye } from 'react-icons/fa';
+import { MdDeleteForever } from 'react-icons/md';
+import { VerticalDotsIcon } from '../../icons/Icons';
 
-// import { capitalize } from '../../utils/capitalize';
 import { sliceText } from '../../utils/sliceText';
 import {
     columns,
@@ -56,6 +52,7 @@ const UsersTable = () => {
         error: getAllUsersError,
         data: users,
     } = useGetAllUsersQuery();
+
     const [deleteUser, { isLoading, isError, error, isSuccess }] =
         useDeleteUserMutation();
 
@@ -137,6 +134,7 @@ const UsersTable = () => {
                 user.username.toLowerCase().includes(filterValue.toLowerCase())
             );
         }
+
         if (
             statusFilter !== 'all' &&
             Array.from(statusFilter).length !== statusOptions.length &&
@@ -234,7 +232,7 @@ const UsersTable = () => {
                 case 'actions':
                     return (
                         <div className='relative flex justify-end items-center gap-2'>
-                            <Dropdown className='bg-background border-1 border-default-200'>
+                            <Dropdown className='w-[100px] bg-background border-1 border-default-200'>
                                 <DropdownTrigger>
                                     <Button
                                         isIconOnly
@@ -247,17 +245,28 @@ const UsersTable = () => {
                                 </DropdownTrigger>
                                 <DropdownMenu>
                                     <DropdownItem>
-                                        <Link to={`/admin/users/${user._id}`}>
-                                            View
+                                        <Link
+                                            className='flex items-center gap-2'
+                                            to={`/admin/users/${user._id}`}
+                                        >
+                                            <FaEye />
+                                            <p>View</p>
                                         </Link>
                                     </DropdownItem>
                                     <DropdownItem onPress={handleUpdate}>
-                                        Edit
+                                        <div className='flex items-center gap-2'>
+                                            <MdModeEditOutline />
+                                            <p>Edit</p>
+                                        </div>
                                     </DropdownItem>
                                     <DropdownItem
+                                        className='flex items-center'
                                         onPress={() => handleDelete(user._id)}
                                     >
-                                        Delete
+                                        <div className='flex items-center gap-2'>
+                                            <MdDeleteForever />
+                                            <p>Delete</p>
+                                        </div>
                                     </DropdownItem>
                                 </DropdownMenu>
                             </Dropdown>
@@ -355,6 +364,8 @@ const UsersTable = () => {
         []
     );
 
+    console.log(users);
+
     return (
         <>
             <UserModalForm
@@ -362,7 +373,7 @@ const UsersTable = () => {
                 onOpenChange={onOpenChange}
                 userData={selectedUser}
             />
-            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
+            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primaryColor-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>All Users</h2>
 
                 <Table

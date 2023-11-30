@@ -6,9 +6,7 @@ import { Provider } from 'react-redux';
 import { DarkModeProvider } from './context/DarkModeContext';
 
 import App from './App.jsx';
-import { persistor, store } from './app/store';
-
-import { PersistGate } from 'redux-persist/integration/react';
+import { store } from './app/store';
 
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,13 +14,11 @@ import 'react-toastify/dist/ReactToastify.css';
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-                <NextUIProvider>
-                    <DarkModeProvider>
-                        <App />
-                    </DarkModeProvider>
-                </NextUIProvider>
-            </PersistGate>
+            <NextUIProvider>
+                <DarkModeProvider>
+                    <App />
+                </DarkModeProvider>
+            </NextUIProvider>
         </Provider>
     </React.StrictMode>
 );

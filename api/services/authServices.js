@@ -197,7 +197,6 @@ const resetPassword = async (req, res, userType) => {
 
     const userModel = userType === 'Customer' ? Customer : Seller;
 
-    console.log(req.user);
     try {
         const user = await userModel.findById(req.user._id);
         if (!user)

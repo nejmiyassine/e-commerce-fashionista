@@ -1,10 +1,21 @@
 const bcrypt = require('bcrypt');
-const { validationResult } = require('express-validator');
 
 const User = require('../models/User');
 const saltRounds = require('../config/env').SALT;
-const JwtSecretKey = require('../config/env').JwtSecretKey;
-const jwtHelper = require('../helpers/issueJwt');
+
+exports.getMyProfileData = async (req, res, next) => {
+    try {
+        const user = res.locals.user;
+        res.status(200).json({
+            status: 'success',
+            data: {
+                user,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 exports.getUserById = async (req, res) => {
     const { id } = req.params;
@@ -23,15 +34,8 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.getAllUsersList = async (req, res) => {
-    // const page = parseInt(req.query.page) || 1;
-    // const sort = req.query.sort || 'DESC';
-    // const usersPerPage = 5;
-
     try {
         const users = await User.find();
-        // .sort({ username: sort })
-        // .skip((page - 1) * usersPerPage)
-        // .limit(usersPerPage);
 
         if (!users) {
             return res.status(404).json({ message: 'users not found' });
@@ -46,7 +50,6 @@ exports.getAllUsersList = async (req, res) => {
 exports.searchForUser = async (req, res) => {
     const { query } = req.query || '';
     const page = req.query.page || 1;
-    const sort = req.query.sort || 'DESC';
     const usersPerPage = 5;
 
     const searchCriteria = {
@@ -71,72 +74,6 @@ exports.searchForUser = async (req, res) => {
         }
 
         res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-exports.registerUser = async (req, res) => {
-    const { first_name, last_name, username, email, password, role } = req.body;
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-        const salt = await bcrypt.genSalt(parseInt(saltRounds));
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        const newUser = await User({
-            first_name,
-            last_name,
-            username,
-            email,
-            password: hashedPassword,
-            role,
-            creation_date: Date.now(),
-            last_login: Date.now(),
-            last_update: Date.now(),
-        });
-
-        await newUser.save();
-        +res.status(201).json({
-            message: 'User registered successfully',
-            user: newUser,
-        });
-    } catch (err) {
-        res.status(500).json({ message: 'Internal server error' });
-    }
-};
-
-exports.loginUser = async (req, res) => {
-    const { email, password } = req.body;
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
-    try {
-        const user = await User.findOne({ email });
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-
-        if (!isPasswordValid)
-            return res
-                .status(401)
-                .json({ message: 'Incorrect email or password' });
-
-        const jwt = jwtHelper.issueJwt(user, JwtSecretKey);
-        const { token, expires } = jwt;
-
-        console.log('connected');
-
-        res.status(200).json({ user, token, expiresIn: expires });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

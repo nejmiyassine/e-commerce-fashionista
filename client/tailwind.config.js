@@ -22,13 +22,14 @@ export default {
         },
         extend: {
             colors: {
-                primary: {
+                primaryColor: {
                     light: '#1a1a1a',
                     deepDark: '#000000',
                     dark: '#F5F5F5',
                     blueCyan: '#4eb2d8',
+                    orange: '#f5a524',
                 },
-                secondary: {
+                secondaryColor: {
                     light: '#3F4458',
                     dark: '#E4E6EA',
                 },

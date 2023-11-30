@@ -43,6 +43,11 @@ const userSchema = new Schema({
         type: Boolean,
         default: true,
     },
+    account_type: {
+        enum: ['user', 'customer', 'seller'],
+        type: String,
+        required: true,
+    },
 });
 
 const User = mongoose.model('User', userSchema);

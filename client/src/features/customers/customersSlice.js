@@ -6,7 +6,9 @@ export const fetchCustomers = createAsyncThunk(
     'customers/fetchCustomers',
     async (_, { rejectWithValue }) => {
         try {
-            const res = await API.get('/customers');
+            const res = await API.get('customers', {
+                withCredentials: true,
+            });
             console.log('data from axios', res.data);
             return res.data;
         } catch (error) {
@@ -20,8 +22,9 @@ export const customersById = createAsyncThunk(
     'customers/customersById',
     async (customerId, { rejectWithValue }) => {
         try {
-            const res = await API.get(`/customers/${customerId}`);
-            console.log('customer details from axios', res.data);
+            const res = await API.get(`customers/${customerId}`, {
+                withCredentials: true,
+            });
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -36,10 +39,13 @@ export const updateCustomer = createAsyncThunk(
         try {
             const res = await API.put(
                 `customers/${customerId}`,
-                updatedCustomerData
+                updatedCustomerData,
+                {
+                    withCredentials: true,
+                }
             );
 
-            console.log('updated customer', res.data);
+            console.log('updated customer from customerSlice', res.data);
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -50,10 +56,11 @@ export const updateCustomer = createAsyncThunk(
 //delete Customer
 export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
-    async ({ customerId, deletedCustomer }, { rejectWithValue }) => {
+    async ({ customerId }, { rejectWithValue }) => {
         try {
-            const res = await API.delete(`customers/${customerId}`, deletedCustomer);
-
+            const res = await API.delete(`customers/${customerId}`, {
+                withCredentials: true,
+            });
             console.log('delete from slice', res.data);
             return res.data;
         } catch (error) {
@@ -66,18 +73,27 @@ const initialState = {
     isLoading: false,
     data: [],
     error: '',
+    customer: null,
+    access_token: '',
 };
 
 const customersSlice = createSlice({
     name: 'customers',
     initialState,
-    reducers: {},
+    reducers: {
+        setCustomer: (state, action) => {
+            state.customer = action.payload.user;
+            state.access_token = action.payload.access_token;
+        },
+        logout: () => ({ ...initialState, customer: null, access_token: '' }),
+    },
     extraReducers: (builder) => {
         builder
-
             //all customers
             .addCase(fetchCustomers.pending, (state) => {
                 state.isLoading = true;
+                state.data = [];
+                state.error = '';
             })
             .addCase(fetchCustomers.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -87,7 +103,7 @@ const customersSlice = createSlice({
             })
             .addCase(fetchCustomers.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.state.error = action.error.message;
             })
 
             // customers by id
@@ -165,5 +181,7 @@ const customersSlice = createSlice({
             });
     },
 });
+
+export const { setCustomer, logout } = customersSlice.actions;
 
 export default customersSlice.reducer;

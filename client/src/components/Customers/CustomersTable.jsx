@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import React, { useMemo, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
     Table,
@@ -20,16 +21,14 @@ import {
     useDisclosure,
 } from '@nextui-org/react';
 
-import { useSelector } from 'react-redux';
-
-import { PlusIcon } from '../../icons/PlusIcon';
-import { VerticalDotsIcon } from '../../icons/VerticalDotsIcon';
 import { SearchIcon } from '../../icons/SearchIcon';
 import { ChevronDownIcon } from '../../icons/ChevronDownIcon';
 
 import { capitalize } from '../../utils/capitalize';
 import EditCustomer from './EditCustomer';
-import DeleteCustomer from './DeleteCustomer';
+import { useDispatch } from 'react-redux';
+import { deleteCustomer } from '../../features/customers/customersSlice';
+import { toast } from 'react-toastify';
 
 const columns = [
     { name: 'ID', uid: '_id', sortable: true },
@@ -58,33 +57,34 @@ const INITIAL_VISIBLE_COLUMNS = [
     'actions',
 ];
 
-const CustomersTable = () => {
+const CustomersTable = ({ data, error, loading }) => {
     const { isOpen, onOpenChange } = useDisclosure();
-    const { loading, data, error } = useSelector((state) => state.customers);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const [updatedCustomer, setUpdatedCustomer] = useState('');
-    const [deletedCustomer, setDeletedCustomer] = useState('');
-    const [filterValue, setFilterValue] = React.useState('');
-    const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
+    const [filterValue, setFilterValue] = useState('');
+    const [selectedKeys, setSelectedKeys] = useState(new Set([]));
 
-    const [visibleColumns, setVisibleColumns] = React.useState(
+    const [visibleColumns, setVisibleColumns] = useState(
         new Set(INITIAL_VISIBLE_COLUMNS)
     );
 
-    const [statusFilter, setStatusFilter] = React.useState('all');
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [sortDescriptor, setSortDescriptor] = React.useState({
+    const [statusFilter, setStatusFilter] = useState('all');
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [sortDescriptor, setSortDescriptor] = useState({
         column: 'email',
         direction: 'ascending',
     });
 
-    const [page, setPage] = React.useState(1);
+    const [page, setPage] = useState(1);
 
     const pages = data && Math.ceil(data.length / rowsPerPage);
 
     const hasSearchFilter = Boolean(filterValue);
 
-    const headerColumns = React.useMemo(() => {
+    const headerColumns = useMemo(() => {
         if (visibleColumns === 'all') return columns;
 
         return columns.filter((column) =>
@@ -139,103 +139,115 @@ const CustomersTable = () => {
             });
     }, [sortDescriptor, items]);
 
-    const renderCell = React.useCallback((customer, columnKey) => {
-        const cellValue = customer[columnKey];
+    const renderCell = React.useCallback(
+        (customer, columnKey) => {
+            const cellValue = customer[columnKey];
 
-        const handleUpdate = () => {
-            setUpdatedCustomer(customer);
-            onOpenChange(true);
-        };
+            const handleUpdate = () => {
+                setUpdatedCustomer(customer);
+                onOpenChange(true);
+            };
 
-        const handleDelete = () => {
-            if (
-                window.confirm('Are you sure you want to delete this customer?')
-            ) {
-                setDeletedCustomer(customer);
+            const handleDelete = () => {
+                if (
+                    window.confirm(
+                        'Are you sure you want to delete this customer?'
+                    )
+                ) {
+                    console.log(customer._id);
+                    dispatch(
+                        deleteCustomer({
+                            customerId: customer._id,
+                        })
+                    );
+                    toast.success('Customer is deleted successfully');
+                    navigate('/admin/customers');
+                }
+            };
+
+            switch (columnKey) {
+                case 'email':
+                    return (
+                        <User
+                            avatarProps={{
+                                radius: 'full',
+                                size: 'sm',
+                                src: customer.avatar
+                                    ? customer.avatar
+                                    : 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
+                            }}
+                            classNames={{
+                                description: 'text-default-500',
+                            }}
+                            description={customer.email}
+                            name={cellValue}
+                        >
+                            {customer.email}
+                        </User>
+                    );
+
+                case 'valid_account':
+                    return (
+                        <Chip
+                            className='capitalize'
+                            color={`${
+                                customer.valid_account ? 'success' : 'danger'
+                            }`}
+                            size='sm'
+                            variant='flat'
+                        >
+                            {cellValue ? 'Verified' : 'Unverified'}
+                        </Chip>
+                    );
+
+                case 'actions':
+                    return (
+                        <div className='relative flex justify-end items-center gap-2'>
+                            <Button
+                                className='bg-foreground text-background'
+                                size='sm'
+                                onPress={handleUpdate}
+                            >
+                                Edit
+                            </Button>
+
+                            <Button
+                                className='bg-blue-600 text-background w-14'
+                                size='sm'
+                            >
+                                <Link to={`/admin/customers/${customer._id}`}>
+                                    View
+                                </Link>
+                            </Button>
+
+                            <Button
+                                size='sm'
+                                onPress={handleDelete}
+                                className='bg-danger text-background'
+                            >
+                                Delete
+                            </Button>
+                        </div>
+                    );
+
+                case 'active':
+                    return (
+                        <Chip
+                            className='capitalize'
+                            color={`${customer.active ? 'success' : 'danger'}`}
+                            size='sm'
+                            variant='flat'
+                        >
+                            {cellValue ? 'Active' : 'Inactive'}
+                        </Chip>
+                    );
+
+                default:
+                    return cellValue;
             }
-        };
-
-        switch (columnKey) {
-            case 'email':
-                return (
-                    <User
-                        avatarProps={{
-                            radius: 'full',
-                            size: 'sm',
-                            src: customer.avatar
-                                ? customer.avatar
-                                : 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
-                        }}
-                        classNames={{
-                            description: 'text-default-500',
-                        }}
-                        description={customer.email}
-                        name={cellValue}
-                    >
-                        {customer.email}
-                    </User>
-                );
-
-            case 'valid_account':
-                return (
-                    <Chip
-                        className='capitalize'
-                        color={`${
-                            customer.valid_account ? 'success' : 'danger'
-                        }`}
-                        size='sm'
-                        variant='flat'
-                    >
-                        {cellValue ? 'Verified' : 'Unverified'}
-                    </Chip>
-                );
-
-            case 'actions':
-                return (
-                    <div className='relative flex justify-end items-center gap-2'>
-                        <Button
-                            className='bg-foreground text-background'
-                            size='sm'
-                            onPress={handleUpdate}
-                        >
-                            Edit
-                        </Button>
-
-                        <Button
-                            className='bg-blue-600 text-background w-14'
-                            size='sm'
-                        >
-                            <Link to={`/admin/customers/${customer._id}`}>
-                                View
-                            </Link>
-                        </Button>
-
-                        <Button
-                            size='sm'
-                            onPress={handleDelete}
-                            className='bg-danger text-background'
-                        >
-                            Delete
-                        </Button>
-                    </div>
-                );
-
-            case 'active':
-                return (
-                    <Chip
-                        className='capitalize'
-                        color={`${customer.active ? 'success' : 'danger'}`}
-                        size='sm'
-                        variant='flat'
-                    >
-                        {cellValue ? 'Active' : 'Inactive'}
-                    </Chip>
-                );
-
-            default:
-                return cellValue;
-        }
-    }, []);
+        },
+        [onOpenChange]
+    );
 
     const onRowsPerPageChange = React.useCallback((e) => {
         setRowsPerPage(Number(e.target.value));
@@ -426,6 +438,7 @@ const CustomersTable = () => {
     if (loading) {
         return <div>loading.....</div>;
     }
+
     if (!loading && error) {
         return <div>Error: {error}</div>;
     }
@@ -438,14 +451,9 @@ const CustomersTable = () => {
                 updatedCustomer={updatedCustomer}
             />
 
-            <DeleteCustomer
-                //  isOpen={isOpen}
-                //  onOpenChange={onOpenChange}
-                deletedCustomer={deletedCustomer}
-            />
 
-            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
-                <h2 className='font-bold text-xl mb-4'>Last Customers</h2>
+            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primaryColor-deepDark'>
+                <h2 className='font-bold text-xl mb-4'>Customers</h2>
 
                 <Table
                     isCompact
@@ -507,3 +515,9 @@ const CustomersTable = () => {
 };
 
 export default CustomersTable;
+
+CustomersTable.propTypes = {
+    data: PropTypes.any,
+    loading: PropTypes.bool,
+    error: PropTypes.string,
+};

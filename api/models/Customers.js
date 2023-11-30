@@ -36,12 +36,11 @@ const customerSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    account_type: {
+        enum: ['user', 'customer', 'seller'],
+        type: String,
+    },
 });
-
-customerSchema.methods.comparePassword = async function (password) {
-    const result = await bcrypt.compareSync(password, this.password);
-    return result;
-};
 
 const Customer = mongoose.model('Customer', customerSchema);
 module.exports = Customer;

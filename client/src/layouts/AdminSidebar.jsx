@@ -12,7 +12,7 @@ const AdminSidebar = ({ expanded, toggleSidebar }) => {
                 expanded ? 'w-52' : 'w-18'
             }`}
         >
-            <nav className='h-full flex flex-col border-r border-gray-300 dark:border-gray-600 shadow-sm bg-white dark:bg-primary-deepDark dark:text-primary-dark'>
+            <nav className='h-full flex flex-col border-r border-gray-300 dark:border-gray-600 shadow-sm bg-white dark:bg-primaryColor-deepDark dark:text-primaryColor-dark'>
                 <div className='h-14 overflow-hidden flex justify-around items-center'>
                     <img
                         className={`w-full h-7 object-fill overflow-hidden transition-all ${

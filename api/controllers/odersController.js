@@ -2,7 +2,8 @@ const Orders = require('../models/Orders');
 
 // Create a new order
 const createOrdersController = async (req, res) => {
-    const customer_id = req.user._id;
+    console.log(res.locals.user);
+    const customer_id = res.locals.user._id;
     const { order_items, cart_total_price } = req.body;
 
     try {
@@ -10,20 +11,19 @@ const createOrdersController = async (req, res) => {
             return res.status(400).send({ message: 'Missing required fields' });
         }
 
-        const newOrder = new Orders({
-              customer_id,
-              order_items,
-              order_date: new Date(),
-              cart_total_price,
-              status: 'pending',
-          });
-      
-          res.status(201).json({
-              message: 'Order created successfully',
-              createdOrder,
-          });
+        const newOrder = await Orders.create({
+            customer_id,
+            order_items,
+            order_date: new Date(),
+            cart_total_price,
+            status: 'pending',
+        });
+
+        res.status(201).json({
+            message: 'Order created successfully',
+            newOrder,
+        });
     } catch (error) {
-        console.error(error);
         res.status(500).send({
             success: false,
             error: error.message,
@@ -81,20 +81,19 @@ const getOrderByIdController = async (req, res) => {
 
 // Get a list of all orders
 const getAllOrdersController = async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = 10;
-    const skip = (page - 1) * limit;
+    // const page = parseInt(req.query.page) || 1;
+    // const limit = 10;
+    // const skip = (page - 1) * limit;
 
     try {
         // if (!req.user.emailValidated) {
         //     return res.status(403).json({ error: 'Forbidden' });
         // }
 
-        const orders = await Orders.find()
-              .populate('customer_id')
-            // .limit(limit)
-            // .skip(skip)
-            // .exec();
+        const orders = await Orders.find().populate('customer_id');
+        // .limit(limit)
+        // .skip(skip)
+        // .exec();
 
         if (orders.length === 0) {
             return res.status(200).json([]);

@@ -1,46 +1,70 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Switch } from '@nextui-org/react';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { Disclosure, Menu, Transition } from '@headlessui/react';
 
 import { useDarkMode } from '../hooks/useDarkMode';
 import { SunIcon, MoonIcon } from '../icons/Icons';
-import LoadingSpinner from '../components/LoadingSpinner';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { logout } from '../features/users/usersSlice';
+import { useGetMyProfileDataQuery } from '../app/api/usersApi';
+import { useLogoutUserMutation } from '../app/api/authApi';
 
 const classNames = (...classes) => {
     return classes.filter(Boolean).join(' ');
 };
 
 const AdminNavbar = () => {
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { toggleDarkMode } = useDarkMode();
-    const { user, isLoading, error } = useSelector((state) => state.users);
 
-    if (isLoading) {
-        return <LoadingSpinner />;
-    }
+    const [
+        logoutUser,
+        {
+            isLoading: isLogoutLoading,
+            isSuccess,
+            error: logoutError,
+            isError: isLogoutError,
+        },
+    ] = useLogoutUserMutation();
 
-    if (error) {
-        toast({
-            variant: 'destructive',
-            description: 'Something went wrong',
-        });
-        return <LoadingSpinner />;
-    }
+    const {
+        data: user,
+        isLoading,
+        isError,
+        error,
+    } = useGetMyProfileDataQuery();
+
+    const loading = isLogoutLoading || isLoading;
+    const isErrorLog = isLogoutError || isError;
+    const errorLog = logoutError || error;
+
+    useEffect(() => {
+        if (isSuccess) {
+            navigate('/admin/login');
+        }
+
+        if (isErrorLog) {
+            if (Array.isArray(errorLog).data.error) {
+                errorLog.data.error.forEach((el) => toast.error(el.message));
+            } else {
+                toast.error(errorLog.data.message);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loading]);
 
     const handleLogout = () => {
-        dispatch(logout());
-        toast.success('See you soon 👋!');
+        logoutUser();
+        toast.success('See you soon 👋!', {
+            position: 'bottom-right',
+        });
     };
 
     return (
         <Disclosure as='nav'>
             <>
-                <div className='h-14 mx-auto px-2 sm:px-6 lg:px-8 border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-primary-deepDark dark:text-primary-dark'>
+                <div className='h-14 mx-auto px-2 sm:px-6 lg:px-8 border-b border-gray-300 dark:border-gray-600 bg-white dark:bg-primaryColor-deepDark dark:text-primaryColor-dark'>
                     <div className='relative flex h-full gap-4 items-center items-center justify-end'>
                         <Switch
                             defaultSelected
@@ -58,7 +82,7 @@ const AdminNavbar = () => {
                                         Open user menu
                                     </span>
                                     <img
-                                        className='h-8 w-8 rounded-full ring ring-primary ring-2 ring-offset-2'
+                                        className='h-8 w-8 rounded-full ring ring-primaryColor ring-2 ring-offset-2'
                                         src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
                                         alt=''
                                     />
