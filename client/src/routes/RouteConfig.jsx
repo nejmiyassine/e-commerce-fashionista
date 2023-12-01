@@ -10,6 +10,7 @@ import CustomerDetails from '../pages/admin/customers/CustomerDetails';
 import ViewAllCustomers from '../pages/admin/customers/ViewAllCustomers';
 import Users from '../pages/admin/users/Users';
 import UserDetails from '../pages/admin/users/UserDetails';
+import LandingP from '../pages/LandingPage/LandingP';
 import Orders from '../pages/admin/Orders/Orders';
 import ProtectedRoutes from './ProtectedRoutes';
 import AuthLogin from '../pages/auth/AuthLogin';
@@ -17,9 +18,8 @@ import AuthRegister from '../pages/auth/AuthRegister';
 import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
 
-import ProtectedRoutesCustomer from './ProtectedRoutesCustomer';
-import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo';
-import CustomerProfile from '../pages/FrontCustomers/CustomerProfile';
+import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
+import CustomerProfile from '../pages/FrontCustomers/customerProfile';
 
 const RouteConfig = () => {
     return (
@@ -70,21 +70,21 @@ const RouteConfig = () => {
                         path='/admin/users/:userId'
                         element={<UserDetails />}
                     />
-                </Route>
-
-
-                {/* front-store */}
-                <Route>
-                    <Route element={<ProtectedRoutesCustomer />} >
-
                     <Route
-                        path='/updateProfile/:customerId'
-                        element={<UpdateCustomerInfo />}
+                        path='/landingPage'
+                        element={<LandingP />}
                     />
                 </Route>
-                
-                </Route>
-                    <Route path='/customer/:customerId' element = {<CustomerProfile />} />
+
+                {/* front-store */}
+                <Route
+                    path='/updateProfile/:customerId'
+                    element={<UpdateCustomerInfo />}
+                />
+                <Route
+                    path='/customerProfile/:customerId'
+                    element={<CustomerProfile />}
+                />
 
             </Routes>
         </Router>

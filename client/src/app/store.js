@@ -11,6 +11,7 @@ import { usersAPI } from './api/usersApi';
 import { ordersAPI } from './api/ordersApi';
 import { authApi } from './api/authApi';
 import { customerAPI } from './api/customerApi';
+import bagSlice from '../features/bag/bagSlice';
 
 export const store = configureStore({
     reducer: {
@@ -19,6 +20,7 @@ export const store = configureStore({
         subcategories: subcategoriesReducer,
         users: usersReducer,
         products: productsReducers,
+        bag: bagSlice,
         [usersAPI.reducerPath]: usersAPI.reducer,
         [authApi.reducerPath]: authApi.reducer,
         [ordersAPI.reducerPath]: ordersAPI.reducer,

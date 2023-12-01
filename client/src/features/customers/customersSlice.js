@@ -61,7 +61,6 @@ export const deleteCustomer = createAsyncThunk(
             const res = await API.delete(`customers/${customerId}`, {
                 withCredentials: true,
             });
-
             console.log('delete from slice', res.data);
             return res.data;
         } catch (error) {
