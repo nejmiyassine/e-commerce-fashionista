@@ -19,7 +19,7 @@ import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
 
 import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
-import CustomerProfile from '../pages/FrontCustomers/customerProfile';
+import CustomerProfile from '../pages/FrontCustomers/CustomerProfile';
 
 const RouteConfig = () => {
     return (
@@ -70,11 +70,12 @@ const RouteConfig = () => {
                         path='/admin/users/:userId'
                         element={<UserDetails />}
                     />
+                </Route>
+                
                     <Route
                         path='/landingPage'
                         element={<LandingP />}
                     />
-                </Route>
 
                 {/* front-store */}
                 <Route

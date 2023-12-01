@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import UpdateCustomerComponent from '../../components/CustomersFront/UpdateCustomerComponent';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import UpdateCustomerComponent from '../../components/CustomersFront/UpdateCustomerComponent';
 import { useDispatch, useSelector } from 'react-redux';
 import { customersById } from '../../features/customers/customersSlice';
 
@@ -17,6 +17,7 @@ const UpdateCustomerInfo = () => {
         dispatch(customersById(customerId));
     }, [dispatch, customerId]);
 
+
     if (loading) {
         return <LoadingSpinner />;
     }
@@ -25,10 +26,11 @@ const UpdateCustomerInfo = () => {
     }
 
     return (
-        <div>
-            <NavbarCustomers customer={data} />
+        <div >
+        <NavbarCustomers customer={data} />
             <UpdateCustomerComponent customer={data} />
         </div>
+
     );
 };
 

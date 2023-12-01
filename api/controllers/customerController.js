@@ -169,19 +169,20 @@ exports.searchForCustomer = async (req, res) => {
     }
 };
 
-// exports.getProfile = async (req, res) => {
-//     try {
+exports.getProfile = async (req, res) => {
+    try {
     
-//         const customerId = res.locals.user._id;
+        const customerId = req.params.id;
+        // const customerId = res.locals.user._id;
 
-//         const customer = await Customer.findById(customerId);
+        const customer = await Customer.findById(customerId);
 
-//          if (!customer) res.status(404).json({ message: 'Customers not found' });
-//         return res.status(200).json(customer);
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
+         if (!customer) res.status(404).json({ message: 'Customers not found' });
+        return res.status(200).json(customer);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 exports.customerCanUpdate = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;

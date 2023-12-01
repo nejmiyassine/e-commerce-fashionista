@@ -2,12 +2,15 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import API from '../../app/api/api';
 
 export const getCustomerProfile = createAsyncThunk(
-    'customers/getCustomerProfile',
+    'fCustomer/getCustomerProfile',
     async (customerId, { rejectWithValue }) => {
         try {
-            const res = await API.get(`customers/profile/${customerId}`, {
-                withCredentials: true,
-            });
+            const res = await API.get(`customers/profile/${customerId}` , {
+                withCredentials : true,
+                
+            }
+            );
+            console.log('res' , res )
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -15,14 +18,28 @@ export const getCustomerProfile = createAsyncThunk(
     }
 );
 
+export const patchCustomerData = createAsyncThunk(
+    'fCustomer/patcheCustomerData',
+ async({customerId , patchedCustomerData}, {rejectWithValue}) => {
+    try {
+         const res = API.patch(`customers/${customerId}` , patchedCustomerData , {
+            withCredentials : true,
+         })
+         console.log('res' , res)
+         return res.data
+    } catch(error) {
+        rejectWithValue(error.res.data);
+    }
+})
+
 const initialState = {
     isLoading: false,
-    customer: [],
+    data: [],
     error: '',
 };
 
 const frontCustomersSlice = createSlice({
-    name: 'customers',
+    name: 'fCustomer',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -30,23 +47,46 @@ const frontCustomersSlice = createSlice({
 
             //customer Profile
             .addCase(getCustomerProfile.pending, (state) => {
+                console.log('sfdfaf')
                 state.isLoading = true;
                 console.log('pending');
             })
             //
             .addCase(getCustomerProfile.fulfilled, (state, action) => {
+                console.log('stats')
                 state.isLoading = false;
                 state.data = action.payload;
                 console.log('payload', state.data);
-                state.error = '';
                 console.log('fulfilled');
             })
             //
             .addCase(getCustomerProfile.rejected, (state, action) => {
                 state.isLoading = false;
-                console.log('rejected');
                 state.error = action.error.message;
-            });
+                console.log('rejected');
+            })
+
+            //patchCustomerData
+            .addCase(patchCustomerData.pending ,(state) => {
+                state.isLoading = true;
+                console.log('pending')
+            })
+
+            .addCase(patchCustomerData.fulfilled , (state, action) => {
+                state.isLoading = false;
+                const {
+                    arg: { customerId },
+                } = action.meta;
+                console.log('action.meta', action.meta);
+
+            
+            })
+
+            .addCase(patchCustomerData.rejected , (state , action) => {
+                isLoading = false;
+                state.data = action.error.message;
+                console.log('rejected')
+            })
     },
 });
 

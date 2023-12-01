@@ -1,7 +1,8 @@
 import React from 'react';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,6 +17,7 @@ import {
     Button,
     useDisclosure,
 } from '@nextui-org/react';
+import { patchCustomerData } from '../../features/customers/frontCustomerSlice';
 
 const schema = yup.object({
     first_name: yup.string().required('First Name is required'),
@@ -25,7 +27,6 @@ const schema = yup.object({
         .string()
         .min(6, 'Password must have at least 6 characters')
         .max(10)
-        .required(),
 });
 
 const UpdateCustomerComponent = ({ customer }) => {
@@ -55,12 +56,13 @@ const UpdateCustomerComponent = ({ customer }) => {
         if (isEditing) {
             // navigate('/admin/customers');
             reset();
+            navigate(`/customerProfile/${customer._id}`)
 
             console.log(customer._id);
             dispatch(
-                updateCustomer({
+                patchCustomerData({
                     customerId: customer._id,
-                    updatedCustomerData: formData,
+                    patchedCustomerData: formData,
                 })
             );
             toast.success('Customer is updated successfully');
@@ -74,9 +76,10 @@ const UpdateCustomerComponent = ({ customer }) => {
     }, [customer]);
     return (
         <>
+
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className='ml-[300px] mt-[60px]  '
+                className='  top-[100px] left-[380px] absolute p-4 bg-lime-50  rounded-xl'
             >
                 <div className='flex flex-col gap-5 text-black-800 w-[700px] '>
                     <div>
@@ -139,7 +142,7 @@ const UpdateCustomerComponent = ({ customer }) => {
                             type='password'
                             variant='bordered'
 
-                            // {...register('password')}
+                             {...register('password')}
                         />
 
                         <div>
@@ -240,6 +243,7 @@ const UpdateCustomerComponent = ({ customer }) => {
                     />
                 </div>
             </form>
+           
         </>
     );
 };

@@ -96,6 +96,7 @@ const customersSlice = createSlice({
                 state.isLoading = true;
                 state.data = [];
                 state.error = '';
+                console.log('pending')
             })
             .addCase(fetchCustomers.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -107,6 +108,7 @@ const customersSlice = createSlice({
                 state.isLoading = false;
                 state.state.error = action.error.message;
             })
+
 
             // customers by id
             .addCase(customersById.pending, (state) => {
