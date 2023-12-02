@@ -20,7 +20,7 @@ import NProgress from 'nprogress';
 import { Link } from 'react-router-dom';
 
 import { MdModeEditOutline } from 'react-icons/md';
-import { FaEye } from 'react-icons/fa';
+import { FaEye, FaUserCircle } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { VerticalDotsIcon } from '../../icons/Icons';
 
@@ -211,10 +211,11 @@ const UsersTable = () => {
                 case 'role':
                     return (
                         <p
-                            className={`capitalize text-sm font-semibold text-${
+                            className={`flex items-center gap-2 capitalize text-sm font-semibold text-${
                                 roleColorMap[user.role.toLowerCase()]
                             }`}
                         >
+                            <FaUserCircle />
                             {cellValue}
                         </p>
                     );
@@ -310,6 +311,7 @@ const UsersTable = () => {
                 columns={columns}
                 loading={isGetAllUsersLoading || isGetAllUsersFetching}
                 data={users}
+                isUser={true}
             />
         );
     }, [
@@ -363,8 +365,6 @@ const UsersTable = () => {
         }),
         []
     );
-
-    console.log(users);
 
     return (
         <>

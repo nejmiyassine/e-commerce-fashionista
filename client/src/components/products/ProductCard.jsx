@@ -10,9 +10,18 @@ import {
 } from 'react-icons/md';
 import { FaCartPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setProduct } from '../../features/products/productsSlice';
 
 const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
+    const dispatch = useDispatch();
+
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const handleUpdateProduct = (product) => {
+        console.log(product);
+        dispatch(setProduct(product));
+    };
 
     const handlePrevClick = () => {
         setCurrentImageIndex((prevIndex) =>
@@ -45,6 +54,7 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
                             <Link
                                 to={`/admin/edit/product/${product._id}`}
                                 className='absolute top-10 left-6 transform -translate-y-1/2 rounded-full bg-white p-2 shadow-md'
+                                onClick={() => handleUpdateProduct(product)}
                             >
                                 <MdEdit className='transition-all text-green-500 w-5 h-5' />
                             </Link>

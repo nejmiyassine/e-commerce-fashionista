@@ -29,8 +29,7 @@ const Products = () => {
         setSelectedCategory(event.target.value);
         setSearch(''); // Clear search when a category is selected
     };
-    // console.log(products)
-    // console.log(JSON.stringify(products, null, 2));
+
     return (
         <Layout>
             {deleteModel && (

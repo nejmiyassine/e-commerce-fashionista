@@ -1,25 +1,29 @@
 /* eslint-disable react/prop-types */
+import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BiDollar, BiX } from 'react-icons/bi';
-import axios from 'axios';
-import {
-    editProduct,
-    getProductById,
-} from '../../../features/products/productsSlice';
-import { getAllCategories } from '../../../features/categories/categoriesSlice';
-import Layout from '../../../layouts/Layout';
 import { Input, Select, SelectItem, Textarea } from '@nextui-org/react';
+// import { useParams } from 'react-router-dom';
+
+import { BiDollar, BiX } from 'react-icons/bi';
 import { ImListNumbered } from 'react-icons/im';
 import { CgOptions, CgRename } from 'react-icons/cg';
 import { LuAsterisk } from 'react-icons/lu';
 import { IoMdCloudUpload } from 'react-icons/io';
-import { useParams } from 'react-router-dom';
+
+import {
+    editProduct,
+    // getProductById,
+} from '../../../features/products/productsSlice';
+import { getAllCategories } from '../../../features/categories/categoriesSlice';
+import Layout from '../../../layouts/Layout';
 import LoadingSpinner from '../../../components/LoadingSpinner';
-import { toast } from 'react-toastify';
+import { useNavigate, useParams } from 'react-router-dom';
+// import { toast } from 'react-toastify';
 
 function EditProduct() {
     const ref = useRef();
+    const navigate = useNavigate();
     const { productId } = useParams();
     const dispatch = useDispatch();
     const { product, isLoading } = useSelector((state) => state.products);
@@ -33,19 +37,18 @@ function EditProduct() {
     );
     const [options, setOptions] = useState(product.options || []);
     const [charOptions, setCharOptions] = useState('');
-    const [category, setCategory] = useState(product.category_id || '');
+    const [category, setCategory] = useState(product.category || '');
     const [short_description, setShort_description] = useState(
         product.short_description || ''
     );
     const [long_description, setLong_description] = useState(
         product.long_description || ''
     );
-    const [editedImages, setEditedImages] = useState([]);
     const [quantity, setQuantity] = useState(product.quantity || '');
+    const [editedImages, setEditedImages] = useState([]);
     const [existingImages, setExistingImages] = useState(
         product.product_images || []
     );
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (
@@ -60,32 +63,8 @@ function EditProduct() {
     }, [charOptions]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const productData = await dispatch(getProductById(productId));
-                await dispatch(getAllCategories());
-
-                setOptions(productData.options || []);
-                setCharOptions('');
-                setName(productData.product_name || '');
-                setPrice(productData.price || '');
-                setDiscount_price(productData.discount_price || '');
-                setCategory(productData.category_id || '');
-                setShort_description(productData.short_description || '');
-                setLong_description(productData.long_description || '');
-                setQuantity(productData.quantity || '');
-                setExistingImages(productData.product_images || []);
-                setLoading(false);
-            } catch (error) {
-                // Handle errors
-                toast.error(error.data.message, {
-                    position: 'bottom-right',
-                });
-            }
-        };
-
-        fetchData();
-    }, [dispatch, productId]);
+        dispatch(getAllCategories());
+    }, [dispatch]);
 
     const handleClick = () => {
         ref.current?.click();
@@ -124,9 +103,8 @@ function EditProduct() {
             };
 
             // Dispatch the editProduct action with updated product data
-            dispatch(
-                editProduct({ id: product._id, data: updatedProductData })
-            );
+            dispatch(editProduct({ id: productId, data: updatedProductData }));
+            navigate('/admin/products');
         } catch (error) {
             console.error('Error updating product:', error);
         }
@@ -141,11 +119,9 @@ function EditProduct() {
         setExistingImages(updatedImages);
     };
 
-    if (loading || isLoading) {
+    if (isLoading || !product) {
         return <LoadingSpinner />;
     }
-
-    console.log(product);
 
     return (
         <Layout>
@@ -164,7 +140,7 @@ function EditProduct() {
                             labelPlacement='outside'
                             type='text'
                             label='Product Name'
-                            aria-label='Product Name'
+                            aria-label='Name'
                             placeholder='Enter Product Name'
                             variant='bordered'
                             value={name}
@@ -181,7 +157,7 @@ function EditProduct() {
                             labelPlacement='outside'
                             type='number'
                             label='Product Quantity'
-                            aria-label='Product Quantity'
+                            aria-label='Quantity'
                             placeholder='Quantity'
                             value={quantity}
                             variant='bordered'
@@ -197,7 +173,7 @@ function EditProduct() {
                             labelPlacement='outside'
                             type='number'
                             label='Product Discount Price'
-                            aria-label='Product Discount Price'
+                            aria-label='Discount Price'
                             placeholder='Product Discount Price'
                             value={discount_price}
                             variant='bordered'
@@ -213,7 +189,7 @@ function EditProduct() {
                             labelPlacement='outside'
                             type='number'
                             label='Product Price'
-                            aria-label='Product Price'
+                            aria-label='Price'
                             placeholder='Product Price'
                             value={price}
                             variant='bordered'
@@ -265,7 +241,7 @@ function EditProduct() {
                                 value={charOptions}
                                 id='options'
                                 type='text'
-                                placeholder='...'
+                                placeholder='Product options (xs, sm, m, ...etc.)'
                                 disabled={options.length === optionsLength}
                             />
                         </div>
@@ -278,7 +254,7 @@ function EditProduct() {
                             variant='underlined'
                             labelPlacement='outside'
                             label='Product Category'
-                            aria-label='Product Category'
+                            aria-label='Category'
                             placeholder='Select product category'
                             onChange={(e) => setCategory(e.target.value)}
                             value={category}
@@ -370,7 +346,7 @@ function EditProduct() {
                                 className='hidden'
                                 ref={ref}
                                 onChange={(event) =>
-                                    setExistingImages((prevImages) => [
+                                    setEditedImages((prevImages) => [
                                         ...prevImages,
                                         event.target.files[0],
                                     ])
