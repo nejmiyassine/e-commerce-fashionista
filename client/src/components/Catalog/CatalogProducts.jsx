@@ -22,7 +22,7 @@ const CatalogProducts = ({
                 {selected.map((select) => (
                     <span
                         key={select}
-                        className='font-semibold capitalize p-1 bg-gray-300/50 rounded-md'
+                        className='font-semibold capitalize py-1 px-2 bg-black text-white rounded-md'
                     >
                         {select}
                     </span>
@@ -47,7 +47,7 @@ const CatalogProducts = ({
                 <div className='flex'>
                     <Input
                         isClearable
-                        // variant='bordered'
+                        variant='underlined'
                         fullWidth
                         aria-label='product_name'
                         labelPlacement='outside'
@@ -76,11 +76,7 @@ const CatalogProducts = ({
             <div className={`grid grid-cols-3 gap-4`}>
                 {products.length ? (
                     products.map((product) => (
-                        <ProductCard
-                            key={product._id}
-                            cols={cols}
-                            product={product}
-                        />
+                        <ProductCard key={product._id} product={product} />
                     ))
                 ) : (
                     <div>

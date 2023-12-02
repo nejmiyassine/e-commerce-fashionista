@@ -83,40 +83,33 @@ exports.searchforProduct = async (req, res) => {
     }
 };
 
-// get products by id
-exports.getProductID = async (req, res) => {
+// Get Product By Id
+exports.getProductById = async (req, res) => {
+    const { id } = req.params;
+
     try {
-        const id = req.params.id;
-        const product = await Product.findById(id)
-            .populate('category_id')
-            .exec();
+        const product = await Product.findById(id).populate('category_id');
 
         if (!product) {
-            res.status(404).json({ message: 'ProductiD not found' });
+            return res.status(404).json({ message: 'Product not found' });
         }
 
-        return res.status(200).json({
-            status: 500,
-            data: product,
-            message: 'Product found',
-        });
+        res.status(200).json(product);
     } catch (error) {
-        console.error(error);
-        return res.json({ message: error?.message });
+        res.status(500).json({ message: error.message });
     }
 };
 // get list of products
 exports.listProduct = async (req, res) => {
     try {
-        const page = req.query.page || 1;
-        const itemsPerPage = 10;
-        const pageNumber = parseInt(page, 10) || 1;
-        const skip = (pageNumber - 1) * itemsPerPage;
+        // const page = req.query.page || 1;
+        // const itemsPerPage = 10;
+        // const pageNumber = parseInt(page, 10) || 1;
+        // const skip = (pageNumber - 1) * itemsPerPage;
 
-        const products = await Product.find()
-            .populate('category_id')
-            .skip(skip)
-            .limit(itemsPerPage);
+        const products = await Product.find().populate('category_id');
+        // .skip(skip)
+        // .limit(itemsPerPage);
 
         return res.status(200).json({
             status: 200,

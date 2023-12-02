@@ -3,8 +3,8 @@ import axios from '../../api/axios';
 
 const initialState = {
     products: [],
-    isLoading: true,
-    // editedProduct: null,
+    product: {},
+    isLoading: false,
     error: null,
 };
 
@@ -17,6 +17,20 @@ export const getAllProducts = createAsyncThunk(
             return response.data.data;
         } catch (error) {
             rejectWithValue(error);
+        }
+    }
+);
+
+export const getProductById = createAsyncThunk(
+    'products/getProductById',
+    async (productId, { rejectWithValue }) => {
+        try {
+            const res = await axios.get(`v1/products/product/${productId}`, {
+                withCredentials: true,
+            });
+            return res.data;
+        } catch (error) {
+            rejectWithValue(error.res.data);
         }
     }
 );
@@ -94,6 +108,22 @@ export const productsSlice = createSlice({
             .addCase(getAllProducts.rejected, (state, action) => {
                 state.isLoading = false;
                 state.products = [];
+                state.error = action.error;
+            })
+            // Get Product By Id
+            .addCase(getProductById.pending, (state) => {
+                state.isLoading = true;
+                state.product = {};
+                state.error = null;
+            })
+            .addCase(getProductById.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.product = action.payload;
+                state.error = null;
+            })
+            .addCase(getProductById.rejected, (state, action) => {
+                state.isLoading = false;
+                state.product = {};
                 state.error = action.error;
             })
             .addCase(editProduct.pending, (state) => {

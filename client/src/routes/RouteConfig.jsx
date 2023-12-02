@@ -18,8 +18,11 @@ import AuthRegister from '../pages/auth/AuthRegister';
 import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
 
-import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
+import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo';
 import CustomerProfile from '../pages/FrontCustomers/customerProfile';
+import EditProduct from '../pages/admin/Products/EditProduct';
+import AddProduct from '../pages/admin/Products/AddProduct';
+import PageNotFound from '../pages/PageNotFound';
 
 const RouteConfig = () => {
     return (
@@ -27,6 +30,7 @@ const RouteConfig = () => {
             <Routes>
                 {/* Unauthorized */}
                 <Route path='/unauthorized' element={<Unauthorized />} />
+                <Route path='*' element={<PageNotFound />} />
 
                 <Route exact path='/' element={<Home />} />
                 <Route path='/catalog' element={<Catalog />} />
@@ -43,6 +47,12 @@ const RouteConfig = () => {
                     }
                 >
                     <Route path='/admin/products' element={<Products />} />
+                    <Route
+                        path='/admin/edit/product/:productId'
+                        element={<EditProduct />}
+                    />
+                    <Route path='/admin/add/product' element={<AddProduct />} />
+
                     <Route path='/admin/categories' element={<Categories />} />
                     <Route path='/admin/orders' element={<Orders />} />
                     <Route
@@ -70,10 +80,7 @@ const RouteConfig = () => {
                         path='/admin/users/:userId'
                         element={<UserDetails />}
                     />
-                    <Route
-                        path='/landingPage'
-                        element={<LandingP />}
-                    />
+                    <Route path='/landingPage' element={<LandingP />} />
                 </Route>
 
                 {/* front-store */}

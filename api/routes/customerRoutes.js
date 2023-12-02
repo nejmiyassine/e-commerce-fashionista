@@ -90,7 +90,7 @@ router.put('/:id', restrictToCustomer, updateCustomers);
 router.patch('/:id', customerCanUpdate);
 // router.patch('/:id', restrictToCustomer, updateCustomerProfile);
 router.delete('/:id', restrictTo('admin', 'manager'), deleteCustomerById);
-router.get('/profile/:id', restrictToCustomer, getProfile);
+// router.get('/profile/:id', restrictToCustomer, getProfile);
 
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
 router.post('/forgot-password', (req, res) =>

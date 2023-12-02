@@ -2,9 +2,16 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import { MdFavorite } from 'react-icons/md';
+import {
+    MdOutlineStar,
+    MdFavoriteBorder,
+    MdDelete,
+    MdEdit,
+} from 'react-icons/md';
+import { FaCartPlus } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const handlePrevClick = () => {
@@ -20,7 +27,7 @@ const ProductCard = ({ product }) => {
     };
 
     return (
-        <div>
+        <div className={`${isAdmin && 'bg-white rounded-md py-2 px-4'}`}>
             <div className='relative group'>
                 <img
                     src={
@@ -32,13 +39,31 @@ const ProductCard = ({ product }) => {
                     className={`h-[350px] w-full object-cover fade-out`}
                 />
 
-                <div className='opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
-                    <button
-                        onClick={handleNextClick}
-                        className='absolute top-10 right-6 transform -translate-y-1/2'
-                    >
-                        <MdFavorite className='text-red-500/50 transition-all hover:text-red-500 w-6 h-6' />
-                    </button>
+                <div className='z-30 opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
+                    {isAdmin ? (
+                        <div className='flex gap-1'>
+                            <Link
+                                to={`/admin/edit/product/${product._id}`}
+                                className='absolute top-10 left-6 transform -translate-y-1/2 rounded-full bg-white p-2 shadow-md'
+                            >
+                                <MdEdit className='transition-all text-green-500 w-5 h-5' />
+                            </Link>
+
+                            <button
+                                onClick={() => setDeleteModel(product._id)}
+                                className='absolute top-10 right-6 transform -translate-y-1/2 rounded-full bg-white p-2 shadow-md'
+                            >
+                                <MdDelete className='transition-all text-red-500 w-5 h-5' />
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={handleNextClick}
+                            className='absolute top-10 right-6 transform -translate-y-1/2 rounded-full bg-white p-2 shadow-md'
+                        >
+                            <MdFavoriteBorder className='transition-all hover:text-red-500 w-5 h-5' />
+                        </button>
+                    )}
                 </div>
 
                 {product.product_images.length > 0 && (
@@ -47,39 +72,61 @@ const ProductCard = ({ product }) => {
                             onClick={handlePrevClick}
                             className='absolute top-1/2 left-4 transform -translate-y-1/2'
                         >
-                            <IoIosArrowBack className='text-primaryColor-orange w-6 h-6' />
+                            <IoIosArrowBack className='w-5 h-5' />
                         </button>
                         <button
                             onClick={handleNextClick}
                             className='absolute top-1/2 right-4 transform -translate-y-1/2'
                         >
-                            <IoIosArrowForward className='text-primaryColor-orange w-6 h-6' />
+                            <IoIosArrowForward className='w-5 h-5' />
                         </button>
                     </div>
                 )}
 
-                <div className='absolute w-full flex justify-center gap-2 px-2 py-1 text-white bottom-0 left-0 opacity-0 transition-opacity duration-200 bg-black/50 group-hover:opacity-100'>
-                    {product.options.map((option, idx) => (
-                        <span
-                            className='cursor-pointer font-regular  transition duration-200 hover:font-semibold'
-                            key={idx}
-                        >
-                            {option}
-                        </span>
-                    ))}
+                {!isAdmin && (
+                    <div className='absolute w-full flex justify-center gap-2 px-2 py-1 text-white bottom-6 left-0 opacity-0 transition-opacity duration-200  group-hover:opacity-100'>
+                        <button className='flex items-center gap-1 rounded-md bg-black/70 text-white hover:bg-black font-semibold transition-all  py-2 mx-auto px-4'>
+                            <FaCartPlus />
+                            <span>Add to cart</span>
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            <div className='flex flex-col gap-1 py-2'>
+                <div className='flex items-center justify-between'>
+                    <div className='flex'>
+                        <MdOutlineStar size={16} className='text-yellow-500' />
+                        <MdOutlineStar size={16} className='text-yellow-500' />
+                        <MdOutlineStar size={16} className='text-yellow-500' />
+                        <MdOutlineStar size={16} className='text-yellow-500' />
+                        <MdOutlineStar size={16} className='text-yellow-500' />
+                    </div>
+                    {isAdmin && (
+                        <p className='text-gray-500'>
+                            {product?.category_id.name
+                                ? product?.category_id.name
+                                : categories.find(
+                                      (cat) => cat._id === product?.category_id
+                                  )?.name}
+                        </p>
+                    )}
                 </div>
-            </div>
 
-            <div className='flex items-center justify-between gap-2 py-2'>
-                <h3 className='text-lg font-bold'>{product.product_name}</h3>
-                <p className='font-semibold text-sm text-right text-primaryColor-orange'>
-                    ${product.price}
-                </p>
-            </div>
+                <Link
+                    to={`${
+                        isAdmin
+                            ? `/admin/product/${product._id}`
+                            : `/product/${product._id}`
+                    }`}
+                >
+                    <h3 className='text-xl font-bold'>
+                        {product.product_name}
+                    </h3>
+                </Link>
 
-            <button className='font-semibold transition-all hover:bg-primaryColor-orange hover:text-white py-2 border w-full mx-auto px-4'>
-                Add to cart
-            </button>
+                <p className='font-semibold text-sm'>${product.price}</p>
+            </div>
         </div>
     );
 };
@@ -87,6 +134,10 @@ const ProductCard = ({ product }) => {
 export default ProductCard;
 
 ProductCard.propTypes = {
-    cols: PropTypes.number,
+    // cols: PropTypes.number,
+    isAdmin: PropTypes.any,
     product: PropTypes.object,
+    categories: PropTypes.arrayOf(PropTypes.object),
+    setEditModel: PropTypes.func,
+    setDeleteModel: PropTypes.func,
 };
