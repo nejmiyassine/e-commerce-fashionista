@@ -92,6 +92,7 @@ const CustomersTable = ({ data, error, loading }) => {
         );
     }, [visibleColumns]);
 
+    console.log('data' , data)
     const filteredItems = React.useMemo(() => {
         let filteredCustomers = data;
 

@@ -53,10 +53,9 @@ exports.getFavoritesProductsById = async (req, res) => {
 
 exports.getAllFavoritesProducts = async (req, res) => {
     try {
-        const favorite = await Favorite.find().populate("product" ,{product_name:1 , product_image : 1  });
-        console.log('favorites' , favorite)
+        const favorite = await Favorite.find().populate('product');
         if (!favorite) {
-            // res.status(404).json({ message: 'favorite products not found' });
+            res.status(404).json({ message: 'favorite products not found' });
         }
         return res.status(200).json(favorite);
     } catch (error) {

@@ -20,6 +20,7 @@ import Catalog from '../pages/catalog/Catalog';
 
 import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
 import CustomerProfile from '../pages/FrontCustomers/CustomerProfile';
+import Favorites from '../pages/favorites/Favorites'
 
 const RouteConfig = () => {
     return (
@@ -85,6 +86,11 @@ const RouteConfig = () => {
                 <Route
                     path='/customerProfile/:customerId'
                     element={<CustomerProfile />}
+                />
+
+                <Route 
+                   path='/customersFavorites' 
+                   element={<Favorites />}
                 />
 
             </Routes>

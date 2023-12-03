@@ -53,6 +53,7 @@ const UpdateCustomerComponent = ({ customer }) => {
     console.log('customer from update Customer component', customer);
 
     const onSubmit = (formData) => {
+        
         if (isEditing) {
             // navigate('/admin/customers');
             reset();
