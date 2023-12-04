@@ -1,57 +1,42 @@
-import { useState } from "react"
+import {useState} from 'react'
 
-const ViewFavorites = ({favorites}) => {
-    console.log('favorites' , favorites[4])
-    const Gfavorites = favorites[4]
-    console.log('f' , Gfavorites)
+const ViewFavorites = ({ favorites }) => {
+    console.log('favorites', favorites._id);
+ const[del, setDelete] = useState('');
 
-   const productName = () => { if (Gfavorites) {
-        const display = Gfavorites.product
-         
-         console.log('display' , display)
+ const removeProduct = () => {
 
-        // const display  = favorites.map((favorite) =>
-        //      favorite.product
-        //  );
-         //console.log('display' , display)
+    dispatch(
+        setDelete({
+            favoriteId : favorites._id
+            
+        })
+    )
+ }
+    return (
+        <div className='grid grid-cols-3 gap-14 m-5 p-5 '>
+            {favorites &&
+                favorites.map((favorite) => (
+                    <div
+                        key={favorite.product._id}
+                        className='w-auto h-auto'
+                    >
+                        <div>
+                            <p className="text-center">{favorite.product.product_name}</p>
+                            <img className="w-[500px] h-[280px] "
+                                src={`${favorite.product.product_images[0]}`}
+                                alt='image of the product'
+                            />
+                        </div>
 
-         const displayProduct = display.product_name
-         console.log('d' , displayProduct)
-         return displayProduct
+                        <button onClick={removeProduct} type="button" className="bg-gray-300 font-medium rounded-md p-2">Remove Product</button>
+                    </div>
+                ))}
+        <div>
+        </div>
+        </div>
 
-         // const displayProduct = display.map((d)=> {
-         //     d.product_id
-         // })
-         // console.log('d' , displayProduct)
+    );
+};
 
-        }
-    }
-        const c = productName()
-
-        const productImage = () => { if (Gfavorites) {
-            const display = Gfavorites.product
-             console.log('display' , display)
-             const displayProduct = display.product_image
-             console.log('d' , displayProduct)
-             return displayProduct
-            }
-        }
-         const i = productImage()
-   return (
-    <div>
-        dfgdfgsf
-    <h1>{c}</h1>
-      <img
-                    src={` ${i}`}
-                    alt={`${i}`}
-                />  
-
-    <h1></h1>
-    <div>
-        <h4></h4>
-    </div>
-    </div>
-)
-}
-
-export default ViewFavorites
+export default ViewFavorites;

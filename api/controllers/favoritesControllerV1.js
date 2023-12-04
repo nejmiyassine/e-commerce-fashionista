@@ -23,6 +23,7 @@ exports.addToFavorites = async (req, res) => {
         if (exists) {
             return res.json({ message: 'it is already added to favorite' });
         }
+
         if (customer && product) {
             const favorite = await Favorite.create({
                 product: product._id,
@@ -53,7 +54,10 @@ exports.getFavoritesProductsById = async (req, res) => {
 
 exports.getAllFavoritesProducts = async (req, res) => {
     try {
-        const favorite = await Favorite.find().populate('product');
+
+        const favorite = await Favorite.find().populate(
+            'product'
+        );
         if (!favorite) {
             res.status(404).json({ message: 'favorite products not found' });
         }
