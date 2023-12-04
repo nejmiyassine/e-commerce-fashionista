@@ -16,8 +16,14 @@ import AuthLogin from '../pages/auth/AuthLogin';
 import AuthRegister from '../pages/auth/AuthRegister';
 import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
+// import HomeTest from '../components/cart/HomeTest';
 
-import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
+import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo';
+// testing cart
+import HomeTest from './../components/cart/HomeTest';
+import Cart from './../components/cart/cart';
+import Checkout from '../components/cart/Checkout';
+import CheckoutSuccess from '../components/cart/CheckoutSuccess';
 
 const RouteConfig = () => {
     return (
@@ -74,6 +80,22 @@ const RouteConfig = () => {
                 <Route
                     path='/customersProfile/:customerId'
                     element={<UpdateCustomerInfo />}
+                />
+                <Route
+                    path='/hometest'
+                    element={<HomeTest/>}
+                />
+                <Route
+                    path='/cart'
+                    element={<Cart/>}
+                />
+                <Route
+                    path='/checkout-success'
+                    element={<CheckoutSuccess/>}
+                />
+                <Route
+                    path='/Checkout'
+                    element={<Checkout/>}
                 />
             </Routes>
         </Router>
