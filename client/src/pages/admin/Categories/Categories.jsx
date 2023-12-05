@@ -87,7 +87,7 @@ const ManageCategories = () => {
             const { data } = await dispatch(
                 editCategory({ id: selectedCategory._id, name: updatedName })
             );
-            
+
             if (data?.success) {
                 setUpdatedName('');
                 setSelectedCategory(null);
@@ -158,8 +158,7 @@ const ManageCategories = () => {
                         />
                     </div>
 
-                    <div className=''>
-                        {/* Button to open the add category modal on the far right */}
+                    <div>
                         <button
                             onClick={openAddCategoryModal}
                             className='flex items-center justify-center font-semibold gap-1 transition bg-black text-white border border-black hover:bg-white hover:text-black hover:border hover:border-black px-4 py-2'

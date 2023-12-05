@@ -17,7 +17,7 @@ const CatalogProducts = ({
     bottomContent,
 }) => {
     return (
-        <section className='px-4 border-l'>
+        <section className='px-4'>
             <div className='text-sm flex items-center gap-2'>
                 <span className='text-gray-500'>Selected Filters: </span>
                 {selected.map((select) => (
@@ -66,16 +66,18 @@ const CatalogProducts = ({
                     />
                 </div>
 
-                <CatalogChangeLayout
-                    cols={cols}
-                    handleChangeCols={handleChangeCols}
-                />
+                <div className='hidden md:block'>
+                    <CatalogChangeLayout
+                        cols={cols}
+                        handleChangeCols={handleChangeCols}
+                    />
+                </div>
             </div>
 
             <Line />
 
             <div
-                className={`grid ${
+                className={`grid grid-col-1 md:${
                     cols === 2 ? 'grid-cols-2' : 'grid-cols-3'
                 } gap-4`}
             >
@@ -85,6 +87,7 @@ const CatalogProducts = ({
                             key={product._id}
                             product={product}
                             bottomContent={bottomContent}
+                            isAdmin={false}
                         />
                     ))
                 ) : (

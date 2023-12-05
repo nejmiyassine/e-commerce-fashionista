@@ -17,7 +17,9 @@ const CatalogSidebarItem = ({ title, children }) => {
                 onClick={handleToggle}
             >
                 <div className='flex items-center gap-1'>
-                    <CiFilter />
+                    <div className='hidden md:block'>
+                        <CiFilter />
+                    </div>
                     <h2 className='text-sm font-semibold'>{title}</h2>
                 </div>
 

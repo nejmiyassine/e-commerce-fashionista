@@ -3,6 +3,7 @@ import { Checkbox, CheckboxGroup, Radio, RadioGroup } from '@nextui-org/react';
 
 import CatalogSidebarItem from './CatalogSidebarItem';
 import { prices } from '../../data/prices';
+import { IoFilter } from 'react-icons/io5';
 
 const CatalogSidebar = ({
     categories,
@@ -10,9 +11,15 @@ const CatalogSidebar = ({
     setSelected,
     selectedPrice,
     setSelectedPrice,
+    isSidebarOpen,
+    toggleSidebar,
 }) => {
     return (
-        <div className='flex flex-col gap-3'>
+        <div className={`flex flex-col gap-3 ${isSidebarOpen ? 'w-full' : ''}`}>
+            <button onClick={toggleSidebar} className='toggle-button'>
+                <IoFilter size={22} />
+            </button>
+
             {/* All Categories */}
             <CatalogSidebarItem title='Filter By Categories'>
                 <CheckboxGroup value={selected} onValueChange={setSelected}>
@@ -24,7 +31,6 @@ const CatalogSidebar = ({
                             <Checkbox value={name} size='sm' color='warning'>
                                 <span>{name}</span>
                             </Checkbox>
-                            <p className='text-gray-400 text-sm'>32</p>
                         </div>
                     ))}
                 </CheckboxGroup>
@@ -61,4 +67,6 @@ CatalogSidebar.propTypes = {
     setSelected: PropTypes.func,
     selectedPrice: PropTypes.array,
     setSelectedPrice: PropTypes.func,
+    isSidebarOpen: PropTypes.bool,
+    toggleSidebar: PropTypes.func,
 };

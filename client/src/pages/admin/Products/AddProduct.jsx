@@ -15,6 +15,7 @@ import { createProduct } from '../../../features/products/productsSlice';
 import Layout from '../../../layouts/Layout';
 // import FileInput from '../../../components/FileInput';
 import { IoMdCloudUpload } from 'react-icons/io';
+import { toast } from 'react-toastify';
 
 function AddProduct() {
     const navigate = useNavigate();
@@ -81,11 +82,25 @@ function AddProduct() {
                 product_images: imageUrls, // Add the image URL to the product data
             };
 
-            console.log(productData);
-
             // Dispatch the createProduct action with product data
-            dispatch(createProduct(productData));
-            navigate('/admin/products');
+            if (
+                !name ||
+                !price ||
+                !discount_price ||
+                !options ||
+                !category ||
+                !short_description ||
+                !long_description ||
+                !images.length ||
+                !quantity
+            ) {
+                toast.error('All Fields are required!', {
+                    position: 'bottom-right',
+                });
+            } else {
+                dispatch(createProduct(productData));
+                navigate('/admin/products');
+            }
         } catch (error) {
             console.error('Error adding product:', error);
         }

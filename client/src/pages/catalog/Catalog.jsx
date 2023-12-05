@@ -24,6 +24,7 @@ const Catalog = () => {
     const [selectedPrice, setSelectedPrice] = useState([]);
     const [filterValue, setFilterValue] = useState('');
     const [columnCount, setColumnCount] = useState(2);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const [rowsPerPage, setRowsPerPage] = useState(6);
     const [page, setPage] = useState(1);
@@ -32,6 +33,10 @@ const Catalog = () => {
 
     const handleColumnChange = (newColumnCount) => {
         setColumnCount(newColumnCount);
+    };
+
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
     };
 
     const onSearchChange = useCallback((value) => {
@@ -149,18 +154,31 @@ const Catalog = () => {
 
     return (
         <>
-            <Navbar />
-            <div className='flex gap-4 p-6'>
-                <aside className='w-1/6'>
+            <Navbar toggleSidebar={toggleSidebar} />
+            <div className='flex gap-4'>
+                <div
+                    className={`inset-0 z-30 bg-black opacity-50 ${
+                        isSidebarOpen ? 'fixed' : 'hidden'
+                    }`}
+                    onClick={toggleSidebar}
+                ></div>
+
+                <aside
+                    className={`fixed top-0 min-h-screen bg-white z-50 p-3 transition-all ${
+                        isSidebarOpen ? 'w-[300px]' : 'hidden'
+                    }`}
+                >
                     <CatalogSidebar
                         categories={categories}
                         selected={selected}
                         setSelected={setSelected}
                         selectedPrice={selectedPrice}
                         setSelectedPrice={setSelectedPrice}
+                        isSidebarOpen={isSidebarOpen}
+                        toggleSidebar={toggleSidebar}
                     />
                 </aside>
-                <div className='w-full'>
+                <div className='w-full p-2 md:p-4 lg:p-6'>
                     {items && (
                         <CatalogProducts
                             selected={selected}
