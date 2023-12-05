@@ -14,6 +14,23 @@ export const fetchFavorites = createAsyncThunk(
     }
 );
 
+
+export const getFavoritesById = createAsyncThunk(
+    'favorites/getFavoritesById' ,
+    async ({rejectWithValue}) => {
+        try {
+
+            const res = await API.get(`favorites/${customerId}` , {
+                withCredentials: true,
+            })
+            console.log('getFavoriteById' , res.data)
+
+        } catch(error) {
+            rejectWithValue(error.res.data)
+
+        }
+
+})
 export const deleteFavorites = createAsyncThunk(
     'favorites/deleteFavorites',
     async ({ favoriteId }, { rejectWithValue }) => {

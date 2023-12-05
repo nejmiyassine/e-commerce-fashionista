@@ -38,7 +38,8 @@ exports.addToFavorites = async (req, res) => {
 exports.getFavoritesProductsById = async (req, res) => {
     try {
         const id = req.params.favoriteID;
-        const favorite = await Favorite.findById(id).populate('product');
+        const favorite = await Favorite.findById(id).populate('product' , {product_name: 1 , product_images : 1 , short_description: 1 ,
+             long_description : 1 , price:1 , quantity : 1 , discount_price : 1 , options: 1 ,sku:1});
 
         if (!favorite) {
             return res
