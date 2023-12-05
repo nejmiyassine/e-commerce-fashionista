@@ -1,7 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { IoCloseOutline } from 'react-icons/io5';
+import { IoIosAdd, IoIosRemove } from 'react-icons/io';
+
+import { MdDelete } from 'react-icons/md';
 
 import { toggleBag } from '../features/bag/bagSlice';
+import { sliceText } from '../utils/sliceText';
+import { useState } from 'react';
 
 /* eslint-disable react/prop-types */
 const BagProductsSidebar = () => {
@@ -13,12 +18,58 @@ const BagProductsSidebar = () => {
         dispatch(toggleBag(false));
     };
 
+    const [quantity, setQuantity] = useState(1);
+
+    const handleIncrementQuantity = () => {
+        setQuantity((prevQuantity) =>
+            prevQuantity > 0 ? prevQuantity + 1 : 1
+        );
+    };
+
+    const handleDecrementQuantity = () => {
+        setQuantity((prevQuantity) =>
+            prevQuantity > 1 ? prevQuantity - 1 : 1
+        );
+    };
+
     const cartItems = [
         {
             _id: 1,
             product_name: 'title',
             product_image:
-                'https://images.unsplash.com/photo-1701198067358-dbe0ac58a2c2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwzfHx8ZW58MHx8fHx8',
+                'https://res.cloudinary.com/dgbwl69xi/image/upload/v1701696965/riexc6dolulms3he4uxf.jpg',
+            quantity: 1,
+            price: 20,
+        },
+        {
+            _id: 2,
+            product_name: 'title',
+            product_image:
+                'https://res.cloudinary.com/dgbwl69xi/image/upload/v1701696965/riexc6dolulms3he4uxf.jpg',
+            quantity: 1,
+            price: 20,
+        },
+        {
+            _id: 3,
+            product_name: 'title',
+            product_image:
+                'https://res.cloudinary.com/dgbwl69xi/image/upload/v1701696965/riexc6dolulms3he4uxf.jpg',
+            quantity: 1,
+            price: 20,
+        },
+        {
+            _id: 4,
+            product_name: 'title',
+            product_image:
+                'https://res.cloudinary.com/dgbwl69xi/image/upload/v1701696965/riexc6dolulms3he4uxf.jpg',
+            quantity: 1,
+            price: 20,
+        },
+        {
+            _id: 5,
+            product_name: 'title',
+            product_image:
+                'https://res.cloudinary.com/dgbwl69xi/image/upload/v1701696965/riexc6dolulms3he4uxf.jpg',
             quantity: 1,
             price: 20,
         },
@@ -31,7 +82,7 @@ const BagProductsSidebar = () => {
 
     return (
         <div
-            className={`fixed inset-0 z-50 overflow-hidden ${
+            className={`fixed w-screen inset-0 z-50 overflow-hidden ${
                 isOpen ? 'block' : 'hidden'
             }`}
         >
@@ -43,84 +94,87 @@ const BagProductsSidebar = () => {
                 ></div>
 
                 {/* Sidebar */}
-                <div className='fixed inset-y-0 left-0 max-w-full flex'>
-                    <div className='w-72 bg-white overflow-y-auto'>
+                <div className='fixed inset-y-0 left-0 max-w-full w-[350px] flex'>
+                    <div className='bg-white overflow-y-auto'>
                         {/* Sidebar Header */}
-                        <div className='p-4 flex items-center'>
-                            <h2 className='text-lg font-semibold'>
-                                My Bag ({cartItems.length} items)
+                        <div className='p-4 flex items-center justify-between border-b'>
+                            <h2 className='text-2xl font-bold'>
+                                My Bag ({cartItems.length})
                             </h2>
                             <button
-                                className='absolute top-2 right-2 text-gray-500'
+                                className='text-gray-500'
                                 onClick={closeBagSidebar}
                             >
-                                <IoCloseOutline />
+                                <IoCloseOutline size={30} />
                             </button>
                         </div>
 
                         {/* Sidebar Content */}
-                        <div className='p-4'>
+                        <div className='p-4 overflow-y-hidden'>
                             {/* Product List */}
                             {cartItems.map((item) => (
-                                <div key={item._id} className='mb-4'>
-                                    <div className='flex items-center mb-2'>
-                                        {/* Product Image */}
+                                <div key={item._id} className='pb-4 last:pb-28'>
+                                    <div className='flex mb-2'>
                                         <img
                                             src={item.product_image}
-                                            alt={item.product_title}
-                                            className='w-12 h-12 object-cover mr-2'
+                                            alt={item.product_name}
+                                            className='w-28 h-50 object-contain mr-2'
                                         />
 
-                                        {/* Product Title */}
-                                        <p className='text-sm font-semibold'>
-                                            {item.product_title}
-                                        </p>
-                                    </div>
+                                        <div className='w-full flex flex-col gap-10 justify-between'>
+                                            <div className='flex items-center justify-between'>
+                                                <p className='text-md capitalize font-bold'>
+                                                    {sliceText(
+                                                        'Dr. Scholl is Shoes womens Brianna Ankle Boot',
+                                                        24
+                                                    )}
+                                                </p>
+                                                <p className='font-semibold'>
+                                                    ${item.price}
+                                                </p>
+                                            </div>
 
-                                    <div className='flex items-center'>
-                                        {/* Counter */}
-                                        <div className='flex items-center mr-4'>
-                                            {/* Add and Remove buttons go here */}
-                                            {/* You can use a state to manage the quantity */}
-                                            <button className='mr-1'>-</button>
-                                            <span>{item.quantity}</span>
-                                            <button className='ml-1'>+</button>
+                                            <div className='flex items-center justify-between'>
+                                                <div className='flex items-center border gap-4 p-1 mr-4'>
+                                                    <IoIosRemove
+                                                        className='cursor-pointer'
+                                                        onClick={
+                                                            handleDecrementQuantity
+                                                        }
+                                                    />
+                                                    <span className='font-semibold'>
+                                                        {quantity}
+                                                    </span>
+                                                    <IoIosAdd
+                                                        className='cursor-pointer'
+                                                        onClick={
+                                                            handleIncrementQuantity
+                                                        }
+                                                    />
+                                                </div>
+
+                                                <button className='ml-2 text-gray-500'>
+                                                    <span className='sr-only'>
+                                                        Delete
+                                                    </span>
+                                                    <MdDelete size={20} />
+                                                </button>
+                                            </div>
                                         </div>
-
-                                        {/* Price */}
-                                        <p className='text-sm'>${item.price}</p>
-
-                                        {/* Delete Icon */}
-                                        <button className='ml-2 text-red-500'>
-                                            <span className='sr-only'>
-                                                Delete
-                                            </span>
-                                            <svg
-                                                className='h-4 w-4'
-                                                fill='none'
-                                                stroke='currentColor'
-                                                viewBox='0 0 24 24'
-                                                xmlns='http://www.w3.org/2000/svg'
-                                            >
-                                                <path
-                                                    strokeLinecap='round'
-                                                    strokeLinejoin='round'
-                                                    strokeWidth='2'
-                                                    d='M6 18L18 6M6 6l12 12'
-                                                />
-                                            </svg>
-                                        </button>
                                     </div>
                                 </div>
                             ))}
                         </div>
 
                         {/* Sidebar Footer */}
-                        <div className='p-4 border-t'>
-                            <p className='text-lg font-semibold'>
-                                Subtotal: ${subtotal}
-                            </p>
-                            <button className='mt-4 bg-blue-500 text-white p-2 rounded'>
+                        <div className='p-4 border-t z-50 bg-white absolute bottom-0 w-full'>
+                            <div className='flex items-center justify-between text-sm'>
+                                <p className='text-gray-500 font-semibold'>
+                                    Subtotal:
+                                </p>
+                                <p className='font-bold'>${subtotal}</p>
+                            </div>
+                            <button className='mt-4 px-2 py-3 rounded w-full font-semibold transition duration-200 bg-violet-500 text-white hover:bg-violet-700'>
                                 Proceed to Checkout
                             </button>
                         </div>

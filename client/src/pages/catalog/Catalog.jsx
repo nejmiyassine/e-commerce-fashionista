@@ -11,6 +11,7 @@ import { getAllCategories } from '../../features/categories/categoriesSlice';
 import { getAllProducts } from '../../features/products/productsSlice';
 import Navbar from '../../layouts/Navbar';
 import BagProductsSidebar from '../../layouts/BagProductsSidebar';
+import { Pagination } from '@nextui-org/react';
 
 const Catalog = () => {
     const dispatch = useDispatch();
@@ -22,17 +23,21 @@ const Catalog = () => {
     const [selected, setSelected] = useState([]);
     const [selectedPrice, setSelectedPrice] = useState([]);
     const [filterValue, setFilterValue] = useState('');
-    const [cols, setCols] = useState(2);
+    const [columnCount, setColumnCount] = useState(2);
+
+    const [rowsPerPage, setRowsPerPage] = useState(6);
+    const [page, setPage] = useState(1);
 
     const hasSearchFilter = Boolean(filterValue);
 
-    const handleChangeCols = (numOfCols) => {
-        setCols((prevCols) => (prevCols === numOfCols ? prevCols : numOfCols));
+    const handleColumnChange = (newColumnCount) => {
+        setColumnCount(newColumnCount);
     };
 
     const onSearchChange = useCallback((value) => {
         if (value) {
             setFilterValue(value);
+            setPage(1);
         } else {
             setFilterValue('');
         }
@@ -83,6 +88,61 @@ const Catalog = () => {
         return filteredProducts;
     }, [products, hasSearchFilter, selected, selectedPrice, filterValue]);
 
+    const pages = useMemo(() => {
+        return products?.length ? Math.ceil(products.length / rowsPerPage) : 0;
+    }, [products?.length, rowsPerPage]);
+
+    const onRowsPerPageChange = useCallback((e) => {
+        setRowsPerPage(Number(e.target.value));
+        setPage(1);
+    }, []);
+
+    const items = useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        if (Array.isArray(filteredProduct))
+            return filteredProduct.slice(start, end);
+    }, [page, filteredProduct, rowsPerPage]);
+
+    const bottomContent = useMemo(() => {
+        return (
+            <div className='py-2 px-2 flex justify-between items-center'>
+                {pages > 0 ? (
+                    <Pagination
+                        showControls
+                        classNames={{
+                            cursor: 'bg-foreground text-background',
+                        }}
+                        color='default'
+                        variant='light'
+                        page={page}
+                        total={pages}
+                        isDisabled={hasSearchFilter}
+                        onChange={setPage}
+                    />
+                ) : null}
+
+                <div className='flex justify-between gap-2 items-center'>
+                    <span className='text-default-400 text-md'>
+                        Total {products && products.length} products:
+                    </span>
+                    <label className='flex items-center text-default-400 text-small'>
+                        rows per page:
+                        <select
+                            className='bg-transparent outline-none text-default-400 text-small'
+                            onChange={onRowsPerPageChange}
+                        >
+                            <option value='6'>6</option>
+                            <option value='10'>10</option>
+                            <option value='16'>16</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        );
+    }, [onRowsPerPageChange, page, pages, products, hasSearchFilter]);
+
     if (isLoading || isProductsLoading) {
         return <LoadingSpinner />;
     }
@@ -101,19 +161,22 @@ const Catalog = () => {
                     />
                 </aside>
                 <div className='w-full'>
-                    {filteredProduct && (
+                    {items && (
                         <CatalogProducts
                             selected={selected}
                             selectedPrice={selectedPrice}
-                            products={filteredProduct}
+                            products={items}
                             filterValue={filterValue}
-                            cols={cols}
-                            handleChangeCols={handleChangeCols}
+                            cols={columnCount}
+                            handleChangeCols={handleColumnChange}
                             onSearchChange={onSearchChange}
+                            bottomContent={bottomContent}
                         />
                     )}
+                    {bottomContent}
                 </div>
             </div>
+
             <BagProductsSidebar />
         </>
     );

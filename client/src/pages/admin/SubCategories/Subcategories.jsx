@@ -11,6 +11,7 @@ import {
     Tooltip,
     Input,
     Spacer,
+    Pagination,
 } from '@nextui-org/react';
 import { CiSearch } from 'react-icons/ci';
 import { RiAddCircleLine } from 'react-icons/ri';
@@ -33,15 +34,20 @@ const columns = [
 
 const ManageSubcategories = () => {
     const dispatch = useDispatch();
+    const { subcategories, isLoading, error } = useSelector(
+        (state) => state.subcategories
+    );
+
     const [name, setName] = useState('');
     const [updatedName, setUpdatedName] = useState('');
     const [selectedSubcategory, setSelectedSubcategory] = useState(null);
     const [confirmDelete, setConfirmDelete] = useState(null);
     const [searchTerm, setSearchTerm] = useState('');
     const [isAddingSubcategory, setIsAddingSubcategory] = useState(false);
-    const { subcategories, isLoading, error } = useSelector(
-        (state) => state.subcategories
-    );
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [page, setPage] = useState(1);
+
+    const hasSearchFilter = Boolean(searchTerm);
 
     useEffect(() => {
         if (error) {
@@ -93,20 +99,16 @@ const ManageSubcategories = () => {
         }
 
         try {
-            const { data } = await dispatch(
+            await dispatch(
                 editSubcategory({
                     id: selectedSubcategory._id,
                     name: updatedName,
                 })
             );
 
-            if (data?.succes) {
-                setUpdatedName('');
-                setSelectedSubcategory(null);
-                dispatch(getAllSubcategories());
-            } else {
-                console.error(data.message);
-            }
+            setUpdatedName('');
+            setSelectedSubcategory(null);
+            dispatch(getAllSubcategories());
         } catch (error) {
             console.error('Error during subcategory update', error);
         }
@@ -151,6 +153,25 @@ const ManageSubcategories = () => {
             subcategory.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const pages = useMemo(() => {
+        return subcategories?.length
+            ? Math.ceil(subcategories.length / rowsPerPage)
+            : 0;
+    }, [subcategories?.length, rowsPerPage]);
+
+    const onRowsPerPageChange = useCallback((e) => {
+        setRowsPerPage(Number(e.target.value));
+        setPage(1);
+    }, []);
+
+    const items = useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        if (Array.isArray(filteredSubcategories))
+            return filteredSubcategories.slice(start, end);
+    }, [page, filteredSubcategories, rowsPerPage]);
+
     const topContent = useMemo(() => {
         return (
             <div className='container mx-auto'>
@@ -189,6 +210,45 @@ const ManageSubcategories = () => {
             </div>
         );
     }, [searchTerm]);
+
+    const bottomContent = useMemo(() => {
+        return (
+            <div className='py-2 px-2 flex justify-between items-center'>
+                {pages > 0 ? (
+                    <Pagination
+                        showControls
+                        classNames={{
+                            cursor: 'bg-foreground text-background',
+                        }}
+                        color='default'
+                        variant='light'
+                        isDisabled={hasSearchFilter}
+                        page={page}
+                        total={pages}
+                        onChange={setPage}
+                    />
+                ) : null}
+
+                <div className='flex justify-between gap-2 items-center'>
+                    <span className='text-default-400 text-md'>
+                        Total {subcategories && subcategories.length}{' '}
+                        subcategories:
+                    </span>
+                    <label className='flex items-center text-default-400 text-small'>
+                        rows per page:
+                        <select
+                            className='bg-transparent outline-none text-default-400 text-small'
+                            onChange={onRowsPerPageChange}
+                        >
+                            <option value='5'>5</option>
+                            <option value='10'>10</option>
+                            <option value='15'>15</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        );
+    }, [onRowsPerPageChange, page, pages, hasSearchFilter, subcategories]);
 
     const renderCell = useCallback((subcategory, columnKey) => {
         const cellValue = subcategory[columnKey];
@@ -370,6 +430,7 @@ const ManageSubcategories = () => {
             <Table
                 isStriped
                 topContent={topContent}
+                bottomContent={bottomContent}
                 aria-label='Example table with custom cells'
             >
                 <TableHeader columns={columns}>
@@ -384,10 +445,7 @@ const ManageSubcategories = () => {
                         </TableColumn>
                     )}
                 </TableHeader>
-                <TableBody
-                    emptyContent={'No category found'}
-                    items={filteredSubcategories}
-                >
+                <TableBody emptyContent={'No category found'} items={items}>
                     {(item) => (
                         <TableRow key={item._id} className='py-2'>
                             {(columnKey) => (

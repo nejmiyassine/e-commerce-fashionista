@@ -12,17 +12,19 @@ import Users from '../pages/admin/users/Users';
 import UserDetails from '../pages/admin/users/UserDetails';
 import LandingP from '../pages/LandingPage/LandingP';
 import Orders from '../pages/admin/Orders/Orders';
-import ProtectedRoutes from './ProtectedRoutes';
 import AuthLogin from '../pages/auth/AuthLogin';
 import AuthRegister from '../pages/auth/AuthRegister';
 import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
+import ProtectedRoutes from './ProtectedRoutes';
 
 import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo';
 import CustomerProfile from '../pages/FrontCustomers/customerProfile';
 import EditProduct from '../pages/admin/Products/EditProduct';
 import AddProduct from '../pages/admin/Products/AddProduct';
 import PageNotFound from '../pages/PageNotFound';
+import AdminProductDetails from '../pages/admin/Products/AdminProductDetails';
+import ProductDetails from '../pages/ProductDetails';
 
 const RouteConfig = () => {
     return (
@@ -33,7 +35,8 @@ const RouteConfig = () => {
                 <Route path='*' element={<PageNotFound />} />
 
                 <Route exact path='/' element={<Home />} />
-                <Route path='/catalog' element={<Catalog />} />
+                <Route path='/shop' element={<Catalog />} />
+                <Route path='/shop/product/:productId' element={<ProductDetails />} />
 
                 {/* Authentication */}
                 <Route path='/register' element={<AuthRegister />} />
@@ -51,6 +54,11 @@ const RouteConfig = () => {
                         path='/admin/edit/product/:productId'
                         element={<EditProduct />}
                     />
+                    <Route
+                        path='/admin/product/:productId'
+                        element={<AdminProductDetails />}
+                    />
+
                     <Route path='/admin/add/product' element={<AddProduct />} />
 
                     <Route path='/admin/categories' element={<Categories />} />

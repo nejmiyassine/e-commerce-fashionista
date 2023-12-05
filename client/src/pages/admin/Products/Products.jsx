@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BiCartAdd } from 'react-icons/bi';
 import Layout from '../../../layouts/Layout';
@@ -9,7 +9,7 @@ import { getAllCategories } from '../../../features/categories/categoriesSlice';
 import ProductCard from '../../../components/products/ProductCard';
 import { Link } from 'react-router-dom';
 import { CiSearch } from 'react-icons/ci';
-import { Input, Select, SelectItem } from '@nextui-org/react';
+import { Input, Pagination, Select, SelectItem } from '@nextui-org/react';
 
 const Products = () => {
     const dispatch = useDispatch();
@@ -19,6 +19,10 @@ const Products = () => {
     const [search, setSearch] = useState('');
     const [deleteModel, setDeleteModel] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
+    const [rowsPerPage, setRowsPerPage] = useState(6);
+    const [page, setPage] = useState(1);
+
+    const hasSearchFilter = Boolean(search);
 
     useEffect(() => {
         dispatch(getAllProducts());
@@ -29,6 +33,60 @@ const Products = () => {
         setSelectedCategory(event.target.value);
         setSearch(''); // Clear search when a category is selected
     };
+
+    const pages = useMemo(() => {
+        return products?.length ? Math.ceil(products.length / rowsPerPage) : 0;
+    }, [products?.length, rowsPerPage]);
+
+    const onRowsPerPageChange = useCallback((e) => {
+        setRowsPerPage(Number(e.target.value));
+        setPage(1);
+    }, []);
+
+    const items = useMemo(() => {
+        const start = (page - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+
+        if (Array.isArray(products)) return products.slice(start, end);
+    }, [page, products, rowsPerPage]);
+
+    const bottomContent = useMemo(() => {
+        return (
+            <div className='py-2 px-2 flex justify-between items-center'>
+                {pages > 0 ? (
+                    <Pagination
+                        showControls
+                        classNames={{
+                            cursor: 'bg-foreground text-background',
+                        }}
+                        color='default'
+                        variant='light'
+                        page={page}
+                        total={pages}
+                        isDisabled={hasSearchFilter}
+                        onChange={setPage}
+                    />
+                ) : null}
+
+                <div className='flex justify-between gap-2 items-center'>
+                    <span className='text-default-400 text-md'>
+                        Total {products && products.length} products:
+                    </span>
+                    <label className='flex items-center text-default-400 text-small'>
+                        rows per page:
+                        <select
+                            className='bg-transparent outline-none text-default-400 text-small'
+                            onChange={onRowsPerPageChange}
+                        >
+                            <option value='6'>6</option>
+                            <option value='10'>10</option>
+                            <option value='16'>16</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+        );
+    }, [onRowsPerPageChange, page, pages, products, hasSearchFilter]);
 
     return (
         <Layout>
@@ -96,8 +154,8 @@ const Products = () => {
                 </div>
 
                 <div className={`grid grid-cols-3 gap-4`}>
-                    {products ? (
-                        products
+                    {items ? (
+                        items
                             .filter(
                                 (product) =>
                                     product?.product_name
@@ -123,6 +181,7 @@ const Products = () => {
                         </div>
                     )}
                 </div>
+                {bottomContent}
             </div>
         </Layout>
     );

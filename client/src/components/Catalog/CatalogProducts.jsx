@@ -14,6 +14,7 @@ const CatalogProducts = ({
     onSearchChange,
     cols,
     handleChangeCols,
+    bottomContent,
 }) => {
     return (
         <section className='px-4 border-l'>
@@ -73,10 +74,18 @@ const CatalogProducts = ({
 
             <Line />
 
-            <div className={`grid grid-cols-3 gap-4`}>
+            <div
+                className={`grid ${
+                    cols === 2 ? 'grid-cols-2' : 'grid-cols-3'
+                } gap-4`}
+            >
                 {products.length ? (
                     products.map((product) => (
-                        <ProductCard key={product._id} product={product} />
+                        <ProductCard
+                            key={product._id}
+                            product={product}
+                            bottomContent={bottomContent}
+                        />
                     ))
                 ) : (
                     <div>
@@ -98,4 +107,5 @@ CatalogProducts.propTypes = {
     onSearchChange: PropTypes.any,
     cols: PropTypes.any,
     handleChangeCols: PropTypes.any,
+    bottomContent: PropTypes.any,
 };

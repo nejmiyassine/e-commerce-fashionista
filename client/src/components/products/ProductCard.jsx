@@ -36,7 +36,7 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
     };
 
     return (
-        <div className={`${isAdmin && 'bg-white rounded-md py-2 px-4'}`}>
+        <div className={`${isAdmin && 'bg-white rounded-md'}`}>
             <div className='relative group'>
                 <img
                     src={
@@ -45,7 +45,8 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
                             : product.product_image
                     }
                     alt={`Product: ${product.product_name}`}
-                    className={`h-[350px] w-full object-cover fade-out`}
+                    // className={`h-[300px] w-full object-cover fade-out`}
+                    className='object-contain w-full lg:h-80'
                 />
 
                 <div className='z-30 opacity-0 transition-opacity duration-200 group-hover:opacity-100'>
@@ -103,7 +104,7 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
                 )}
             </div>
 
-            <div className='flex flex-col gap-1 py-2'>
+            <div className='flex flex-col gap-1 py-2 px-4'>
                 <div className='flex items-center justify-between'>
                     <div className='flex'>
                         <MdOutlineStar size={16} className='text-yellow-500' />
@@ -127,7 +128,7 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
                     to={`${
                         isAdmin
                             ? `/admin/product/${product._id}`
-                            : `/product/${product._id}`
+                            : `/shop/product/${product._id}`
                     }`}
                 >
                     <h3 className='text-xl font-bold'>

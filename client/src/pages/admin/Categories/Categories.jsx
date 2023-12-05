@@ -87,6 +87,7 @@ const ManageCategories = () => {
             const { data } = await dispatch(
                 editCategory({ id: selectedCategory._id, name: updatedName })
             );
+            
             if (data?.success) {
                 setUpdatedName('');
                 setSelectedCategory(null);
