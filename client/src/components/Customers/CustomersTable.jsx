@@ -149,6 +149,8 @@ const CustomersTable = ({ data, error, loading }) => {
                 onOpenChange(true);
             };
 
+             console.log('customer' , customer._id)
+
             const handleDelete = () => {
                 if (
                     window.confirm(

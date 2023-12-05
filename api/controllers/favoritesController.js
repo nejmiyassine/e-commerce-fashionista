@@ -59,7 +59,6 @@ exports.getAllFavoritesProducts = async (req, res) => {
             'product',
             { product_name: 1, product_images: 1 }
         );
-        console.log('favorites', favorite);
         if (!favorite) {
             // res.status(404).json({ message: 'favorite products not found' });
         }
