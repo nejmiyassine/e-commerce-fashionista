@@ -21,9 +21,9 @@ import Catalog from '../pages/catalog/Catalog';
 import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo';
 // testing cart
 import HomeTest from './../components/cart/HomeTest';
-import Cart from './../components/cart/cart';
-import Checkout from '../components/cart/Checkout';
+import Cart from './../components/cart/Cart';
 import CheckoutSuccess from '../components/cart/CheckoutSuccess';
+
 
 const RouteConfig = () => {
     return (
@@ -93,10 +93,7 @@ const RouteConfig = () => {
                     path='/checkout-success'
                     element={<CheckoutSuccess/>}
                 />
-                <Route
-                    path='/Checkout'
-                    element={<Checkout/>}
-                />
+                
             </Routes>
         </Router>
     );

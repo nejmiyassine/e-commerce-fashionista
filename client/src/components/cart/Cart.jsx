@@ -11,11 +11,14 @@ import {
   getTotals,
 } from '../../features/cart/cartSlice';
 import PayButton from './PayButton';
+import { sliceText } from './../../utils/sliceText';
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
+  
+  
   useEffect(() => {
     dispatch(getTotals());
   }, [cart, dispatch]);
@@ -36,6 +39,7 @@ const Cart = () => {
     dispatch(clearCart());
   };
 
+
   return (
     <div className="cart-container p-8">
       <h2 className="text-2xl font-semibold mb-8">My Bag (2)</h2>
@@ -51,8 +55,9 @@ const Cart = () => {
         </div>
       ) : (
         <div>
-          <div className="titles hidden md:grid grid-cols-5 gap-2 mb-4">
-            <h3 className="product-title">Product</h3>
+          <div className="titles hidden md:grid grid-cols-6 gap-2 mb-4">
+            
+            <h3 className="product-title col-span-2">Product</h3>
             <h3 className="price">Price</h3>
             <h3 className="Quantity">Quantity</h3>
             <h3 className="total">Total</h3>
@@ -61,18 +66,17 @@ const Cart = () => {
           <div className="cart-items">
             {cart.cartItems &&
               cart.cartItems.map((item) => (
-                <div key={item._id} className="cart-item grid grid-cols-1 md:grid-cols-5 gap-2 border-t py-4">
-                  <div className="cart-product flex items-center">
-                    <img src={item.product_images[0]} alt={item.product_name} className="w-24 mr-4" />
+                <div key={item.product._id} className="cart-item grid grid-cols-1 md:grid-cols-6 gap-5 border-t py-4">
+                <div className="cart-product flex items-center col-span-2">
+                <img src={item.product.product_images[0]} alt={item.product.product_name} className="w-20 mr-4" />
                     <div>
-                      <h3>{item.product_name}</h3>
-                      <p>{item.short_description}</p>
-                      
+                      <h3 className='text-xl font-bold text-gray-800 dark:text-white mb-2'>{sliceText(item.product.product_name, 20)}</h3>
+                      <p className='text-gray-600 dark:text-gray-300 text-sm mb-4 w-2/3'>{item.product.short_description}</p>   
                     </div>
                   </div>
-                  <div className="cart-prouduct-price flex items-center justify-content">
+                  <div className="cart-prouduct-price flex items-center ml w-full">
                     <h5 className="text-gray-400 md:hidden">Price: </h5>
-                    <span>${item.price}</span>
+                    <span>${item.product.price.toFixed(2)}</span>
                   </div>
                   <div className="relative flex items-center max-w-[8rem]">
                   <button
@@ -104,11 +108,11 @@ const Cart = () => {
                     <span className="text-gray-900 dark:text-white">+</span>
                   </button>
                 </div>
-                  <div className="cart-product-total-price flex justify-content">
+                  <div className="cart-product-total-price flex justify-content relative flex items-center">
                     <h5 className="text-gray-400 md:hidden">Total: </h5>
-                    <span>${item.price * item.cartQuantity}</span>
+                    <span>${(item.product.price * item.cartQuantity).toFixed(2)}</span>
                   </div>
-                  <div className="cart-product-remove ">
+                  <div className="cart-product-remove relative flex items-center">
                     <button
                     onClick={() => handleRemoveFromCart(item)}
                     className="text-red-300 hover:text-red-500 flex items-center justify-content"
@@ -127,7 +131,7 @@ const Cart = () => {
             <div className="cart-checkout lg:w-1/3 ">
               <div className="subtotal flex justify-between text-xl">
                 <span>Subtotal</span>
-                <span className="amount">${cart.cartTotalAmount}</span>
+                <span className="amount">${cart.cartTotalAmount.toFixed(2)}</span>
               </div>
               <p className="text-sm font-light mt-2">Taxes and shipping calculated at checkout</p>
               <PayButton cartItems = {cart.cartItems} />

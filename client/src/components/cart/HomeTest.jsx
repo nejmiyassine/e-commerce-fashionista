@@ -1,27 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
-
-import {useHistory} from 'react-router';
-import { addToCart } from "../../features/cart/cartSlice";
-// import { useGetAllProductsQuery } from "../slices/productsApi";
-import { getAllProducts } from "../../features/products/productsSlice";
 import { useEffect } from "react";
-// import Cart from './Cart';
 import { Link } from 'react-router-dom';
 import { Button } from '@nextui-org/react';
 
+import { getAllProducts } from "../../features/products/productsSlice";
+import AddToCartBtn from "./AddToCartBtn";
+
 const HomeTest = () => {
   const { products, isLoading, error } = useSelector((state) => state.products);
-  // console.log("products", products);
   const dispatch = useDispatch();
-  const history = useHistory();
-
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-    // history.push("/cart");
-    if (history) {
-      history.push("/cart");
-    }
-  };
 
   useEffect(() => {
     dispatch(getAllProducts())
@@ -54,6 +41,7 @@ const HomeTest = () => {
                   <button onClick={() => handleAddToCart(product)}>
                     Add To Cart
                   </button>
+                  <AddToCartBtn product={product}  />
                 </div>
               ))}
           </div>
