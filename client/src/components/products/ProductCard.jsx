@@ -12,11 +12,15 @@ import { FaCartPlus } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setProduct } from '../../features/products/productsSlice';
+import { useAddProductToCartMutation } from '../../app/api/cartApi';
+import { toast } from 'react-toastify';
 
 const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
     const dispatch = useDispatch();
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const [addProductToCart, { isSuccess: isAddSuccess }] =
+        useAddProductToCartMutation();
 
     const handleUpdateProduct = (product) => {
         console.log(product);
@@ -33,6 +37,25 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
         setCurrentImageIndex((prevIndex) =>
             prevIndex < product.product_images.length - 1 ? prevIndex + 1 : 0
         );
+    };
+
+    const handleAddToCart = async () => {
+        try {
+            const quantity = 1;
+
+            await addProductToCart({ productId: product?._id, quantity });
+
+            if (isAddSuccess) {
+                toast.success('Product added to cart successfully', {
+                    position: 'bottom-right',
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Error adding product to cart', {
+                position: 'bottom-right',
+            });
+        }
     };
 
     return (
@@ -94,12 +117,15 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
                 )}
 
                 {/* {isAdmin && ( */}
-                    <div className='absolute w-full flex justify-center gap-2 px-2 py-1 text-white bottom-6 left-0 opacity-0 transition-opacity duration-200  group-hover:opacity-100'>
-                        <button className='flex items-center gap-1 rounded-md bg-black/70 text-white hover:bg-black font-semibold transition-all  py-2 mx-auto px-4'>
-                            <FaCartPlus />
-                            <span>Add to cart</span>
-                        </button>
-                    </div>
+                <div className='absolute w-full flex justify-center gap-2 px-2 py-1 text-white bottom-6 left-0 opacity-0 transition-opacity duration-200  group-hover:opacity-100'>
+                    <button
+                        onClick={handleAddToCart}
+                        className='flex items-center gap-1 rounded-md bg-black/70 text-white hover:bg-black font-semibold transition-all  py-2 mx-auto px-4'
+                    >
+                        <FaCartPlus />
+                        <span>Add to cart</span>
+                    </button>
+                </div>
                 {/* )} */}
             </div>
 

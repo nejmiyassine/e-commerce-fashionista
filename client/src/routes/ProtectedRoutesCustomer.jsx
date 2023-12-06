@@ -19,13 +19,7 @@ const ProtectedRoutesCustomer = () => {
         return <LoadingSpinner />;
     }
 
-    return isLoggedIn && customer ? (
-        <Outlet />
-    ) : isLoggedIn && !customer ? (
-        <Navigate to='/unauthorized' />
-    ) : (
-        <Navigate to='/login' />
-    );
+    return isLoggedIn && customer ? <Outlet /> : <Navigate to='/login' />;
 };
 
 export default ProtectedRoutesCustomer;

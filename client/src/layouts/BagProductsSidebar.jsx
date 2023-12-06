@@ -1,15 +1,21 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import nProgress from 'nprogress';
 
 import { IoCloseOutline } from 'react-icons/io5';
 import { IoIosAdd, IoIosRemove } from 'react-icons/io';
 import { MdDelete } from 'react-icons/md';
 
-import { toggleBag } from '../features/bag/bagSlice';
-import { sliceText } from '../utils/sliceText';
+import {
+    addItemToCart,
+    removeItemFromCart,
+    toggleCartSidebar,
+} from '../features/cart/cartSlice';
 import {
     useAddProductToCartMutation,
     useGetAllCartItemsQuery,
+    useRemoveProductFromCartMutation,
 } from '../app/api/cartApi';
 
 import LoadingSpinner from '../components/LoadingSpinner';
@@ -17,42 +23,109 @@ import LoadingSpinner from '../components/LoadingSpinner';
 /* eslint-disable react/prop-types */
 const BagProductsSidebar = () => {
     const dispatch = useDispatch();
-    const { isOpen } = useSelector((state) => state.bag);
+    const { isOpen } = useSelector((state) => state.cart);
 
-    const { data: cart, isLoading, isFetching } = useGetAllCartItemsQuery();
-    // const [
-    //     addProductToCart,
-    //     { isLoading: isAddLoading, isSuccess: isAddSuccess },
-    // ] = useAddProductToCartMutation();
+    const {
+        data: cartItems,
+        isLoading,
+        isFetching,
+    } = useGetAllCartItemsQuery();
+    // const { cart } = useSelector((state) => state.cart);
 
-    const loading = isLoading || isFetching;
+    // console.log(cart);
 
-    // eslint-disable-next-line no-unused-vars
-    const [quantity, setQuantity] = useState(1);
+    const [
+        addProductToCart,
+        {
+            isLoading: isAddLoading,
+            isError: isAddError,
+            isSuccess: isAddSuccess,
+        },
+    ] = useAddProductToCartMutation();
+    const [
+        removeProductFromCart,
+        {
+            isLoading: isRemoveLoading,
+            isError: isRemoveError,
+            isSuccess: isRemoveSuccess,
+        },
+    ] = useRemoveProductFromCartMutation();
+
+    const loading = isLoading || isFetching || isAddLoading || isRemoveLoading;
 
     const closeBagSidebar = () => {
-        dispatch(toggleBag(false));
+        dispatch(toggleCartSidebar(false));
     };
 
-    const handleIncrementQuantity = () => {
-        setQuantity((prevQuantity) =>
-            prevQuantity > 0 ? prevQuantity + 1 : 1
-        );
+    const handleAddToCart = async (productId) => {
+        try {
+            const quantity = 1;
+
+            await addProductToCart({
+                productId: productId,
+                quantity,
+            });
+            dispatch(addItemToCart(productId));
+
+            if (isAddSuccess) {
+                toast.info('Product updated in the cart successfully', {
+                    position: 'bottom-right',
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Error updating product in the cart', {
+                position: 'bottom-right',
+            });
+        }
     };
 
-    const handleDecrementQuantity = () => {
-        setQuantity((prevQuantity) =>
-            prevQuantity > 1 ? prevQuantity - 1 : 1
-        );
+    const handleRemoveFromCart = async (productId) => {
+        try {
+            const quantity = 1;
+
+            dispatch(removeItemFromCart(productId));
+            await removeProductFromCart({
+                productId: productId,
+                quantity,
+            });
+
+            if (isRemoveSuccess) {
+                toast.success('Product updated in the cart successfully', {
+                    position: 'bottom-right',
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Error updating product in the cart', {
+                position: 'bottom-right',
+            });
+        }
     };
 
     const subtotal = 0;
 
-    if (loading) {
+    useEffect(() => {
+        if (isAddSuccess) {
+            toast.success('Product updated in the cart successfully');
+            nProgress.done();
+        }
+
+        if (isAddError || isRemoveError) {
+            nProgress.done();
+            // toast.error('Error updating product in the cart', {
+            //     position: 'top-right',
+            // });
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [loading]);
+
+    if (loading || !cartItems.cartItems) {
         return <LoadingSpinner />;
     }
 
-    console.log(cart);
+    console.log(cartItems);
 
     return (
         <div
@@ -68,13 +141,17 @@ const BagProductsSidebar = () => {
                 ></div>
 
                 {/* Sidebar */}
-                <div className='fixed inset-y-0 left-0 max-w-full w-[350px] flex'>
-                    <div className='bg-white overflow-y-auto'>
+
+                <div className='fixed inset-y-0 left-0 max-w-full w-2/5 flex'>
+                    <div className='bg-white overflow-y-auto w-full'>
                         {/* Sidebar Header */}
                         <div className='p-4 flex items-center justify-between border-b'>
                             <h2 className='text-2xl font-bold'>
                                 My Bag (
-                                {cart.cartItems && cart.cartItems.length})
+                                {cartItems.cartItems.length > 0
+                                    ? cartItems.cartItems.length
+                                    : 0}
+                                )
                             </h2>
                             <button
                                 className='text-gray-500'
@@ -87,8 +164,8 @@ const BagProductsSidebar = () => {
                         {/* Sidebar Content */}
                         <div className='p-4 overflow-y-hidden'>
                             {/* Product List */}
-                            {cart.cartItems &&
-                                cart.cartItems.map((item) => (
+                            {cartItems.cartItems &&
+                                cartItems.cartItems.map((item) => (
                                     <div
                                         key={item.product._id}
                                         className='pb-4 last:pb-28'
@@ -105,14 +182,18 @@ const BagProductsSidebar = () => {
 
                                             <div className='w-full flex flex-col gap-10 justify-between'>
                                                 <div className='flex items-center justify-between'>
-                                                    <p className='text-md capitalize font-bold'>
-                                                        {sliceText(
-                                                            'Dr. Scholl is Shoes womens Brianna Ankle Boot',
-                                                            24
-                                                        )}
+                                                    <p className='text-md w-60 capitalize font-bold'>
+                                                        {
+                                                            item.product
+                                                                .product_name
+                                                        }
                                                     </p>
-                                                    <p className='font-semibold'>
-                                                        ${item.product.price}
+                                                    <p className='font-semibold ml-5 text-sm'>
+                                                        $
+                                                        {
+                                                            item.product
+                                                                .discount_price
+                                                        }
                                                     </p>
                                                 </div>
 
@@ -120,20 +201,25 @@ const BagProductsSidebar = () => {
                                                     <div className='flex items-center border gap-4 p-1 mr-4'>
                                                         <IoIosRemove
                                                             className='cursor-pointer'
-                                                            onClick={
-                                                                handleDecrementQuantity
+                                                            onClick={() =>
+                                                                handleRemoveFromCart(
+                                                                    item.product
+                                                                        ._id
+                                                                )
                                                             }
                                                         />
-                                                        <input
-                                                            className='font-semibold w-6 text-center'
-                                                            type='number'
-                                                            value={quantity}
-                                                        />
+
+                                                        <span className='font-semibold w-6 text-center'>
+                                                            {item.quantity}
+                                                        </span>
 
                                                         <IoIosAdd
                                                             className='cursor-pointer'
-                                                            onClick={
-                                                                handleIncrementQuantity
+                                                            onClick={() =>
+                                                                handleAddToCart(
+                                                                    item.product
+                                                                        ._id
+                                                                )
                                                             }
                                                         />
                                                     </div>

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { Pagination } from '@nextui-org/react';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 import CatalogProducts from '../../components/Catalog/CatalogProducts';
@@ -9,9 +10,8 @@ import CatalogSidebar from '../../components/Catalog/CatalogSidebar';
 // import { fetchProducts } from '../../features/products/productsThunk';
 import { getAllCategories } from '../../features/categories/categoriesSlice';
 import { getAllProducts } from '../../features/products/productsSlice';
-import Navbar from '../../layouts/Navbar';
 import BagProductsSidebar from '../../layouts/BagProductsSidebar';
-import { Pagination } from '@nextui-org/react';
+import Navbar from '../../layouts/Navbar';
 
 const Catalog = () => {
     const dispatch = useDispatch();
@@ -19,6 +19,8 @@ const Catalog = () => {
         (state) => state.products
     );
     const { categories, isLoading } = useSelector((state) => state.categories);
+
+    const loading = isLoading;
 
     const [selected, setSelected] = useState([]);
     const [selectedPrice, setSelectedPrice] = useState([]);
@@ -148,9 +150,11 @@ const Catalog = () => {
         );
     }, [onRowsPerPageChange, page, pages, products, hasSearchFilter]);
 
-    if (isLoading || isProductsLoading) {
+    if (loading || isProductsLoading) {
         return <LoadingSpinner />;
     }
+
+    
 
     return (
         <>

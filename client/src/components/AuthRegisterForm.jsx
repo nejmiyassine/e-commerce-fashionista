@@ -45,6 +45,8 @@ const AuthRegisterForm = ({ account_type }) => {
     const methods = useForm({
         resolver: yupResolver(userSchema),
         defaultValues: {
+            first_name: '',
+            last_name: '',
             email: '',
             password: '',
         },

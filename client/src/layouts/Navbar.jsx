@@ -1,14 +1,15 @@
 /* eslint-disable react/prop-types */
 import { FaShoppingBag } from 'react-icons/fa';
-import { toggleBag } from '../features/bag/bagSlice';
 import { useDispatch } from 'react-redux';
 import { IoFilter } from 'react-icons/io5';
+
+import { toggleCartSidebar } from '../features/cart/cartSlice';
 
 const Navbar = ({ toggleSidebar }) => {
     const dispatch = useDispatch();
 
     const openBagSidebar = () => {
-        dispatch(toggleBag(true));
+        dispatch(toggleCartSidebar(true));
     };
 
     return (

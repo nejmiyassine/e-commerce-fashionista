@@ -8,15 +8,13 @@ const layoutOptions = [
 /* eslint-disable react/prop-types */
 const CatalogChangeLayout = ({ cols, handleChangeCols }) => {
     return (
-        <div className='flex items-center'>
+        <div className='flex items-center gap-2'>
             {layoutOptions.map((option) => (
                 <div
                     key={option.cols}
-                    className={`flex items-center p-[6px] gap-1 px-3 py-2 focus:outline-none cursor-pointer transition-all duration-300 ${
+                    className={`flex items-center p-[6px] px-2 py-2 rounded-md focus:outline-none cursor-pointer transition-all duration-300 ${
                         cols === option.cols
-                            ? // ? 'bg-gray-300/50 text-black'
-                              // : 'text-gray-500'
-                              'bg-blue-500 text-white'
+                            ? 'bg-blue-500 text-white'
                             : 'bg-gray-300 text-gray-700'
                     } p-1`}
                     onClick={() => handleChangeCols(option.cols)}

@@ -25,6 +25,7 @@ import AddProduct from '../pages/admin/Products/AddProduct';
 import PageNotFound from '../pages/PageNotFound';
 import AdminProductDetails from '../pages/admin/Products/AdminProductDetails';
 import ProductDetails from '../pages/ProductDetails';
+import ProtectedRoutesCustomer from './ProtectedRoutesCustomer';
 
 const RouteConfig = () => {
     return (
@@ -35,8 +36,15 @@ const RouteConfig = () => {
                 <Route path='*' element={<PageNotFound />} />
 
                 <Route exact path='/' element={<Home />} />
-                <Route path='/shop' element={<Catalog />} />
-                <Route path='/shop/product/:productId' element={<ProductDetails />} />
+                <Route path='/landingPage' element={<LandingP />} />
+
+                <Route element={<ProtectedRoutesCustomer />}>
+                    <Route path='/shop' element={<Catalog />} />
+                    <Route
+                        path='/shop/product/:productId'
+                        element={<ProductDetails />}
+                    />
+                </Route>
 
                 {/* Authentication */}
                 <Route path='/register' element={<AuthRegister />} />
@@ -88,7 +96,6 @@ const RouteConfig = () => {
                         path='/admin/users/:userId'
                         element={<UserDetails />}
                     />
-                    <Route path='/landingPage' element={<LandingP />} />
                 </Route>
 
                 {/* front-store */}

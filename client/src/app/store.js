@@ -12,7 +12,7 @@ import { ordersAPI } from './api/ordersApi';
 import { authApi } from './api/authApi';
 import { customerAPI } from './api/customerApi';
 import { cartAPI } from './api/cartApi';
-import bagSlice from '../features/bag/bagSlice';
+import cartSlice from '../features/cart/cartSlice';
 
 export const store = configureStore({
     reducer: {
@@ -21,7 +21,7 @@ export const store = configureStore({
         subcategories: subcategoriesReducer,
         users: usersReducer,
         products: productsReducers,
-        bag: bagSlice,
+        cart: cartSlice,
         [usersAPI.reducerPath]: usersAPI.reducer,
         [authApi.reducerPath]: authApi.reducer,
         [ordersAPI.reducerPath]: ordersAPI.reducer,
