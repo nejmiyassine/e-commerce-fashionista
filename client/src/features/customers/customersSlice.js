@@ -82,6 +82,7 @@ const customersSlice = createSlice({
     initialState,
     reducers: {
         setCustomer: (state, action) => {
+            console.log(action.payload);
             state.customer = action.payload.user;
             state.access_token = action.payload.access_token;
         },
@@ -89,11 +90,13 @@ const customersSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
+
             //all customers
             .addCase(fetchCustomers.pending, (state) => {
                 state.isLoading = true;
                 state.data = [];
                 state.error = '';
+                console.log('pending')
             })
             .addCase(fetchCustomers.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -105,6 +108,7 @@ const customersSlice = createSlice({
                 state.isLoading = false;
                 state.state.error = action.error.message;
             })
+
 
             // customers by id
             .addCase(customersById.pending, (state) => {

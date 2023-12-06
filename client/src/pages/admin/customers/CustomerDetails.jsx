@@ -11,7 +11,8 @@ const CustomerDetails = () => {
 
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
-  
+    console.log('data from customerDetails' , data)
+
     useEffect(() => {
         dispatch(customersById(customerId));
     }, [dispatch, customerId]);
@@ -29,7 +30,7 @@ const CustomerDetails = () => {
             {data._id ? (
                 <DisplayCustomerDetails customer={data} />
             ) : (
-                <div>customers not found</div>
+                <div>customer not found</div>
             )}
         </div>
     );

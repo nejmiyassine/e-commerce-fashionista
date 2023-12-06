@@ -92,6 +92,7 @@ const CustomersTable = ({ data, error, loading }) => {
         );
     }, [visibleColumns]);
 
+    console.log('data' , data)
     const filteredItems = React.useMemo(() => {
         let filteredCustomers = data;
 
@@ -147,6 +148,8 @@ const CustomersTable = ({ data, error, loading }) => {
                 setUpdatedCustomer(customer);
                 onOpenChange(true);
             };
+
+             console.log('customer' , customer._id)
 
             const handleDelete = () => {
                 if (
@@ -452,7 +455,7 @@ const CustomersTable = ({ data, error, loading }) => {
             />
 
 
-            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primaryColor-deepDark'>
+            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>Customers</h2>
 
                 <Table

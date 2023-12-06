@@ -2,6 +2,8 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 
 import customersReducer from '../features/customers/customersSlice';
+import frontCustomerReducer from '../features/customers/frontCustomerSlice'
+import favoritesReducer from '../features/favorites/favoritesSlice';
 import categoriesReducer from '../features/categories/categoriesSlice';
 import subcategoriesReducer from '../features/subcategories/subcategoriesSlice';
 import productsReducers from '../features/products/productsSlice';
@@ -16,6 +18,8 @@ import bagSlice from '../features/bag/bagSlice';
 export const store = configureStore({
     reducer: {
         customers: customersReducer,
+        frontCustomers: frontCustomerReducer,
+        favorites: favoritesReducer,
         categories: categoriesReducer,
         subcategories: subcategoriesReducer,
         users: usersReducer,
