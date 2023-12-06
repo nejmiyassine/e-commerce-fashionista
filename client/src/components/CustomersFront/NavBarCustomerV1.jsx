@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import {
     Navbar,
     NavbarContent,
@@ -10,50 +9,32 @@ import {
     DropdownMenu,
     Avatar,
     Button,
+    Link,
 } from '@nextui-org/react';
-import { logOutCustomer } from '../../features/customers/frontCustomerSlice';
 
 const NavbarCustomers = ({ customer }) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     return (
         <div className=' shadow-md  border-black'>
             <Navbar>
+                <NavbarContent
+                    className='hidden sm:flex gap-4'
+                    justify='center'
+                ></NavbarContent>
+
                 <NavbarContent as='div' justify='end'>
                     <div className='flex justify-center '>
                         <ul className='flex justify-around w-80 relative right-80     '>
                             <li>
-                                <Button
-                                    className='bg-color-none '
-                                    onClick={() => {
-                                        navigate('/landingPage');
-                                    }}
-                                >
-                                    Home
-                                </Button>
+                                <Link>Home</Link>
+                            </li>
+
+                            <li>
+                                <Link>Orders</Link>
                             </li>
                             <li>
-                                <Button
-                                    className='bg-color-none '
-                                    onClick={() => {
-                                        navigate('/customersOrders');
-                                    }}
-                                >
-                                    Orders
-                                </Button>
-                            </li>
-                            <li>
-                                <Button
-                                    className='bg-color-none '
-                                    onClick={() => {
-                                        navigate(
-                                            '/customersFavorites'
-                                        );
-                                    }}
-                                >
-                                    Favorites
-                                </Button>
+                                <Link>Favorites</Link>
                             </li>
                         </ul>
                     </div>
@@ -73,16 +54,15 @@ const NavbarCustomers = ({ customer }) => {
                             aria-label='Profile Actions'
                             variant='flat'
                         >
-                            <DropdownItem key='email'>
+                            <DropdownItem key='profile' className='h-14 gap-2 '>
                                 <p className='font-semibold'>
                                     {customer.email}
                                 </p>
                             </DropdownItem>
 
                             <DropdownItem key='profile' className='h-8'>
-                                <Button className='bg-color-none '
-                              
-                                >
+                                {' '}
+                                <Button className='bg-color-none '>
                                     Profile
                                 </Button>
                             </DropdownItem>
@@ -91,7 +71,7 @@ const NavbarCustomers = ({ customer }) => {
                                 <Button
                                     className='bg-color-none '
                                     onClick={() => {
-                                        navigate(`/updateProfile/${customer._id}`);
+                                        navigate('/updateCustomers');
                                     }}
                                 >
                                     Settings
@@ -105,15 +85,7 @@ const NavbarCustomers = ({ customer }) => {
                                 color='danger'
                                 className='h-8'
                             >
-                                <Button className='bg-color-none'
-                                onClick={() => {
-
-                                 dispatch(logOutCustomer()) 
-                                navigate('/login')
-                            }
-                                }
-                                >
-                                
+                                <Button className='bg-color-none'>
                                     Log out
                                 </Button>
                             </DropdownItem>

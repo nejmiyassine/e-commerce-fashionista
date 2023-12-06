@@ -3,14 +3,12 @@ import API from '../../app/api/api';
 
 export const getCustomerProfile = createAsyncThunk(
     'fCustomer/getCustomerProfile',
-    async (customerId, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const res = await API.get(`customers/profile/${customerId}` , {
-                withCredentials : true,
-                
-            }
-            );
-            console.log('res' , res )
+            const res = await API.get('customers/profile', {
+                withCredentials: true,
+            });
+            console.log('res', res);
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -19,23 +17,42 @@ export const getCustomerProfile = createAsyncThunk(
 );
 
 export const patchCustomerData = createAsyncThunk(
-    'fCustomer/patcheCustomerData',
- async({customerId , patchedCustomerData}, {rejectWithValue}) => {
-    try {
-         const res = API.patch(`customers/${customerId}` , patchedCustomerData , {
-            withCredentials : true,
-         })
-         console.log('res' , res)
-         return res.data
-    } catch(error) {
-        rejectWithValue(error.res.data);
+    'fCustomer/patchCustomerData',
+    async ({customerId , patchedCustomerData }, { rejectWithValue }) => {
+        try {
+            console.log('id from fron customerSlice'  ,customerId)
+            const res = await API.patch(
+                `customers/${customerId}`,
+                
+                patchedCustomerData,
+                {
+                    withCredentials: true,
+                }
+            );
+            console.log('res' , res.data);
+            return res.data;
+        } catch (error) {
+            rejectWithValue(error.res.data);
+        }
     }
-})
+);
+
+export const logOutCustomer = createAsyncThunk(
+    'fCustomer/logOutCustomer',
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await API.get('customers/logout');
+            console.log('data of logout', res);
+        } catch (error) {
+            rejectWithValue(error.res.data);
+        }
+    }
+);
 
 const initialState = {
     isLoading: false,
-    data: [],
-    error: '',
+    customerData: [],
+    err: '',
 };
 
 const frontCustomersSlice = createSlice({
@@ -47,46 +64,62 @@ const frontCustomersSlice = createSlice({
 
             //customer Profile
             .addCase(getCustomerProfile.pending, (state) => {
-                console.log('sfdfaf')
+                console.log('sfdfaf');
                 state.isLoading = true;
                 console.log('pending');
             })
             //
             .addCase(getCustomerProfile.fulfilled, (state, action) => {
-                console.log('stats')
+                console.log('stats');
                 state.isLoading = false;
-                state.data = action.payload;
-                console.log('payload', state.data);
+                state.customerData = action.payload;
+                console.log('payload', state.customerData);
                 console.log('fulfilled');
             })
             //
             .addCase(getCustomerProfile.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.err = action.error.message;
                 console.log('rejected');
             })
 
             //patchCustomerData
-            .addCase(patchCustomerData.pending ,(state) => {
+            .addCase(patchCustomerData.pending, (state) => {
                 state.isLoading = true;
-                console.log('pending')
+                console.log('pending');
             })
 
-            .addCase(patchCustomerData.fulfilled , (state, action) => {
+            .addCase(patchCustomerData.fulfilled, (state, action) => {
                 state.isLoading = false;
                 const {
                     arg: { customerId },
                 } = action.meta;
                 console.log('action.meta', action.meta);
 
-            
+             
+                state.err = '';
             })
 
-            .addCase(patchCustomerData.rejected , (state , action) => {
-                isLoading = false;
-                state.data = action.error.message;
-                console.log('rejected')
+            .addCase(patchCustomerData.rejected, (state, action) => {
+                state.isLoading = false;
+                state.customerData = action.error.message;
+                console.log('rejected');
             })
+
+            //logout customer
+            .addCase(logOutCustomer.pending, (state) => {
+                state.isLoading = true;
+                console.log('pending');
+            })
+            .addCase(logOutCustomer.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.customerData = action.data;
+                console.log('fulfillled');
+            })
+            .addCase(logOutCustomer.rejected, (state, action) => {
+                state.customerData = action.error.message;
+                console.log('rejected');
+            });
     },
 });
 

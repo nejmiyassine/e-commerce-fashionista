@@ -83,10 +83,13 @@ const RouteConfig = () => {
                     path='/updateProfile/:customerId'
                     element={<UpdateCustomerInfo />}
                 />
-                <Route
-                    path='/customerProfile/:customerId'
+
+                {/* <Route
+                    path='/customerProfile'
                     element={<CustomerProfile />}
-                />
+                /> */}
+
+                <Route path='/customersOrders' />
 
                 <Route 
                    path='/customersFavorites' 

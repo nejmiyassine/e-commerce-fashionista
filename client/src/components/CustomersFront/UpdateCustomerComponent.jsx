@@ -30,6 +30,7 @@ const schema = yup.object({
 });
 
 const UpdateCustomerComponent = ({ customer }) => {
+    console.log('cus' , customer)
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -57,12 +58,12 @@ const UpdateCustomerComponent = ({ customer }) => {
         if (isEditing) {
             // navigate('/admin/customers');
             reset();
-            navigate(`/customerProfile/${customer._id}`)
+            navigate('/landingPage')
 
             console.log(customer._id);
             dispatch(
                 patchCustomerData({
-                    customerId: customer._id,
+                     customerId: customer._id,
                     patchedCustomerData: formData,
                 })
             );

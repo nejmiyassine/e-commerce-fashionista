@@ -7,12 +7,9 @@ exports.getCustomerProfileData = async (req, res, next) => {
     try {
         const user = res.locals.user;
 
-        res.status(200).json({
-            status: 'success',
-            data: {
+        res.status(200).json(   
                 user,
-            },
-        });
+        );
     } catch (error) {
         next(error);
     }
@@ -169,25 +166,26 @@ exports.searchForCustomer = async (req, res) => {
     }
 };
 
-exports.getProfile = async (req, res) => {
-    try {
+// exports.getProfile = async (req, res) => {
+//     try {
     
-        const customerId = req.params.id;
-        // const customerId = res.locals.user._id;
+//          const customerId = res.locals.user._id;
 
-        const customer = await Customer.findById(customerId);
+//         const customer = await Customer.findById(customerId);
+//         console.log('customer' , customer)
 
-         if (!customer) res.status(404).json({ message: 'Customers not found' });
-        return res.status(200).json(customer);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
+//          if (!customer) res.status(404).json({ message: 'Customers not found' });
+//         return res.status(200).json(customer);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
 
 exports.customerCanUpdate = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
 
     try {
+        
         const salt = await bcrypt.genSalt(parseInt(saltRounds));
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -212,7 +210,8 @@ exports.customerCanUpdate = async (req, res) => {
         }
 
         const updatedCustomer = await Customer.findByIdAndUpdate(
-            id,
+            // user,
+             id,
             updatedFields,
             { new: true }
         );

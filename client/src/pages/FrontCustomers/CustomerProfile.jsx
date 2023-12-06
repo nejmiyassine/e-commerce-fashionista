@@ -10,16 +10,15 @@ import { getCustomerProfile } from '../../features/customers/frontCustomerSlice'
 import NavbarCustomers from '../../components/CustomersFront/NavBarCustomers';
 
 const CustomerProfile = () => {
-    const { customerId } = useParams();
     const dispatch = useDispatch();
-    const { loading, data, error } = useSelector((state) => state.frontCustomers);
-    console.log('data from customerProfile', data);
+    const { loading, customerData, error } = useSelector((state) => state.frontCustomers);
+    console.log('customerData from customerProfile', customerData);
 
     useEffect(() => {
-        dispatch(getCustomerProfile(customerId));
-        console.log('dispatch' , dispatch(getCustomerProfile(customerId)))
+        dispatch(getCustomerProfile());
+        console.log('dispatch' , dispatch(getCustomerProfile()))
         
-    }, [dispatch, customerId]);
+    }, [dispatch, ]);
 
 
     if (loading) {
@@ -29,13 +28,14 @@ const CustomerProfile = () => {
         return <div>Error: {error}</div>;
     }
 
-  console.log('data' , data)
+  console.log('customerData' , customerData)
+   console.log('customerDataID' , customerData)
     
     return (
         <div>
             
-            {data._id ? (
-                <NavbarCustomers customer={data} />
+            {customerData ? (
+                <NavbarCustomers customer={customerData} />
             ) : (
                 <div>no customer found</div>
             )}

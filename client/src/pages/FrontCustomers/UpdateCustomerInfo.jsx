@@ -3,32 +3,30 @@ import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import UpdateCustomerComponent from '../../components/CustomersFront/UpdateCustomerComponent';
 import { useDispatch, useSelector } from 'react-redux';
-import { customersById } from '../../features/customers/customersSlice';
+import { patchCustomerData } from '../../features/customers/frontCustomerSlice';
 
 import NavbarCustomers from '../../components/CustomersFront/NavBarCustomers';
 
 const UpdateCustomerInfo = () => {
     const { customerId } = useParams();
+    console.log('customerId' , customerId)
     const dispatch = useDispatch();
-    const { loading, data, error } = useSelector((state) => state.customers);
-    console.log('data from updateCustomerInfo', data);
-
-    useEffect(() => {
-        dispatch(customersById(customerId));
-    }, [dispatch, customerId]);
+    const { isLoading, customerData, err } = useSelector((state) => state.frontCustomers);
+    console.log('data from updateCustomerInfo', customerData);
 
 
-    if (loading) {
+
+    if (isLoading) {
         return <LoadingSpinner />;
     }
-    if (!loading && error) {
-        return <div>Error: {error}</div>;
+    if (!isLoading && err) {
+        return <div>Error: {err}</div>;
     }
 
     return (
         <div >
-        <NavbarCustomers customer={data} />
-            <UpdateCustomerComponent customer={data} />
+        <NavbarCustomers customer={customerData} />
+            <UpdateCustomerComponent customer={customerData} />
         </div>
 
     );

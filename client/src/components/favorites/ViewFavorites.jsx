@@ -5,8 +5,12 @@ import {
 } from '../../features/favorites/favoritesSlice';
 
 const ViewFavorites = ({ favorites }) => {
+    
     const dispatch = useDispatch();
     return (
+
+        <div>
+
         <div className='grid grid-cols-4 gap-3 m-5 p-5 '>
             {favorites &&
                 favorites.map((favorite) => (
@@ -54,7 +58,7 @@ const ViewFavorites = ({ favorites }) => {
                         </div>
                     </div>
                 ))}
-             
+             </div>
         </div>
     );
 };

@@ -82,16 +82,17 @@ router.post(
 
 router.get('/logout', logoutHandler);
 
-// router.get('/profile', getCustomerProfileData);
+router.get('/profile', getCustomerProfileData);
 
-router.get('/', restrictTo('admin', 'manager'), getAllCustomersList);
+router.get('/',  getAllCustomersList);
 router.get('/:id', restrictTo('admin', 'manager'), getCustomerById);
 router.get('/search', searchForCustomer);
 router.put('/:id', updateCustomers);
 router.patch('/:id', customerCanUpdate);
-router.patch('/:id', restrictToCustomer, updateCustomerProfile);
 router.delete('/:id', restrictTo('admin', 'manager'), deleteCustomerById);
-router.get('/profile/:id', getProfile);
+
+// router.get('/profile/:id', getProfile);
+// router.patch('/:id', restrictToCustomer, updateCustomerProfile);
 
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
 router.post('/forgot-password', (req, res) =>
