@@ -8,11 +8,11 @@ const ViewFavorites = ({ favorites }) => {
     const dispatch = useDispatch();
     return (
         <div>
-            <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-10 m-5 p-5 '>
+            <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-5 m-5 p-5 '>
                 {favorites &&
                     favorites.map((favorite) => (
                         <div className=' ml-[90px] mt-[30px]  sm:w-1/2 md:w-1/3 md:ml-2px xl:w-[55%]'>
-                            <h6 className='text-center text-md font-semibold'>
+                            <h6 className='text-center text-md font-semibold p-1'>
                                 {favorite.product.product_name}
                             </h6>
                             <div
