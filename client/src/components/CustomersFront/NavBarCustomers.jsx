@@ -79,13 +79,7 @@ const NavbarCustomers = ({ customer }) => {
                                 </p>
                             </DropdownItem>
 
-                            <DropdownItem key='profile' className='h-8'>
-                                <Button className='bg-color-none '
-                              
-                                >
-                                    Profile
-                                </Button>
-                            </DropdownItem>
+                        
 
                             <DropdownItem key='settings' className='h-8'>
                                 <Button
@@ -97,7 +91,6 @@ const NavbarCustomers = ({ customer }) => {
                                     Settings
                                 </Button>
 
-                                {/* <Settings isOpen={isOpen} onOpenChange={onOpenChange} /> */}
                             </DropdownItem>
 
                             <DropdownItem

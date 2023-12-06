@@ -84,10 +84,10 @@ const RouteConfig = () => {
                     element={<UpdateCustomerInfo />}
                 />
 
-                {/* <Route
+                 <Route
                     path='/customerProfile'
                     element={<CustomerProfile />}
-                /> */}
+                /> 
 
                 <Route path='/customersOrders' />
 
