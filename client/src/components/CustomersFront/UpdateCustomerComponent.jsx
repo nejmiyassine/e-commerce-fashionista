@@ -17,7 +17,7 @@ import {
     Button,
     useDisclosure,
 } from '@nextui-org/react';
-import { patchCustomerData } from '../../features/customers/frontCustomerSlice';
+import { patchCustomerData } from '../../features/customers/customersSlice';
 
 const schema = yup.object({
     first_name: yup.string().required('First Name is required'),
@@ -30,7 +30,6 @@ const schema = yup.object({
 });
 
 const UpdateCustomerComponent = ({ customer }) => {
-    console.log('cus' , customer)
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -56,7 +55,6 @@ const UpdateCustomerComponent = ({ customer }) => {
     const onSubmit = (formData) => {
         
         if (isEditing) {
-            // navigate('/admin/customers');
             reset();
             navigate('/landingPage')
 

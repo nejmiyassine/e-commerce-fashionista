@@ -13,14 +13,16 @@ import UserDetails from '../pages/admin/users/UserDetails';
 import LandingP from '../pages/LandingPage/LandingP';
 import Orders from '../pages/admin/Orders/Orders';
 import ProtectedRoutes from './ProtectedRoutes';
+import ProtectedRoutesCustomer from './ProtectedRoutesCustomer';
 import AuthLogin from '../pages/auth/AuthLogin';
 import AuthRegister from '../pages/auth/AuthRegister';
 import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
 
-import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
+import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo';
 import CustomerProfile from '../pages/FrontCustomers/CustomerProfile';
-import Favorites from '../pages/favorites/Favorites'
+import Favorites from '../pages/favorites/Favorites';
+import CustomersOrdersPage from '../pages/CustomersOrders/CustomersOrdersPage';
 
 const RouteConfig = () => {
     return (
@@ -72,30 +74,27 @@ const RouteConfig = () => {
                         element={<UserDetails />}
                     />
                 </Route>
-                
-                    <Route
-                        path='/landingPage'
-                        element={<LandingP />}
-                    />
+
+                <Route path='/landingPage' element={<LandingP />} />
 
                 {/* front-store */}
+                {/* customerProtectedRoute */}
+                {/* <Route
+                    element={
+                        <ProtectedRoutesCustomer allowedRoles={'customer'} />
+                    }
+                > */}
                 <Route
                     path='/updateProfile/:customerId'
                     element={<UpdateCustomerInfo />}
                 />
 
-                 <Route
-                    path='/customerProfile'
-                    element={<CustomerProfile />}
-                /> 
+                <Route path='/customerProfile' element={<CustomerProfile />} />
 
-                <Route path='/customersOrders' />
+                <Route path='customersOrders' element={<CustomersOrdersPage />} />
+                <Route path='/customersFavorites' element={<Favorites />} />
 
-                <Route 
-                   path='/customersFavorites' 
-                   element={<Favorites />}
-                />
-
+                {/* </Route> */}
             </Routes>
         </Router>
     );

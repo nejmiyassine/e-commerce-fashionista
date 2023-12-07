@@ -11,7 +11,7 @@ import {
     Avatar,
     Button,
 } from '@nextui-org/react';
-import { logOutCustomer } from '../../features/customers/frontCustomerSlice';
+import { logOutCustomer } from '../../features/customers/customersSlice';
 
 const NavbarCustomers = ({ customer }) => {
     const navigate = useNavigate();

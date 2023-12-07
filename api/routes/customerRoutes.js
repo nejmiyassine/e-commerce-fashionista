@@ -82,13 +82,13 @@ router.post(
 
 router.get('/logout', logoutHandler);
 
-router.get('/profile', getCustomerProfileData);
+router.get('/profile', restrictToCustomer, getCustomerProfileData);
 
-router.get('/',  getAllCustomersList);
+router.get('/', restrictTo('admin', 'manager'), getAllCustomersList);
 router.get('/:id', restrictTo('admin', 'manager'), getCustomerById);
 router.get('/search', searchForCustomer);
-router.put('/:id', updateCustomers);
-router.patch('/:id', customerCanUpdate);
+router.put('/:id', restrictTo('admin', 'manager'), updateCustomers);
+router.patch('/:id', restrictToCustomer, customerCanUpdate);
 router.delete('/:id', restrictTo('admin', 'manager'), deleteCustomerById);
 
 // router.get('/profile/:id', getProfile);

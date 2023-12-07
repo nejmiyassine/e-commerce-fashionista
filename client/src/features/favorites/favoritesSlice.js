@@ -46,8 +46,8 @@ export const deleteFavorites = createAsyncThunk(
 );
 
 const initialState = {
-    isLoading: false,
-    data: [],
+    loading: false,
+    favoritesData: [],
     error: '',
 };
 
@@ -65,31 +65,31 @@ const favoritesSlice = createSlice({
 
             //fetchFavorites
             .addCase(fetchFavorites.pending, (state) => {
-                state.isLoading = true;
+                state.loading = true;
             })
             .addCase(fetchFavorites.fulfilled, (state, action) => {
-                state.isLoading = false;
-                state.data = action.payload;
+                state.loading = false;
+                state.favoritesData = action.payload;
                 state.error = '';
-                console.log('fetchFavorites', state.data);
+                console.log('fetchFavorites', state.favoritesData);
             })
             .addCase(fetchFavorites.rejected, (state, action) => {
-                state.isLoading = false;
+                state.loading = false;
                 state.error = action.error.message;
             })
 
             //deleteFavorites
             .addCase(deleteFavorites.pending, (state) => {
-                state.isLoading = true;
+                state.loading = true;
             })
 
             .addCase(deleteFavorites.fulfilled, (state, action) => {
-                state.isLoading = false;
+                state.loading = false;
                 const {
                     arg: { favoriteId },
                 } = action.meta;
                 if (favoriteId) {
-                    state.data = state.data.filter(
+                    state.favoritesData = state.favoritesData.filter(
                         (favorite) => favorite._id !== favoriteId
                     );
                 }

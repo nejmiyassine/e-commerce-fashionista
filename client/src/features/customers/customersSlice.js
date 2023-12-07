@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import API from '../../app/api/api';
 
-//all customers
+//GetAllcustomersByTheUser
 export const fetchCustomers = createAsyncThunk(
     'customers/fetchCustomers',
     async (_, { rejectWithValue }) => {
@@ -17,7 +17,7 @@ export const fetchCustomers = createAsyncThunk(
     }
 );
 
-//customerById
+//customerByIdAllowedByTheUser
 export const customersById = createAsyncThunk(
     'customers/customersById',
     async (customerId, { rejectWithValue }) => {
@@ -32,7 +32,7 @@ export const customersById = createAsyncThunk(
     }
 );
 
-//UpdateCustomer
+//UpdateCustomerByTheUser
 export const updateCustomer = createAsyncThunk(
     'customers/updateCustomer',
     async ({ customerId, updatedCustomerData }, { rejectWithValue }) => {
@@ -53,7 +53,7 @@ export const updateCustomer = createAsyncThunk(
     }
 );
 
-//delete Customer
+//deleteCustomerByTheUser
 export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
     async ({ customerId }, { rejectWithValue }) => {
@@ -69,10 +69,61 @@ export const deleteCustomer = createAsyncThunk(
     }
 );
 
+//GetCustomerProfileByTheCustomer
+export const getCustomerProfile = createAsyncThunk(
+    'fCustomer/getCustomerProfile',
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await API.get('customers/profile', {
+                withCredentials: true,
+            });
+            console.log('res', res);
+            return res.data;
+        } catch (error) {
+            rejectWithValue(error.res.data);
+        }
+    }
+);
+
+//patchCustomerProfile
+export const patchCustomerData = createAsyncThunk(
+    'fCustomer/patchCustomerData',
+    async ({ customerId, patchedCustomerData }, { rejectWithValue }) => {
+        try {
+            console.log('id from fron customerSlice', customerId);
+            const res = await API.patch(
+                `customers/${customerId}`,
+
+                patchedCustomerData,
+                {
+                    withCredentials: true,
+                }
+            );
+            console.log('res', res.data);
+            return res.data;
+        } catch (error) {
+            rejectWithValue(error.res.data);
+        }
+    }
+);
+
+//logoutCustomer
+export const logOutCustomer = createAsyncThunk(
+    'fCustomer/logOutCustomer',
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await API.get('customers/logout');
+            console.log('data of logout', res);
+        } catch (error) {
+            rejectWithValue(error.res.data);
+        }
+    }
+);
+
 const initialState = {
     isLoading: false,
     data: [],
-    error: '',
+    err: '',
     customer: null,
     access_token: '',
 };
@@ -86,7 +137,10 @@ const customersSlice = createSlice({
             state.customer = action.payload.user;
             state.access_token = action.payload.access_token;
         },
-        logout: () => ({ ...initialState, customer: null, access_token: '' }),
+        logout: () => {
+            ({ ...initialState, customer: null, access_token: '' });
+            console.log('islogout');
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -95,38 +149,35 @@ const customersSlice = createSlice({
             .addCase(fetchCustomers.pending, (state) => {
                 state.isLoading = true;
                 state.data = [];
-                state.error = '';
-                console.log('pending')
+                state.err = '';
+                console.log('pending');
             })
             .addCase(fetchCustomers.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
-                state.error = '';
+                state.err = '';
                 console.log('fetch customers', state.data);
             })
             .addCase(fetchCustomers.rejected, (state, action) => {
                 state.isLoading = false;
-                state.state.error = action.error.message;
+                state.state.err = action.error.message;
             })
-
 
             // customers by id
             .addCase(customersById.pending, (state) => {
                 state.isLoading = true;
                 console.log('pending');
             })
-            //
             .addCase(customersById.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
                 console.log('payload', state.data);
-                state.error = '';
+                state.err = '';
                 console.log('fulfilled');
             })
-            //
             .addCase(customersById.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.err = action.error.message;
                 console.log('rejected');
             })
 
@@ -134,7 +185,6 @@ const customersSlice = createSlice({
             .addCase(updateCustomer.pending, (state) => {
                 state.isLoading = true;
             })
-
             .addCase(updateCustomer.fulfilled, (state, action) => {
                 state.isLoading = false;
                 const {
@@ -147,11 +197,11 @@ const customersSlice = createSlice({
                         customer._id === customerId ? action.payload : customer
                     );
                 }
-                state.error = '';
+                state.err = '';
             })
             .addCase(updateCustomer.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.err = action.error.message;
                 console.log('rejected');
             })
 
@@ -159,9 +209,7 @@ const customersSlice = createSlice({
             .addCase(deleteCustomer.pending, (state) => {
                 state.isLoading = true;
                 console.log('pending');
-            });
-
-        builder
+            })
             .addCase(deleteCustomer.fulfilled, (state, action) => {
                 state.isLoading = false;
                 const {
@@ -175,12 +223,65 @@ const customersSlice = createSlice({
                     console.log('state.data', state.data);
                 }
 
-                state.error = '';
+                state.err = '';
                 console.log('fulfilled');
             })
             .addCase(deleteCustomer.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
+                state.err = action.error.message;
+                console.log('rejected');
+            })
+
+            //GetCustomerProfileByTheCustomer
+            .addCase(getCustomerProfile.pending, (state) => {
+                state.isLoading = true;
+                console.log('pending');
+            })
+            .addCase(getCustomerProfile.fulfilled, (state, action) => {
+                console.log('stats');
+                state.isLoading = false;
+                state.data = action.payload;
+                console.log('payload', state.data);
+                console.log('fulfilled');
+            })
+            .addCase(getCustomerProfile.rejected, (state, action) => {
+                state.isLoading = false;
+                state.err = action.error.message;
+                console.log('rejected');
+            })
+
+            //patchCustomerData
+            .addCase(patchCustomerData.pending, (state) => {
+                state.isLoading = true;
+                console.log('pending');
+            })
+            .addCase(patchCustomerData.fulfilled, (state, action) => {
+                state.isLoading = false;
+                const {
+                    arg: { customerId },
+                } = action.meta;
+                console.log('action.meta', action.meta);
+
+                state.err = '';
+            })
+            .addCase(patchCustomerData.rejected, (state, action) => {
+                state.isLoading = false;
+                state.data = action.error.message;
+                console.log('rejected');
+            })
+
+            //logout customer
+            .addCase(logOutCustomer.pending, (state) => {
+                state.isLoading = true;
+                console.log('pending');
+            })
+            .addCase(logOutCustomer.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.data;
+                console.log('fulfillled');
+            })
+            .addCase(logOutCustomer.rejected, (state, action) => {
+                state.err = action.error.message;
                 console.log('rejected');
             });
     },

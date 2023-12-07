@@ -19,6 +19,7 @@ export const store = configureStore({
     reducer: {
         customers: customersReducer,
         frontCustomers: frontCustomerReducer,
+    
         favorites: favoritesReducer,
         categories: categoriesReducer,
         subcategories: subcategoriesReducer,

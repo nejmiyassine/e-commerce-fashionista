@@ -17,7 +17,7 @@ const ViewFavorites = ({ favorites }) => {
                             </h6>
                             <div
                                 key={favorite.product._id}
-                                className='  w-96 h-auto bg-white-800 border-black border-medium rounded-md shadow-xl hover:-translate-y-1 hover:scale-200 duration-300   '
+                                className='  w-96 h-auto  rounded-md shadow-xl  hover:-translate-y-1 hover:scale-200 duration-300   '
                             >
                                 <img
                                     className='w-[240px] h-[380px] mx-auto'
@@ -35,7 +35,7 @@ const ViewFavorites = ({ favorites }) => {
                                             );
                                         }}
                                         type='submit'
-                                        className='border-2 border-black hover:bg-red-300 hover:border-none font-medium rounded-md m-2 p-2'
+                                        className='border-2 border-black hover:bg-red-300 hover:border-none font-medium rounded-md m-2 p-1'
                                     >
                                         Remove
                                     </button>
@@ -48,7 +48,7 @@ const ViewFavorites = ({ favorites }) => {
                                                 })
                                             );
                                         }}
-                                        className='border-2 border-black hover:bg-blue-300 hover:border-none font-medium rounded-md m-2 p-2 '
+                                        className='border-2 border-black hover:bg-blue-300 hover:border-none font-medium rounded-md mx-3 my-2 m p-1 '
                                         type='submit'
                                     >
                                         More details
