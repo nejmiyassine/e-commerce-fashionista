@@ -16,6 +16,7 @@ import AuthLogin from '../pages/auth/AuthLogin';
 import AuthRegister from '../pages/auth/AuthRegister';
 import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
+<<<<<<< HEAD
 import ProtectedRoutes from './ProtectedRoutes';
 
 import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
@@ -27,6 +28,15 @@ import AdminProductDetails from '../pages/admin/Products/AdminProductDetails';
 import ProductDetails from '../pages/ProductDetails';
 import ProtectedRoutesCustomer from './ProtectedRoutesCustomer';
 import Favorites from '../pages/favorites/Favorites'
+=======
+import CatalogClo from '../pages/catalog/CatalogClo';
+
+import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
+import CustomerProfile from '../pages/FrontCustomers/customerProfile';
+import Contact from '../components/LandingPage/Contact'
+import About from '../components/LandingPage/About'
+import Terms from '../components/LandingPage/Terms'
+>>>>>>> 593aa5debc4d1c475e2bdd366069ce29a280d751
 
 const RouteConfig = () => {
     return (
@@ -37,6 +47,7 @@ const RouteConfig = () => {
                 <Route path='*' element={<PageNotFound />} />
 
                 <Route exact path='/' element={<Home />} />
+<<<<<<< HEAD
                 <Route path='/landingPage' element={<LandingP />} />
 
                 <Route element={<ProtectedRoutesCustomer />}>
@@ -46,6 +57,28 @@ const RouteConfig = () => {
                         element={<ProductDetails />}
                     />
                 </Route>
+=======
+                <Route path='/catalog' element={<Catalog />} />
+                <Route path='/catalogclo' element={<CatalogClo />} />
+
+                <Route
+                    path='/landingPage'
+                    element={<LandingP />}
+                />
+                <Route
+                    path='/about'
+                    element={<About />}
+                />
+                 <Route
+                    path='/terms'
+                    element={<Terms />}
+                />
+                <Route
+                    path='/contact'
+                    element={<Contact />}
+                />
+
+>>>>>>> 593aa5debc4d1c475e2bdd366069ce29a280d751
 
                 {/* Authentication */}
                 <Route path='/register' element={<AuthRegister />} />

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -79,7 +80,7 @@ const NavbarCustomers = ({ customer }) => {
                                 </p>
                             </DropdownItem>
 
-                        
+
 
                             <DropdownItem key='settings' className='h-8'>
                                 <Button
@@ -101,12 +102,12 @@ const NavbarCustomers = ({ customer }) => {
                                 <Button className='bg-color-none'
                                 onClick={() => {
 
-                                 dispatch(logOutCustomer()) 
+                                 dispatch(logOutCustomer())
                                 navigate('/login')
                             }
                                 }
                                 >
-                                
+
                                     Log out
                                 </Button>
                             </DropdownItem>
