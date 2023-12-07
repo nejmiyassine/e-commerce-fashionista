@@ -5,7 +5,7 @@ const {
     listProductsByCategoryName,
     deleteProduct,
     updateProduct,
-    getProductID,
+    getProductById,
     searchforProduct,
 } = require('../controllers/productController');
 
@@ -14,8 +14,9 @@ router.get('/categories', listProductsByCategoryName);
 
 router.get('/', listProduct);
 router.get('/:name', searchforProduct);
-router.get('/:id', getProductID);
+router.get('/product/:id', getProductById);
+
 router.delete('/:id', deleteProduct);
-router.put('/:id', updateProduct);
+router.patch('/:id', updateProduct);
 
 module.exports = router;

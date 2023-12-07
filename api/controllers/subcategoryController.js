@@ -41,7 +41,6 @@ const createSubCategoryController = async (req, res) => {
     }
 };
 
-
 //Delete sub-category
 const deleteSubCategoryController = async (req, res) => {
     try {
@@ -72,7 +71,6 @@ const deleteSubCategoryController = async (req, res) => {
     }
 };
 
-
 //Get by ID
 const getSubCategoryController = async (req, res) => {
     try {
@@ -92,17 +90,16 @@ const getSubCategoryController = async (req, res) => {
     }
 };
 
-
 //Get ALL
 const getAllSubCategoryController = async (req, res) => {
     try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = 10;
-        const skip = (page - 1) * limit;
+        // const page = parseInt(req.query.page) || 1;
+        // const limit = 10;
+        // const skip = (page - 1) * limit;
 
-        const subcategories = await Subcategory.find({})
-            .limit(limit)
-            .skip(skip)
+        const subcategories = await Subcategory.find()
+            // .limit(limit)
+            // .skip(skip)
             .select('_id name');
 
         if (subcategories.length === 0) {
@@ -120,7 +117,6 @@ const getAllSubCategoryController = async (req, res) => {
         });
     }
 };
-
 
 //Get Search Subcategories
 const getSearchSubCategoryController = async (req, res) => {
@@ -154,7 +150,6 @@ const getSearchSubCategoryController = async (req, res) => {
         });
     }
 };
-
 
 //Put Subcategory
 const updateSubCategoryController = async (req, res) => {

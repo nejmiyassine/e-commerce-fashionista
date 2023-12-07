@@ -3,8 +3,8 @@ import axios from '../../api/axios';
 
 const initialState = {
     products: [],
-    isLoading: true,
-    // editedProduct: null,
+    product: {},
+    isLoading: false,
     error: null,
 };
 
@@ -21,12 +21,27 @@ export const getAllProducts = createAsyncThunk(
     }
 );
 
+export const getProductById = createAsyncThunk(
+    'products/getProductById',
+    async (productById, { rejectWithValue }) => {
+        try {
+            const response = await axios.get(
+                `v1/products/product/${productById}`,
+                { withCredentials: true }
+            );
+            return response.data.data;
+        } catch (error) {
+            rejectWithValue(error);
+        }
+    }
+);
+
 // Edit Product
 export const editProduct = createAsyncThunk(
     'products/editProduct',
     async ({ id, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.put(`v1/products/${id}`, data);
+            const response = await axios.patch(`v1/products/${id}`, data);
             return response.data.data;
         } catch (error) {
             rejectWithValue(error);
@@ -78,7 +93,12 @@ export const fetchProductsByCategory = createAsyncThunk(
 export const productsSlice = createSlice({
     name: 'products',
     initialState,
-    reducers: {},
+    reducers: {
+        setProduct: (state, action) => {
+            state.isLoading = false;
+            state.product = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getAllProducts.pending, (state) => {
@@ -94,6 +114,22 @@ export const productsSlice = createSlice({
             .addCase(getAllProducts.rejected, (state, action) => {
                 state.isLoading = false;
                 state.products = [];
+                state.error = action.error;
+            })
+            // Get Product By Id
+            .addCase(getProductById.pending, (state) => {
+                state.isLoading = true;
+                state.product = {};
+                state.error = null;
+            })
+            .addCase(getProductById.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.product = action.payload;
+                state.error = null;
+            })
+            .addCase(getProductById.rejected, (state, action) => {
+                state.isLoading = false;
+                state.product = {};
                 state.error = action.error;
             })
             .addCase(editProduct.pending, (state) => {
@@ -171,5 +207,7 @@ export const productsSlice = createSlice({
             });
     },
 });
+
+export const { setProduct } = productsSlice.actions;
 
 export default productsSlice.reducer;

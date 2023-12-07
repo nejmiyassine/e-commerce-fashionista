@@ -68,8 +68,9 @@ const AdminNavbar = () => {
                     <div className='relative flex h-full gap-4 items-center items-center justify-end'>
                         <Switch
                             defaultSelected
+                            color='secondary'
                             onClick={toggleDarkMode}
-                            size='lg'
+                            size='md'
                             startContent={<SunIcon />}
                             endContent={<MoonIcon />}
                         />

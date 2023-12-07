@@ -20,7 +20,7 @@ import NProgress from 'nprogress';
 import { Link } from 'react-router-dom';
 
 import { MdModeEditOutline } from 'react-icons/md';
-import { FaEye } from 'react-icons/fa';
+import { FaEye, FaUserCircle } from 'react-icons/fa';
 import { MdDeleteForever } from 'react-icons/md';
 import { VerticalDotsIcon } from '../../icons/Icons';
 
@@ -93,13 +93,13 @@ const UsersTable = () => {
             NProgress.done();
         }
 
-        if (isError || isGetAllUsersError) {
+        if (isError) {
             NProgress.done();
-            const err = error || getAllUsersError;
+            const err = error;
             if (Array.isArray(err.data.error)) {
                 err.data.error.forEach((el) =>
                     toast.error(el.message, {
-                        position: 'top-right',
+                        position: 'bottom-right',
                     })
                 );
             } else {
@@ -109,12 +109,36 @@ const UsersTable = () => {
                     err.message ||
                     err.toString();
                 toast.error(resMessage, {
-                    position: 'top-right',
+                    position: 'bottom-right',
                 });
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoading, isGetAllUsersLoading]);
+    }, [isLoading, isError]);
+
+    React.useEffect(() => {
+        if (isGetAllUsersError) {
+            NProgress.done();
+            const err = getAllUsersError;
+            if (Array.isArray(err.data.error)) {
+                err.data.error.forEach((el) =>
+                    toast.error(el.message, {
+                        position: 'bottom-right',
+                    })
+                );
+            } else {
+                const resMessage =
+                    err.data.message ||
+                    err.data.detail ||
+                    err.message ||
+                    err.toString();
+                toast.error(resMessage, {
+                    position: 'bottom-right',
+                });
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isGetAllUsersLoading, isGetAllUsersError]);
 
     const hasSearchFilter = Boolean(filterValue);
 
@@ -211,10 +235,11 @@ const UsersTable = () => {
                 case 'role':
                     return (
                         <p
-                            className={`capitalize text-sm font-semibold text-${
+                            className={`flex items-center gap-2 capitalize text-sm font-semibold text-${
                                 roleColorMap[user.role.toLowerCase()]
                             }`}
                         >
+                            <FaUserCircle />
                             {cellValue}
                         </p>
                     );
@@ -310,6 +335,7 @@ const UsersTable = () => {
                 columns={columns}
                 loading={isGetAllUsersLoading || isGetAllUsersFetching}
                 data={users}
+                isUser={true}
             />
         );
     }, [
@@ -363,8 +389,6 @@ const UsersTable = () => {
         }),
         []
     );
-
-    console.log(users);
 
     return (
         <>

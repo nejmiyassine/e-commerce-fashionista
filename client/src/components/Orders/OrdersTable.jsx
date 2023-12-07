@@ -190,6 +190,7 @@ const OrdersTable = () => {
                 columns={columns}
                 loading={isLoading}
                 data={data}
+                isUser={false}
             />
         );
     }, [

@@ -76,6 +76,13 @@ export const usersAPI = api.injectEndpoints({
                 body: updatedUser,
                 credentials: 'include',
             }),
+            invalidatesTags: (result, error, { id }) =>
+                result
+                    ? [
+                          { type: 'Users', id },
+                          { type: 'Users', id: 'LIST' },
+                      ]
+                    : [{ type: 'Users', id: 'LIST' }],
             onQueryStarted() {
                 NProgress.start();
             },

@@ -13,7 +13,8 @@ import { usersAPI } from './api/usersApi';
 import { ordersAPI } from './api/ordersApi';
 import { authApi } from './api/authApi';
 import { customerAPI } from './api/customerApi';
-import bagSlice from '../features/bag/bagSlice';
+import { cartAPI } from './api/cartApi';
+import cartSlice from '../features/cart/cartSlice';
 
 export const store = configureStore({
     reducer: {
@@ -24,11 +25,12 @@ export const store = configureStore({
         subcategories: subcategoriesReducer,
         users: usersReducer,
         products: productsReducers,
-        bag: bagSlice,
+        cart: cartSlice,
         [usersAPI.reducerPath]: usersAPI.reducer,
         [authApi.reducerPath]: authApi.reducer,
         [ordersAPI.reducerPath]: ordersAPI.reducer,
         [customerAPI.reducerPath]: customerAPI.reducer,
+        [cartAPI.reducerPath]: cartAPI.reducer,
     },
     devTools: import.meta.env.VITE_REACT_APP_NODE_ENV === 'development',
     middleware: (getDefaultMiddleware) =>
@@ -37,6 +39,7 @@ export const store = configureStore({
             ordersAPI.middleware,
             authApi.middleware,
             customerAPI.middleware,
+            cartAPI.middleware,
         ]),
 });
 

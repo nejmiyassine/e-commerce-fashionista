@@ -12,14 +12,20 @@ import Users from '../pages/admin/users/Users';
 import UserDetails from '../pages/admin/users/UserDetails';
 import LandingP from '../pages/LandingPage/LandingP';
 import Orders from '../pages/admin/Orders/Orders';
-import ProtectedRoutes from './ProtectedRoutes';
 import AuthLogin from '../pages/auth/AuthLogin';
 import AuthRegister from '../pages/auth/AuthRegister';
 import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
+import ProtectedRoutes from './ProtectedRoutes';
 
 import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
 import CustomerProfile from '../pages/FrontCustomers/CustomerProfile';
+import EditProduct from '../pages/admin/Products/EditProduct';
+import AddProduct from '../pages/admin/Products/AddProduct';
+import PageNotFound from '../pages/PageNotFound';
+import AdminProductDetails from '../pages/admin/Products/AdminProductDetails';
+import ProductDetails from '../pages/ProductDetails';
+import ProtectedRoutesCustomer from './ProtectedRoutesCustomer';
 import Favorites from '../pages/favorites/Favorites'
 
 const RouteConfig = () => {
@@ -28,9 +34,18 @@ const RouteConfig = () => {
             <Routes>
                 {/* Unauthorized */}
                 <Route path='/unauthorized' element={<Unauthorized />} />
+                <Route path='*' element={<PageNotFound />} />
 
                 <Route exact path='/' element={<Home />} />
-                <Route path='/catalog' element={<Catalog />} />
+                <Route path='/landingPage' element={<LandingP />} />
+
+                <Route element={<ProtectedRoutesCustomer />}>
+                    <Route path='/shop' element={<Catalog />} />
+                    <Route
+                        path='/shop/product/:productId'
+                        element={<ProductDetails />}
+                    />
+                </Route>
 
                 {/* Authentication */}
                 <Route path='/register' element={<AuthRegister />} />
@@ -44,6 +59,17 @@ const RouteConfig = () => {
                     }
                 >
                     <Route path='/admin/products' element={<Products />} />
+                    <Route
+                        path='/admin/edit/product/:productId'
+                        element={<EditProduct />}
+                    />
+                    <Route
+                        path='/admin/product/:productId'
+                        element={<AdminProductDetails />}
+                    />
+
+                    <Route path='/admin/add/product' element={<AddProduct />} />
+
                     <Route path='/admin/categories' element={<Categories />} />
                     <Route path='/admin/orders' element={<Orders />} />
                     <Route
@@ -72,11 +98,6 @@ const RouteConfig = () => {
                         element={<UserDetails />}
                     />
                 </Route>
-                
-                    <Route
-                        path='/landingPage'
-                        element={<LandingP />}
-                    />
 
                 {/* front-store */}
                 <Route

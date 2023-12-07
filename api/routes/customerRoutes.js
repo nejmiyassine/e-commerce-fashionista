@@ -93,6 +93,7 @@ router.delete('/:id', restrictTo('admin', 'manager'), deleteCustomerById);
 
 // router.get('/profile/:id', getProfile);
 
+
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
 router.post('/forgot-password', (req, res) =>
     forgotPassword(req, res, 'Customer')

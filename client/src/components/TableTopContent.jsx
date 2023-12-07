@@ -10,6 +10,9 @@ import {
 // import { ChevronDownIcon, SearchIcon } from '../../icons/Icons';
 import { capitalize } from '../utils/capitalize';
 import { ChevronDownIcon, SearchIcon, UserPlus } from '../icons/Icons';
+import { FaUserCircle } from 'react-icons/fa';
+import { PiColumnsBold } from 'react-icons/pi';
+import { IoIosTrendingUp } from 'react-icons/io';
 
 const TableTopContent = ({
     filterValue,
@@ -25,6 +28,7 @@ const TableTopContent = ({
     columns,
     loading,
     data,
+    isUser,
 }) => {
     return (
         <div className='flex flex-col gap-4'>
@@ -35,6 +39,7 @@ const TableTopContent = ({
                         base: 'w-full sm:max-w-[44%]',
                         inputWrapper: 'border-1',
                     }}
+                    labelPlacement='outside'
                     placeholder='Search by name...'
                     size='sm'
                     startContent={<SearchIcon className='text-default-300' />}
@@ -53,7 +58,17 @@ const TableTopContent = ({
                                 size='sm'
                                 variant='flat'
                             >
-                                Role
+                                {isUser ? (
+                                    <>
+                                        <FaUserCircle size={16} />
+                                        Role
+                                    </>
+                                ) : (
+                                    <>
+                                        <IoIosTrendingUp size={16} />
+                                        Status
+                                    </>
+                                )}
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu
@@ -83,6 +98,7 @@ const TableTopContent = ({
                                 size='sm'
                                 variant='flat'
                             >
+                                <PiColumnsBold size={16} />
                                 Columns
                             </Button>
                         </DropdownTrigger>
@@ -109,7 +125,7 @@ const TableTopContent = ({
                             className='bg-foreground text-background'
                             size='sm'
                             isDisabled={loading}
-                            endContent={<UserPlus />}
+                            startContent={<UserPlus size={16} />}
                             onPress={onOpen}
                         >
                             Add User
@@ -153,4 +169,5 @@ TableTopContent.propTypes = {
     columns: PropTypes.array,
     loading: PropTypes.bool,
     data: PropTypes.any,
+    isUser: PropTypes.bool,
 };

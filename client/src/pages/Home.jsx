@@ -56,9 +56,9 @@ const Home = () => {
                 </Link>
                 <Link
                     className='text-blue-600 underline underline-offset-4'
-                    to='/catalog'
+                    to='/shop'
                 >
-                    Catalog
+                    Shop
                 </Link>
                 {/* <Link
                     to='/admin/login'

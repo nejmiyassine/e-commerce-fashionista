@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import AuthLoginForm from '../../../components/AuthLoginForm';
 
 const AdminLogin = () => {
@@ -7,11 +8,17 @@ const AdminLogin = () => {
                 <div className='px-8 py-6 md:px-16'>
                     <div className='mb-6 text-center'>
                         <h2 className='font-bold text-3xl mb-1'>
-                            Welcome back!
+                            Admin / Manager Login
                         </h2>
                         <p className='text-sm text-slate-400 dark:text-slate-500'>
                             Please enter your details
                         </p>
+                        <Link
+                            to='/login'
+                            className='text-sm text-blue-600 underline dark:text-slate-700'
+                        >
+                            You are a customer?
+                        </Link>
                     </div>
 
                     <AuthLoginForm account_type={'user'} />

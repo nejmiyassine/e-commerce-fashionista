@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import {
@@ -35,7 +35,7 @@ const userRole = [
     },
 ];
 
-const userSchema = yup
+const schema = yup
     .object({
         first_name: yup.string().required('Please enter a first name'),
         last_name: yup.string().required('Please enter a last name'),
@@ -57,10 +57,8 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
     const navigate = useNavigate();
     const isEditing = !!userData;
 
-    const passwordInitialValue = isEditing ? '' : '';
-
     const methods = useForm({
-        resolver: yupResolver(userSchema),
+        resolver: yupResolver(schema),
         defaultValues: {
             first_name: '',
             last_name: '',
@@ -69,13 +67,14 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
             role: '',
             password: '',
         },
+        userData,
     });
 
     const {
-        register,
         handleSubmit,
         formState: { errors },
         reset,
+        control,
     } = methods;
 
     const [
@@ -97,8 +96,6 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
         },
     ] = useUpdateUserMutation();
 
-    const loading = isAddLoading || isUpdateLoading;
-
     const [isVisible, setIsVisible] = React.useState(false);
     const toggleVisibility = () => setIsVisible(!isVisible);
 
@@ -108,37 +105,31 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
         onOpenChange(false);
 
         if (isEditing) {
-            updateUser({
-                userId: userData._id,
-                updatedUser: { ...formData, account_type: 'user' },
-            });
+            updateUser({ userId: userData._id, updatedUser: formData });
         } else {
             addUser({ ...formData, account_type: 'user' });
         }
     };
 
-    // Effect to set form data when userData prop changes
     React.useEffect(() => {
         if (userData) {
             reset({
                 ...userData,
-                password: passwordInitialValue,
+                password: '',
             });
         }
+    }, [userData, reset]);
 
+    // Effect to set form data when userData prop changes
+    React.useEffect(() => {
         if (isAddSuccess) {
             toast.success('User Added successfully');
             NProgress.done();
         }
 
-        if (isUpdateSuccess) {
-            toast.success('User updated successfully');
+        if (isAddError) {
             NProgress.done();
-        }
-
-        if (isUpdateError || isAddError) {
-            NProgress.done();
-            const err = addError || updateError;
+            const err = addError;
             if (Array.isArray(err.data.error)) {
                 err.data.error.forEach((el) =>
                     toast.error(el.message, {
@@ -157,7 +148,36 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userData, reset, passwordInitialValue, isAddLoading, isUpdateLoading]);
+    }, [isAddLoading]);
+
+    React.useEffect(() => {
+        if (isUpdateSuccess) {
+            NProgress.done();
+            toast.success('User updated successfully');
+        }
+
+        if (isUpdateError) {
+            NProgress.done();
+            const err = updateError;
+            if (Array.isArray(err.data.error)) {
+                err.data.error.forEach((el) =>
+                    toast.error(el.message, {
+                        position: 'top-right',
+                    })
+                );
+            } else {
+                const resMessage =
+                    err.data.message ||
+                    err.data.detail ||
+                    err.message ||
+                    err.toString();
+                toast.error(resMessage, {
+                    position: 'top-right',
+                });
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isUpdateLoading]);
 
     return (
         <Modal
@@ -170,138 +190,186 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
                 {(onClose) => (
                     <>
                         <ModalHeader className='flex flex-col gap-1'>
-                            {userData ? 'Edit User' : 'Add User'}
+                            {isEditing ? 'Update User' : 'Add User'}
                         </ModalHeader>
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <ModalBody>
                                 <div className='flex items-center gap-2'>
                                     <div>
-                                        <Input
-                                            autoFocus
-                                            endContent={
-                                                <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
-                                            }
+                                        <Controller
+                                            render={({ field }) => (
+                                                <Input
+                                                    autoFocus
+                                                    endContent={
+                                                        <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
+                                                    }
+                                                    label='First Name'
+                                                    placeholder='Enter First Name'
+                                                    variant='bordered'
+                                                    {...field}
+                                                    isInvalid={
+                                                        !!errors.first_name
+                                                    }
+                                                    errorMessage={
+                                                        errors.first_name &&
+                                                        errors.first_name
+                                                            ?.message
+                                                    }
+                                                />
+                                            )}
                                             name='first_name'
-                                            label='First Name'
-                                            aria-label='User First Name'
-                                            placeholder='Enter First Name'
-                                            variant='bordered'
-                                            {...register('first_name')}
-                                            isInvalid={!!errors.first_name}
-                                            errorMessage={
-                                                errors.first_name &&
-                                                errors.first_name?.message
-                                            }
+                                            control={control}
+                                            rules={{ required: true }}
                                         />
                                     </div>
                                     <div>
-                                        <Input
-                                            endContent={
-                                                <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
-                                            }
+                                        <Controller
+                                            render={({ field }) => (
+                                                <Input
+                                                    autoFocus
+                                                    label='Last Name'
+                                                    placeholder='Enter Last Name'
+                                                    variant='bordered'
+                                                    {...field}
+                                                    isInvalid={
+                                                        !!errors.last_name
+                                                    }
+                                                    errorMessage={
+                                                        errors.last_name &&
+                                                        errors.last_name
+                                                            ?.message
+                                                    }
+                                                    endContent={
+                                                        <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
+                                                    }
+                                                />
+                                            )}
                                             name='last_name'
-                                            label='Last Name'
-                                            aria-label='User Last Name'
-                                            placeholder='Enter Last Name'
-                                            variant='bordered'
-                                            {...register('last_name')}
-                                            isInvalid={!!errors.last_name}
-                                            errorMessage={
-                                                errors.last_name &&
-                                                errors.last_name?.message
-                                            }
+                                            control={control}
+                                            rules={{ required: true }}
                                         />
                                     </div>
                                 </div>
                                 <div>
-                                    <Input
-                                        endContent={
-                                            <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
-                                        }
+                                    <Controller
+                                        render={({ field }) => (
+                                            <Input
+                                                autoFocus
+                                                variant='bordered'
+                                                label='Email'
+                                                placeholder='Enter Email'
+                                                type='email'
+                                                isInvalid={!!errors.email}
+                                                errorMessage={
+                                                    errors.email &&
+                                                    errors.email?.message
+                                                }
+                                                endContent={
+                                                    <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
+                                                }
+                                                {...field}
+                                            />
+                                        )}
                                         name='email'
-                                        label='Email'
-                                        placeholder='Enter Email'
-                                        aria-label='User Email Address'
-                                        type='email'
-                                        variant='bordered'
-                                        {...register('email')}
-                                        isInvalid={!!errors.email}
-                                        errorMessage={
-                                            errors.email &&
-                                            errors.email?.message
-                                        }
+                                        control={control}
+                                        rules={{ required: true }}
                                     />
                                 </div>
                                 <div>
-                                    <Input
-                                        endContent={
-                                            <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
-                                        }
+                                    <Controller
+                                        render={({ field }) => (
+                                            <Input
+                                                autoFocus
+                                                variant='bordered'
+                                                label='Username'
+                                                placeholder='Enter Username'
+                                                isInvalid={!!errors.username}
+                                                errorMessage={
+                                                    errors.username &&
+                                                    errors.username?.message
+                                                }
+                                                endContent={
+                                                    <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
+                                                }
+                                                {...field}
+                                            />
+                                        )}
                                         name='username'
-                                        label='Username'
-                                        aria-label='User Username'
-                                        placeholder='Enter Username'
-                                        variant='bordered'
-                                        {...register('username')}
-                                        isInvalid={!!errors.username}
-                                        errorMessage={
-                                            errors.username &&
-                                            errors.username?.message
-                                        }
+                                        control={control}
+                                        rules={{ required: true }}
                                     />
                                 </div>
                                 <div>
-                                    <Input
-                                        endContent={
-                                            <button
-                                                className='focus:outline-none'
-                                                type='button'
-                                                onClick={toggleVisibility}
-                                            >
-                                                {isVisible ? (
-                                                    <EyeSlashFilledIcon className='text-2xl text-default-400 pointer-events-none' />
-                                                ) : (
-                                                    <EyeFilledIcon className='text-2xl text-default-400 pointer-events-none' />
-                                                )}
-                                            </button>
-                                        }
-                                        type={isVisible ? 'text' : 'password'}
+                                    <Controller
+                                        render={({ field }) => (
+                                            <Input
+                                                autoFocus
+                                                variant='bordered'
+                                                label='Password'
+                                                placeholder='Enter Password'
+                                                isInvalid={!!errors.password}
+                                                errorMessage={
+                                                    errors.password &&
+                                                    errors.password?.message
+                                                }
+                                                endContent={
+                                                    <button
+                                                        className='focus:outline-none'
+                                                        type='button'
+                                                        onClick={
+                                                            toggleVisibility
+                                                        }
+                                                    >
+                                                        {isVisible ? (
+                                                            <EyeSlashFilledIcon className='text-2xl text-default-400 pointer-events-none' />
+                                                        ) : (
+                                                            <EyeFilledIcon className='text-2xl text-default-400 pointer-events-none' />
+                                                        )}
+                                                    </button>
+                                                }
+                                                type={
+                                                    isVisible
+                                                        ? 'text'
+                                                        : 'password'
+                                                }
+                                                {...field}
+                                            />
+                                        )}
                                         name='password'
-                                        label='Password'
-                                        aria-label='User Password'
-                                        placeholder='Enter Password'
-                                        variant='bordered'
-                                        {...register('password')}
-                                        isInvalid={!!errors.password}
-                                        errorMessage={
-                                            errors.password &&
-                                            errors.password?.message
-                                        }
+                                        control={control}
+                                        rules={{ required: true }}
                                     />
                                 </div>
                                 <div>
-                                    <Select
-                                        variant='underlined'
-                                        name='role'
-                                        label='Select user role'
-                                        aria-label='User Role'
-                                        placeholder='Select a role'
-                                        className='w-full px-2'
-                                        {...register('role')}
-                                        isInvalid={!!errors.role}
-                                        errorMessage={
-                                            errors.role && errors.role?.message
-                                        }
-                                    >
-                                        {userRole.map((role) => (
-                                            <SelectItem
-                                                key={role.value}
-                                                value={role.value}
+                                    <Controller
+                                        render={({ field }) => (
+                                            <Select
+                                                autoFocus
+                                                variant='underlined'
+                                                label='Select user role'
+                                                placeholder='Select a role'
+                                                className='w-full px-2'
+                                                isInvalid={!!errors.role}
+                                                errorMessage={
+                                                    errors.role &&
+                                                    errors.role?.message
+                                                }
+                                                {...field}
                                             >
-                                                {role.label}
-                                            </SelectItem>
-                                        ))}
-                                    </Select>
+                                                {userRole.map((role) => (
+                                                    <SelectItem
+                                                        key={role.value}
+                                                        value={role.value}
+                                                    >
+                                                        {role.label}
+                                                    </SelectItem>
+                                                ))}
+                                            </Select>
+                                        )}
+                                        name='role'
+                                        control={control}
+                                        rules={{ required: true }}
+                                    />
                                 </div>
                             </ModalBody>
                             <ModalFooter>
@@ -311,7 +379,7 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
                                 >
                                     Close
                                 </Button>
-                                {loading ? (
+                                {isAddLoading || isUpdateLoading ? (
                                     <Button
                                         className='bg-black text-white'
                                         isDisabled

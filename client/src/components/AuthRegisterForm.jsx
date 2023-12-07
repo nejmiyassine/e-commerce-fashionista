@@ -45,6 +45,8 @@ const AuthRegisterForm = ({ account_type }) => {
     const methods = useForm({
         resolver: yupResolver(userSchema),
         defaultValues: {
+            first_name: '',
+            last_name: '',
             email: '',
             password: '',
         },
@@ -190,7 +192,7 @@ const AuthRegisterForm = ({ account_type }) => {
                 name='confirmPassword'
                 label='Confirm Password'
                 placeholder='Confirm Password'
-                {...register('password')}
+                {...register('confirmPassword')}
                 isInvalid={!!errors.confirmPassword}
                 errorMessage={
                     errors.confirmPassword && errors.confirmPassword?.message

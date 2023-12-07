@@ -3,7 +3,7 @@ import { Spinner } from '@nextui-org/react';
 
 const LoadingSpinner = ({ size = 'lg' }) => {
     return (
-        <div className='flex justify-center items-center'>
+        <div className='flex justify-center items-center z-50'>
             <Spinner size={size} />
         </div>
     );

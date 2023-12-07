@@ -1,5 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+    Table,
+    TableHeader,
+    TableColumn,
+    TableBody,
+    TableRow,
+    TableCell,
+    Tooltip,
+    Input,
+    Spacer,
+} from '@nextui-org/react';
+import { MdEdit, MdDelete } from 'react-icons/md';
+import { IoIosClose } from 'react-icons/io';
+import { RiAddCircleLine } from 'react-icons/ri';
+import { CiSearch } from 'react-icons/ci';
+
 import {
     getAllCategories,
     editCategory,
@@ -7,6 +23,11 @@ import {
     createCategory,
 } from '../../../features/categories/categoriesSlice';
 import Layout from '../../../layouts/Layout';
+
+const columns = [
+    { name: 'NAME', uid: 'name' },
+    { name: 'ACTIONS', uid: 'actions' },
+];
 
 const ManageCategories = () => {
     const dispatch = useDispatch();
@@ -66,6 +87,7 @@ const ManageCategories = () => {
             const { data } = await dispatch(
                 editCategory({ id: selectedCategory._id, name: updatedName })
             );
+
             if (data?.success) {
                 setUpdatedName('');
                 setSelectedCategory(null);
@@ -114,175 +136,251 @@ const ManageCategories = () => {
         category?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    return (
-        <Layout>
-            <div className='container mx-auto p-6'>
-                <h1 className='text-3xl font-bold text-center'>
-                    Manage Categories
-                </h1>
-                <div className='flex justify-between items-center mt-4 mb-8'>
+    const topContent = useMemo(() => {
+        return (
+            <div className='container mx-auto'>
+                <div className='flex justify-between items-center flex-col gap-2 md:flex-row mt-4 mb-4'>
                     <div>
-                        <input
+                        <Input
+                            variant='underlined'
                             type='text'
-                            placeholder='Search Categories'
+                            className='w-[250px] md:w-[350px]'
+                            labelPlacement='outside'
+                            placeholder='Search for Categories'
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className='border p-2 rounded'
+                            endContent={
+                                <CiSearch
+                                    size={20}
+                                    className='text-default-400'
+                                />
+                            }
                         />
                     </div>
+
                     <div>
-                        {/* Button to open the add category modal on the far right */}
                         <button
                             onClick={openAddCategoryModal}
-                            className='bg-blue-500 text-white px-4 py-2 rounded'
+                            className='flex items-center justify-center font-semibold gap-1 transition bg-black text-white border border-black hover:bg-white hover:text-black hover:border hover:border-black px-4 py-2'
                         >
+                            <RiAddCircleLine size={20} />
                             Add a Category
                         </button>
                     </div>
                 </div>
+                <Spacer y={4} />
+                <hr />
+                <Spacer y={2} />
+            </div>
+        );
+    }, [searchTerm]);
 
-                {/* Add Category Modal */}
-                {isAddingCategory && (
-                    <div className='fixed inset-0 flex items-center justify-center'>
-                        <div className='relative bg-white p-6 shadow-lg rounded-lg'>
-                            <form onSubmit={handleSubmit}>
-                                <div className='input-group mb-3'>
-                                    <input
-                                        type='text'
-                                        className='form-control'
-                                        placeholder='Enter new category'
-                                        value={name}
-                                        onChange={(e) =>
-                                            setName(e.target.value)
-                                        }
-                                    />
+    const renderCell = useCallback((category, columnKey) => {
+        const cellValue = category[columnKey];
+
+        switch (columnKey) {
+            case 'name':
+                return (
+                    <div className='w-[250px] md:w-[400px] py-2 flex flex-col'>
+                        <p className='font-semibold capitalize'>{cellValue}</p>
+                    </div>
+                );
+            case 'actions':
+                return (
+                    <div className='w-full md:w-[250px] relative flex items-center gap-2'>
+                        <Tooltip content='Edit category'>
+                            <span className='text-sm flex items-center gap-1 py-1 px-2 rounded-md text-white bg-green-500 cursor-pointer active:opacity-50'>
+                                <MdEdit
+                                    onClick={() =>
+                                        setSelectedCategory(category)
+                                    }
+                                />
+                                Edit
+                            </span>
+                        </Tooltip>
+                        <Tooltip color='danger' content='Delete category'>
+                            <span className='text-sm text-white bg-danger flex items-center gap-1 py-1 px-2 rounded-md cursor-pointer active:opacity-50'>
+                                <MdDelete
+                                    onClick={() =>
+                                        setConfirmDelete(category._id)
+                                    }
+                                />
+                                Delete
+                            </span>
+                        </Tooltip>
+                    </div>
+                );
+            default:
+                return cellValue;
+        }
+    }, []);
+
+    return (
+        <Layout>
+            <h2 className='text-lg md:text-3xl font-bold text-center mt-4 mb-6'>
+                Manage Your Categories
+            </h2>
+            {/* Add Category Modal */}
+            {isAddingCategory && (
+                <div className='fixed inset-0 z-50 flex items-center justify-center'>
+                    <div
+                        className='absolute inset-0 bg-black opacity-50'
+                        onClick={closeAddCategoryModal}
+                    ></div>
+                    <div className='relative bg-white w-[350px] p-6 shadow-lg rounded-lg'>
+                        <div className='pb-4 flex items-center justify-between'>
+                            <h2 className='text-xl font-bold'>
+                                Add New Category
+                            </h2>
+                            <IoIosClose
+                                size={25}
+                                className='text-default-500 hover:cursor-pointer hover:text-default-700'
+                                onClick={closeAddCategoryModal}
+                            />
+                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className='input-group flex flex-col gap-4'>
+                                <Input
+                                    variant='underlined'
+                                    type='text'
+                                    className='form-control'
+                                    placeholder='Add New Category'
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    endContent={
+                                        <RiAddCircleLine
+                                            size={20}
+                                            className='text-default-400'
+                                        />
+                                    }
+                                />
+                                <div className='flex justify-end'>
                                     <button
                                         type='submit'
-                                        className='btn btn-primaryColor bg-blue-500 text-black px-4 py-2 rounded-md'
+                                        className='font-semibold flex items-center gap-1 text-sm mt-2 bg-black text-white transition-all border border-white hover:bg-white hover:text-black hover:border-black px-4 py-2 rounded-md'
                                     >
+                                        <RiAddCircleLine />
                                         Submit
                                     </button>
                                 </div>
-                                <button
-                                    onClick={closeAddCategoryModal}
-                                    className='bg-red-500 text-white px-4 py-2 items-center rounded-md mt-2'
-                                >
-                                    Close
-                                </button>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
-                )}
-
-                {/* List of Categories */}
-                <div className='min-w-full bg-white border rounded-lg shadow-md'>
-                    <table className='min-w-full leading-normal'>
-                        <thead>
-                            <tr>
-                                <th className='py-3 border-b-2 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider'>
-                                    Category
-                                </th>
-                                <th className='py-3 border-b-2 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider'>
-                                    Actions
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredCategories.map((category) => (
-                                <tr key={category._id} className='bg-white'>
-                                    <td className='py-5 border-b border-gray-200 text-sm px-4'>
-                                        {category && category.name
-                                            ? category.name
-                                            : 'N/A'}
-                                    </td>
-                                    <td className='py-5 border-b border-gray-200 text-sm'>
-                                        <div className='flex justify-center'>
-                                            <button
-                                                type='button'
-                                                onClick={() =>
-                                                    setSelectedCategory(
-                                                        category
-                                                    )
-                                                }
-                                                className='hover:text-blue-700 mx-2 bg-green-500 text-white px-4 py-2 rounded-lg'
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                type='button'
-                                                onClick={() =>
-                                                    setConfirmDelete(
-                                                        category._id
-                                                    )
-                                                }
-                                                className='hover:text-blue-700 mx-2 bg-red-500 text-white px-4 py-2 rounded-lg'
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
                 </div>
+            )}
 
-                {/* Edit Category Modal */}
-                {selectedCategory && (
-                    <div className='fixed inset-0 flex items-center justify-center'>
-                        <div className='relative bg-white p-6 shadow-lg rounded-lg'>
-                            <form onSubmit={handleUpdate}>
-                                <div className='input-group mb-3'>
-                                    <input
-                                        type='text'
-                                        className='form-control'
-                                        placeholder='Enter updated category'
-                                        value={updatedName}
-                                        onChange={(e) =>
-                                            setUpdatedName(e.target.value)
-                                        }
-                                    />
+            {/* Edit Category Modal */}
+            {selectedCategory && (
+                <div className='fixed inset-0 z-50 flex items-center justify-center'>
+                    <div
+                        className='absolute inset-0 bg-black opacity-50'
+                        onClick={() => setSelectedCategory(null)}
+                    ></div>
+                    <div className='relative bg-white w-[350px] p-6 shadow-lg rounded-lg'>
+                        <div className='pb-4 flex items-center justify-between'>
+                            <h2 className='text-xl font-bold'>
+                                Update your Category
+                            </h2>
+                            <IoIosClose
+                                size={25}
+                                className='text-default-500 hover:cursor-pointer hover:text-default-700'
+                                onClick={() => setSelectedCategory(null)}
+                            />
+                        </div>
+
+                        <form onSubmit={handleUpdate}>
+                            <div className='flex flex-col gap-4'>
+                                <Input
+                                    variant='underlined'
+                                    type='text'
+                                    placeholder='Update your category'
+                                    value={updatedName}
+                                    onChange={(e) =>
+                                        setUpdatedName(e.target.value)
+                                    }
+                                    endContent={
+                                        <MdEdit
+                                            size={20}
+                                            className='text-default-400'
+                                        />
+                                    }
+                                />
+                                <div className='flex justify-end'>
                                     <button
                                         type='submit'
-                                        className='btn btn-primaryColor bg-blue-500 text-black px-4 py-2 rounded-md '
+                                        className='font-semibold flex items-center gap-1 text-sm mt-2 bg-black text-white transition-all border border-white hover:bg-white hover:text-black hover:border-black px-4 py-2 rounded-md'
                                     >
-                                        Update
+                                        <MdEdit />
+                                        Update Category
                                     </button>
                                 </div>
-                                <button
-                                    onClick={() => setSelectedCategory(null)}
-                                    className='bg-red-500 text-white px-4 py-2 rounded-md mt-2'
-                                >
-                                    Close
-                                </button>
-                            </form>
-                        </div>
+                            </div>
+                        </form>
                     </div>
-                )}
+                </div>
+            )}
 
-                {/* Delete Category Confirmation Modal */}
-                {confirmDelete && (
-                    <div className='fixed inset-0 flex items-center justify-center'>
-                        <div className='relative bg-white p-6 shadow-lg rounded-lg'>
-                            <p className='mb-4'>
-                                Are you sure you want to delete this category?
-                            </p>
-                            <button
-                                onClick={handleConfirmDelete}
-                                className='bg-red-500 text-white px-4 py-2 rounded-md mx-2'
-                            >
-                                Confirm
-                            </button>
-                            <button
-                                onClick={() => setConfirmDelete(null)}
-                                className='bg-gray-500 text-white px-4 py-2 rounded-md mx-2'
-                            >
-                                Cancel
-                            </button>
-                        </div>
+            {/* Delete Category Confirmation Modal */}
+            {confirmDelete && (
+                <div className='fixed inset-0 z-50 flex items-center justify-center'>
+                    <div
+                        className='absolute inset-0 bg-black opacity-50'
+                        onClick={() => setConfirmDelete(null)}
+                    ></div>
+
+                    <div className='relative bg-white p-6 shadow-lg rounded-lg'>
+                        <p className='mb-4'>
+                            Are you sure you want to <strong>delete</strong>{' '}
+                            this category?
+                        </p>
+                        <button
+                            onClick={handleConfirmDelete}
+                            className='bg-red-400 transition hover:bg-red-700  font-semibold text-white px-4 py-2 rounded-md mx-2'
+                        >
+                            Confirm
+                        </button>
+                        <button
+                            onClick={() => setConfirmDelete(null)}
+                            className='bg-gray-600 transition hover:bg-gray-500 text-white px-4 py-2 rounded-md mx-2'
+                        >
+                            Cancel
+                        </button>
                     </div>
-                )}
-            </div>
+                </div>
+            )}
+
+            <Table
+                isStriped
+                topContent={topContent}
+                aria-label='Example table with custom cells'
+            >
+                <TableHeader columns={columns}>
+                    {(column) => (
+                        <TableColumn
+                            key={column.uid}
+                            align={
+                                column.uid === 'actions' ? 'center' : 'start'
+                            }
+                        >
+                            {column.name}
+                        </TableColumn>
+                    )}
+                </TableHeader>
+                <TableBody
+                    emptyContent={'No category found'}
+                    items={filteredCategories}
+                >
+                    {(item) => (
+                        <TableRow key={item._id} className='py-2'>
+                            {(columnKey) => (
+                                <TableCell>
+                                    {renderCell(item, columnKey)}
+                                </TableCell>
+                            )}
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
         </Layout>
     );
 };

@@ -14,25 +14,26 @@ const CatalogProducts = ({
     onSearchChange,
     cols,
     handleChangeCols,
+    bottomContent,
 }) => {
     return (
-        <section className='px-4 border-l'>
+        <section className='px-4'>
             <div className='text-sm flex items-center gap-2'>
                 <span className='text-gray-500'>Selected Filters: </span>
                 {selected.map((select) => (
                     <span
                         key={select}
-                        className='font-semibold capitalize p-1 bg-gray-300/50 rounded-md'
+                        className='font-semibold capitalize py-1 px-2 bg-black text-white rounded-md'
                     >
                         {select}
                     </span>
                 ))}
-                {selectedPrice.map((select) => (
+                {selectedPrice.map((selectPrice) => (
                     <span
-                        key={select}
-                        className='font-semibold capitalize p-1 bg-gray-300/50 rounded-md'
+                        key={selectPrice}
+                        className='font-semibold capitalize p-1 bg-gray-black text-white rounded-md'
                     >
-                        ${select}
+                        ${selectPrice}
                     </span>
                 ))}
             </div>
@@ -47,7 +48,7 @@ const CatalogProducts = ({
                 <div className='flex'>
                     <Input
                         isClearable
-                        // variant='bordered'
+                        variant='underlined'
                         fullWidth
                         aria-label='product_name'
                         labelPlacement='outside'
@@ -65,21 +66,28 @@ const CatalogProducts = ({
                     />
                 </div>
 
-                <CatalogChangeLayout
-                    cols={cols}
-                    handleChangeCols={handleChangeCols}
-                />
+                <div className='hidden md:block'>
+                    <CatalogChangeLayout
+                        cols={cols}
+                        handleChangeCols={handleChangeCols}
+                    />
+                </div>
             </div>
 
             <Line />
 
-            <div className={`grid grid-cols-3 gap-4`}>
+            <div
+                className={`grid grid-col-1 md:${
+                    cols === 2 ? 'grid-cols-2' : 'grid-cols-3'
+                } gap-4`}
+            >
                 {products.length ? (
                     products.map((product) => (
                         <ProductCard
                             key={product._id}
-                            cols={cols}
                             product={product}
+                            bottomContent={bottomContent}
+                            isAdmin={false}
                         />
                     ))
                 ) : (
@@ -102,4 +110,5 @@ CatalogProducts.propTypes = {
     onSearchChange: PropTypes.any,
     cols: PropTypes.any,
     handleChangeCols: PropTypes.any,
+    bottomContent: PropTypes.any,
 };
