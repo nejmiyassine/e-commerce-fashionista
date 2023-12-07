@@ -52,7 +52,7 @@ const Products = () => {
 
     const bottomContent = useMemo(() => {
         return (
-            <div className='py-2 px-2 flex justify-between items-center'>
+            <div className='mt-6 px-2 flex justify-between items-center'>
                 {pages > 0 ? (
                     <Pagination
                         showControls
@@ -126,10 +126,7 @@ const Products = () => {
                             }
                         />
                     </div>
-                    <div className='category-dropdown flex items-center gap-2'>
-                        <label htmlFor='category' className='text-sm w-full'>
-                            Filter by:{' '}
-                        </label>
+                    <div className='category-dropdown flex items-center gap-2 w-40'>
                         <Select
                             isRequired
                             id='category'

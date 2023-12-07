@@ -1,7 +1,5 @@
-import NProgress from 'nprogress';
-
 import { api } from './apiRTQ';
-import { listCartItems } from '../../features/cart/cartSlice';
+// import { listCartItems } from '../../features/cart/cartSlice';
 
 export const cartAPI = api.injectEndpoints({
     tagTypes: ['Cart'],
@@ -12,9 +10,7 @@ export const cartAPI = api.injectEndpoints({
                 credentials: 'include',
                 method: 'GET',
             }),
-            onQueryStarted() {
-                NProgress.start();
-            },
+            providesTags: [{ type: 'Cart', id: 'LIST' }],
         }),
         addProductToCart: builder.mutation({
             query: (productData) => ({
@@ -23,17 +19,22 @@ export const cartAPI = api.injectEndpoints({
                 body: productData,
                 credentials: 'include',
             }),
-            invalidatesTags: [{ type: 'Cart', id: 'LIST' }],
-            async onQueryStarted(args, { dispatch, queryFulfilled }) {
-                NProgress.start();
-                try {
-                    const { data } = await queryFulfilled;
-                    console.log(data);
-                    dispatch(listCartItems({ cart: data }));
-                } catch (err) {
-                    //
-                }
-            },
+            invalidatesTags: (result, error, { id }) =>
+                result
+                    ? [
+                          { type: 'Cart', id },
+                          { type: 'Cart', id: 'LIST' },
+                      ]
+                    : [{ type: 'Cart', id: 'LIST' }],
+            // async onQueryStarted(args, { dispatch, queryFulfilled }) {
+            //     NProgress.start();
+            //     try {
+            //         const { data } = await queryFulfilled;
+            //         dispatch(listCartItems({ cart: data.cart }));
+            //     } catch (err) {
+            //         //
+            //     }
+            // },
         }),
         removeProductFromCart: builder.mutation({
             query: (productData) => ({
@@ -43,9 +44,21 @@ export const cartAPI = api.injectEndpoints({
                 credentials: 'include',
             }),
             invalidatesTags: [{ type: 'Cart', id: 'LIST' }],
-            onQueryStarted() {
-                NProgress.start();
-            },
+            // onQueryStarted() {
+            //     NProgress.start();
+            // },
+        }),
+        decreaseProductQuantity: builder.mutation({
+            query: (productData) => ({
+                url: 'cart/decreaseQuantity',
+                method: 'POST',
+                body: productData,
+                credentials: 'include',
+            }),
+            invalidatesTags: [{ type: 'Cart', id: 'LIST' }],
+            // onQueryStarted() {
+            //     NProgress.start();
+            // },
         }),
     }),
 });
@@ -54,4 +67,5 @@ export const {
     useGetAllCartItemsQuery,
     useAddProductToCartMutation,
     useRemoveProductFromCartMutation,
+    useDecreaseProductQuantityMutation,
 } = cartAPI;

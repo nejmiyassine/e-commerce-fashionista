@@ -5,12 +5,13 @@ import { Pagination } from '@nextui-org/react';
 
 import LoadingSpinner from '../../components/LoadingSpinner';
 import CatalogProducts from '../../components/Catalog/CatalogProducts';
-import CatalogSidebar from '../../components/Catalog/CatalogSidebar';
+import FilterCatalogSidebar from '../../components/Catalog/FilterCatalogSidebar';
 
-// import { fetchProducts } from '../../features/products/productsThunk';
 import { getAllCategories } from '../../features/categories/categoriesSlice';
 import { getAllProducts } from '../../features/products/productsSlice';
 import BagProductsSidebar from '../../layouts/BagProductsSidebar';
+// import CartSidebar from '../../layouts/CartSidebar';
+
 import Navbar from '../../layouts/Navbar';
 
 const Catalog = () => {
@@ -114,7 +115,7 @@ const Catalog = () => {
 
     const bottomContent = useMemo(() => {
         return (
-            <div className='py-2 px-2 flex justify-between items-center'>
+            <div className='mt-6 px-2 flex justify-between items-center'>
                 {pages > 0 ? (
                     <Pagination
                         showControls
@@ -154,8 +155,6 @@ const Catalog = () => {
         return <LoadingSpinner />;
     }
 
-    
-
     return (
         <>
             <Navbar toggleSidebar={toggleSidebar} />
@@ -172,7 +171,7 @@ const Catalog = () => {
                         isSidebarOpen ? 'w-[300px]' : 'hidden'
                     }`}
                 >
-                    <CatalogSidebar
+                    <FilterCatalogSidebar
                         categories={categories}
                         selected={selected}
                         setSelected={setSelected}
@@ -200,6 +199,7 @@ const Catalog = () => {
             </div>
 
             <BagProductsSidebar />
+            {/* <CartSidebar /> */}
         </>
     );
 };

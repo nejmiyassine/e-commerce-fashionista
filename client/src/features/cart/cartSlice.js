@@ -14,53 +14,49 @@ export const cartSlice = createSlice({
             state.isOpen = action.payload;
         },
         listCartItems: (state, action) => {
-            state.cart = action.payload.cart;
+            state.cart = action.payload;
         },
         addItemToCart: (state, action) => {
-            const newItem = action.payload;
-            const existingItem = state.cart?.find(
-                (item) => item.product._id === newItem._id
+            const { productId, quantity } = action.payload;
+            const existingItemIndex = state.cart.findIndex(
+                (item) => item.product._id === productId
             );
 
-            if (existingItem) {
-                existingItem.quantity += 1;
+            if (existingItemIndex !== -1) {
+                state.cart[existingItemIndex].quantity += quantity;
             } else {
-                state.cart.push({ ...newItem, quantity: 1 });
+                state.cart.push({ productId, quantity });
             }
         },
         removeItemFromCart: (state, action) => {
-            const itemId = action.payload;
+            const productId = action.payload;
             state.cart = state.cart.filter(
-                (item) => item.product._id !== itemId
+                (item) => item.product._id !== productId
             );
         },
         decreaseItemQuantity: (state, action) => {
-            const itemId = action.payload;
-            const existingItem = state.cart.find(
-                (item) => item.product._id === itemId
+            const { productId, quantity } = action.payload;
+            const item = state.cart.find(
+                (item) => item.product._id === productId
             );
 
-            if (existingItem) {
-                if (existingItem.quantity > 1) {
-                    existingItem.quantity -= 1;
-                } else {
-                    state.items = state.items.filter(
-                        (item) => item.id !== itemId
-                    );
-                }
+            if (item) {
+                item.quantity = Math.max(item.quantity - quantity, 0);
             }
         },
-        clearCart: () => initialState,
+        clearCart: (state) => {
+            state.cart = [];
+        },
     },
 });
 
 export const {
+    toggleCartSidebar,
     listCartItems,
     addItemToCart,
     removeItemFromCart,
     decreaseItemQuantity,
     clearCart,
-    toggleCartSidebar,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

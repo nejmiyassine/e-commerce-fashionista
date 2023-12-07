@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import {
     Input,
@@ -16,7 +17,7 @@ import { updateCustomer } from '../../features/customers/customersSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify';
 
 const schema = yup.object({
     first_name: yup.string().required('First Name is required'),
@@ -64,17 +65,17 @@ const EditCustomer = ({ isOpen, onOpenChange, updatedCustomer }) => {
                     updatedCustomerData: formData,
                 })
             );
-            toast.success('Customer is updated successfully')
+            toast.success('Customer is updated successfully');
         }
     };
 
-    React.useEffect(() => { 
+    React.useEffect(() => {
         if (updatedCustomer) {
             reset({ ...updatedCustomer, password: passwordInitialValue });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dispatch, updatedCustomer]);
 
-    console.log('display edit')
     return (
         <Modal
             isOpen={isOpen}

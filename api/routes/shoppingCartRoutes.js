@@ -6,7 +6,8 @@ const { restrictToCustomer } = require('../middleware/restrictMiddleware');
 
 const {
     addToCart,
-    removeItemFromCart,
+    decreaseQuantity,
+    removeFromCart,
     getAllCartItems,
 } = require('../controllers/shoppingCartController');
 
@@ -14,6 +15,7 @@ router.use(deserializeUser, requireUser);
 
 router.get('/', restrictToCustomer, getAllCartItems);
 router.post('/addToCart', restrictToCustomer, addToCart);
-router.post('/removeFromCart', restrictToCustomer, removeItemFromCart);
+router.post('/removeFromCart', restrictToCustomer, removeFromCart);
+router.post('/decreaseQuantity', restrictToCustomer, decreaseQuantity);
 
 module.exports = router;

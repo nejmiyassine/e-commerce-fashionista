@@ -67,8 +67,7 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
                         product.product_images[currentImageIndex]
                     }
                     alt={`Product: ${product.product_name}`}
-                    // className={`h-[300px] w-full object-cover fade-out`}
-                    className='object-contain w-full h-60'
+                    className='object-contain w-full h-72 fade-out'
                 />
 
                 <div className='z-30 opacity-0 transition-opacity duration-200 group-hover:opacity-100'>

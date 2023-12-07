@@ -23,7 +23,25 @@ const shoppingCartSchema = new Schema({
     items: [cartItemSchema],
 });
 
-shoppingCartSchema.methods.removeItemFromCart = async function (
+shoppingCartSchema.methods.removeItemFromCart = async function (productId) {
+    const cartItemIndex = this.items.findIndex((item) =>
+        item.product.equals(productId)
+    );
+
+    if (cartItemIndex !== -1) {
+        const { quantity, product } = this.items[cartItemIndex];
+
+        // Decrease the cartQuantity of the associated product
+        await Product.findByIdAndUpdate(product, {
+            $inc: { cartQuantity: -quantity },
+        });
+
+        // Remove the item from the cart
+        this.items.splice(cartItemIndex, 1);
+    }
+};
+
+shoppingCartSchema.methods.decreaseQuantity = async function (
     productId,
     quantity
 ) {
@@ -33,12 +51,12 @@ shoppingCartSchema.methods.removeItemFromCart = async function (
         if (cartItem.quantity > quantity) {
             cartItem.quantity -= quantity;
         } else {
-            this.items = this.items.filter(
-                (item) => !item.product.equals(productId)
-            );
+            // If quantity becomes 0 or negative, remove the item from the cart
+            await this.removeFromCart(productId);
         }
 
-        await Product.findByIdAndUpdate(productId, {
+        // Decrease the cartQuantity of the associated product
+        await Product.findByIdAndUpdate(cartItem.product, {
             $inc: { cartQuantity: -quantity },
         });
     }

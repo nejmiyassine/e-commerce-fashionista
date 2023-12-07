@@ -192,7 +192,7 @@ const AuthRegisterForm = ({ account_type }) => {
                 name='confirmPassword'
                 label='Confirm Password'
                 placeholder='Confirm Password'
-                {...register('password')}
+                {...register('confirmPassword')}
                 isInvalid={!!errors.confirmPassword}
                 errorMessage={
                     errors.confirmPassword && errors.confirmPassword?.message

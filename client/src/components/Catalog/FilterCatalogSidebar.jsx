@@ -1,11 +1,12 @@
 import PropTypes from 'prop-types';
 import { Checkbox, CheckboxGroup, Radio, RadioGroup } from '@nextui-org/react';
+// import { IoFilter } from 'react-icons/io5';
+import { IoCloseCircleOutline } from 'react-icons/io5';
 
 import CatalogSidebarItem from './CatalogSidebarItem';
 import { prices } from '../../data/prices';
-import { IoFilter } from 'react-icons/io5';
 
-const CatalogSidebar = ({
+const FilterCatalogSidebar = ({
     categories,
     selected,
     setSelected,
@@ -16,9 +17,12 @@ const CatalogSidebar = ({
 }) => {
     return (
         <div className={`flex flex-col gap-3 ${isSidebarOpen ? 'w-full' : ''}`}>
-            <button onClick={toggleSidebar} className='toggle-button'>
-                <IoFilter size={22} />
-            </button>
+            <div className='flex items-center justify-between'>
+                <h3 className='text-xl font-bold'>Filter By Categories</h3>
+                <button onClick={toggleSidebar} className='toggle-button'>
+                    <IoCloseCircleOutline size={22} />
+                </button>
+            </div>
 
             {/* All Categories */}
             <CatalogSidebarItem title='Filter By Categories'>
@@ -59,9 +63,9 @@ const CatalogSidebar = ({
     );
 };
 
-export default CatalogSidebar;
+export default FilterCatalogSidebar;
 
-CatalogSidebar.propTypes = {
+FilterCatalogSidebar.propTypes = {
     categories: PropTypes.array,
     selected: PropTypes.array,
     setSelected: PropTypes.func,

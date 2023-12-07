@@ -93,13 +93,13 @@ const UsersTable = () => {
             NProgress.done();
         }
 
-        if (isError || isGetAllUsersError) {
+        if (isError) {
             NProgress.done();
-            const err = error || getAllUsersError;
+            const err = error;
             if (Array.isArray(err.data.error)) {
                 err.data.error.forEach((el) =>
                     toast.error(el.message, {
-                        position: 'top-right',
+                        position: 'bottom-right',
                     })
                 );
             } else {
@@ -109,12 +109,36 @@ const UsersTable = () => {
                     err.message ||
                     err.toString();
                 toast.error(resMessage, {
-                    position: 'top-right',
+                    position: 'bottom-right',
                 });
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoading, isGetAllUsersLoading]);
+    }, [isLoading, isError]);
+
+    React.useEffect(() => {
+        if (isGetAllUsersError) {
+            NProgress.done();
+            const err = getAllUsersError;
+            if (Array.isArray(err.data.error)) {
+                err.data.error.forEach((el) =>
+                    toast.error(el.message, {
+                        position: 'bottom-right',
+                    })
+                );
+            } else {
+                const resMessage =
+                    err.data.message ||
+                    err.data.detail ||
+                    err.message ||
+                    err.toString();
+                toast.error(resMessage, {
+                    position: 'bottom-right',
+                });
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isGetAllUsersLoading, isGetAllUsersError]);
 
     const hasSearchFilter = Boolean(filterValue);
 
