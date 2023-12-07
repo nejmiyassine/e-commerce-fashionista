@@ -24,4 +24,5 @@ router.use('/orders', ordersRoutes);
 router.use('/uploads', uploadImageRoutes);
 
 router.use('/favorites', favoritesRoutes);
+
 module.exports = router;

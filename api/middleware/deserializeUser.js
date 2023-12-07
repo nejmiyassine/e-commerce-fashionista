@@ -6,8 +6,8 @@ const CustomError = require('../helpers/customError');
 
 const deserializeUser = async (req, res, next) => {
     try {
-        let access_token;
-
+        // let access_token;
+        
         if (req.cookies.access_token) {
             access_token = req.cookies.access_token;
         }

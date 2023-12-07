@@ -1,3 +1,6 @@
+import { toast } from 'react-toastify';
+import NProgress from 'nprogress';
+
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../../components/LoadingSpinner';
@@ -7,14 +10,16 @@ import { getCustomerProfile } from '../../features/customers/frontCustomerSlice'
 import NavbarCustomers from '../../components/CustomersFront/NavBarCustomers';
 
 const CustomerProfile = () => {
-    const { customerId } = useParams();
     const dispatch = useDispatch();
-    const { loading, data, error } = useSelector((state) => state.customers);
-    console.log('data from updateCustomerInfo', data);
+    const { loading, customerData, error } = useSelector((state) => state.frontCustomers);
+    console.log('customerData from customerProfile', customerData);
 
     useEffect(() => {
-        dispatch(getCustomerProfile(customerId));
-    }, [dispatch, customerId]);
+        dispatch(getCustomerProfile());
+        console.log('dispatch' , dispatch(getCustomerProfile()))
+        
+    }, [dispatch, ]);
+
 
     if (loading) {
         return <LoadingSpinner />;
@@ -22,12 +27,15 @@ const CustomerProfile = () => {
     if (!loading && error) {
         return <div>Error: {error}</div>;
     }
+
+  console.log('customerData' , customerData)
+   console.log('customerDataID' , customerData)
     
     return (
         <div>
             
-            {data._id ? (
-                <NavbarCustomers customer={data} />
+            {customerData ? (
+                <NavbarCustomers customer={customerData} />
             ) : (
                 <div>no customer found</div>
             )}

@@ -28,7 +28,7 @@ const DisplayCustomerDetails = ({ customer }) => {
                                         Total Costs
                                     </div>
                                     <div className='font-bold text-lg'>
-                                        12K ${' '}
+                                        12K $
                                     </div>
                                 </div>
                             </div>

@@ -1,7 +1,8 @@
 import React from 'react';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,6 +17,7 @@ import {
     Button,
     useDisclosure,
 } from '@nextui-org/react';
+import { patchCustomerData } from '../../features/customers/frontCustomerSlice';
 
 const schema = yup.object({
     first_name: yup.string().required('First Name is required'),
@@ -25,10 +27,10 @@ const schema = yup.object({
         .string()
         .min(6, 'Password must have at least 6 characters')
         .max(10)
-        .required(),
 });
 
 const UpdateCustomerComponent = ({ customer }) => {
+    console.log('cus' , customer)
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -52,15 +54,17 @@ const UpdateCustomerComponent = ({ customer }) => {
     console.log('customer from update Customer component', customer);
 
     const onSubmit = (formData) => {
+        
         if (isEditing) {
-            navigate('/admin/customers');
+            // navigate('/admin/customers');
             reset();
+            navigate('/landingPage')
 
             console.log(customer._id);
             dispatch(
-                updateCustomer({
-                    customerId: customer._id,
-                    updatedCustomerData: formData,
+                patchCustomerData({
+                     customerId: customer._id,
+                    patchedCustomerData: formData,
                 })
             );
             toast.success('Customer is updated successfully');
@@ -74,9 +78,10 @@ const UpdateCustomerComponent = ({ customer }) => {
     }, [customer]);
     return (
         <>
+
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className='ml-[300px] mt-[60px]  '
+                className='  top-[100px] left-[380px] absolute p-4 bg-lime-50  rounded-xl'
             >
                 <div className='flex flex-col gap-5 text-black-800 w-[700px] '>
                     <div>
@@ -127,25 +132,23 @@ const UpdateCustomerComponent = ({ customer }) => {
                             {...register('email')}
                         />
 
-                        <div>
-
-                        </div>
+                        <div></div>
                         <p className='text-red-500'>{errors.email?.message}</p>
-                    {/* </div> */}
+                        {/* </div> */}
 
-                    {/* <div> */}
+                        {/* <div> */}
                         <div>Password</div>
                         <input
                             className='border-black border-1 rounded-md w-[700px]'
                             placeholder='password'
                             type='password'
                             variant='bordered'
-                            
-                            // {...register('password')}
+
+                             {...register('password')}
                         />
 
                         <div>
-                             {/*
+                            {/*
                              <Button
                                 className='bg-transparent text-blue-500 border-none p-0'
                                 onPress={onOpen}
@@ -197,14 +200,13 @@ const UpdateCustomerComponent = ({ customer }) => {
                                 </ModalContent>
                             </Modal>  */}
                         </div>
-                       
 
                         <p className='text-red-500'>
                             {errors.password?.message}
                         </p>
-                    {/* </div> */}
+                        {/* </div> */}
 
-                    {/* <div> */}
+                        {/* <div> */}
                         <div>Creation Date</div>
                         <input
                             className='border-black border-1 rounded-md w-[700px]'
@@ -243,6 +245,7 @@ const UpdateCustomerComponent = ({ customer }) => {
                     />
                 </div>
             </form>
+           
         </>
     );
 };

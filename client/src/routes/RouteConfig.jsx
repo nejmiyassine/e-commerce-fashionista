@@ -18,14 +18,15 @@ import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
 import ProtectedRoutes from './ProtectedRoutes';
 
-import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo';
-import CustomerProfile from '../pages/FrontCustomers/customerProfile';
+import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
+import CustomerProfile from '../pages/FrontCustomers/CustomerProfile';
 import EditProduct from '../pages/admin/Products/EditProduct';
 import AddProduct from '../pages/admin/Products/AddProduct';
 import PageNotFound from '../pages/PageNotFound';
 import AdminProductDetails from '../pages/admin/Products/AdminProductDetails';
 import ProductDetails from '../pages/ProductDetails';
 import ProtectedRoutesCustomer from './ProtectedRoutesCustomer';
+import Favorites from '../pages/favorites/Favorites'
 
 const RouteConfig = () => {
     return (
@@ -103,10 +104,19 @@ const RouteConfig = () => {
                     path='/updateProfile/:customerId'
                     element={<UpdateCustomerInfo />}
                 />
-                <Route
-                    path='/customerProfile/:customerId'
+
+                 <Route
+                    path='/customerProfile'
                     element={<CustomerProfile />}
+                /> 
+
+                <Route path='/customersOrders' />
+
+                <Route 
+                   path='/customersFavorites' 
+                   element={<Favorites />}
                 />
+
             </Routes>
         </Router>
     );

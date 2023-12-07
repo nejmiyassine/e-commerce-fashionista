@@ -38,7 +38,8 @@ exports.addToFavorites = async (req, res) => {
 exports.getFavoritesProductsById = async (req, res) => {
     try {
         const id = req.params.favoriteID;
-        const favorite = await Favorite.findById(id).populate('product');
+        const favorite = await Favorite.findById(id).populate('product' , {product_name: 1 , product_images : 1 , short_description: 1 ,
+             long_description : 1 , price:1 , quantity : 1 , discount_price : 1 , options: 1 ,sku:1});
 
         if (!favorite) {
             return res
@@ -53,11 +54,16 @@ exports.getFavoritesProductsById = async (req, res) => {
 
 exports.getAllFavoritesProducts = async (req, res) => {
     try {
-        const favorite = await Favorite.find().populate('product');
+        const customerId = res.locals.user._id;
+
+        const favorite = await Favorite.find({ customer: customerId }).populate(
+            'product',
+            { product_name: 1, product_images: 1 }
+        );
         if (!favorite) {
-            res.status(404).json({ message: 'favorite products not found' });
+            // res.status(404).json({ message: 'favorite products not found' });
         }
-        return res.status(200).json({ message: favorite });
+        return res.status(200).json(favorite);
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
