@@ -28,12 +28,12 @@ const CatalogProducts = ({
                         {select}
                     </span>
                 ))}
-                {selectedPrice.map((select) => (
+                {selectedPrice.map((selectPrice) => (
                     <span
-                        key={select}
-                        className='font-semibold capitalize p-1 bg-gray-300/50 rounded-md'
+                        key={selectPrice}
+                        className='font-semibold capitalize p-1 bg-gray-black text-white rounded-md'
                     >
-                        ${select}
+                        ${selectPrice}
                     </span>
                 ))}
             </div>

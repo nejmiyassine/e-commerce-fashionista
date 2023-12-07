@@ -149,8 +149,6 @@ const BagProductsSidebar = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isRemoveLoading]);
 
-    console.log(cartItems);
-
     return (
         <div
             className={`fixed w-screen inset-0 z-50 overflow-hidden ${
@@ -166,7 +164,7 @@ const BagProductsSidebar = () => {
 
                 {/* Sidebar */}
 
-                {isLoading || !cartItems.cartItems ? (
+                {isLoading || !cartItems ? (
                     <LoadingSpinner />
                 ) : (
                     <div className='fixed inset-y-0 left-0 max-w-full w-2/5 flex'>

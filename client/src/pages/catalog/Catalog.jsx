@@ -29,7 +29,7 @@ const Catalog = () => {
     const [columnCount, setColumnCount] = useState(2);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    const [rowsPerPage, setRowsPerPage] = useState(6);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
 
     const hasSearchFilter = Boolean(filterValue);
@@ -141,7 +141,6 @@ const Catalog = () => {
                             className='bg-transparent outline-none text-default-400 text-small'
                             onChange={onRowsPerPageChange}
                         >
-                            <option value='6'>6</option>
                             <option value='10'>10</option>
                             <option value='16'>16</option>
                         </select>

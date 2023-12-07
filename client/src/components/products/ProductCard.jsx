@@ -115,17 +115,17 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
                     </div>
                 )}
 
-                {/* {isAdmin && ( */}
-                <div className='absolute w-full flex justify-center gap-2 px-2 py-1 text-white bottom-6 left-0 opacity-0 transition-opacity duration-200  group-hover:opacity-100'>
-                    <button
-                        onClick={handleAddToCart}
-                        className='flex items-center gap-1 rounded-md bg-black/70 text-white hover:bg-black font-semibold transition-all  py-2 mx-auto px-4'
-                    >
-                        <FaCartPlus />
-                        <span>Add to cart</span>
-                    </button>
-                </div>
-                {/* )} */}
+                {!isAdmin && (
+                    <div className='absolute w-full flex justify-center gap-2 px-2 py-1 text-white bottom-0 left-0 opacity-0 transition-opacity duration-200  group-hover:opacity-100'>
+                        <button
+                            onClick={handleAddToCart}
+                            className='w-full flex items-center justify-center uppercase gap-1 rounded-md bg-black/80 text-white hover:bg-black font-semibold transition-all py-3 px-4'
+                        >
+                            <FaCartPlus />
+                            <span>add to cart</span>
+                        </button>
+                    </div>
+                )}
             </div>
 
             <div className='flex flex-col gap-1 py-2 px-4'>

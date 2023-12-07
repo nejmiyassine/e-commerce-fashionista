@@ -19,7 +19,7 @@ const Products = () => {
     const [search, setSearch] = useState('');
     const [deleteModel, setDeleteModel] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [rowsPerPage, setRowsPerPage] = useState(6);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
 
     const hasSearchFilter = Boolean(search);
@@ -34,9 +34,24 @@ const Products = () => {
         setSearch(''); // Clear search when a category is selected
     };
 
+    useEffect(() => {
+        setPage(1); // Reset page to 1 when selected category changes
+    }, [selectedCategory]);
+
     const pages = useMemo(() => {
-        return products?.length ? Math.ceil(products.length / rowsPerPage) : 0;
-    }, [products?.length, rowsPerPage]);
+        const filteredProducts = products.filter(
+            (product) =>
+                product?.product_name
+                    .toLowerCase()
+                    .includes(search.toLowerCase()) &&
+                (selectedCategory === '' ||
+                    product?.category_id._id === selectedCategory)
+        );
+
+        return filteredProducts?.length
+            ? Math.ceil(filteredProducts.length / rowsPerPage)
+            : 0;
+    }, [products, rowsPerPage, search, selectedCategory]);
 
     const onRowsPerPageChange = useCallback((e) => {
         setRowsPerPage(Number(e.target.value));
@@ -78,7 +93,6 @@ const Products = () => {
                             className='bg-transparent outline-none text-default-400 text-small'
                             onChange={onRowsPerPageChange}
                         >
-                            <option value='6'>6</option>
                             <option value='10'>10</option>
                             <option value='16'>16</option>
                         </select>
