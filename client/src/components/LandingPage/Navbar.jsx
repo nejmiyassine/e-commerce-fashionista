@@ -1,18 +1,26 @@
 import React, { useState } from 'react';
 import { FaBars, FaFacebookF, FaTwitter, FaGooglePlusG, FaInstagram } from 'react-icons/fa';
+import {Link} from 'react-router-dom';
 import Logo from "../../assets/logo.png";
 import { faHeart, faShoppingBag, faUser } from '@fortawesome/free-solid-svg-icons';
 import { faHeart as farHeart, faUser as farUser } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch } from 'react-redux';
+import { toggleBag } from '../../features/bag/bagSlice';
 
 const Navbar = () => {
+  const dispatch = useDispatch();
+
+    const openBagSidebar = () => {
+        dispatch(toggleBag(true));
+    };
   const [navOpen, setNavOpen] = useState(false);
 
   const handleNav = () => {
     setNavOpen(!navOpen);
   };
   const iconStyle = "text-2xl";
-  const linkStyle = "text-center text-gray-100 hover:text-primary transition relative";
+  const linkStyle = "text-center text-gray-100 hover:text-primaryColor-orange transition relative";
   const badgeStyle = "absolute right-0 -top-1 w-5 h-5 rounded-full flex items-center justify-center bg-primary text-white text-xs";
 
 
@@ -23,30 +31,24 @@ const Navbar = () => {
   return (
     <div className="w-full bg-black py-1 flex justify-between items-center text-white">
       <div className="flex items-center">
-        <img src={Logo} alt="Logo" className="h-12" />
+        <a href="/landingpage">
+        <img src={Logo} alt="Logo" className="h-12" /></a>
       </div>
 
       <div className="hidden sm:flex items-center">
         <ul className="flex space-x-4">
           <li>
-            <a  className=" py-2 px-4 hover:border hover:border-gold-500 hover:rounded hover:bg-white hover:text-yellow-500" href="#">Home</a>
+            <a  className=" py-2 px-4 hover:border hover:border-gold-500 hover:rounded hover:bg-white hover:text-yellow-500" href="/landingpage">Home</a>
           </li>
           <li>
-            <a  className=" py-2 px-4 hover:border hover:border-gold-500 hover:rounded hover:bg-white hover:text-yellow-500" href="#AboutUs">New</a>
+            <Link className=" py-2 px-4 hover:border hover:border-gold-500 hover:rounded hover:bg-white hover:text-yellow-500"  to="/catalog">Products</Link>
           </li>
           <li>
-            <a className=" py-2 px-4 hover:border hover:border-gold-500 hover:rounded hover:bg-white hover:text-yellow-500" href="#AboutUs">Top</a>
+          <Link className=" py-2 px-4 hover:border hover:border-gold-500 hover:rounded hover:bg-white hover:text-yellow-500"  to="/About">About Us</Link>
           </li>
           <li>
-            <a  className=" py-2 px-4 hover:border hover:border-gold-500 hover:rounded hover:bg-white hover:text-yellow-500"  href="#AboutUs">Bottom</a>
+            <Link className=" py-2 px-4 hover:border hover:border-gold-500 hover:rounded hover:bg-white hover:text-yellow-500"  to="/contact">Contact Us</Link>
           </li>
-          <li>
-            <a  className=" py-2 px-4 hover:border hover:border-gold-500 hover:rounded hover:bg-white hover:text-yellow-500" href="#AboutUs">Accessories</a>
-          </li>
-          <li>
-            <a  className=" py-2 px-4 hover:border hover:border-gold-500 hover:rounded hover:bg-white hover:text-yellow-500" href="#Products">Products</a>
-          </li>
-         
         </ul>
       </div>
       
@@ -56,9 +58,9 @@ const Navbar = () => {
                     { icon: faShoppingBag, label: 'Cart', count: 0 },
                     { icon: farUser, label: 'Account' },
                 ].map(({ icon, label, count }, index) => (
-                    <a key={index} href="#" className={linkStyle}>
+                    <button key={index} onClick={label === 'Cart' && openBagSidebar} className={linkStyle}>
                         <div className={iconStyle}>
-                            <FontAwesomeIcon className='hover:text-yellow-500' icon={icon} />
+                            <FontAwesomeIcon className='' icon={icon} />
                         </div>
                         <div className="text-xs leading-3">{label}</div>
                         {count !== undefined && (
@@ -66,7 +68,7 @@ const Navbar = () => {
                                 {count}
                             </div>
                         )}
-                    </a>
+                    </button>
                 ))}
             </div>
 
@@ -87,16 +89,13 @@ const Navbar = () => {
             <a href="#AboutUs">New</a>
           </li>
           <li>
-            <a href="#AboutUs">Top</a>
-          </li>
-          <li>
-            <a href="#AboutUs">Bottom</a>
+            <a href="#AboutUs">Categories</a>
           </li>
           <li>
             <a href="#AboutUs">Accessories</a>
           </li>
           <li>
-            <a href="#Products">Products</a>
+            <Link to="/catalog">Products</Link>
           </li>
           
             </ul>

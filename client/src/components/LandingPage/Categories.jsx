@@ -43,7 +43,7 @@ const Category = ({ title, imageSrc }) => {
 
 const Categories = () => {
   return (
-    <div className="mx-20 pb-20 max-w-7xl py-16 px-4 sm:px-6 lg:px-8">
+    <div className="mx-20 max-w-7xl pt-16 px-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-2xl py-2 sm:py-24 lg:max-w-none lg:py-5">
         <h1 className="text-4xl font-mono font-bold text-center text-gray-900">Explore Your Universe:</h1>
 

@@ -3,6 +3,8 @@ import { AiFillPhone, AiOutlineClockCircle } from 'react-icons/ai';
 import { CiLocationArrow1 } from "react-icons/ci";
 import { BsChatSquareDots } from 'react-icons/bs';
 import { FaShippingFast } from "react-icons/fa";
+import {Link} from 'react-router-dom';
+
 
 const Head = () => {
 
@@ -26,9 +28,9 @@ const Head = () => {
                     <AiFillPhone size={20} className='mr-2 text-black' />
                     <p>+212-654-456-543</p>
                 </div>
-                <div className='px-2'>
-                <button className=' bg-black text-yellow-400 py-2 px-4 rounded-full hover:bg-white hover:text-black'>Contact Us</button>
-                </div>
+                <button>
+      
+      </button>
             </div>
         </div>
     );

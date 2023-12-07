@@ -1,73 +1,101 @@
-import React from 'react'
+import React from 'react';
+import Navbar from './Navbar.jsx';
+import Head from './Head.jsx';
+import Footer from './Footer.jsx';
+import Bg2 from '../../assets/hero.jpg';
+import { AiFillPhone, AiOutlineClockCircle } from 'react-icons/ai';
+import { CiLocationArrow1 } from "react-icons/ci";
 
 const Contact = () => {
   return (
     <div>
-<div class="container py-6 mx-auto md:px-6">
-  <section class="mb-16">
-    <div class=" flex flex-wrap">
-      <div class="mb-10 w-full shrink-0 grow-0 basis-auto md:mb-0 md:w-6/12 md:px-3 lg:px-6">
-        <h2 class="mb-6 text-4xl capitalize font-mono font-bold">Contact us</h2>
-        <p class="mb-6 text-neutral-500 dark:text-neutral-300">
-         
-Step into a world of fashion where your needs matter. Got questions or need styling advice? Our dedicated team is here to assist. Whether it's through email, a quick call, or social media, we're just a message away. Your satisfaction is our priority, making your fashion journey with us unforgettable. Let's enhance your style together – contact us for a personalized and seamless shopping experience. Your wardrobe's next chapter starts here at Fashionista.        </p>
-        <p class="mb-2 text-neutral-500 dark:text-neutral-300">
-          Casablanca, 20000, Morocco
-        </p>
-        <p class="mb-2 text-neutral-500 dark:text-neutral-300">
-          + 212 234 567 89
-        </p>
-        <p class="mb-2 text-neutral-500 dark:text-neutral-300">
-          info@fashionista.com
-        </p>
-      </div>
-      <div class="mb-12 w-full shrink-0 grow-0 basis-auto md:mb-0 md:w-6/12 md:px-3 lg:px-6">
-        <form>
-          <div class="relative mb-6" data-te-input-wrapper-init>
-            <input type="text"
-              class="border border-gray-300 rounded-md px-4 py-2peer block min-h-[auto] w-full  bg-transparent py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-              id="exampleInput90" placeholder="Name" />
-            <label
-              class="pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-              for="exampleInput90">Name
-            </label>
-          </div>
-          <div class="relative mb-6" data-te-input-wrapper-init>
-            <input type="email"
-              class="border border-gray-300 rounded-md px-4 py-2  peer block min-h-[auto] w-full  bg-transparent leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-              id="exampleInput91" placeholder="Email address" />
-            <label
-              class=" pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
-              for="exampleInput91">Email address
-            </label>
-          </div>
-          <div class="relative mb-6" data-te-input-wrapper-init>
-            <textarea
-              class="border border-gray-300 rounded-md px-4 py-2 peer block min-h-[auto] w-full  bg-transparent leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
-              id="exampleFormControlTextarea1" rows="3" placeholder="Your message"></textarea>
-            <label for="exampleFormControlTextarea1"
-              class="pointer-events-none absolute top-0 left-3 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[1.6] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[0.9rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[0.9rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary">Message</label>
-          </div>
-          <div class="mb-6 inline-block min-h-[1.5rem] justify-center pl-[1.5rem] md:flex">
-            <input
-              class="relative float-left mt-[0.15rem] mr-[6px] -ml-[1.5rem] h-[1.125rem] w-[1.125rem] appearance-none rounded-[0.25rem] border-[0.125rem] border-solid border-neutral-300 outline-none before:pointer-events-none before:absolute before:h-[0.875rem] before:w-[0.875rem] before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[''] checked:border-primary checked:bg-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:ml-[0.25rem] checked:after:-mt-px checked:after:block checked:after:h-[0.8125rem] checked:after:w-[0.375rem] checked:after:rotate-45 checked:after:border-[0.125rem] checked:after:border-t-0 checked:after:border-l-0 checked:after:border-solid checked:after:border-white checked:after:bg-transparent checked:after:content-[''] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:transition-[border-color_0.2s] focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] focus:after:absolute focus:after:z-[1] focus:after:block focus:after:h-[0.875rem] focus:after:w-[0.875rem] focus:after:rounded-[0.125rem] focus:after:content-[''] checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:after:ml-[0.25rem] checked:focus:after:-mt-px checked:focus:after:h-[0.8125rem] checked:focus:after:w-[0.375rem] checked:focus:after:rotate-45 checked:focus:after:rounded-none checked:focus:after:border-[0.125rem] checked:focus:after:border-t-0 checked:focus:after:border-l-0 checked:focus:after:border-solid checked:focus:after:border-white checked:focus:after:bg-transparent dark:border-neutral-600 dark:checked:border-primary dark:checked:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]"
-              type="checkbox" value="" id="exampleCheck96" checked />
-            <label class="inline-block pl-[0.15rem] hover:cursor-pointer" for="exampleCheck96">
-              Send me a copy of this message
-            </label>
-          </div>
-          <button type="button" data-te-ripple-init data-te-ripple-color="light"
-            class="mb-6 inline-block w-full rounded bg-blue-300 px-6 pt-2.5 pb-2 text-xs font-medium uppercase leading-normal text-black shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]">
-            Send
-          </button>
-        </form>
-      </div>
-    </div>
-  </section>
-</div>
-      
-    </div>
-  )
-}
+      <Head />
+      <Navbar />
+      <div className="max-w-screen-lg mx-auto p-5 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 border h-[40rem] bg-cover bg-center bg-opacity-50" style={{ backgroundImage: `url(${Bg2})`  }}>
+          <div className="bg-gray-800 md:col-span-4 p-10 text-white bg-cover bg-center h-[40rem]">
+            <p className="mt-4 text-sm leading-7 font-regular uppercase">Business Inquiries</p>
+            <h3 className="text-3xl sm:text-4xl leading-normal font-extrabold tracking-tight">
+            Let's <span className="text-indigo-600">Connect!</span>
+            </h3>
+            <p className="mt-4 leading-7 text-gray-200">
+            Are you a retailer, influencer, or fashion enthusiast looking to collaborate? We're open to partnerships that align with our vision. Reach out to us for wholesale inquiries, brand collaborations, or any other business proposition.
+            </p>
+            <div className="flex items-center mt-5">
+            <CiLocationArrow1 size={30} className='text-white mr-2' />
 
-export default Contact
+              <span className="text-sm">Casablanca, Morocco.</span>
+            </div>
+            <div className="flex items-center mt-5">
+              <AiFillPhone size={30} className='text-white mr-2' />
+              <span className="text-sm">+93 749 99 65 50</span>
+            </div>
+            <div className="flex items-center mt-5">
+            <AiOutlineClockCircle size={30} className='text-white mr-2' />
+              <span className="text-sm">9AM - 5AM</span>
+            </div>
+          </div>
+          <form className="md:col-span-8 p-10">
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label className="block uppercase  tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-first-name">
+                  First Name
+                </label>
+                <input
+                  className="appearance-none block w-full bg-opacity-50 bg-gray-200 text-white border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:text-black"
+                  id="grid-first-name" type="text" placeholder="Jane" />
+                <p className="text-red-500 text-xs italic">Please fill out this field.</p>
+              </div>
+              <div className="w-full md:w-1/2 px-3">
+                <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-last-name">
+                  Last Name
+                </label>
+                <input
+                  className="appearance-none block bg-opacity-50 w-full bg-gray-200 text-gray-100 border border-gray-100 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="grid-last-name" type="text" placeholder="Doe" />
+              </div>
+            </div>
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full px-3">
+                <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-email">
+                  Email Address
+                </label>
+                <input
+                  className="appearance-none block w-full bg-opacity-50 bg-gray-200 text-gray-900 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  id="grid-email" type="email" placeholder="********@*****.**" />
+              </div>
+            </div>
+            <div className="flex flex-wrap -mx-3 mb-6">
+              <div className="w-full px-3">
+                <label className="block uppercase tracking-wide text-gray-100 text-xs font-bold mb-2" htmlFor="grid-message">
+                  Your Message
+                </label>
+                <textarea
+    rows="10"
+    className="appearance-none block w-full bg-gray-200 bg-opacity-50 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+  ></textarea>
+              </div>
+              <div className="flex justify-between w-full px-3">
+                <div className="md:flex md:items-center">
+                  <label className="block text-gray-100 font-bold">
+                    <input className="mr-2 leading-tight" type="checkbox" />
+                    <span className="text-sm">Send me your newsletter!</span>
+                  </label>
+                </div>
+                <button
+                  className="shadow bg-indigo-600 hover:bg-indigo-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-6 rounded"
+                  type="submit"
+                >
+                  Send Message
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <Footer/>
+    </div>
+  );
+};
+
+export default Contact;
