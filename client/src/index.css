@@ -6,6 +6,6 @@
 @tailwind utilities;
 
 body {
-    /* font-family: 'Poppins', sans-serif; */
-    font-family: 'Red Hat Display', sans-serif;
+    font-family: 'Poppins', sans-serif;
+    /* font-family: 'Red Hat Display', sans-serif; */
 }

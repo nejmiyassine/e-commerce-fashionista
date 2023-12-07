@@ -1,7 +1,7 @@
 import { HiOutlineViewGrid, HiOutlineViewGridAdd } from 'react-icons/hi';
 
 const layoutOptions = [
-    { cols: 2, icon: <HiOutlineViewGrid size={20} />, label: '2 Columns' },
+    { cols: 1, icon: <HiOutlineViewGrid size={20} />, label: '1 Column' },
     { cols: 3, icon: <HiOutlineViewGridAdd size={20} />, label: '3 Columns' },
     // Add more options as needed
 ];

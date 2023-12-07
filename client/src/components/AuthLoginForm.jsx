@@ -82,7 +82,7 @@ const AuthLoginForm = ({ account_type }) => {
             toast.success('You successfully logged in', {
                 position: 'bottom-right',
             });
-            navigate('/');
+            navigate('/landingpage');
         }
 
         if (isErrorCustomer) {

@@ -17,9 +17,13 @@ import AuthLogin from '../pages/auth/AuthLogin';
 import AuthRegister from '../pages/auth/AuthRegister';
 import Unauthorized from '../pages/Unauthorized';
 import Catalog from '../pages/catalog/Catalog';
+import CatalogClo from '../pages/catalog/CatalogClo';
 
 import UpdateCustomerInfo from '../pages/FrontCustomers/UpdateCustomerInfo'
 import CustomerProfile from '../pages/FrontCustomers/customerProfile';
+import Contact from '../components/LandingPage/Contact'
+import About from '../components/LandingPage/About'
+import Terms from '../components/LandingPage/Terms'
 
 const RouteConfig = () => {
     return (
@@ -30,6 +34,25 @@ const RouteConfig = () => {
 
                 <Route exact path='/' element={<Home />} />
                 <Route path='/catalog' element={<Catalog />} />
+                <Route path='/catalogclo' element={<CatalogClo />} />
+
+                <Route
+                    path='/landingPage'
+                    element={<LandingP />}
+                />
+                <Route
+                    path='/about'
+                    element={<About />}
+                />
+                 <Route
+                    path='/terms'
+                    element={<Terms />}
+                />
+                <Route
+                    path='/contact'
+                    element={<Contact />}
+                />
+
 
                 {/* Authentication */}
                 <Route path='/register' element={<AuthRegister />} />
@@ -69,10 +92,6 @@ const RouteConfig = () => {
                     <Route
                         path='/admin/users/:userId'
                         element={<UserDetails />}
-                    />
-                    <Route
-                        path='/landingPage'
-                        element={<LandingP />}
                     />
                 </Route>
 
