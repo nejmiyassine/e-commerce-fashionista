@@ -13,8 +13,6 @@ export const fetchFavorites = createAsyncThunk(
         }
     }
 );
-
-
 export const getFavoritesById = createAsyncThunk(
     'favorites/getFavoritesById' ,
     async ({rejectWithValue}) => {
@@ -24,6 +22,7 @@ export const getFavoritesById = createAsyncThunk(
                 withCredentials: true,
             })
             console.log('getFavoriteById' , res.data)
+            return res.data
 
         } catch(error) {
             rejectWithValue(error.res.data)
@@ -39,6 +38,7 @@ export const deleteFavorites = createAsyncThunk(
                 withCredentials: true,
             });
             console.log('delete favorite from slie', res.data);
+            return res.data
         } catch (error) {
             rejectWithValue(error.res.data);
         }
@@ -82,7 +82,6 @@ const favoritesSlice = createSlice({
             .addCase(deleteFavorites.pending, (state) => {
                 state.loading = true;
             })
-
             .addCase(deleteFavorites.fulfilled, (state, action) => {
                 state.loading = false;
                 const {
@@ -96,8 +95,8 @@ const favoritesSlice = createSlice({
                 state.error = '';
                 console.log('fulfilled');
             })
-
             .addCase(deleteFavorites.rejected, (state, action) => {
+                state.loading = false
                 state.error = action.error.message;
                 console.log('rejected');
             });

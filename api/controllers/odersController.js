@@ -84,13 +84,15 @@ const getAllOrdersController = async (req, res) => {
     // const page = parseInt(req.query.page) || 1;
     // const limit = 10;
     // const skip = (page - 1) * limit;
+    const customerId = res.locals.user._id;
+ 
 
     try {
         // if (!req.user.emailValidated) {
         //     return res.status(403).json({ error: 'Forbidden' });
         // }
 
-        const orders = await Orders.find().populate('customer_id');
+        const orders = await Orders.find({customer_id:customerId}).populate('customer_id');
         // .limit(limit)
         // .skip(skip)
         // .exec();
@@ -106,9 +108,28 @@ const getAllOrdersController = async (req, res) => {
     }
 };
 
+
+//delete orders
+const deleteOrdersController = async(req , res) => {
+try {
+    // const customerId = res.locals.user._id;
+    const id = req.params.favoriteID;
+
+    const orders = await Orders.findByIdAndDelete(id);
+    console.log('orders' , orders)
+    
+    return res.json({message : 'order is deleted successfully'})
+    
+ 
+} catch (error) {
+return res.json({message:error.message})
+}
+}
+
 module.exports = {
     createOrdersController,
     updateOrdersController,
     getOrderByIdController,
     getAllOrdersController,
+    deleteOrdersController,
 };

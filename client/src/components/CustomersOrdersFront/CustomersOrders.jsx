@@ -1,54 +1,60 @@
-import React from "react";
-import {Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, getKeyValue} from "@nextui-org/react";
-// import {users} from "./data";
+import React from 'react';
+import {
+    Table,
+    TableHeader,
+    TableColumn,
+    TableBody,
+    TableRow,
+    TableCell,
+    Button,
+} from '@nextui-org/react';
+import { deleteCustomersorders } from '../../features/orders/ordersSlice';
+import { useDispatch } from 'react-redux';
 
-export default function CustomersOrders() {
-  const [page, setPage] = React.useState(1);
-  const rowsPerPage = 4;
+export default function CustomersOrders({ orders }) {
+    console.log('ordersCstomers', orders);
+    const dispatch = useDispatch();
 
-  const pages = Math.ceil(users.length / rowsPerPage);
+    return (
+        <>
+            <Table>
+                <TableHeader>
+                    <TableColumn className='font-bold' key='name'>PRODUCT_NAME</TableColumn>
+                    <TableColumn className='font-bold'key='role'>PRICE</TableColumn>
+                    <TableColumn className='font-bold' key='status'>STATUS</TableColumn>
+                    <TableColumn className='font-bold' key='sta'>ACTIONS</TableColumn>
+                </TableHeader>
 
-  const items = React.useMemo(() => {
-    const start = (page - 1) * rowsPerPage;
-    const end = start + rowsPerPage;
+                <TableBody>
+                    {orders &&
+                        orders.map((order) => (
+                            <TableRow key = {order._id}>
+                                <TableCell  >{order.order_items[0]}</TableCell>
 
-    return users.slice(start, end);
-  }, [page, users]);
-
-  return (
-    <Table 
-      aria-label="Example table with client side pagination"
-      bottomContent={
-        <div className="flex w-full justify-center">
-          <Pagination
-            isCompact
-            showControls
-            showShadow
-            color="secondary"
-            page={page}
-            total={pages}
-            onChange={(page) => setPage(page)}
-          />
-        </div>
-      }
-      classNames={{
-        wrapper: "min-h-[222px]",
-      }}
-    >
-      <TableHeader>
-        <TableColumn key="name">NAME</TableColumn>
-        <TableColumn key="role">ROLE</TableColumn>
-        <TableColumn key="status">STATUS</TableColumn>
-      </TableHeader>
-      <TableBody items={items}>
-        {(item) => (
-          <TableRow key={item.name}>
-            {(columnKey) => <TableCell>{getKeyValue(item, columnKey)}</TableCell>}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
-  );
+                                <TableCell >{order.cart_total_price}</TableCell>
+                                <TableCell>{order.status}</TableCell>
+                                <TableCell>
+                                    <Button className='mr-2 bg-primary text-white font-semibold '>
+                                        Complete
+                                    </Button>
+                                    <Button
+                                        onCLick={() => {
+                                            dispatch(
+                                                deleteCustomersorders({
+                                                    ordersId: order._id,
+                                                })
+                                            );
+                                        }}
+                                        type='submit'
+                                        className='bg-danger text-white font-semibold'
+                                    >
+                                        Cancel
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                </TableBody>
+            </Table>
+        </>
+    );
 }
-
-

@@ -14,10 +14,8 @@ const CustomerProfile = () => {
     console.log('customerData from customerProfile', data);
 
     useEffect(() => {
-        dispatch(getCustomerProfile());
-        console.log('dispatch' , dispatch(getCustomerProfile()))
-        
-    }, [dispatch, ]);
+        dispatch(getCustomerProfile());        
+    }, [dispatch]);
 
 
     if (isLoading) {
