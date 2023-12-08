@@ -2,31 +2,33 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import UpdateCustomerComponent from '../../components/CustomersFront/UpdateCustomerComponent';
-import {useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import NavbarCustomers from '../../components/CustomersFront/NavBarCustomers';
+import { useGetCustomerProfileDataQuery } from '../../app/api/customerApi';
 
 const UpdateCustomerInfo = () => {
-    const { customerId } = useParams();
-    console.log('customerId' , customerId)
-    const { isLoading, data, err } = useSelector((state) => state.customers);
-    console.log('data from updateCustomerInfo', data);
+    const {
+        data: customer,
+        isLoading,
+        isFetching,
+        isError,
+        error,
+    } = useGetCustomerProfileDataQuery();
 
-
-
-    if (isLoading) {
+    if (isLoading || isFetching) {
         return <LoadingSpinner />;
     }
-    if (!isLoading && err) {
-        return <div>Error: {err}</div>;
+
+    if (!isLoading && isError) {
+        return <div>Error: {error}</div>;
     }
 
     return (
-        <div >
-        <NavbarCustomers customer={data} />
-            <UpdateCustomerComponent customer={data} />
+        <div>
+            <NavbarCustomers customer={customer} />
+            <UpdateCustomerComponent customer={customer} />
         </div>
-
     );
 };
 

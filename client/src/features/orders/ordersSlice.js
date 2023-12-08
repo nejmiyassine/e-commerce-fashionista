@@ -15,19 +15,6 @@ export const getCustomersOrders = createAsyncThunk(
     }
 );
 
-export const deleteCustomersorders = createAsyncThunk(
-    'orders/deleteCustomersOrders',
-    async ({ordersId}, { rejectWithvalue }) => {
-        try {
-            const res = await API.delete(`/orders/${ordersId}`, 
-            { withCredentials: true });
-            console.log('res' , res.data)
-            return res.data
-        } catch (error) {
-            rejectWithvalue(error.res.data);
-        }
-    }
-);
 
 const initialState = {
     loading: false,
@@ -55,27 +42,7 @@ const ordersSlice = createSlice({
                 state.ordersData = action.error.message;
             })
 
-            .addCase(deleteCustomersorders.pending, (state) => {
-                state.loading = true;
-            })
-            .addCase(deleteCustomersorders.fulfilled, (state, action) => {
-                state.loading = false;
-                console.log('arg')
-                const {
-                    arg: { ordersId },
-                } = action.meta;
-
-                if (ordersId) {
-                    state.ordersData = state.ordersData.filter(
-                        (order) => (order._id = ordersId)
-                    );
-                }
-            })
-            .addCase(deleteCustomersorders.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message;
-                
-            });
+     
     },
 });
 

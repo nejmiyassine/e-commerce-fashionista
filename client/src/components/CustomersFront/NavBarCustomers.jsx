@@ -12,10 +12,29 @@ import {
     Button,
 } from '@nextui-org/react';
 import { logOutCustomer } from '../../features/customers/customersSlice';
+import { useGetCustomerProfileDataQuery } from '../../app/api/customerApi';
+import LoadingSpinner from '../LoadingSpinner';
 
-const NavbarCustomers = ({ customer }) => {
+const NavbarCustomers = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+
+    const {
+        data: customer,
+        isLoading,
+        isFetching,
+        isError,
+        error,
+    } = useGetCustomerProfileDataQuery();
+
+    const loading = isLoading || isFetching;
+
+    if (loading) {
+        return <LoadingSpinner />;
+    }
+
+    if (!isLoading && isError) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
         <div className=' shadow-md  border-black'>
@@ -47,9 +66,7 @@ const NavbarCustomers = ({ customer }) => {
                                 <Button
                                     className='bg-color-none '
                                     onClick={() => {
-                                        navigate(
-                                            '/customersFavorites'
-                                        );
+                                        navigate('/customersFavorites');
                                     }}
                                 >
                                     Favorites
@@ -57,58 +74,46 @@ const NavbarCustomers = ({ customer }) => {
                             </li>
                         </ul>
                     </div>
+
                     <Dropdown placement='bottom-end'>
                         <DropdownTrigger>
-                            <Avatar
-                                isBordered
-                                as='button'
-                                className='transition-transform'
-                                color='secondaryColor'
-                                name='Jason Hughes'
-                                size='sm'
-                                src='https://i.pravatar.cc/150?u=a042581f4e29026704d'
-                            />
+                            <Button variant='light'>
+                                <Avatar
+                                    isBordered
+                                    as='button'
+                                    className='transition-transform'
+                                    color='secondaryColor'
+                                    name='Jason Hughes'
+                                    size='sm'
+                                    src='https://i.pravatar.cc/150?u=a042581f4e29026704d'
+                                />
+                                <span>{customer.first_name}</span>
+                            </Button>
                         </DropdownTrigger>
                         <DropdownMenu
                             aria-label='Profile Actions'
                             variant='flat'
                         >
-                            <DropdownItem key='email'>
-                                <p className='font-semibold'>
-                                    {customer.email}
-                                </p>
-                            </DropdownItem>
-
-                        
-
-                            <DropdownItem key='settings' className='h-8'>
-                                <Button
-                                    className='bg-color-none '
-                                    onClick={() => {
-                                        navigate(`/updateProfile/${customer._id}`);
-                                    }}
-                                >
-                                    Settings
-                                </Button>
-
+                            <DropdownItem
+                                key='settings'
+                                className='h-8'
+                                onClick={() => {
+                                    navigate(`/updateProfile/${customer._id}`);
+                                }}
+                            >
+                                Profile
                             </DropdownItem>
 
                             <DropdownItem
                                 key='logout'
                                 color='danger'
                                 className='h-8'
-                            >
-                                <Button className='bg-color-none'
                                 onClick={() => {
-
-                                 dispatch(logOutCustomer()) 
-                                navigate('/login')
-                            }
-                                }
-                                >
-                                
-                                    Log out
-                                </Button>
+                                    dispatch(logOutCustomer());
+                                    navigate('/login');
+                                }}
+                            >
+                                Log out
                             </DropdownItem>
                         </DropdownMenu>
                     </Dropdown>

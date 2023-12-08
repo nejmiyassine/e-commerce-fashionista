@@ -5,42 +5,32 @@ import { fetchFavorites } from '../../features/favorites/favoritesSlice';
 import ViewFavorites from '../../components/favorites/ViewFavorites';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import NavbarCustomers from '../../components/CustomersFront/NavBarCustomers';
-import {getCustomerProfile} from '../../features/customers/customersSlice'
+import { getCustomerProfile } from '../../features/customers/customersSlice';
 
 const Favorites = () => {
     const dispatch = useDispatch();
-    const { loading, favoritesData, error } = useSelector((state) => state.favorites);
-    console.log('data from favorites', favoritesData);
+    const { isLoading, favoritesData, error } = useSelector(
+        (state) => state.favorites
+    );
 
     useEffect(() => {
         dispatch(fetchFavorites());
     }, [dispatch]);
 
-    const { isLoading , data , err} = useSelector((state) => state.customers);
-    console.log('customerData', data);
-
-    useEffect(() => {
-        dispatch(getCustomerProfile());
-    }, [dispatch ]);
-
-
-    if (loading || isLoading ) {
+    if (isLoading) {
         return <LoadingSpinner />;
     }
 
-    if (!loading && error) {
+    if (!isLoading && error) {
         return <div>Error: {error}</div>;
     }
-    if (!isLoading && err) {
-        return <div>Error: {err}</div>;
-    }
-
-    console.log('data', data);
 
     return (
         <>
-            <NavbarCustomers customer={data} />
-            <div>{favoritesData && <ViewFavorites favorites={favoritesData} />}</div>
+            <NavbarCustomers />
+            <div>
+                {favoritesData && <ViewFavorites favorites={favoritesData} />}
+            </div>
         </>
     );
 };

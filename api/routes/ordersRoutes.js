@@ -21,6 +21,5 @@ router.post('/', restrictToCustomer, createOrdersController);
 router.get('/:id', getOrderByIdController);
 router.get('/', getAllOrdersController);
 router.put('/:id', updateOrdersController);
-router.delete('/:id' , deleteOrdersController);
 
 module.exports = router;

@@ -93,7 +93,6 @@ export const patchCustomerData = createAsyncThunk(
             console.log('id from fron customerSlice', customerId);
             const res = await API.patch(
                 `customers/${customerId}`,
-
                 patchedCustomerData,
                 {
                     withCredentials: true,

@@ -7,9 +7,12 @@ exports.getCustomerProfileData = async (req, res, next) => {
     try {
         const user = res.locals.user;
 
-        res.status(200).json(   
+        res.status(200).json({
+            status: 'success',
+            data: {
                 user,
-        );
+            },
+        });
     } catch (error) {
         next(error);
     }
@@ -129,11 +132,10 @@ exports.customerCanUpdate = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
 
     try {
-        
         const salt = await bcrypt.genSalt(parseInt(saltRounds));
         const hashedPassword = await bcrypt.hash(password, salt);
+        const customerId = res.locals.user._id;
 
-        const id = { _id: req.params.id };
         const updatedFields = {
             first_name,
             last_name,
@@ -141,20 +143,12 @@ exports.customerCanUpdate = async (req, res) => {
             password,
         };
 
-        if (email) {
-            const exists = await Customer.findOne({ email });
-            if (exists) {
-                return res
-                    .status(400)
-                    .json({ message: 'email is already existed' });
-            }
-        }
         if (password) {
             updatedFields.password = hashedPassword;
         }
 
         const updatedCustomer = await Customer.findByIdAndUpdate(
-             id,
+            customerId,
             updatedFields,
             { new: true }
         );
@@ -169,7 +163,7 @@ exports.customerCanUpdate = async (req, res) => {
 
 // exports.getProfile = async (req, res) => {
 //     try {
-    
+
 //          const customerId = res.locals.user._id;
 
 //         const customer = await Customer.findById(customerId);
@@ -181,5 +175,3 @@ exports.customerCanUpdate = async (req, res) => {
 //         res.status(500).json({ message: error.message });
 //     }
 // };
-
-

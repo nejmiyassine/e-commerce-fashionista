@@ -109,27 +109,11 @@ const getAllOrdersController = async (req, res) => {
 };
 
 
-//delete orders
-const deleteOrdersController = async(req , res) => {
-try {
-    // const customerId = res.locals.user._id;
-    const id = req.params.favoriteID;
-
-    const orders = await Orders.findByIdAndDelete(id);
-    console.log('orders' , orders)
-    
-    return res.json({message : 'order is deleted successfully'})
-    
  
-} catch (error) {
-return res.json({message:error.message})
-}
-}
 
 module.exports = {
     createOrdersController,
     updateOrdersController,
     getOrderByIdController,
     getAllOrdersController,
-    deleteOrdersController,
 };
