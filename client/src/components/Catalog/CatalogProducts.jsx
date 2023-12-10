@@ -3,8 +3,8 @@ import { Input } from '@nextui-org/react';
 import { CiSearch } from 'react-icons/ci';
 
 import ProductCard from '../products/ProductCard';
-import Line from '../Line';
 import CatalogChangeLayout from './CatalogChangeLayout';
+import Line from '../Line';
 
 const CatalogProducts = ({
     selected,
@@ -77,8 +77,8 @@ const CatalogProducts = ({
             <Line />
 
             <div
-                className={`grid grid-col-1 md:${
-                    cols === 2 ? 'grid-cols-2' : 'grid-cols-3'
+                className={`grid ${
+                    cols === 3 ? 'grid-cols-3' : 'grid-cols-2'
                 } gap-4`}
             >
                 {products.length ? (

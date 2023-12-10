@@ -17,6 +17,8 @@ import OrderStatusChip from '../OrderStatusChip';
 import FormatPrice from '../FormatPrice';
 import LoadingContent from '../LoadingContent';
 
+import { sliceText } from '../../utils/sliceText';
+
 const columns = [
     { name: 'NAME', uid: 'name' },
     { name: 'PRICE', uid: 'price' },
@@ -55,7 +57,7 @@ const LastOrders = () => {
                 return (
                     <div className='flex flex-col'>
                         <p className='text-bold text-sm capitalize'>
-                            {order.order_items[0]}
+                            {sliceText(order.order_items[0], 10)}
                         </p>
                     </div>
                 );

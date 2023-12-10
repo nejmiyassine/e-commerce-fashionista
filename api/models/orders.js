@@ -4,7 +4,6 @@ const ordersSchema = new mongoose.Schema({
     customer_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customer',
-        required: false,
         description: 'The customer ID',
     },
     order_items: {

@@ -1,12 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import API from '../../app/api/api';
 
-export const fetchFavorites = createAsyncThunk(
-    'favorites/fetchFavorites',
-    async (_, { rejectWithValue }) => {
+export const addToFavorites = createAsyncThunk(
+    'favorites/addToFavorites',
+    async (productId, { rejectWithValue }) => {
         try {
-            const res = await API.get('/favorites', { withCredentials: true });
-            console.log('favorites from axios', res.data);
+            const res = await API.post(
+                '/favorites/addToFavorites',
+                { productId },
+                {
+                    withCredentials: true,
+                }
+            );
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -14,23 +19,33 @@ export const fetchFavorites = createAsyncThunk(
     }
 );
 
+export const fetchFavorites = createAsyncThunk(
+    'favorites/fetchFavorites',
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await API.get('/favorites', { withCredentials: true });
+
+            return res.data;
+        } catch (error) {
+            rejectWithValue(error.res.data);
+        }
+    }
+);
 
 export const getFavoritesById = createAsyncThunk(
-    'favorites/getFavoritesById' ,
-    async ({rejectWithValue}) => {
+    'favorites/getFavoritesById',
+    async (customerId, { rejectWithValue }) => {
         try {
-
-            const res = await API.get(`favorites/${customerId}` , {
+            const res = await API.get(`favorites/${customerId}`, {
                 withCredentials: true,
-            })
-            console.log('getFavoriteById' , res.data)
-
-        } catch(error) {
-            rejectWithValue(error.res.data)
-
+            });
+            return res.data;
+        } catch (error) {
+            rejectWithValue(error.res.data);
         }
+    }
+);
 
-})
 export const deleteFavorites = createAsyncThunk(
     'favorites/deleteFavorites',
     async ({ favoriteId }, { rejectWithValue }) => {
@@ -38,7 +53,7 @@ export const deleteFavorites = createAsyncThunk(
             const res = await API.delete(`favorites/${favoriteId}`, {
                 withCredentials: true,
             });
-            console.log('delete favorite from slie', res.data);
+            return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
         }
@@ -62,6 +77,20 @@ const favoritesSlice = createSlice({
 
     extraReducers: (builder) => {
         builder
+            // Add To Favorites
+            .addCase(addToFavorites.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(addToFavorites.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.payload;
+                state.error = '';
+                console.log('addToFavorites', state.data);
+            })
+            .addCase(addToFavorites.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.error.message;
+            })
 
             //fetchFavorites
             .addCase(fetchFavorites.pending, (state) => {

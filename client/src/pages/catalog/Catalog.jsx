@@ -10,9 +10,10 @@ import FilterCatalogSidebar from '../../components/Catalog/FilterCatalogSidebar'
 import { getAllCategories } from '../../features/categories/categoriesSlice';
 import { getAllProducts } from '../../features/products/productsSlice';
 import BagProductsSidebar from '../../layouts/BagProductsSidebar';
-// import CartSidebar from '../../layouts/CartSidebar';
-
 import Navbar from '../../layouts/Navbar';
+import Footer from '../../components/LandingPage/Footer';
+
+import { toggleCartSidebar } from '../../features/cart/cartSlice';
 
 const Catalog = () => {
     const dispatch = useDispatch();
@@ -40,6 +41,10 @@ const Catalog = () => {
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    const openBagSidebar = () => {
+        dispatch(toggleCartSidebar(true));
     };
 
     const onSearchChange = useCallback((value) => {
@@ -156,7 +161,10 @@ const Catalog = () => {
 
     return (
         <>
-            <Navbar toggleSidebar={toggleSidebar} />
+            <Navbar
+                toggleSidebar={toggleSidebar}
+                openBagSidebar={openBagSidebar}
+            />
             <div className='flex gap-4'>
                 <div
                     className={`inset-0 z-30 bg-black opacity-50 ${
@@ -198,7 +206,8 @@ const Catalog = () => {
             </div>
 
             <BagProductsSidebar />
-            {/* <CartSidebar /> */}
+
+            <Footer />
         </>
     );
 };

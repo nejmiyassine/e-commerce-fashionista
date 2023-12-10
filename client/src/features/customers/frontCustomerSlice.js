@@ -18,18 +18,18 @@ export const getCustomerProfile = createAsyncThunk(
 
 export const patchCustomerData = createAsyncThunk(
     'fCustomer/patchCustomerData',
-    async ({customerId , patchedCustomerData }, { rejectWithValue }) => {
+    async ({ customerId, patchedCustomerData }, { rejectWithValue }) => {
         try {
-            console.log('id from fron customerSlice'  ,customerId)
+            console.log('id from fron customerSlice', customerId);
             const res = await API.patch(
                 `customers/${customerId}`,
-                
+
                 patchedCustomerData,
                 {
                     withCredentials: true,
                 }
             );
-            console.log('res' , res.data);
+            console.log('res', res.data);
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -92,11 +92,11 @@ const frontCustomersSlice = createSlice({
             .addCase(patchCustomerData.fulfilled, (state, action) => {
                 state.isLoading = false;
                 const {
+                    // eslint-disable-next-line no-unused-vars
                     arg: { customerId },
                 } = action.meta;
                 console.log('action.meta', action.meta);
 
-             
                 state.err = '';
             })
 

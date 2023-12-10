@@ -61,8 +61,8 @@ const AuthRegisterForm = ({ account_type }) => {
 
     useEffect(() => {
         if (isSuccess) {
-            toast.success('You successfully logged in');
-            navigate(account_type === 'user' ? '/admin/dashboard' : '/');
+            toast.success('You successfully register in');
+            navigate(account_type.toLowerCase() === 'customer' && '/login');
         }
 
         if (isError) {

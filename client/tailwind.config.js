@@ -9,16 +9,15 @@ export default {
     ],
     darkMode: 'class',
     theme: {
-        screens:{
-            sm:'578px',
+        screens: {
+            sm: '578px',
             md: '770px',
             lg: '992px',
-            xl: '1200px'
+            xl: '1200px',
         },
-        container:{
+        container: {
             center: true,
-            padding: '1rem'
-
+            padding: '1rem',
         },
         extend: {
             colors: {
@@ -26,7 +25,7 @@ export default {
                     light: '#1a1a1a',
                     deepDark: '#000000',
                     dark: '#F5F5F5',
-                    blueCyan: '#4eb2d8',
+                    blueCyan: '#d4af37',
                     orange: '#f5a524',
                 },
                 secondaryColor: {

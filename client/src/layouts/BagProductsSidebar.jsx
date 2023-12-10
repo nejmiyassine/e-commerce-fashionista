@@ -16,6 +16,7 @@ import {
 
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Button } from '@nextui-org/react';
+import { Link } from 'react-router-dom';
 
 /* eslint-disable react/prop-types */
 const BagProductsSidebar = () => {
@@ -167,7 +168,7 @@ const BagProductsSidebar = () => {
                 {isLoading || !cartItems ? (
                     <LoadingSpinner />
                 ) : (
-                    <div className='fixed inset-y-0 left-0 max-w-full w-2/5 flex'>
+                    <div className='fixed inset-y-0 gap-4 left-0 max-w-full w-2/5 flex'>
                         <div className='bg-white overflow-y-auto w-full'>
                             {/* Sidebar Header */}
                             <div className='p-4 flex items-center justify-between border-b'>
@@ -200,7 +201,7 @@ const BagProductsSidebar = () => {
                                             key={item.product._id}
                                             className='pb-4 last:pb-28'
                                         >
-                                            <div className='flex mb-2'>
+                                            <div className='flex gap-2 h-32 mb-2'>
                                                 <img
                                                     src={
                                                         item.product
@@ -210,7 +211,7 @@ const BagProductsSidebar = () => {
                                                         item.product
                                                             .product_name
                                                     }
-                                                    className='w-28 h-50 object-contain mr-2'
+                                                    className='w-28 h-full object-contain mr-2'
                                                 />
 
                                                 <div className='w-full flex flex-col gap-10 justify-between'>
@@ -333,9 +334,12 @@ const BagProductsSidebar = () => {
                                             .toFixed(2)}
                                     </p>
                                 </div>
-                                <button className='mt-4 px-2 py-3 rounded w-full font-semibold transition duration-200 bg-violet-500 text-white hover:bg-violet-700'>
-                                    Proceed to Checkout
-                                </button>
+
+                                <Link to='/payment'>
+                                    <Button className='mt-4 px-2 py-3 rounded w-full font-semibold transition duration-200 bg-violet-500 text-white hover:bg-violet-700'>
+                                        Proceed to Checkout
+                                    </Button>
+                                </Link>
                             </div>
                         </div>
                     </div>

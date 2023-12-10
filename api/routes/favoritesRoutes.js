@@ -15,8 +15,8 @@ const { restrictToCustomer } = require('../middleware/restrictMiddleware');
 router.use(deserializeUser, requireUser);
 
 router.get('/', restrictToCustomer, getAllFavoritesProducts);
-router.post('/addToFavorites', addToFavorites);
-router.get('/:favoriteID', getFavoritesProductsById);
-router.delete('/:favoriteID', deleteFavoritesProducts);
+router.get('/:favoriteID', restrictToCustomer, getFavoritesProductsById);
+router.post('/addToFavorites', restrictToCustomer, addToFavorites);
+router.delete('/:favoriteID', restrictToCustomer, deleteFavoritesProducts);
 
 module.exports = router;

@@ -1,17 +1,33 @@
-import { useDispatch } from 'react-redux';
+/* eslint-disable react/prop-types */
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
     deleteFavorites,
     getFavoritesById,
 } from '../../features/favorites/favoritesSlice';
 
-const ViewFavorites = ({ favorites }) => {
+import LoadingSpinner from '../LoadingSpinner';
+
+const ViewFavorites = () => {
     const dispatch = useDispatch();
+
+    const { data: favorites, isLoading } = useSelector(
+        (state) => state.favorites
+    );
+
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
+
     return (
         <div>
             <div className='grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-5 m-5 p-5 '>
-                {favorites &&
+                {favorites.length &&
                     favorites.map((favorite) => (
-                        <div className=' ml-[90px] mt-[30px]  sm:w-1/2 md:w-1/3 md:ml-2px xl:w-[55%]'>
+                        <div
+                            key={favorite._id}
+                            className=' ml-[90px] mt-[30px]  sm:w-1/2 md:w-1/3 md:ml-2px xl:w-[55%]'
+                        >
                             <h6 className='text-center text-md font-semibold p-1'>
                                 {favorite.product.product_name}
                             </h6>

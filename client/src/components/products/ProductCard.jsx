@@ -14,13 +14,15 @@ import { useDispatch } from 'react-redux';
 import { setProduct } from '../../features/products/productsSlice';
 import { useAddProductToCartMutation } from '../../app/api/cartApi';
 import { toast } from 'react-toastify';
+import { addToFavorites } from '../../features/favorites/favoritesSlice';
 
 const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
     const dispatch = useDispatch();
 
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [addProductToCart, { isSuccess: isAddSuccess }] =
         useAddProductToCartMutation();
+
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const handleUpdateProduct = (product) => {
         console.log(product);
@@ -58,6 +60,17 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
         }
     };
 
+    const handleAddToFavorites = (productId) => {
+        try {
+            dispatch(addToFavorites(productId));
+        } catch (error) {
+            console.error(error);
+            toast.error('Error adding product to favorites', {
+                position: 'bottom-right',
+            });
+        }
+    };
+
     return (
         <div className={`${isAdmin && 'bg-white rounded-md'}`}>
             <div className='relative group'>
@@ -90,7 +103,7 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
                         </div>
                     ) : (
                         <button
-                            onClick={handleNextClick}
+                            onClick={() => handleAddToFavorites(product._id)}
                             className='absolute top-10 right-6 transform -translate-y-1/2 rounded-full bg-white p-2 shadow-md'
                         >
                             <MdFavoriteBorder className='transition-all hover:text-red-500 w-5 h-5' />
@@ -137,15 +150,14 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
                         <MdOutlineStar size={16} className='text-yellow-500' />
                         <MdOutlineStar size={16} className='text-yellow-500' />
                     </div>
-                    {isAdmin && (
-                        <p className='text-gray-500'>
-                            {product?.category_id.name
-                                ? product?.category_id.name
-                                : categories.find(
-                                      (cat) => cat._id === product?.category_id
-                                  )?.name}
-                        </p>
-                    )}
+
+                    <p className='text-gray-500 text-sm'>
+                        {product?.category_id.name
+                            ? product?.category_id.name
+                            : categories.find(
+                                  (cat) => cat._id === product?.category_id
+                              )?.name}
+                    </p>
                 </div>
 
                 <Link

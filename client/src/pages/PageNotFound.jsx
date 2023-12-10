@@ -7,7 +7,7 @@ const PageNotFound = () => {
             <h2 className='font-bold text-9xl'>404!</h2>
             <h2 className='text-2xl'>Page Not Found!</h2>
             <Link
-                to='/landingPage'
+                to='/landing-page'
                 className='mt-2 flex items-center gap-2 text-blue-400 transition hover:text-blue-600'
             >
                 <CiCircleChevLeft />

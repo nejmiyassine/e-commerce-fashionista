@@ -2,7 +2,6 @@ const Orders = require('../models/Orders');
 
 // Create a new order
 const createOrdersController = async (req, res) => {
-    console.log(res.locals.user);
     const customer_id = res.locals.user._id;
     const { order_items, cart_total_price } = req.body;
 
@@ -54,7 +53,7 @@ const updateOrdersController = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -75,25 +74,14 @@ const getOrderByIdController = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: error.message });
     }
 };
 
 // Get a list of all orders
 const getAllOrdersController = async (req, res) => {
-    // const page = parseInt(req.query.page) || 1;
-    // const limit = 10;
-    // const skip = (page - 1) * limit;
-
     try {
-        // if (!req.user.emailValidated) {
-        //     return res.status(403).json({ error: 'Forbidden' });
-        // }
-
         const orders = await Orders.find().populate('customer_id');
-        // .limit(limit)
-        // .skip(skip)
-        // .exec();
 
         if (orders.length === 0) {
             return res.status(200).json([]);
@@ -102,7 +90,26 @@ const getAllOrdersController = async (req, res) => {
         res.status(200).json({ orders });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getCustomerOrders = async (req, res) => {
+    const customerId = res.locals.user._id;
+
+    try {
+        const orders = await Orders.find({ customer_id: customerId });
+
+        if (orders.length === 0) {
+            return res
+                .status(200)
+                .json({ message: 'No orders found for the customer' });
+        }
+
+        res.status(200).json({ orders });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -111,4 +118,5 @@ module.exports = {
     updateOrdersController,
     getOrderByIdController,
     getAllOrdersController,
+    getCustomerOrders,
 };

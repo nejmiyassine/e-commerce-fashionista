@@ -161,7 +161,7 @@ const OrdersTable = () => {
                     <p className='font-semibold'>{capitalize(cellValue[0])}</p>
                 );
 
-            case 'price':
+            case 'cart_total_price':
                 return <FormatPrice price={order.cart_total_price} />;
 
             case 'status':
