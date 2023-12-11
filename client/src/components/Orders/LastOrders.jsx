@@ -57,7 +57,7 @@ const LastOrders = () => {
                 return (
                     <div className='flex flex-col'>
                         <p className='text-bold text-sm capitalize'>
-                            {sliceText(order.order_items[0], 10)}
+                            {sliceText(order.order_items[0].product_name, 10)}
                         </p>
                     </div>
                 );
@@ -114,6 +114,8 @@ const LastOrders = () => {
         }),
         []
     );
+
+    console.log(data);
 
     return (
         <Table

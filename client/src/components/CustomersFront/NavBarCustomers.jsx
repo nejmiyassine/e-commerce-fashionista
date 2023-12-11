@@ -78,7 +78,7 @@ const NavbarCustomers = () => {
                         <ul className='flex justify-around w-80 relative right-80     '>
                             <li>
                                 <Button
-                                    className='bg-color-none hover:text-primaryColor-blueCyan'
+                                    className='bg-color-none hover:text-primaryColor-gold'
                                     onClick={() => {
                                         navigate('/landing-page');
                                     }}
@@ -88,7 +88,7 @@ const NavbarCustomers = () => {
                             </li>
                             <li>
                                 <Button
-                                    className='bg-color-none hover:text-primaryColor-blueCyan'
+                                    className='bg-color-none hover:text-primaryColor-gold'
                                     onClick={() => {
                                         navigate('/customers-orders');
                                     }}
@@ -98,7 +98,7 @@ const NavbarCustomers = () => {
                             </li>
                             <li>
                                 <Button
-                                    className='bg-color-none hover:text-primaryColor-blueCyan'
+                                    className='bg-color-none hover:text-primaryColor-gold'
                                     onClick={() => {
                                         navigate('/customers-favorites');
                                     }}

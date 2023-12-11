@@ -21,7 +21,7 @@ const About = () => {
                         <img className=' rounded-lg' src={About1} alt='img' />
                     </div>
                     <div className=' w-full lg:w-2/4 p-4 space-y-3'>
-                        <h2 className=' font-semibold text-3xl text-primaryColor-blueCyan italic'>
+                        <h2 className=' font-semibold text-3xl text-primaryColor-gold italic'>
                             Our Story:{' '}
                         </h2>
                         <p>
@@ -39,7 +39,7 @@ const About = () => {
             <div className='py-8 flex flex-col items-center justify-center lg:px-32 px-3'>
                 <div className='flex flex-col lg:flex-row items-center gap-5'>
                     <div className='w-full lg:w-2/4 p-4 space-y-3'>
-                        <h2 className=' font-semibold text-3xl text-primaryColor-blueCyan italic'>
+                        <h2 className=' font-semibold text-3xl text-primaryColor-gold italic'>
                             Our Mission:
                         </h2>
                         <p>
@@ -62,7 +62,7 @@ const About = () => {
                         <img className=' rounded-lg' src={About3} alt='img' />
                     </div>
                     <div className=' w-full lg:w-2/4 p-4 space-y-3'>
-                        <h2 className=' font-semibold text-3xl text-primaryColor-blueCyan italic'>
+                        <h2 className=' font-semibold text-3xl text-primaryColor-gold italic'>
                             Crafting Your Style Story:
                         </h2>
                         <p>

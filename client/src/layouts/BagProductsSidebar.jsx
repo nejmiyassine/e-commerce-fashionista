@@ -17,6 +17,7 @@ import {
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Button } from '@nextui-org/react';
 import { Link } from 'react-router-dom';
+import { calculateSubTotal } from '../utils/calculateSubTotal';
 
 /* eslint-disable react/prop-types */
 const BagProductsSidebar = () => {
@@ -156,10 +157,10 @@ const BagProductsSidebar = () => {
                 isOpen ? 'block' : 'hidden'
             }`}
         >
-            <div className='absolute inset-0 overflow-hidden'>
+            <div className='fixed inset-0 overflow-hidden'>
                 {/* Dark overlay */}
                 <div
-                    className='absolute inset-0 bg-black opacity-50'
+                    className='fixed inset-0 bg-black opacity-50'
                     onClick={closeBagSidebar}
                 ></div>
 
@@ -309,29 +310,9 @@ const BagProductsSidebar = () => {
                                     </p>
                                     <p className='font-bold'>
                                         $
-                                        {cartItems.cartItems
-                                            .reduce(
-                                                (
-                                                    previousValue,
-                                                    currentValue
-                                                ) => {
-                                                    return (
-                                                        parseFloat(
-                                                            previousValue
-                                                        ) +
-                                                        parseFloat(
-                                                            currentValue.quantity
-                                                        ) *
-                                                            parseFloat(
-                                                                currentValue
-                                                                    .product
-                                                                    .price
-                                                            )
-                                                    );
-                                                },
-                                                0
-                                            )
-                                            .toFixed(2)}
+                                        {calculateSubTotal(
+                                            cartItems?.cartItems
+                                        )}
                                     </p>
                                 </div>
 

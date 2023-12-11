@@ -1,10 +1,10 @@
 import CustomersOrders from '../../components/CustomersOrdersFront/CustomersOrders';
-import NavbarCustomers from '../../components/CustomersFront/NavBarCustomers';
+import Navbar from '../../layouts/NavBar';
 
 const CustomersOrdersPage = () => {
     return (
         <>
-            <NavbarCustomers />
+            <Navbar />
             <div className='mt-16 '>
                 <CustomersOrders />
             </div>

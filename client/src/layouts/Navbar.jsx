@@ -13,9 +13,9 @@ import {
     DropdownMenu,
     DropdownTrigger,
 } from '@nextui-org/react';
-import { IoFilter } from 'react-icons/io5';
 import { IoMdHeart } from 'react-icons/io';
 import { useCookies } from 'react-cookie';
+import { FaFilter } from 'react-icons/fa';
 
 import { logOutCustomer } from '../features/customers/frontCustomerSlice';
 import { useGetCustomerProfileDataQuery } from '../app/api/customerApi';
@@ -64,7 +64,7 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
     }
 
     return (
-        <div className='w-full py-3 px-10 flex justify-between items-center'>
+        <div className='container mx-auto w-full py-3 flex justify-between items-center'>
             <div className='flex items-center'>
                 <Link to='/landing-page'>
                     <h2 className='font-bold text-xl'>Logo</h2>
@@ -72,10 +72,10 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
             </div>
 
             <div className='hidden sm:flex items-center'>
-                <ul className='flex gap-8 text-sm'>
+                <ul className='flex gap-4 lg:gap-8 text-sm'>
                     <li>
                         <Link
-                            className='hover:text-primaryColor-blueCyan hover:underline hover:underline-offset-8'
+                            className='hover:text-primaryColor-gold hover:underline hover:underline-offset-8'
                             to='/landing-page'
                         >
                             Home
@@ -83,7 +83,7 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
                     </li>
                     <li>
                         <Link
-                            className='hover:text-primaryColor-blueCyan hover:underline hover:underline-offset-8'
+                            className='hover:text-primaryColor-gold hover:underline hover:underline-offset-8'
                             to='/shop'
                         >
                             Products
@@ -91,7 +91,7 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
                     </li>
                     <li>
                         <Link
-                            className='hover:text-primaryColor-blueCyan  hover:underline hover:underline-offset-8'
+                            className='hover:text-primaryColor-gold  hover:underline hover:underline-offset-8'
                             to='/About'
                         >
                             About us
@@ -99,7 +99,7 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
                     </li>
                     <li>
                         <Link
-                            className='hover:text-primaryColor-blueCyan  hover:underline hover:underline-offset-8'
+                            className='hover:text-primaryColor-gold  hover:underline hover:underline-offset-8'
                             to='/contact'
                         >
                             Contact us
@@ -113,7 +113,7 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
                     onClick={toggleSidebar}
                     className='text-center text-gray-700 transition'
                 >
-                    <IoFilter className='w-5 h-5' />
+                    <FaFilter className='w-4 h-4' />
                 </button>
 
                 <button
@@ -143,7 +143,7 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
                             <Avatar
                                 isBordered
                                 as='button'
-                                className='transition-transform'
+                                className='z-1 transition-transform'
                                 color='secondaryColor'
                                 name='Customer Name'
                                 size='sm'
@@ -154,7 +154,7 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
                             aria-label='Profile Actions'
                             variant='flat'
                         >
-                            <DropdownItem key='settings' className='h-8'>
+                            <DropdownItem key='update-profile' className='h-8'>
                                 <Button
                                     className='bg-color-none '
                                     onClick={() => {
@@ -164,6 +164,28 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
                                     }}
                                 >
                                     Settings
+                                </Button>
+                            </DropdownItem>
+
+                            <DropdownItem key='customer-orders' className='h-8'>
+                                <Button
+                                    className='bg-color-none '
+                                    onClick={() => {
+                                        navigate(`/customers-orders`);
+                                    }}
+                                >
+                                    Orders
+                                </Button>
+                            </DropdownItem>
+
+                            <DropdownItem key='customer-orders' className='h-8'>
+                                <Button
+                                    className='bg-color-none '
+                                    onClick={() => {
+                                        navigate(`/payment`);
+                                    }}
+                                >
+                                    Payment
                                 </Button>
                             </DropdownItem>
 
@@ -194,7 +216,7 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
                     className='cursor-pointer mx-4'
                 />
                 {navOpen && (
-                    <div className='absolute top-0 left-0 right-0 bottom-0 bg-black/90 p-4 text-center'>
+                    <div className='fixed top-0 left-0 right-0 bottom-0 bg-black/100 z-50 p-4 text-center text-white h-screen'>
                         <div className='flex justify-end'>
                             <div
                                 onClick={handleClose}
@@ -203,7 +225,7 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
                                 <FaBars size={20} />
                             </div>
                         </div>
-                        <ul className='flex flex-col space-y-4'>
+                        <ul className='flex flex-col h-full justify-center items-center space-y-4'>
                             <li>
                                 <Link to='/'>Home</Link>
                             </li>
@@ -217,16 +239,6 @@ const Navbar = ({ toggleSidebar, openBagSidebar }) => {
                                 <Link to='/'>Contact us</Link>
                             </li>
                         </ul>
-                        <div className='mt-4'>
-                            <input
-                                type='text'
-                                placeholder='Search...'
-                                className='px-4 py-2 border border-gray-300 rounded-md'
-                            />
-                            <button className='ml-2 px-4 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700'>
-                                Search
-                            </button>
-                        </div>
                     </div>
                 )}
             </div>

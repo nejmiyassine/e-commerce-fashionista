@@ -2,6 +2,8 @@ import { LuLayoutDashboard } from 'react-icons/lu';
 import { BiUser, BiCategory, BiCategoryAlt } from 'react-icons/bi';
 import { MdOutlineDiscount } from 'react-icons/md';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
+import { GrTransaction } from 'react-icons/gr';
+
 import { UsersIcon } from '../icons/Icons';
 
 export const sidebarItemsData = [
@@ -26,11 +28,6 @@ export const sidebarItemsData = [
         path: '/admin/products',
     },
     {
-        icon: HiOutlineShoppingBag,
-        text: 'Orders',
-        path: '/admin/orders',
-    },
-    {
         icon: BiCategory,
         text: 'Categories',
         path: '/admin/categories',
@@ -39,5 +36,15 @@ export const sidebarItemsData = [
         icon: BiCategoryAlt,
         text: 'Subcategories',
         path: '/admin/subcategories',
+    },
+    {
+        icon: HiOutlineShoppingBag,
+        text: 'Orders',
+        path: '/admin/orders',
+    },
+    {
+        icon: GrTransaction,
+        text: 'Transactions',
+        path: '/admin/transactions',
     },
 ];

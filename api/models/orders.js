@@ -7,7 +7,7 @@ const ordersSchema = new mongoose.Schema({
         description: 'The customer ID',
     },
     order_items: {
-        type: [String],
+        type: [Object],
         description: 'The order list',
     },
     order_date: {

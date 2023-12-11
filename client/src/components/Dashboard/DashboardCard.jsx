@@ -35,7 +35,7 @@ const DashboardCard = () => {
                                         </span>
                                         <p></p>
                                     </div>
-                                    <div className='rounded-full bg-primaryColor-blueCyan text-white dark:bg-primaryColor-dark dark:text-primaryColor-deepDark p-3'>
+                                    <div className='rounded-full bg-primaryColor-gold text-white dark:bg-primaryColor-dark dark:text-primaryColor-deepDark p-3'>
                                         {icon}
                                     </div>
                                 </div>

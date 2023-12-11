@@ -31,6 +31,9 @@ import About from '../components/LandingPage/About';
 import Terms from '../components/LandingPage/Terms';
 import CustomersOrdersPage from '../pages/CustomersOrders/CustomersOrdersPage';
 import Payment from '../pages/Payment/Payment';
+import CheckoutSuccess from '../pages/Payment/CheckoutSuccess';
+import AdminTransactions from '../pages/admin/transactions/AdminTransactions';
+import OrdersDetails from '../pages/admin/Orders/OrdersDetails';
 
 const RouteConfig = () => {
     return (
@@ -60,6 +63,10 @@ const RouteConfig = () => {
                         element={<ProductDetails />}
                     />
                     <Route path='/payment' element={<Payment />} />
+                    <Route
+                        path='/payment/success'
+                        element={<CheckoutSuccess />}
+                    />
                 </Route>
 
                 {/* Admin Protected Routes */}
@@ -68,35 +75,6 @@ const RouteConfig = () => {
                         <ProtectedRoutes allowedRoles={['admin', 'manager']} />
                     }
                 >
-                    <Route path='/admin/products' element={<Products />} />
-                    <Route
-                        path='/admin/edit/product/:productId'
-                        element={<EditProduct />}
-                    />
-                    <Route
-                        path='/admin/product/:productId'
-                        element={<AdminProductDetails />}
-                    />
-
-                    <Route path='/admin/add/product' element={<AddProduct />} />
-
-                    <Route path='/admin/categories' element={<Categories />} />
-                    <Route path='/admin/orders' element={<Orders />} />
-                    <Route
-                        path='/admin/subcategories'
-                        element={<Subcategories />}
-                    />
-
-                    <Route
-                        path='/admin/customers'
-                        element={<ViewAllCustomers />}
-                    />
-
-                    <Route
-                        path='/admin/customers/:customerId'
-                        element={<CustomerDetails />}
-                    />
-
                     <Route
                         path='/admin/dashboard'
                         element={<AdminDashboard />}
@@ -106,6 +84,44 @@ const RouteConfig = () => {
                     <Route
                         path='/admin/users/:userId'
                         element={<UserDetails />}
+                    />
+
+                    <Route
+                        path='/admin/customers'
+                        element={<ViewAllCustomers />}
+                    />
+                    <Route
+                        path='/admin/customers/:customerId'
+                        element={<CustomerDetails />}
+                    />
+
+                    <Route path='/admin/products' element={<Products />} />
+                    <Route
+                        path='/admin/edit/product/:productId'
+                        element={<EditProduct />}
+                    />
+                    <Route
+                        path='/admin/product/:productId'
+                        element={<AdminProductDetails />}
+                    />
+                    <Route path='/admin/add/product' element={<AddProduct />} />
+
+                    <Route path='/admin/categories' element={<Categories />} />
+
+                    <Route
+                        path='/admin/subcategories'
+                        element={<Subcategories />}
+                    />
+
+                    <Route path='/admin/orders' element={<Orders />} />
+                    <Route
+                        path='/admin/orders/:orderId'
+                        element={<OrdersDetails />}
+                    />
+
+                    <Route
+                        path='/admin/transactions'
+                        element={<AdminTransactions />}
                     />
                 </Route>
 

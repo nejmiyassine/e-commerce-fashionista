@@ -16,6 +16,7 @@ import { ordersAPI } from './api/ordersApi';
 import { authApi } from './api/authApi';
 import { customerAPI } from './api/customerApi';
 import { cartAPI } from './api/cartApi';
+import { paymentsAPI } from './api/paymentsApi';
 
 export const store = configureStore({
     reducer: {
@@ -33,6 +34,7 @@ export const store = configureStore({
         [ordersAPI.reducerPath]: ordersAPI.reducer,
         [customerAPI.reducerPath]: customerAPI.reducer,
         [cartAPI.reducerPath]: cartAPI.reducer,
+        [paymentsAPI.reducerPath]: paymentsAPI.reducer,
     },
     devTools: import.meta.env.VITE_REACT_APP_NODE_ENV === 'development',
     middleware: (getDefaultMiddleware) =>
@@ -42,6 +44,7 @@ export const store = configureStore({
             authApi.middleware,
             customerAPI.middleware,
             cartAPI.middleware,
+            paymentsAPI.middleware,
         ]),
 });
 

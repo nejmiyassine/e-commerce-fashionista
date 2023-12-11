@@ -9,10 +9,16 @@ import { getProductById } from '../features/products/productsSlice';
 import LoadingSpinner from './LoadingSpinner';
 import { MdEdit } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { useAddProductToCartMutation } from '../app/api/cartApi';
+import { toast } from 'react-toastify';
+import { addToFavorites } from '../features/favorites/favoritesSlice';
 
 const ProductDetailsSection = ({ productId, isAdmin }) => {
     const dispatch = useDispatch();
     const { product, isLoading } = useSelector((state) => state.products);
+
+    const [addProductToCart, { isSuccess: isAddSuccess }] =
+        useAddProductToCartMutation();
 
     const [quantity, setQuantity] = useState(1);
 
@@ -26,6 +32,36 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
         setQuantity((prevQuantity) =>
             prevQuantity > 1 ? prevQuantity - 1 : 1
         );
+    };
+
+    const handleAddToCart = async () => {
+        try {
+            const quantity = 1;
+
+            await addProductToCart({ productId: productId, quantity });
+
+            if (isAddSuccess) {
+                toast.success('Product added to cart successfully', {
+                    position: 'bottom-right',
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error('Error adding product to cart', {
+                position: 'bottom-right',
+            });
+        }
+    };
+
+    const handleAddToFavorites = () => {
+        try {
+            dispatch(addToFavorites(productId));
+        } catch (error) {
+            console.error(error);
+            toast.error('Error adding product to favorites', {
+                position: 'bottom-right',
+            });
+        }
     };
 
     useEffect(() => {
@@ -218,13 +254,19 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
                                 <div className='flex flex-wrap items-center -mx-4 '>
                                     <div className='w-full px-4 mb-4 lg:w-1/2 lg:mb-0'>
                                         <button className='flex items-center gap-2 capitalize justify-center w-full font-semibold py-4 text-white bg-black border border-black rounded-md transition dark:text-gray-200 dark:border-white hover:bg-white hover:text-black dark:bg-blue-600 dark:hover:bg-blue-700 dark:hover:border-blue-700 dark:hover:text-gray-300'>
-                                            <FaCartPlus size={18} />
+                                            <FaCartPlus
+                                                size={18}
+                                                onClick={handleAddToCart}
+                                            />
                                             Add to Cart
                                         </button>
                                     </div>
                                     <div className='w-full px-4 mb-4 lg:mb-0 lg:w-1/2'>
                                         <button className='flex items-center gap-2 capitalize justify-center w-full p-4 border border-rose-500 rounded-md dark:text-gray-200 dark:border-rose-500 text-white bg-rose-500 transition hover:border-rose-500 hover:bg-white hover:text-rose-500 dark:bg-rose-500 dark:hover:bg-blue-700 dark:hover:border-blue-700 dark:hover:text-gray-300'>
-                                            <CiHeart size={18} />
+                                            <CiHeart
+                                                size={18}
+                                                onClick={handleAddToFavorites}
+                                            />
                                             Add to Wishlist
                                         </button>
                                     </div>

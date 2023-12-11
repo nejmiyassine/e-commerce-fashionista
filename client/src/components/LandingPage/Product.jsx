@@ -38,7 +38,7 @@ const Product = () => {
     }
 
     return (
-        <div className='mx-4 md:mx-8 lg:mx-20'>
+        <div className='container mx-auto'>
             <div>
                 <h2 className='text-3xl md:text-4xl lg:text-5xl py-3 md:py-5 font-bold text-center text-gray-900'>
                     New Arrivals:
@@ -58,13 +58,13 @@ const Product = () => {
                             slidesPerView: 2,
                         },
                         768: {
-                            slidesPerView: 3,
+                            slidesPerView: 2,
                         },
                         1024: {
-                            slidesPerView: 4,
+                            slidesPerView: 3,
                         },
                         1280: {
-                            slidesPerView: 5,
+                            slidesPerView: 4,
                         },
                     }}
                     coverflowEffect={{

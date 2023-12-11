@@ -9,6 +9,8 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import API from '../../app/api/api';
 
 import BillingDetailsFields from './BillingDetailsFields';
+import { useCreateOrdersMutation } from '../../app/api/ordersApi';
+import { useSavePaymentMutation } from '../../app/api/paymentsApi';
 
 const schema = yup
     .object({
@@ -26,7 +28,7 @@ const schema = yup
     })
     .required();
 
-const CheckoutForm = ({ price }) => {
+const CheckoutForm = ({ cartItems, price }) => {
     const cardElementOptions = {
         style: {
             base: {
@@ -43,6 +45,9 @@ const CheckoutForm = ({ price }) => {
         },
         hidePostalCode: true,
     };
+
+    const [createOrders, { isError, error }] = useCreateOrdersMutation();
+    const [savePayment] = useSavePaymentMutation();
 
     const navigate = useNavigate();
 
@@ -137,16 +142,55 @@ const CheckoutForm = ({ price }) => {
                 return;
             }
 
+            const formattedCartItems = cartItems.map((cartItem) => ({
+                _id: cartItem.product._id,
+                quantity: cartItem.quantity,
+                product_name: cartItem.product.product_name,
+                product_images: cartItem.product.product_images,
+                price: cartItem.product.price,
+                discount_price: cartItem.product.discount_price,
+                options: cartItem.product.options,
+                category_id: cartItem.product.category_id,
+                short_description: cartItem.product.short_description,
+                long_description: cartItem.product.long_description,
+            }));
+
+            const { data } = await createOrders({
+                order_items: formattedCartItems,
+                cart_total_price: price,
+            });
+
+            await savePayment({
+                order_id: data.newOrder._id,
+                payment_date: new Date(),
+                amount: price,
+                card: {
+                    payment_method: paymentMethodReq.card,
+                },
+                status: 'Succeeded',
+                billing_details: billingDetails,
+            });
             navigate('/payment/success');
         } catch (err) {
             setCheckoutError(err.message);
         }
     };
 
+    if (isError) {
+        console.error(error);
+    }
+
     return (
         <div className='pt-4'>
             <div className=''>
                 <h2 className='font-bold text-2xl pb-6'>Checkout</h2>
+                {checkoutError && (
+                    <div className='bg-red-500 py-2 rounded-md'>
+                        <p className='text-white text-center'>
+                            {checkoutError}
+                        </p>
+                    </div>
+                )}
                 <form onSubmit={handleSubmit(handleFormSubmit)}>
                     <BillingDetailsFields errors={errors} control={control} />
 
@@ -168,12 +212,6 @@ const CheckoutForm = ({ price }) => {
                         </Button>
                     </div>
                 </form>
-
-                <div className='error'>
-                    {checkoutError && (
-                        <p className='text-error'>{checkoutError}</p>
-                    )}
-                </div>
             </div>
         </div>
     );

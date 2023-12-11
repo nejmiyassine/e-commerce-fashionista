@@ -72,7 +72,11 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
     };
 
     return (
-        <div className={`${isAdmin && 'bg-white rounded-md'}`}>
+        <div
+            className={`${
+                isAdmin && 'bg-white dark:bg-primaryColor-deepDark rounded-md'
+            }`}
+        >
             <div className='relative group'>
                 <img
                     src={

@@ -25,8 +25,7 @@ export default {
                     light: '#1a1a1a',
                     deepDark: '#000000',
                     dark: '#F5F5F5',
-                    blueCyan: '#d4af37',
-                    orange: '#f5a524',
+                    gold: '#d4af37',
                 },
                 secondaryColor: {
                     light: '#3F4458',

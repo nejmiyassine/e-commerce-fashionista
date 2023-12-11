@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
     Table,
     TableHeader,
@@ -9,31 +7,32 @@ import {
     TableRow,
     TableCell,
 } from '@nextui-org/react';
+import { Link } from 'react-router-dom';
 
-import { getCustomersOrders } from '../../features/orders/ordersSlice';
 import LoadingSpinner from '../LoadingSpinner';
 import FormatDate from '../FormatDate';
 import FormatPrice from '../FormatPrice';
 import OrderStatusChip from '../OrderStatusChip';
 
+import { useGetCustomersOrdersQuery } from '../../app/api/ordersApi';
+
 export default function CustomersOrders() {
-    const dispatch = useDispatch();
+    const {
+        data: customerOrders,
+        isLoading,
+        isError,
+        error,
+    } = useGetCustomersOrdersQuery();
 
-    const { loading, ordersData, error } = useSelector((state) => state.orders);
-
-    useEffect(() => {
-        dispatch(getCustomersOrders());
-    }, [dispatch]);
-
-    if (loading) {
+    if (isLoading) {
         return <LoadingSpinner />;
     }
 
-    if (!loading && error) {
+    if (!isLoading && isError) {
         return <div>Error: {error}</div>;
     }
 
-    const customerOrders = ordersData.orders;
+    console.log(customerOrders.orders);
 
     return (
         <div className='container mx-auto'>
@@ -54,10 +53,16 @@ export default function CustomersOrders() {
                 </TableHeader>
 
                 <TableBody>
-                    {customerOrders &&
-                        customerOrders.map((order) => (
+                    {!isLoading || customerOrders ? (
+                        customerOrders.orders.map((order) => (
                             <TableRow key={`${order._id}`}>
-                                <TableCell>{order.order_items[0]}</TableCell>
+                                <TableCell>
+                                    {order.order_items.map((item) => (
+                                        <div key={item.product_name}>
+                                            <p>{item.product_name}</p>
+                                        </div>
+                                    ))}
+                                </TableCell>
                                 <TableCell>
                                     <FormatPrice
                                         price={order.cart_total_price}
@@ -70,7 +75,13 @@ export default function CustomersOrders() {
                                     <FormatDate date={order.order_date} />
                                 </TableCell>
                             </TableRow>
-                        ))}
+                        ))
+                    ) : (
+                        <div>
+                            <p>There are no orders yet!</p>
+                            <Link to='/shop'>Start Shopping.</Link>
+                        </div>
+                    )}
                 </TableBody>
             </Table>
         </div>

@@ -200,9 +200,6 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
                                             render={({ field }) => (
                                                 <Input
                                                     autoFocus
-                                                    endContent={
-                                                        <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
-                                                    }
                                                     label='First Name'
                                                     placeholder='Enter First Name'
                                                     variant='bordered'
@@ -238,9 +235,6 @@ const UserModalForm = ({ isOpen, onOpenChange, userData }) => {
                                                         errors.last_name &&
                                                         errors.last_name
                                                             ?.message
-                                                    }
-                                                    endContent={
-                                                        <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
                                                     }
                                                 />
                                             )}

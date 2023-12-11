@@ -20,7 +20,7 @@ const Contact = () => {
                         </p>
                         <h3 className='text-2xl sm:text-3xl leading-normal font-extrabold tracking-tight'>
                             Let's{' '}
-                            <span className='text-primaryColor-blueCyan'>
+                            <span className='text-primaryColor-gold'>
                                 Connect!
                             </span>
                         </h3>
@@ -132,7 +132,7 @@ const Contact = () => {
                                     </label>
                                 </div>
                                 <button
-                                    className='shadow bg-primaryColor-blueCyan hover:bg-primaryColor-blueCyan/80 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-6 rounded'
+                                    className='shadow bg-primaryColor-gold hover:bg-primaryColor-gold/80 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-6 rounded'
                                     type='submit'
                                 >
                                     Send Message

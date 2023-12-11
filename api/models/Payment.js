@@ -21,7 +21,6 @@ const paymentSchema = new Schema({
     },
     status: {
         type: String,
-        default: 'payed',
     },
     billing_details: { type: Object, required: true },
 });

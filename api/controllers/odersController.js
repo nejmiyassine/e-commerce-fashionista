@@ -98,7 +98,9 @@ const getCustomerOrders = async (req, res) => {
     const customerId = res.locals.user._id;
 
     try {
-        const orders = await Orders.find({ customer_id: customerId });
+        const orders = await Orders.find({ customer_id: customerId }).populate(
+            'customer_id'
+        );
 
         if (orders.length === 0) {
             return res

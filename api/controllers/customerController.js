@@ -75,15 +75,6 @@ exports.updateCustomers = async (req, res) => {
             password,
         };
 
-        // To Change when I will disable the customer email
-        if (email) {
-            const exists = await Customer.findOne({ email });
-            if (exists) {
-                return res
-                    .status(400)
-                    .json({ message: 'email is already existed' });
-            }
-        }
         if (password) {
             updatedFields.password = hashedPassword;
         }

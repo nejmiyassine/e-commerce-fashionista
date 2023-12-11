@@ -7,79 +7,10 @@ import { BiSolidCalendar } from 'react-icons/bi';
 import { BsArrowLeftShort } from 'react-icons/bs';
 import { formatDate } from '../../utils/formatDate';
 import { MailIcon } from '../../icons/Icons';
-import { AiOutlineDollar } from 'react-icons/ai';
-import { AiOutlineShopping } from 'react-icons/ai';
-import { MdOutlineTaskAlt } from 'react-icons/md';
-import { MdOutlineCancel } from 'react-icons/md';
 
 const DisplayCustomerDetails = ({ customer }) => {
     return (
         <Layout>
-            <div className='flex    text-gray-800 py-5  '>
-                <div className=' w-full'>
-                    <div className='grid grid-cols-12 gap-4'>
-                        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
-                            <div className='flex flex-row bg-white shadow-sm rounded p-4'>
-                                <div className='flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-blue-100 text-blue-500'>
-                                    <AiOutlineDollar className='w-10 h-12' />
-                                </div>
-                                <div className='flex flex-col flex-grow ml-4'>
-                                    <div className='text-sm text-gray-500'>
-                                        Total Costs
-                                    </div>
-                                    <div className='font-bold text-lg'>
-                                        12K $
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
-                            <div className='flex flex-row bg-white shadow-sm rounded p-4'>
-                                <div className='flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-green-100 text-green-500'>
-                                    <AiOutlineShopping className='w-10 h-12' />
-                                </div>
-                                <div className='flex flex-col flex-grow ml-4'>
-                                    <div className='text-sm text-gray-500'>
-                                        Total Order
-                                    </div>
-                                    <div className='font-bold text-lg'>
-                                        2307
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
-                            <div className='flex flex-row bg-white shadow-sm rounded p-4'>
-                                <div className='flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-orange-100 text-orange-500'>
-                                    <MdOutlineTaskAlt className='w-10 h-12' />
-                                </div>
-                                <div className='flex flex-col flex-grow ml-4'>
-                                    <div className='text-sm text-gray-500'>
-                                        Completed
-                                    </div>
-                                    <div className='font-bold text-lg'>
-                                        1934
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className='col-span-12 sm:col-span-6 md:col-span-3'>
-                            <div className='flex flex-row bg-white shadow-sm rounded p-4'>
-                                <div className='flex items-center justify-center flex-shrink-0 h-12 w-12 rounded-xl bg-red-100 text-red-500'>
-                                    <MdOutlineCancel className='w-10 h-12' />
-                                </div>
-                                <div className='flex flex-col flex-grow ml-4'>
-                                    <div className='text-sm text-gray-500'>
-                                        Canceled
-                                    </div>
-                                    <div className='font-bold text-lg'>235</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             {/* customers info */}
             <div className='bg-white dark:bg-primaryColor-deepDark'>
                 <div className='rounded-md p-4 shadow-sm bg-white dark:bg-primaryColor-deepDark'>
@@ -172,7 +103,7 @@ const DisplayCustomerDetails = ({ customer }) => {
 
                             <Link to='/admin/customers'>
                                 <Button
-                                    className=' bg-blue-300 mt-4 flex items-center hover:bg-blue-500'
+                                    className=' bg-black text-white mt-4 flex items-center hover:bg-black/90'
                                     type='secondaryColor'
                                 >
                                     <BsArrowLeftShort size={20} />

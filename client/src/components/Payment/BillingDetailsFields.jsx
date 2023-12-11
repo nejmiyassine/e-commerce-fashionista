@@ -154,15 +154,6 @@ const BillingDetailsFields = ({ errors, control }) => {
                 <p className='text-sm pb-2'>Phone Number</p>
                 <Controller
                     render={({ field }) => (
-                        // <Input
-                        //     autoFocus
-                        //     label='Phone Number'
-                        //     placeholder='Phone Number'
-                        //     variant='bordered'
-                        //     {...field}
-                        //     isInvalid={!!errors.email}
-                        //     errorMessage={errors.email && errors.email?.message}
-                        // />
                         <PhoneInput
                             className='border outline-none p-2 rounded-md border-2 placeholder:text-sm placeholder:text-gray-400 px-2'
                             placeholder='+212 6XXXXXXXX'
@@ -175,10 +166,6 @@ const BillingDetailsFields = ({ errors, control }) => {
                         validate: (value) => isValidPhoneNumber(value),
                         required: true,
                     }}
-                    // rules={{
-                    //     validate: (value) => isPossiblePhoneNumber(`${value}`),
-                    //     required: true,
-                    // }}
                     name='phone'
                     control={control}
                 />

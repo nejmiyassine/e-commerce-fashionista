@@ -42,7 +42,7 @@ const Hero = () => {
                             Elevate your style and indulge in the season is
                             hottest trends
                         </p>
-                        <button className='mt-3 bg-black text-white py-2 px-4 rounded hover:bg-primaryColor-blueCyan hover:text-white-300'>
+                        <button className='mt-3 bg-black text-white py-2 px-4 rounded hover:bg-primaryColor-gold hover:text-white-300'>
                             {' '}
                             <Link to='/catalog'>Shop Now</Link>
                         </button>
@@ -63,7 +63,7 @@ const Hero = () => {
                         <p className='text-xl text-gray-500 mt-4 mb-2 mx-1 italic text-center'>
                             Elevate Your Wardrobe, Elevate Your Confidence!
                         </p>
-                        <button className='mt-3 bg-black text-white py-2 px-4 rounded hover:bg-primaryColor-blueCyan hover:text-white-300'>
+                        <button className='mt-3 bg-black text-white py-2 px-4 rounded hover:bg-primaryColor-gold hover:text-white-300'>
                             <Link to='/catalog'>Discover Our Collection</Link>
                         </button>
                     </div>

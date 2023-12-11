@@ -1,19 +1,18 @@
-import { Link, useParams } from 'react-router-dom';
-import { HiOutlineArrowSmLeft } from 'react-icons/hi';
+import { useParams } from 'react-router-dom';
 
 import ProductDetailsSection from '../components/ProductDetailsSection';
+import Navbar from '../layouts/Navbar';
 
 const ProductDetails = () => {
     const { productId } = useParams();
 
     return (
-        <div>
-            <Link to='/shop' className='flex items-center gap-2'>
-                <HiOutlineArrowSmLeft />
-                Back to Shop Page
-            </Link>
-            <ProductDetailsSection productId={productId} isAdmin={false} />
-        </div>
+        <>
+            <Navbar />
+            <div className='container mx-auto'>
+                <ProductDetailsSection productId={productId} isAdmin={false} />
+            </div>
+        </>
     );
 };
 

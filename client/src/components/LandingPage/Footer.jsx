@@ -17,7 +17,7 @@ const Footer = () => {
                     <div className='grid grid-cols-1 gap-8 sm:grid-cols-2'>
                         <div>
                             <div>
-                                <p className='font-medium text-primaryColor-blueCyan'>
+                                <p className='font-medium text-primaryColor-gold'>
                                     Call us
                                 </p>
 
@@ -34,14 +34,14 @@ const Footer = () => {
 
                         <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
                             <div>
-                                <p className='font-medium text-primaryColor-blueCyan'>
+                                <p className='font-medium text-primaryColor-gold'>
                                     Navigate
                                 </p>
 
                                 <ul className='mt-6 space-y-4 text-sm'>
                                     <li>
                                         <Link
-                                            className='text-gray-100 transition dark:text-gray-200 hover:text-primaryColor-blueCyan hover:underline'
+                                            className='text-gray-100 transition dark:text-gray-200 hover:text-primaryColor-gold hover:underline'
                                             to='/landing-page'
                                         >
                                             Home{' '}
@@ -50,7 +50,7 @@ const Footer = () => {
 
                                     <li>
                                         <Link
-                                            className='text-gray-100 transition dark:text-gray-200 hover:text-primaryColor-blueCyan hover:underline'
+                                            className='text-gray-100 transition dark:text-gray-200 hover:text-primaryColor-gold hover:underline'
                                             to='/catalog'
                                         >
                                             Products{' '}
@@ -60,14 +60,14 @@ const Footer = () => {
                             </div>
 
                             <div>
-                                <p className='font-medium text-primaryColor-blueCyan'>
+                                <p className='font-medium text-primaryColor-gold'>
                                     Company
                                 </p>
 
                                 <ul className='mt-6 space-y-4 text-sm'>
                                     <li>
                                         <Link
-                                            className='text-gray-100 transition dark:text-gray-200 hover:text-primaryColor-blueCyan hover:underline'
+                                            className='text-gray-100 transition dark:text-gray-200 hover:text-primaryColor-gold hover:underline'
                                             to='/about'
                                         >
                                             About Us{' '}
@@ -76,7 +76,7 @@ const Footer = () => {
 
                                     <li>
                                         <Link
-                                            className='text-gray-100 transition dark:text-gray-200 hover:text-primaryColor-blueCyan hover:underline'
+                                            className='text-gray-100 transition dark:text-gray-200 hover:text-primaryColor-gold hover:underline'
                                             to='/contact'
                                         >
                                             Contact Us{' '}
@@ -112,7 +112,7 @@ const Footer = () => {
                                     <a
                                         rel='noreferrer'
                                         target='_blank'
-                                        className='text-primaryColor-blueCyan transition hover:opacity-75 dark:text-gray-100'
+                                        className='text-primaryColor-gold transition hover:opacity-75 dark:text-gray-100'
                                     >
                                         <span className='sr-only'>
                                             Facebook
@@ -137,7 +137,7 @@ const Footer = () => {
                                     <a
                                         rel='noreferrer'
                                         target='_blank'
-                                        className='text-primaryColor-blueCyan transition hover:opacity-75 dark:text-gray-200'
+                                        className='text-primaryColor-gold transition hover:opacity-75 dark:text-gray-200'
                                     >
                                         <span className='sr-only'>
                                             Instagram
