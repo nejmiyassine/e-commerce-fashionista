@@ -94,7 +94,7 @@ const AuthRegisterForm = ({ account_type }) => {
 
     return (
         <form
-            className='w-full h-full overflow-y-hidden flex flex-col flex-1 gap-2'
+            className='flex flex-col flex-1 gap-2 md:w-96 mx-auto'
             onSubmit={handleSubmit(onSubmit)}
         >
             <div className='flex gap-2'>

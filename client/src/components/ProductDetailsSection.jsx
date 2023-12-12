@@ -3,7 +3,6 @@ import { Image } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaCartPlus, FaStar } from 'react-icons/fa';
-import { CiHeart } from 'react-icons/ci';
 
 import { getProductById } from '../features/products/productsSlice';
 import LoadingSpinner from './LoadingSpinner';
@@ -11,7 +10,6 @@ import { MdEdit } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import { useAddProductToCartMutation } from '../app/api/cartApi';
 import { toast } from 'react-toastify';
-import { addToFavorites } from '../features/favorites/favoritesSlice';
 
 const ProductDetailsSection = ({ productId, isAdmin }) => {
     const dispatch = useDispatch();
@@ -48,17 +46,6 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
         } catch (error) {
             console.error(error);
             toast.error('Error adding product to cart', {
-                position: 'bottom-right',
-            });
-        }
-    };
-
-    const handleAddToFavorites = () => {
-        try {
-            dispatch(addToFavorites(productId));
-        } catch (error) {
-            console.error(error);
-            toast.error('Error adding product to favorites', {
                 position: 'bottom-right',
             });
         }
@@ -259,15 +246,6 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
                                                 onClick={handleAddToCart}
                                             />
                                             Add to Cart
-                                        </button>
-                                    </div>
-                                    <div className='w-full px-4 mb-4 lg:mb-0 lg:w-1/2'>
-                                        <button className='flex items-center gap-2 capitalize justify-center w-full p-4 border border-rose-500 rounded-md dark:text-gray-200 dark:border-rose-500 text-white bg-rose-500 transition hover:border-rose-500 hover:bg-white hover:text-rose-500 dark:bg-rose-500 dark:hover:bg-blue-700 dark:hover:border-blue-700 dark:hover:text-gray-300'>
-                                            <CiHeart
-                                                size={18}
-                                                onClick={handleAddToFavorites}
-                                            />
-                                            Add to Wishlist
                                         </button>
                                     </div>
                                 </div>

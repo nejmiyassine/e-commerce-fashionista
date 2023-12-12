@@ -44,7 +44,6 @@ const RouteConfig = () => {
                 <Route path='*' element={<PageNotFound />} />
 
                 <Route exact path='/' element={<Home />} />
-                <Route path='/landing-page' element={<LandingP />} />
 
                 <Route path='/about' element={<About />} />
                 <Route path='/terms' element={<Terms />} />
@@ -54,6 +53,8 @@ const RouteConfig = () => {
                 <Route path='/register' element={<AuthRegister />} />
                 <Route path='/login' element={<AuthLogin />} />
                 <Route path='/admin/login' element={<AdminLogin />} />
+
+                <Route path='/landing-page' element={<LandingP />} />
 
                 {/* Protected Customer */}
                 <Route element={<ProtectedRoutesCustomer />}>
@@ -66,6 +67,26 @@ const RouteConfig = () => {
                     <Route
                         path='/payment/success'
                         element={<CheckoutSuccess />}
+                    />
+
+                    <Route
+                        path='/update-profile/:customerId'
+                        element={<UpdateCustomerInfo />}
+                    />
+
+                    <Route
+                        path='/customer-profile'
+                        element={<CustomerProfile />}
+                    />
+
+                    <Route
+                        path='/customers-orders'
+                        element={<CustomersOrdersPage />}
+                    />
+
+                    <Route
+                        path='/customers-favorites'
+                        element={<Favorites />}
                     />
                 </Route>
 
@@ -126,19 +147,6 @@ const RouteConfig = () => {
                 </Route>
 
                 {/* front-store */}
-                <Route
-                    path='/update-profile/:customerId'
-                    element={<UpdateCustomerInfo />}
-                />
-
-                <Route path='/customer-profile' element={<CustomerProfile />} />
-
-                <Route
-                    path='/customers-orders'
-                    element={<CustomersOrdersPage />}
-                />
-
-                <Route path='/customers-favorites' element={<Favorites />} />
             </Routes>
         </Router>
     );

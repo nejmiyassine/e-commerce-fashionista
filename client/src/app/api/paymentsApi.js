@@ -31,5 +31,8 @@ export const paymentsAPI = api.injectEndpoints({
     }),
 });
 
-export const { useSavePaymentMutation, useGetPaymentDetailsByIdQuery } =
-    paymentsAPI;
+export const {
+    useSavePaymentMutation,
+    useGetPaymentDetailsByIdQuery,
+    useGetAllPaymentsQuery,
+} = paymentsAPI;

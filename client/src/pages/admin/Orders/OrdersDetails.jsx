@@ -98,6 +98,8 @@ const OrdersDetails = () => {
         console.log('Something went wrong: ', error);
     }
 
+    console.log(payment);
+
     return (
         <Layout>
             <h2 className='font-bold text-xl mb-4'>Orders Details</h2>
@@ -114,8 +116,11 @@ const OrdersDetails = () => {
 
                         <div className='grid grid-cols-3 gap-8 justify-between pt-8'>
                             <div className='flex gap-2'>
-                                <div className='flex items-center justify-center bg-gray-100 rounded-full w-12 h-12'>
-                                    <BiUser size={20} />
+                                <div className='flex items-center justify-center bg-gray-100 dark:bg-gray-600 rounded-full w-12 h-12'>
+                                    <BiUser
+                                        size={20}
+                                        className='text-black dark:text-white'
+                                    />
                                 </div>
 
                                 <div className='flex flex-col gap-2 ml-2'>
@@ -138,8 +143,11 @@ const OrdersDetails = () => {
                             </div>
 
                             <div className='flex gap-2'>
-                                <div className='flex items-center justify-center bg-gray-100 rounded-full w-12 h-12'>
-                                    <MdOutlineShoppingCart size={20} />
+                                <div className='flex items-center justify-center bg-gray-100 dark:bg-gray-600 rounded-full w-12 h-12'>
+                                    <MdOutlineShoppingCart
+                                        size={20}
+                                        className='text-black dark:text-white'
+                                    />
                                 </div>
 
                                 <div className='flex flex-col gap-2 ml-2'>
@@ -160,8 +168,11 @@ const OrdersDetails = () => {
                             </div>
 
                             <div className='flex gap-2'>
-                                <div className='flex items-center justify-center bg-gray-100 rounded-full w-12 h-12'>
-                                    <MdOutlinePayment size={20} />
+                                <div className='flex items-center justify-center bg-gray-100 dark:bg-gray-600 rounded-full w-12 h-12'>
+                                    <MdOutlinePayment
+                                        size={20}
+                                        className='text-black dark:text-white'
+                                    />
                                 </div>
 
                                 <div className='flex flex-col gap-2 ml-2'>

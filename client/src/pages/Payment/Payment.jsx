@@ -1,6 +1,6 @@
 import CheckoutForm from '../../components/Payment/CheckoutForm';
 import StripeLayout from '../../layouts/StripeLayout';
-import Navbar from '../../layouts/Navbar';
+import CustomerNavbar from '../../layouts/CustomerNavbar';
 import { useGetAllCartItemsQuery } from '../../app/api/cartApi';
 import LoadingSpinner from '../../components/LoadingSpinner';
 import { calculateSubTotal } from '../../utils/calculateSubTotal';
@@ -13,13 +13,19 @@ const Payment = () => {
 
     return (
         <StripeLayout>
-            <Navbar />
+            <CustomerNavbar />
             <div className='container mx-auto'>
-                <CartProducts />
-                <CheckoutForm
-                    price={calculateSubTotal(cartItems?.cartItems)}
-                    cartItems={cartItems.cartItems}
-                />
+                <div className='flex flex-col gap-4 p-6 lg:justify-around lg:flex-row lg:justify-center'>
+                    <div className='w-full lg:w-2/5'>
+                        <CartProducts />
+                    </div>
+                    <div className='w-full lg:w-2/5'>
+                        <CheckoutForm
+                            price={calculateSubTotal(cartItems?.cartItems)}
+                            cartItems={cartItems.cartItems}
+                        />
+                    </div>
+                </div>
             </div>
         </StripeLayout>
     );

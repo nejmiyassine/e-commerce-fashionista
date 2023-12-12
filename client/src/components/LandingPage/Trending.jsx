@@ -1,86 +1,74 @@
-import { Swiper, SwiperSlide } from 'swiper/react';
+/* eslint-disable react/prop-types */
+import { FaRegStar, FaStar } from 'react-icons/fa';
 
-import {
-    // EffectCoverflow,
-    Navigation,
-    // Pagination,
-    Scrollbar,
-    A11y,
-} from 'swiper/modules';
-
-import slider_image_1 from '../../assets/style3.jpg';
-import slider_image_2 from '../../assets/style2.jpg';
-import slider_image_3 from '../../assets/style4.jpg';
-import slider_image_4 from '../../assets/style6.jpg';
-import slider_image_5 from '../../assets/style7.jpg';
-import slider_image_6 from '../../assets/style5.jpg';
-import slider_image_7 from '../../assets/style1.jpg';
-import slider_image_8 from '../../assets/style8.jpg';
-import Women from '../../assets/women.jpg';
-
-const images = [
-    slider_image_1,
-    slider_image_2,
-    slider_image_3,
-    slider_image_4,
-    slider_image_5,
-    slider_image_6,
-    slider_image_7,
-    slider_image_8,
-    Women,
+const reviews = [
+    {
+        text: 'Absolutely love the quality and style of the clothing! The fabric is so soft, and the fit is perfect. I ordered a dress for a special occasion, and I received so many compliments. Will definitely shop here again!',
+        author: 'Happy Customer',
+        rating: 5,
+        image: 'https://images.unsplash.com/photo-1520785643438-5bf77931f493?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fGZvcm1hbCUyMHdlYXJ8ZW58MHx8MHx8fDA%3D',
+    },
+    {
+        text: "This footwear collection is amazing! The shoes are not only trendy but also comfortable for long hours. I purchased a pair of sneakers for my workouts, and I couldn't be happier. Great value for money.",
+        author: 'Satisfied Shopper',
+        rating: 5,
+        image: 'https://images.unsplash.com/photo-1506720432985-fa1fd9047c46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDl8fHxlbnwwfHx8fHw%3D',
+    },
+    {
+        text: 'The accessories here are a game-changer! I found the perfect statement pieces to elevate my outfits. The attention to detail is impressive, and the prices are reasonable. Highly recommend!',
+        author: 'Fashion Enthusiast',
+        rating: 4,
+        image: 'https://images.unsplash.com/photo-1516195851888-6f1a981a862e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDE4fHx8ZW58MHx8fHx8',
+    },
 ];
+
+const StarIcon = ({ filled }) =>
+    filled ? (
+        <FaStar className={filled ? 'text-primaryColor-gold' : ''} />
+    ) : (
+        <FaRegStar />
+    );
 
 const Trending = () => {
     return (
-        <div className='trending-container py-8 md:py-16 lg:py-24 px-4 md:px-8 lg:px-16 xl:px-32'>
-            <h2 className='text-2xl md:text-3xl lg:text-4xl xl:text-5xl md:py-5 font-poppins capitalize italic font-bold text-center'>
-                @Fashionista
-            </h2>
-            <h3 className='text-2xl text-yellow-600 md:text-3xl lg:text-4xl xl:text-5xl py-3 md:py-5 font-poppins capitalize font-semibold text-center'>
-                Enjoy Our Timeless Style
-            </h3>
-            <Swiper
-                grabCursor={true}
-                centeredSlides={true}
-                loop={true}
-                spaceBetween={10}
-                slidesPerView={4}
-                breakpoints={{
-                    640: {
-                        slidesPerView: 2,
-                    },
-                    768: {
-                        slidesPerView: 3,
-                    },
-                    1024: {
-                        slidesPerView: 4,
-                    },
-                }}
-                // coverflowEffect={{
-                //     rotate: 0,
-                //     stretch: 0,
-                //     depth: 100,
-                //     modifier: 2.5,
-                // }}
-                navigation
-                pagination={{ el: '.swiper-pagination', clickable: true }}
-                modules={[
-                    Navigation,
-                    // EffectCoverflow,
-                    // Pagination,
-                    Scrollbar,
-                    A11y,
-                ]}
-            >
-                {images.map((image, index) => (
-                    <SwiperSlide key={index} className='h-96'>
-                        <img
-                            className='w-full object-contain cursor-pointer rounded-sm md:pb-8 lg:pb-10'
-                            src={image}
-                        />
-                    </SwiperSlide>
+        <div className='container py-8 px-4 pb-24'>
+            <div className='flex flex-col items-center justify-center pb-12'>
+                <h2 className='text-4xl font-extrabold leading-tight text-center mb-2'>
+                    <span className='text-primaryColor-gold'>@Fashionista</span>{' '}
+                    Customer Reviews
+                </h2>
+                <p className='text-md w-1/2 text-gray-700 text-center'>
+                    Timeless Style, Real Reviews
+                </p>
+            </div>
+
+            <div className='flex flex-col md:flex-row justify-between gap-8'>
+                {reviews.map((review, index) => (
+                    <div
+                        key={index}
+                        className='w-full md:w-1/3 bg-white p-6 rounded-md shadow-md mb-8 md:mb-0'
+                    >
+                        <div className='flex justify-center'>
+                            <img
+                                className='w-32 h-32 object-cover rounded-full mb-4'
+                                src={review.image}
+                                alt={`Customer ${index + 1}`}
+                            />
+                        </div>
+                        <p className='text-md text-gray-800 mb-4'>
+                            {review.text}
+                        </p>
+                        <div className='flex items-center mb-2'>
+                            {Array.from({ length: 5 }, (_, i) => (
+                                <StarIcon key={i} filled={i < review.rating} />
+                            ))}
+                        </div>
+                        <p className='text-sm text-gray-600'>
+                            — {review.author}
+                        </p>
+                    </div>
                 ))}
-            </Swiper>
+            </div>
         </div>
     );
 };

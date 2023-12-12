@@ -2,7 +2,7 @@ import UpdateCustomerComponent from '../../components/CustomersFront/UpdateCusto
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 import { useGetCustomerProfileDataQuery } from '../../app/api/customerApi';
-import Navbar from '../../layouts/Navbar';
+import CustomerNavbar from '../../layouts/CustomerNavbar';
 
 const UpdateCustomerInfo = () => {
     const {
@@ -23,7 +23,7 @@ const UpdateCustomerInfo = () => {
 
     return (
         <div>
-            <Navbar />
+            <CustomerNavbar />
             <UpdateCustomerComponent customer={customer} />
         </div>
     );

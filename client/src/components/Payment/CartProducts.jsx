@@ -151,7 +151,10 @@ const CartProducts = () => {
                         <div className='empty-cart'>
                             <p>Your cart is empty</p>
                             <div className='start-shopping'>
-                                <Link to='/shop' className='flex items-center'>
+                                <Link
+                                    to='/shop'
+                                    className='flex items-center gap-2 py-2'
+                                >
                                     <FaArrowLeftLong />
                                     <span>Start Shopping</span>
                                 </Link>
@@ -164,12 +167,12 @@ const CartProducts = () => {
                                     <img
                                         src={item.product.product_images[0]}
                                         alt={item.product.product_name}
-                                        className='w-28 h-full object-contain mr-2'
+                                        className='w-20 md:w-28 h-full object-contain mr-2'
                                     />
 
                                     <div className='w-full flex flex-col gap-10 justify-between'>
                                         <div className='flex items-center justify-between'>
-                                            <p className='text-md w-60 capitalize font-bold'>
+                                            <p className='text-sm md:text-md w-60 capitalize font-bold'>
                                                 {item.product.product_name}
                                             </p>
                                             <p className='font-semibold ml-5 text-sm'>
@@ -236,6 +239,8 @@ const CartProducts = () => {
                             </div>
                         ))
                     )}
+
+                    <hr />
                 </div>
             )}
         </>

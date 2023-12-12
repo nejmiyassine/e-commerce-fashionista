@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 // import React from 'react';
-import Navbar from '../../layouts/Navbar.jsx';
+import CustomerNavbar from '../../layouts/CustomerNavbar.jsx';
 import Head from './Head.jsx';
 import Footer from './Footer.jsx';
 // import Bg2 from '../../assets/hero.jpg';
@@ -11,7 +11,7 @@ const Contact = () => {
     return (
         <div>
             <Head />
-            <Navbar />
+            <CustomerNavbar />
             <div className='max-w-screen-lg mx-auto p-5 py-16'>
                 <div className='grid grid-cols-1 md:grid-cols-12 border h-[40rem] bg-cover bg-center bg-black'>
                     <div className='bg-gray-800 md:col-span-4 p-10 text-white bg-cover bg-center h-[40rem]'>

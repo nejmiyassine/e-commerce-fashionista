@@ -2,7 +2,7 @@
 import About1 from '../../assets/about1.jpg';
 import About2 from '../../assets/about2.jpg';
 import About3 from '../../assets/about3.jpg';
-import Navbar from '../../layouts/Navbar.jsx';
+import CustomerNavbar from '../../layouts/CustomerNavbar.jsx';
 import Head from './Head.jsx';
 import Footer from './Footer.jsx';
 
@@ -10,7 +10,7 @@ const About = () => {
     return (
         <div>
             <Head />
-            <Navbar />
+            <CustomerNavbar />
             <div className=' py-5 flex flex-col items-center justify-center lg:px-32 px-5 bg-backgroundColor'>
                 <h1 className=' mb-5 font-black text-5xl italic capitalize text-center lg:mt-5 mx-5 text-yellow-500'>
                     @Fashionista

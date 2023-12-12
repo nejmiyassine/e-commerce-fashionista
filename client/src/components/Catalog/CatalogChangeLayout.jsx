@@ -1,8 +1,9 @@
-import { BsFillGrid3X3GapFill, BsFillGridFill } from 'react-icons/bs';
+import { BsFillGrid3X3GapFill } from 'react-icons/bs';
+import { CiGrid2H } from 'react-icons/ci';
 
 const layoutOptions = [
-    { cols: 2, icon: <BsFillGridFill size={16} /> },
-    { cols: 3, icon: <BsFillGrid3X3GapFill size={16} /> },
+    { cols: 1, icon: <CiGrid2H size={16} /> },
+    { cols: 4, icon: <BsFillGrid3X3GapFill size={16} /> },
 ];
 
 /* eslint-disable react/prop-types */

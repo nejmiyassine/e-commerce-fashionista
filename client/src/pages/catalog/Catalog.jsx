@@ -10,7 +10,7 @@ import FilterCatalogSidebar from '../../components/Catalog/FilterCatalogSidebar'
 import { getAllCategories } from '../../features/categories/categoriesSlice';
 import { getAllProducts } from '../../features/products/productsSlice';
 import BagProductsSidebar from '../../layouts/BagProductsSidebar';
-import Navbar from '../../layouts/Navbar';
+import CustomerNavbar from '../../layouts/CustomerNavbar';
 import Footer from '../../components/LandingPage/Footer';
 
 import { toggleCartSidebar } from '../../features/cart/cartSlice';
@@ -27,7 +27,7 @@ const Catalog = () => {
     const [selected, setSelected] = useState([]);
     const [selectedPrice, setSelectedPrice] = useState([]);
     const [filterValue, setFilterValue] = useState('');
-    const [columnCount, setColumnCount] = useState(2);
+    const [columnCount, setColumnCount] = useState(1);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -161,7 +161,7 @@ const Catalog = () => {
 
     return (
         <>
-            <Navbar
+            <CustomerNavbar
                 toggleSidebar={toggleSidebar}
                 openBagSidebar={openBagSidebar}
             />

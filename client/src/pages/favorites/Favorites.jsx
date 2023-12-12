@@ -1,10 +1,10 @@
 import ViewFavorites from '../../components/favorites/ViewFavorites';
-import Navbar from '../../layouts/Navbar';
+import CustomerNavbar from '../../layouts/CustomerNavbar';
 
 const Favorites = () => {
     return (
         <>
-            <Navbar />
+            <CustomerNavbar />
             <div>
                 <ViewFavorites />
             </div>

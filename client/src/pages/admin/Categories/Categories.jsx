@@ -278,7 +278,7 @@ const ManageCategories = () => {
                     ></div>
                     <div className='relative bg-white w-[350px] p-6 shadow-lg rounded-lg'>
                         <div className='pb-4 flex items-center justify-between'>
-                            <h2 className='text-xl font-bold'>
+                            <h2 className='text-xl font-bold text-black'>
                                 Update your Category
                             </h2>
                             <IoIosClose

@@ -12,10 +12,12 @@ const {
     createCheckoutSession,
     savePaymentDetails,
     getPaymentDetailsByOrderId,
+    getAllPayments,
 } = require('../controllers/paymentController');
 
 router.use(deserializeUser, requireUser);
 
+router.get('/', restrictTo('admin', 'manager'), getAllPayments);
 router.get('/:id', restrictTo('admin', 'manager'), getPaymentDetailsByOrderId);
 router.post('/payment_intents', restrictToCustomer, stripePaymentIntent);
 router.post(

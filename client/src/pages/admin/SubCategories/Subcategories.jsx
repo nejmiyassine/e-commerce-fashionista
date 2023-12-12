@@ -356,7 +356,7 @@ const ManageSubcategories = () => {
 
                     <div className='relative bg-white p-6 w-[350px] shadow-lg rounded-lg'>
                         <div className='pb-4 flex items-center justify-between'>
-                            <h2 className='text-xl font-bold'>
+                            <h2 className='text-xl font-bold text-black'>
                                 Update your subcategory
                             </h2>
                             <IoIosClose

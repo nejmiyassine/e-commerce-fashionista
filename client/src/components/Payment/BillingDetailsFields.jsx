@@ -10,60 +10,64 @@ import 'react-phone-number-input/style.css';
 const BillingDetailsFields = ({ errors, control }) => {
     return (
         <div className='flex flex-col gap-3'>
-            <Controller
-                render={({ field }) => (
-                    <Input
-                        autoFocus
-                        label='Country'
-                        placeholder='Country'
-                        variant='bordered'
-                        {...field}
-                        isInvalid={!!errors.country}
-                        errorMessage={errors.country && errors.country?.message}
-                    />
-                )}
-                name='country'
-                control={control}
-                rules={{ required: true }}
-            />
+            <div className='flex flex-col md:flex-row gap-2'>
+                <Controller
+                    render={({ field }) => (
+                        <Input
+                            autoFocus
+                            label='Country'
+                            placeholder='Country'
+                            variant='bordered'
+                            {...field}
+                            isInvalid={!!errors.country}
+                            errorMessage={
+                                errors.country && errors.country?.message
+                            }
+                        />
+                    )}
+                    name='country'
+                    control={control}
+                    rules={{ required: true }}
+                />
 
-            <Controller
-                render={({ field }) => (
-                    <Input
-                        autoFocus
-                        label='First Name'
-                        placeholder='First Name'
-                        variant='bordered'
-                        {...field}
-                        isInvalid={!!errors.first_name}
-                        errorMessage={
-                            errors.first_name && errors.first_name?.message
-                        }
-                    />
-                )}
-                name='first_name'
-                control={control}
-                rules={{ required: true }}
-            />
+                <Controller
+                    render={({ field }) => (
+                        <Input
+                            autoFocus
+                            label='First Name'
+                            placeholder='First Name'
+                            variant='bordered'
+                            {...field}
+                            isInvalid={!!errors.first_name}
+                            errorMessage={
+                                errors.first_name && errors.first_name?.message
+                            }
+                        />
+                    )}
+                    name='first_name'
+                    control={control}
+                    rules={{ required: true }}
+                />
 
-            <Controller
-                render={({ field }) => (
-                    <Input
-                        autoFocus
-                        label='Last Name'
-                        placeholder='Last Name'
-                        variant='bordered'
-                        {...field}
-                        isInvalid={!!errors.last_name}
-                        errorMessage={
-                            errors.last_name && errors.last_name?.message
-                        }
-                    />
-                )}
-                name='last_name'
-                control={control}
-                rules={{ required: true }}
-            />
+                <Controller
+                    render={({ field }) => (
+                        <Input
+                            autoFocus
+                            label='Last Name'
+                            placeholder='Last Name'
+                            variant='bordered'
+                            {...field}
+                            isInvalid={!!errors.last_name}
+                            errorMessage={
+                                errors.last_name && errors.last_name?.message
+                            }
+                        />
+                    )}
+                    name='last_name'
+                    control={control}
+                    rules={{ required: true }}
+                />
+            </div>
 
             <Controller
                 render={({ field }) => (
@@ -87,7 +91,7 @@ const BillingDetailsFields = ({ errors, control }) => {
 
             <div className=''>
                 <p className='text-sm pb-2 pl-1'>Shipping Address</p>
-                <div className='flex items-center gap-3'>
+                <div className='flex items-center flex-col md:flex-row gap-3'>
                     <Controller
                         render={({ field }) => (
                             <Input

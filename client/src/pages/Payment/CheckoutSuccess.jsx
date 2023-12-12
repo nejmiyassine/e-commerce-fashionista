@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import Navbar from '../../layouts/Navbar';
+import CustomerNavbar from '../../layouts/CustomerNavbar';
 
 const CheckoutSuccess = () => {
     return (
         <div className='bg-white h-screen container mx-auto flex flex-col items-center'>
-            <Navbar />
+            <CustomerNavbar />
             <div className='p-6  md:mx-auto h-full flex flex-col justify-center'>
                 <svg
                     viewBox='0 0 24 24'

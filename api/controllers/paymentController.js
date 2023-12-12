@@ -116,11 +116,32 @@ const getPaymentDetailsByOrderId = async (req, res) => {
     }
 };
 
-// const getPaymentDetails = (req, res) => {};
+const getAllPayments = async (req, res) => {
+    try {
+        const payment = await Payment.find();
+
+        if (!payment) {
+            return res.status(404).json({
+                status: 404,
+                message: "There's noPayment",
+            });
+        }
+
+        res.status(200).json({
+            status: 'success',
+            payment,
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message,
+        });
+    }
+};
 
 module.exports = {
     stripePaymentIntent,
     createCheckoutSession,
     savePaymentDetails,
     getPaymentDetailsByOrderId,
+    getAllPayments,
 };

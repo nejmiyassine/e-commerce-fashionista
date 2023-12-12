@@ -15,17 +15,13 @@ export default {
             lg: '992px',
             xl: '1200px',
         },
-        container: {
-            center: true,
-            padding: '1rem',
-        },
         extend: {
             colors: {
                 primaryColor: {
                     light: '#1a1a1a',
                     deepDark: '#000000',
                     dark: '#F5F5F5',
-                    gold: '#d4af37',
+                    gold: '#FDD017',
                 },
                 secondaryColor: {
                     light: '#3F4458',
