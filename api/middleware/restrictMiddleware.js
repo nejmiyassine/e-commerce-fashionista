@@ -4,7 +4,6 @@ exports.restrictTo =
     (...allowedRoles) =>
     (req, res, next) => {
         const user = res.locals.user;
-        console.log('user' , user)
         if (!allowedRoles.includes(user.role)) {
             return next(
                 new CustomError(

@@ -8,7 +8,6 @@ export const getCustomersOrders = createAsyncThunk(
             const res = await API.get('/orders/customer/order', {
                 withCredentials: true,
             });
-            console.log('response', res.data);
             return res.data;
         } catch (error) {
             rejectWithvalue(error.res.data);
@@ -35,7 +34,6 @@ const ordersSlice = createSlice({
             .addCase(getCustomersOrders.fulfilled, (state, action) => {
                 state.loading = false;
                 state.ordersData = action.payload;
-                console.log('state', state.ordersData);
             })
             .addCase(getCustomersOrders.rejected, (state, action) => {
                 state.loading = false;

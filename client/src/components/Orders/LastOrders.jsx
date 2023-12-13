@@ -115,8 +115,6 @@ const LastOrders = () => {
         []
     );
 
-    console.log(data);
-
     return (
         <Table
             aria-label='Last orders table'

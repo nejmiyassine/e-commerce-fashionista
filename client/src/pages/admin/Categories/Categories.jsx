@@ -48,13 +48,11 @@ const ManageCategories = () => {
 
         try {
             const response = await dispatch(createCategory(name));
-            console.log('Create Category Response:', response);
 
             if (response?.meta?.requestStatus === 'fulfilled') {
                 const payload = response.payload;
 
                 if (payload !== undefined && payload.success) {
-                    console.log('Category created successfully');
                     dispatch(getAllCategories());
                     setName('');
                     setIsAddingCategory(false);
@@ -105,7 +103,6 @@ const ManageCategories = () => {
             const response = await dispatch(deleteCategory(categoryId));
 
             if (response?.meta?.requestStatus === 'fulfilled') {
-                console.log('Category deleted');
                 dispatch(getAllCategories());
             } else {
                 console.error(response?.payload || 'Unknown error');

@@ -31,20 +31,21 @@ const Hero = () => {
         >
             <SwiperSlide>
                 <div
-                    className='bg-cover h-screen md:h-[36rem] w-full bg-no-repeat bg-center py-10 sm:py-28 flex items-center'
+                    className='relative bg-cover h-screen md:h-[36rem] text-center md:text-start w-full bg-no-repeat bg-center py-10 sm:py-28 flex items-center'
                     style={{
                         backgroundImage: `url(${HeroImage})`,
                     }}
                 >
-                    <div className='w-1/2 ml-8'>
-                        <h2 className='text-6xl font-bold text-black capitalize'>
+                    <div className='fixed inset-0 h-full bg-black opacity-50 md:opacity-0 md:hidden'></div>
+                    <div className='w-full z-50 md:w-1/2 md:ml-8'>
+                        <h2 className='text-3xl md:text-6xl font-bold text-black capitalize'>
                             Discover{' '}
                             <span className='text-primaryColor-gold'>
                                 Trendsetting
                             </span>{' '}
                             Fashion
                         </h2>
-                        <p className='text-md w-4/5 text-gray-500 mt-4 mb-2 italic capitalize'>
+                        <p className='text-sm md:text-md mx-auto md:mx-0 w-4/5 text-white md:text-gray-500 mt-4 mb-2 italic capitalize'>
                             Explore our handpicked collection of chic essentials
                             and statement pieces. Crafted to make you stand out,
                             our latest fashion speaks volumes about your
@@ -64,20 +65,21 @@ const Hero = () => {
             </SwiperSlide>
             <SwiperSlide>
                 <div
-                    className='bg-cover h-screen md:h-[36rem] w-full bg-no-repeat bg-center py-10 sm:py-28 flex items-center justify-center'
+                    className='relative bg-cover h-screen md:h-[36rem] text-center md:text-start w-full bg-no-repeat bg-center py-10 sm:py-28 flex items-center justify-center'
                     style={{
                         backgroundImage: `url(${HeroImage1})`,
                     }}
                 >
                     <div className='italic flex flex-col items-center justify-center w-[80rem]'>
-                        <h2 className='text-center text-6xl w-2/5 mx-auto font-bold text-black capitalize font-poppins text-center'>
+                        <h2 className='text-center text-3xl w-4/5 md:text-6xl md:w-2/5 mx-auto font-bold text-black capitalize font-poppins text-center'>
                             Elevate Your{' '}
                             <span className='text-primaryColor-gold'>
                                 Everyday{' '}
                             </span>
                             Style
                         </h2>
-                        <p className='text-md text-gray-600 w-2/5 my-8 mx-auto'>
+
+                        <p className='text-sm md:text-md text-gray-600 w-4/5 md:w-2/5 my-8 mx-auto'>
                             Unleash your individuality with our versatile
                             collection. Whether it's a casual day out or a
                             special occasion, our fashion adapts to your

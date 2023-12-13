@@ -166,7 +166,7 @@ const BagProductsSidebar = () => {
 
                 {/* Sidebar */}
 
-                {isLoading || !cartItems ? (
+                {isLoading ? (
                     <LoadingSpinner />
                 ) : (
                     <div className='fixed inset-y-0 gap-4 left-0 max-w-full w-2/5 flex'>
@@ -175,9 +175,9 @@ const BagProductsSidebar = () => {
                             <div className='p-4 flex items-center justify-between border-b'>
                                 <h2 className='text-2xl font-bold'>
                                     My Bag (
-                                    {cartItems.cartItems
-                                        ? cartItems.cartItems.length
-                                        : 0}
+                                    {cartItems?.cartItems
+                                        ? 0
+                                        : cartItems?.cartItems.length}
                                     )
                                 </h2>
                                 <button
@@ -190,7 +190,8 @@ const BagProductsSidebar = () => {
 
                             {/* Sidebar Content */}
                             <div className='p-4 overflow-y-hidden'>
-                                {cartItems.cartItems?.length === 0 ? (
+                                {cartItems === undefined ||
+                                cartItems?.cartItems?.length === 0 ? (
                                     <div>
                                         <h3 className='font-semibold text-lg text-gray-400 capitalize flex justify-center'>
                                             Your cart is empty!
@@ -303,17 +304,23 @@ const BagProductsSidebar = () => {
                             </div>
 
                             {/* Sidebar Footer */}
+
                             <div className='p-4 border-t z-50 bg-white absolute bottom-0 w-full'>
                                 <div className='flex items-center justify-between text-sm'>
                                     <p className='text-gray-500 font-semibold'>
                                         Subtotal:
                                     </p>
-                                    <p className='font-bold'>
-                                        $
-                                        {calculateSubTotal(
-                                            cartItems?.cartItems
-                                        )}
-                                    </p>
+                                    {cartItems === undefined ||
+                                        (cartItems?.cartItems?.length === 0 ? (
+                                            <p className='font-bold'>$0</p>
+                                        ) : (
+                                            <p className='font-bold'>
+                                                $
+                                                {calculateSubTotal(
+                                                    cartItems?.cartItems
+                                                )}
+                                            </p>
+                                        ))}
                                 </div>
 
                                 <Link to='/payment'>

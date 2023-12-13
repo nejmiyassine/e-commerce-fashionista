@@ -144,10 +144,11 @@ const CartProducts = () => {
             ) : (
                 <div className='cart-container py-4'>
                     <h2 className='font-bold text-2xl pb-6'>
-                        My Bag ({cartItems.cartItems.length})
+                        My Bag ({cartItems?.cartItems?.length})
                     </h2>
 
-                    {cartItems.cartItems.length === 0 ? (
+                    {cartItems === undefined ||
+                    cartItems?.cartItems?.length === 0 ? (
                         <div className='empty-cart'>
                             <p>Your cart is empty</p>
                             <div className='start-shopping'>

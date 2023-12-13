@@ -22,7 +22,7 @@ const Payment = () => {
                     <div className='w-full lg:w-2/5'>
                         <CheckoutForm
                             price={calculateSubTotal(cartItems?.cartItems)}
-                            cartItems={cartItems.cartItems}
+                            cartItems={cartItems?.cartItems}
                         />
                     </div>
                 </div>

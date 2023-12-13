@@ -155,7 +155,6 @@ const CustomersTable = ({ data, error, loading }) => {
                         'Are you sure you want to delete this customer?'
                     )
                 ) {
-                    console.log(customer._id);
                     dispatch(
                         deleteCustomer({
                             customerId: customer._id,

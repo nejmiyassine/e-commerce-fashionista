@@ -44,7 +44,7 @@ const CustomerNavbar = ({ toggleSidebar, openBagSidebar }) => {
     const { data: cartItems, isLoading: isCartItemsLoading } =
         useGetAllCartItemsQuery();
 
-    const [logoutUser, { isSuccess }] = useLogoutCustomerMutation();
+    const [logoutCustomer] = useLogoutCustomerMutation();
 
     const badgeStyle =
         'absolute -top-1 -right-2 w-4 h-4 rounded-full flex items-center justify-center bg-primaryColor-gold text-xs';
@@ -53,15 +53,23 @@ const CustomerNavbar = ({ toggleSidebar, openBagSidebar }) => {
         dispatch(fetchFavorites());
     }, [dispatch]);
 
-    const handleLogout = () => {
-        logoutUser();
+    const handleLogout = async () => {
+        await logoutCustomer();
 
-        if (isSuccess) {
-            navigate('/login');
-            toast.success('See you soon 👋!', {
-                position: 'bottom-right',
-            });
-        }
+        navigate('/login');
+        toast.success('See you soon 👋!', {
+            position: 'bottom-right',
+        });
+    };
+
+    const CustomNavbarItem = ({ to, children, isActive }) => {
+        return (
+            <NavbarItem isActive={isActive}>
+                <Link to={to} className='text-primaryColor-gold'>
+                    {children}
+                </Link>
+            </NavbarItem>
+        );
     };
 
     const loading = isCustomerProfileLoading || isFetching;
@@ -112,19 +120,37 @@ const CustomerNavbar = ({ toggleSidebar, openBagSidebar }) => {
                         Fashionista
                     </p>
                 </NavbarBrand>
-                <NavbarItem isActive>
-                    <Link to='/landing-page' className='text-primaryColor-gold'>
+                <NavbarItem>
+                    <Link
+                        to='/landing-page'
+                        className='hover:text-primaryColor-gold hover:underline'
+                    >
                         Home
                     </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link to='/shop'>Products</Link>
+                    <Link
+                        to='/shop'
+                        className='hover:text-primaryColor-gold hover:underline'
+                    >
+                        Products
+                    </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link to='/About'>About us</Link>
+                    <Link
+                        to='/About'
+                        className='hover:text-primaryColor-gold hover:underline'
+                    >
+                        About us
+                    </Link>
                 </NavbarItem>
                 <NavbarItem>
-                    <Link to='/contact'>Contact us</Link>
+                    <Link
+                        to='/contact'
+                        className='hover:text-primaryColor-gold hover:underline'
+                    >
+                        Contact us
+                    </Link>
                 </NavbarItem>
             </NavbarContent>
 
@@ -143,9 +169,9 @@ const CustomerNavbar = ({ toggleSidebar, openBagSidebar }) => {
                     >
                         <FaShoppingBag className='w-5 h-5' />
                         <span className={`${badgeStyle}`}>
-                            {!isCartItemsLoading || cartItems
-                                ? cartItems.cartItems?.length
-                                : 0}
+                            {isCartItemsLoading || !cartItems
+                                ? 0
+                                : cartItems?.cartItems?.length}
                         </span>
                     </button>
                     <Dropdown placement='bottom-end'>
@@ -218,26 +244,27 @@ const CustomerNavbar = ({ toggleSidebar, openBagSidebar }) => {
                 </NavbarContent>
             )}
 
-            {!isLoggedIn ||
-                (!customer && (
-                    <NavbarContent justify='end'>
-                        <NavbarItem className='hidden lg:flex'>
-                            <Link
-                                className='text-black cursor-pointer'
-                                to='/login'
-                            >
-                                Login
-                            </Link>
-                        </NavbarItem>
-                        <NavbarItem>
-                            <Button as={Link} color='warning' variant='flat'>
-                                <Link to='/register'>Sign Up</Link>
-                            </Button>
-                        </NavbarItem>
-                    </NavbarContent>
-                ))}
+            {!isLoggedIn && !customer && (
+                <NavbarContent justify='end'>
+                    <NavbarItem className='hidden lg:flex'>
+                        <Link className='text-black cursor-pointer' to='/login'>
+                            Sign in
+                        </Link>
+                    </NavbarItem>
+                    <NavbarItem>
+                        <Button color='warning' variant='flat'>
+                            <Link to='/register'>Sign Up</Link>
+                        </Button>
+                    </NavbarItem>
+                </NavbarContent>
+            )}
 
             <NavbarMenu>
+                <NavbarItem>
+                    <Link to='/login' className='w-full' size='lg'>
+                        Sign in
+                    </Link>
+                </NavbarItem>
                 <NavbarItem>
                     <Link to='/landing-page' className='w-full' size='lg'>
                         Home

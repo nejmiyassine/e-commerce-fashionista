@@ -85,7 +85,6 @@ const favoritesSlice = createSlice({
                 state.isLoading = false;
                 state.data = action.payload;
                 state.error = '';
-                console.log('addToFavorites', state.data);
             })
             .addCase(addToFavorites.rejected, (state, action) => {
                 state.isLoading = false;
@@ -100,7 +99,6 @@ const favoritesSlice = createSlice({
                 state.isLoading = false;
                 state.data = action.payload;
                 state.error = '';
-                console.log('fetchFavorites', state.data);
             })
             .addCase(fetchFavorites.rejected, (state, action) => {
                 state.isLoading = false;
@@ -123,12 +121,10 @@ const favoritesSlice = createSlice({
                     );
                 }
                 state.error = '';
-                console.log('fulfilled');
             })
 
             .addCase(deleteFavorites.rejected, (state, action) => {
                 state.error = action.error.message;
-                console.log('rejected');
             });
     },
 });

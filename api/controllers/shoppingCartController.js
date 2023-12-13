@@ -121,6 +121,7 @@ exports.getAllCartItems = async (req, res) => {
         } else {
             res.status(404).json({
                 success: false,
+                cartItems: [],
                 message: 'Shopping cart not found for the user',
             });
         }

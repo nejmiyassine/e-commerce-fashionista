@@ -33,7 +33,7 @@ const Trending = () => {
     return (
         <div className='container py-8 px-4 pb-24'>
             <div className='flex flex-col items-center justify-center pb-12'>
-                <h2 className='text-4xl font-extrabold leading-tight text-center mb-2'>
+                <h2 className='text-2xl sm:text-4xl font-extrabold leading-tight text-center mb-2'>
                     <span className='text-primaryColor-gold'>@Fashionista</span>{' '}
                     Customer Reviews
                 </h2>
@@ -55,7 +55,7 @@ const Trending = () => {
                                 alt={`Customer ${index + 1}`}
                             />
                         </div>
-                        <p className='text-md text-gray-800 mb-4'>
+                        <p className='text-sm sm:text-md text-gray-800 mb-4'>
                             {review.text}
                         </p>
                         <div className='flex items-center mb-2'>

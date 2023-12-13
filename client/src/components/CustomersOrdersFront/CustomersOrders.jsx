@@ -6,8 +6,8 @@ import {
     TableBody,
     TableRow,
     TableCell,
+    Image,
 } from '@nextui-org/react';
-import { Link } from 'react-router-dom';
 
 import LoadingSpinner from '../LoadingSpinner';
 import FormatDate from '../FormatDate';
@@ -15,6 +15,17 @@ import FormatPrice from '../FormatPrice';
 import OrderStatusChip from '../OrderStatusChip';
 
 import { useGetCustomersOrdersQuery } from '../../app/api/ordersApi';
+import LoadingContent from '../LoadingContent';
+import { useCallback } from 'react';
+import { Link } from 'react-router-dom';
+
+const columns = [
+    { name: 'ID', uid: '_id' },
+    { name: 'NAME', uid: 'order_items' },
+    { name: 'PRICE', uid: 'cart_total_price', sortable: true },
+    { name: 'STATUS', uid: 'status' },
+    { name: 'ORDER DATE', uid: 'order_date', sortable: true },
+];
 
 export default function CustomersOrders() {
     const {
@@ -24,6 +35,58 @@ export default function CustomersOrders() {
         error,
     } = useGetCustomersOrdersQuery();
 
+    const loadingState =
+        isLoading ||
+        customerOrders === undefined ||
+        customerOrders?.orders?.length === 0
+            ? 'loading'
+            : 'idle';
+
+    const renderCell = useCallback((order, columnKey) => {
+        const cellValue = order[columnKey];
+        switch (columnKey) {
+            case '_id':
+                return (
+                    <div>
+                        <p className='text-gray-500 dark:text-gray-300'>
+                            {(cellValue, 10)}
+                            {/* {sliceText(cellValue, 10)} */}
+                        </p>
+                    </div>
+                );
+
+            case 'order_items':
+                return (
+                    <Link
+                        to={`/admin/orders/${order['_id']}`}
+                        className='flex items-center gap-2'
+                    >
+                        <Image
+                            className='w-10 h-10'
+                            src={cellValue[0].product_images[0]}
+                            alt={cellValue[0].product_name}
+                        />
+                        <p className='font-semibold'>
+                            {cellValue[0].product_name}
+                            {/* {capitalize(cellValue[0].product_name)} */}
+                        </p>
+                    </Link>
+                );
+
+            case 'cart_total_price':
+                return <FormatPrice price={order.cart_total_price} />;
+
+            case 'status':
+                return <OrderStatusChip status={order.status} />;
+
+            case 'order_date':
+                return <FormatDate cellValue={cellValue} />;
+
+            default:
+                return cellValue;
+        }
+    }, []);
+
     if (isLoading) {
         return <LoadingSpinner />;
     }
@@ -32,55 +95,38 @@ export default function CustomersOrders() {
         return <div>Error: {error}</div>;
     }
 
-    console.log(customerOrders.orders);
-
     return (
         <div className='container mx-auto'>
             <Table>
-                <TableHeader>
-                    <TableColumn className='font-bold' key='name'>
-                        PRODUCT_NAME
-                    </TableColumn>
-                    <TableColumn className='font-bold' key='role'>
-                        PRICE
-                    </TableColumn>
-                    <TableColumn className='font-bold' key='status'>
-                        STATUS
-                    </TableColumn>
-                    <TableColumn className='font-bold' key='date'>
-                        DATE
-                    </TableColumn>
+                <TableHeader columns={columns}>
+                    {(column) => (
+                        <TableColumn
+                            key={column.uid}
+                            align={
+                                column.uid === 'actions' ? 'center' : 'start'
+                            }
+                            allowsSorting={column.sortable}
+                        >
+                            {column.name}
+                        </TableColumn>
+                    )}
                 </TableHeader>
-
-                <TableBody>
-                    {!isLoading || customerOrders ? (
-                        customerOrders.orders.map((order) => (
-                            <TableRow key={`${order._id}`}>
-                                <TableCell>
-                                    {order.order_items.map((item) => (
-                                        <div key={item.product_name}>
-                                            <p>{item.product_name}</p>
-                                        </div>
-                                    ))}
+                <TableBody
+                    emptyContent={'No orders found'}
+                    items={customerOrders?.orders ?? []}
+                    loadingContent={
+                        <LoadingContent loadingState={loadingState} />
+                    }
+                    loadingState={loadingState}
+                >
+                    {(item) => (
+                        <TableRow key={item?._id}>
+                            {(columnKey) => (
+                                <TableCell key={columnKey}>
+                                    {renderCell(item, columnKey)}
                                 </TableCell>
-                                <TableCell>
-                                    <FormatPrice
-                                        price={order.cart_total_price}
-                                    />
-                                </TableCell>
-                                <TableCell>
-                                    <OrderStatusChip status={order.status} />
-                                </TableCell>
-                                <TableCell>
-                                    <FormatDate date={order.order_date} />
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    ) : (
-                        <div>
-                            <p>There are no orders yet!</p>
-                            <Link to='/shop'>Start Shopping.</Link>
-                        </div>
+                            )}
+                        </TableRow>
                     )}
                 </TableBody>
             </Table>

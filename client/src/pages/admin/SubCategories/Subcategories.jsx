@@ -62,16 +62,12 @@ const ManageSubcategories = () => {
 
         try {
             const response = await dispatch(createSubcategory(name));
-            console.log('Create Subcategory Response:', response);
 
             if (response?.meta?.requestStatus === 'fulfilled') {
+                // eslint-disable-next-line no-unused-vars
                 const { success, subcategory } = response.payload;
 
-                console.log('Success:', success);
-                console.log('Subcategory:', subcategory);
-
                 if (success) {
-                    console.log('Subcategory created successfully');
                     dispatch(getAllSubcategories());
                     setName('');
                     setIsAddingSubcategory(false);
@@ -119,7 +115,6 @@ const ManageSubcategories = () => {
             const response = await dispatch(deleteSubcategory(subcategoryId));
 
             if (response?.meta?.requestStatus === 'fulfilled') {
-                console.log('Subcategory deleted');
                 dispatch(getAllSubcategories());
             } else {
                 console.error(response?.payload || 'Unknown error');

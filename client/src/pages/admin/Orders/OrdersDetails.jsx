@@ -95,10 +95,8 @@ const OrdersDetails = () => {
         return <LoadingSpinner />;
 
     if (isError) {
-        console.log('Something went wrong: ', error);
+        console.error('Something went wrong: ', error);
     }
-
-    console.log(payment);
 
     return (
         <Layout>

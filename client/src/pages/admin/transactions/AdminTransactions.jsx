@@ -1,4 +1,5 @@
 import {
+    Chip,
     Input,
     Spacer,
     Table,
@@ -7,6 +8,7 @@ import {
     TableColumn,
     TableHeader,
     TableRow,
+    User,
 } from '@nextui-org/react';
 import { useCallback, useMemo, useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
@@ -16,8 +18,12 @@ import LoadingSpinner from '../../../components/LoadingSpinner';
 import Layout from '../../../layouts/Layout';
 import FormatDate from '../../../components/FormatDate';
 import FormatPrice from '../../../components/FormatPrice';
+import { sliceText } from '../../../utils/sliceText';
+import { FaCheck } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const columns = [
+    { name: 'ID', uid: '_id' },
     { name: 'ORDER ID', uid: 'order_id' },
     { name: 'AMOUNT', uid: 'amount' },
     { name: 'EMAIL', uid: 'billing_details' },
@@ -78,6 +84,40 @@ const AdminTransactions = () => {
         const cellValue = payment[columnKey];
 
         switch (columnKey) {
+            case 'status':
+                return (
+                    <Chip
+                        className='capitalize'
+                        color='success'
+                        size='sm'
+                        variant='flat'
+                    >
+                        <div className='flex items-center gap-1'>
+                            <FaCheck className='text-green-500' />
+                            <p>{cellValue}</p>
+                        </div>
+                    </Chip>
+                );
+
+            case '_id':
+                return (
+                    <div>
+                        <p className='text-gray-500 dark:text-gray-300'>
+                            {sliceText(cellValue, 10)}
+                        </p>
+                    </div>
+                );
+
+            case 'order_id':
+                return (
+                    <Link
+                        to={`/admin/orders/${cellValue}`}
+                        className='text-gray-500 dark:text-gray-300'
+                    >
+                        {sliceText(cellValue, 10)}
+                    </Link>
+                );
+
             case 'name':
                 return (
                     <div className='w-[250px] md:w-[400px] py-2 flex flex-col'>
@@ -93,9 +133,20 @@ const AdminTransactions = () => {
 
             case 'billing_details':
                 return (
-                    <div>
-                        <p>{cellValue.email}</p>
-                    </div>
+                    <User
+                        avatarProps={{
+                            radius: 'full',
+                            size: 'sm',
+                            src: 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
+                        }}
+                        classNames={{
+                            description: 'text-default-500',
+                        }}
+                        description={cellValue.phone}
+                        name={cellValue.email}
+                    >
+                        {cellValue.email}
+                    </User>
                 );
 
             default:
@@ -115,13 +166,13 @@ const AdminTransactions = () => {
             td: [
                 // changing the rows border radius
                 // first
-                'group-data-[first=true]:first:before:rounded-none',
-                'group-data-[first=true]:last:before:rounded-none',
+                'group-data-[first=true]:first:before:rounded-none py-2',
+                'group-data-[first=true]:last:before:rounded-none py-2',
                 // middle
-                'group-data-[middle=true]:before:rounded-none',
+                'group-data-[middle=true]:before:rounded-none py-2',
                 // last
-                'group-data-[last=true]:first:before:rounded-none',
-                'group-data-[last=true]:last:before:rounded-none',
+                'group-data-[last=true]:first:before:rounded-none py-2',
+                'group-data-[last=true]:last:before:rounded-none py-2',
             ],
         }),
         []
@@ -130,16 +181,15 @@ const AdminTransactions = () => {
     if (isLoadingPayment || isFetchingPayment) return <LoadingSpinner />;
 
     if (isError) {
-        console.log('Something went wrong: ', error);
+        console.error('Something went wrong: ', error);
     }
 
-    console.log(payment);
 
     return (
         <Layout>
             <div className='rounded-md p-4 shadow-sm bg-white dark:bg-primaryColor-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>
-                    All Payment Transaction
+                    All Payments Transactions
                 </h2>
 
                 <Table

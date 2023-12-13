@@ -1,15 +1,15 @@
 /* eslint-disable react/prop-types */
-import { Image } from '@nextui-org/react';
 import { useEffect, useState } from 'react';
+import { Image } from '@nextui-org/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FaCartPlus, FaStar } from 'react-icons/fa';
-
-import { getProductById } from '../features/products/productsSlice';
-import LoadingSpinner from './LoadingSpinner';
 import { MdEdit } from 'react-icons/md';
 import { Link } from 'react-router-dom';
-import { useAddProductToCartMutation } from '../app/api/cartApi';
 import { toast } from 'react-toastify';
+
+import { getProductById } from '../features/products/productsSlice';
+import { useAddProductToCartMutation } from '../app/api/cartApi';
+import LoadingSpinner from './LoadingSpinner';
 
 const ProductDetailsSection = ({ productId, isAdmin }) => {
     const dispatch = useDispatch();
@@ -110,7 +110,7 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
                         <div className='lg:pl-20'>
                             <div className='mb-8 '>
                                 <div className='flex items-center justify-between'>
-                                    <span className='text-lg font-medium text-rose-500 dark:text-rose-200'>
+                                    <span className='text-lg font-medium text-primaryColor-gold'>
                                         {product?.category_id.name}
                                     </span>
                                     {isAdmin && (
@@ -119,12 +119,12 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
                                         >
                                             <MdEdit
                                                 size={20}
-                                                className='text-green-500 cursor-pointer'
+                                                className='text-primaryColor-gold cursor-pointer'
                                             />
                                         </Link>
                                     )}
                                 </div>
-                                <h2 className='max-w-xl mt-2 mb-6 text-2xl font-bold dark:text-gray-400 md:text-4xl'>
+                                <h2 className='max-w-xl mt-2 mb-6 text-2xl font-bold dark:text-white md:text-4xl'>
                                     {product?.product_name}
                                 </h2>
                                 <div className='flex items-center mb-6'>
@@ -132,31 +132,31 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
                                         <li>
                                             <FaStar
                                                 size={16}
-                                                className='w-4 mr-1 text-red-500 dark:text-gray-400 bi bi-star cursor-pointer'
+                                                className='w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer'
                                             />
                                         </li>
                                         <li>
                                             <FaStar
                                                 size={16}
-                                                className='w-4 mr-1 text-red-500 dark:text-gray-400 bi bi-star cursor-pointer'
+                                                className='w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer'
                                             />
                                         </li>
                                         <li>
                                             <FaStar
                                                 size={16}
-                                                className='w-4 mr-1 text-red-500 dark:text-gray-400 bi bi-star cursor-pointer'
+                                                className='w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer'
                                             />
                                         </li>
                                         <li>
                                             <FaStar
                                                 size={16}
-                                                className='w-4 mr-1 text-red-500 dark:text-gray-400 bi bi-star cursor-pointer'
+                                                className='w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer'
                                             />
                                         </li>
                                         <li>
                                             <FaStar
                                                 size={16}
-                                                className='w-4 mr-1 text-red-500 dark:text-gray-400 bi bi-star cursor-pointer'
+                                                className='w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer'
                                             />
                                         </li>
                                     </ul>
@@ -164,17 +164,19 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
                                         (2 customer reviews)
                                     </p>
                                 </div>
-                                <p className='max-w-md mb-8 text-gray-700 dark:text-gray-400'>
+                                <p className='max-w-md mb-8 text-black/80 dark:dark:text-white/80'>
                                     {product?.short_description}
                                 </p>
                                 <div className='flex items-center justify-between'>
-                                    <p className='inline-block mb-2 text-4xl font-bold text-gray-700 dark:text-gray-400 '>
-                                        <span>${product?.discount_price}</span>
+                                    <p className='inline-block mb-2 text-4xl flex items-center gap-1 font-bold dark:text-white '>
+                                        <span className='text-black/80 dark:text-white/90'>
+                                            ${product?.discount_price}
+                                        </span>
                                         <span className='text-base font-normal text-gray-500 line-through dark:text-gray-400'>
                                             ${product?.price}
                                         </span>
                                     </p>
-                                    <p className='dark:text-green-300 text-green-500'>
+                                    <p className='font-semibold text-primaryColor-gold'>
                                         {product?.quantity} in stock
                                     </p>
                                 </div>
@@ -205,7 +207,7 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
                                 <div className='relative flex flex-row w-full h-10 mt-4 bg-transparent rounded-lg'>
                                     <button
                                         onClick={handleDecrementQuantity}
-                                        className='w-20 h-full text-gray-600 bg-black text-white rounded-l outline-none cursor-pointer dark:hover:bg-gray-700 dark:text-gray-400 dark:bg-gray-900 hover:bg-black/70'
+                                        className='w-20 h-full text-white bg-black text-white rounded-l outline-none cursor-pointer dark:hover:bg-gray-700 dark:text-gray-400 dark:bg-gray-900 hover:bg-black/70'
                                     >
                                         <span className='m-auto text-2xl font-thin'>
                                             -

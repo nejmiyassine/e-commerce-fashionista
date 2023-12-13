@@ -62,7 +62,6 @@ const createCheckoutSession = async (req, res) => {
             data: session,
         });
     } catch (error) {
-        console.log(error);
         next(error);
     }
 };

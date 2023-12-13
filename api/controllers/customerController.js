@@ -55,7 +55,6 @@ exports.deleteCustomerById = async (req, res) => {
             .status(200)
             .json({ message: 'Customer deleted successfully' });
     } catch (error) {
-        console.log('error from customerController : ', error);
         res.status(500).json({ message: error.message });
     }
 };
@@ -152,18 +151,3 @@ exports.customerCanUpdate = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-// exports.getProfile = async (req, res) => {
-//     try {
-
-//          const customerId = res.locals.user._id;
-
-//         const customer = await Customer.findById(customerId);
-//         console.log('customer' , customer)
-
-//          if (!customer) res.status(404).json({ message: 'Customers not found' });
-//         return res.status(200).json(customer);
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };

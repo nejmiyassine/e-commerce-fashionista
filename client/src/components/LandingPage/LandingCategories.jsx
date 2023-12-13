@@ -41,11 +41,10 @@ const LandingCategories = () => {
                     <span className='text-primaryColor-gold'>Our </span>
                     Categories
                 </h2>
-                <p className='text-md w-1/2 text-gray-700 text-center'>
-                    Explore our latest and trendiest collection across diverse
-                    categories. Elevate your style with chic clothing,
-                    comfortable footwear, statement accessories, athleisure
-                    essentials, and sophisticated formal wear.
+                <p className='text-md w-full md:w-2/3 text-gray-700 text-center'>
+                    Elevate your style with chic clothing, comfortable footwear,
+                    statement accessories, athleisure essentials, and
+                    sophisticated formal wear.
                 </p>
             </div>
 

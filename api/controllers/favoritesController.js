@@ -4,22 +4,21 @@ const Customer = require('../models/Customers');
 
 exports.addToFavorites = async (req, res) => {
     const { productId } = req.body;
-    console.log(productId);
     try {
         const customerId = res.locals.user._id;
 
         const product = await Product.findById(productId);
-        console.log('product', product);
         const customer = await Customer.findById(customerId);
-        console.log('customer', customer);
 
         const exists = await Favorite.findOne({
             customer: customerId,
             product: productId,
         });
-        console.log('exists', exists);
+
         if (exists) {
-            return res.status(200).json({ message: 'it is already added to favorite' });
+            return res
+                .status(200)
+                .json({ message: 'it is already added to favorite' });
         }
 
         const favorite = await Favorite.create({

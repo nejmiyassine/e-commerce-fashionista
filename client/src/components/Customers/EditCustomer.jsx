@@ -62,7 +62,6 @@ const EditCustomer = ({ isOpen, onOpenChange, updatedCustomer }) => {
             onOpenChange(false);
             reset();
 
-            console.log(updatedCustomer._id);
             dispatch(
                 updateCustomer({
                     customerId: updatedCustomer._id,

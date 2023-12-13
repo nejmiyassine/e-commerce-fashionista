@@ -23,13 +23,11 @@ import { VerticalDotsIcon } from '../../icons/Icons';
 const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
     const dispatch = useDispatch();
 
-    const [addProductToCart, { isSuccess: isAddSuccess }] =
-        useAddProductToCartMutation();
+    const [addProductToCart] = useAddProductToCartMutation();
 
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     const handleUpdateProduct = (product) => {
-        console.log(product);
         dispatch(setProduct(product));
     };
 
@@ -51,11 +49,9 @@ const ProductCard = ({ product, isAdmin, categories, setDeleteModel }) => {
 
             await addProductToCart({ productId: product?._id, quantity });
 
-            if (isAddSuccess) {
-                toast.success('Product added to cart successfully', {
-                    position: 'bottom-right',
-                });
-            }
+            toast.success('Product added to cart successfully', {
+                position: 'bottom-right',
+            });
         } catch (error) {
             console.error(error);
             toast.error('Error adding product to cart', {

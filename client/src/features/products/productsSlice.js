@@ -159,7 +159,6 @@ export const productsSlice = createSlice({
             .addCase(deleteProduct.fulfilled, (state, action) => {
                 state.isLoading = false;
                 const deletedProductId = action.payload._id;
-                // console.log(" deleeeeted" + deletedProductId)
 
                 state.products = state.products.filter(
                     (product) => product._id !== deletedProductId

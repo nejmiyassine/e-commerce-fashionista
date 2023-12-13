@@ -42,9 +42,6 @@ const UpdateCustomerComponent = ({ customer }) => {
     });
 
     const onSubmit = (formData) => {
-        console.log(customer._id);
-        console.log(formData);
-
         dispatch(
             patchCustomerData({
                 customerId: customer._id,

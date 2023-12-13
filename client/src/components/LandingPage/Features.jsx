@@ -6,7 +6,7 @@ const Features = () => {
     return (
         <div className='bg-[#F2F3F5] mb-8'>
             <div className='container mx-auto'>
-                <div className='w-full max-w-screen-lg mx-auto grid grid-cols-3 gap-6 justify-center'>
+                <div className='w-full max-w-screen-lg mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 justify-center'>
                     <div className='rounded-sm p-4 flex flex-col items-center'>
                         <img
                             src={delivery}
@@ -16,7 +16,9 @@ const Features = () => {
                         <h4 className='font-medium capitalize text-lg'>
                             Free Shipping
                         </h4>
-                        <p className='text-gray-500 text-sm'>Order Over $50</p>
+                        <p className='text-gray-500 text-sm text-center'>
+                            Order Over $50
+                        </p>
                     </div>
                     <div className='rounded-sm p-4 flex flex-col items-center'>
                         <img
@@ -27,7 +29,7 @@ const Features = () => {
                         <h4 className='font-medium capitalize text-lg'>
                             Money Return
                         </h4>
-                        <p className='text-gray-500 text-sm'>
+                        <p className='text-gray-500 text-sm text-center'>
                             15 Days Money Returns
                         </p>
                     </div>
@@ -40,7 +42,7 @@ const Features = () => {
                         <h4 className='font-medium capitalize text-lg'>
                             24/7 Support
                         </h4>
-                        <p className='text-gray-500 text-sm'>
+                        <p className='text-gray-500 text-sm text-center'>
                             Customer Support
                         </p>
                     </div>
