@@ -1,7 +1,15 @@
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
-const SidebarItem = ({ Icon, text, active, path, expanded }) => {
+const SidebarItem = ({ Icon, text, path, expanded }) => {
+    const [active, setActive] = useState(false);
+    const location = useLocation();
+
+    useEffect(() => {
+        setActive(location.pathname === path);
+    }, [location, path]);
+
     const icon = <Icon size={20} />;
 
     return (

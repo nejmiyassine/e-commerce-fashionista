@@ -4,18 +4,17 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Input, Select, SelectItem, Textarea } from '@nextui-org/react';
+import { toast } from 'react-toastify';
+
 import { BiX, BiDollar } from 'react-icons/bi';
 import { ImListNumbered } from 'react-icons/im';
 import { CgOptions, CgRename } from 'react-icons/cg';
 import { LuAsterisk } from 'react-icons/lu';
+import { IoMdCloudUpload } from 'react-icons/io';
 
 import { getAllCategories } from '../../../features/categories/categoriesSlice';
 import { createProduct } from '../../../features/products/productsSlice';
-// import { fetchCategories } from '../path-to-your-categories-slice';
 import Layout from '../../../layouts/Layout';
-// import FileInput from '../../../components/FileInput';
-import { IoMdCloudUpload } from 'react-icons/io';
-import { toast } from 'react-toastify';
 
 function AddProduct() {
     const navigate = useNavigate();

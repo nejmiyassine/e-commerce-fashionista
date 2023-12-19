@@ -25,7 +25,6 @@ const CartSidebar = () => {
         return <LoadingSpinner />;
     }
 
-    console.log(cart);
 
     return (
         <div>

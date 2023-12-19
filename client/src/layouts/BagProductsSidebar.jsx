@@ -16,6 +16,8 @@ import {
 
 import LoadingSpinner from '../components/LoadingSpinner';
 import { Button } from '@nextui-org/react';
+import { Link } from 'react-router-dom';
+import { calculateSubTotal } from '../utils/calculateSubTotal';
 
 /* eslint-disable react/prop-types */
 const BagProductsSidebar = () => {
@@ -155,27 +157,27 @@ const BagProductsSidebar = () => {
                 isOpen ? 'block' : 'hidden'
             }`}
         >
-            <div className='absolute inset-0 overflow-hidden'>
+            <div className='fixed inset-0 overflow-hidden'>
                 {/* Dark overlay */}
                 <div
-                    className='absolute inset-0 bg-black opacity-50'
+                    className='fixed inset-0 bg-black opacity-50'
                     onClick={closeBagSidebar}
                 ></div>
 
                 {/* Sidebar */}
 
-                {isLoading || !cartItems ? (
+                {isLoading ? (
                     <LoadingSpinner />
                 ) : (
-                    <div className='fixed inset-y-0 left-0 max-w-full w-2/5 flex'>
+                    <div className='fixed inset-y-0 gap-4 left-0 max-w-full w-2/5 flex'>
                         <div className='bg-white overflow-y-auto w-full'>
                             {/* Sidebar Header */}
                             <div className='p-4 flex items-center justify-between border-b'>
                                 <h2 className='text-2xl font-bold'>
                                     My Bag (
-                                    {cartItems.cartItems
-                                        ? cartItems.cartItems.length
-                                        : 0}
+                                    {cartItems?.cartItems
+                                        ? 0
+                                        : cartItems?.cartItems.length}
                                     )
                                 </h2>
                                 <button
@@ -188,7 +190,8 @@ const BagProductsSidebar = () => {
 
                             {/* Sidebar Content */}
                             <div className='p-4 overflow-y-hidden'>
-                                {cartItems.cartItems?.length === 0 ? (
+                                {cartItems === undefined ||
+                                cartItems?.cartItems?.length === 0 ? (
                                     <div>
                                         <h3 className='font-semibold text-lg text-gray-400 capitalize flex justify-center'>
                                             Your cart is empty!
@@ -200,7 +203,7 @@ const BagProductsSidebar = () => {
                                             key={item.product._id}
                                             className='pb-4 last:pb-28'
                                         >
-                                            <div className='flex mb-2'>
+                                            <div className='flex gap-2 h-32 mb-2'>
                                                 <img
                                                     src={
                                                         item.product
@@ -210,7 +213,7 @@ const BagProductsSidebar = () => {
                                                         item.product
                                                             .product_name
                                                     }
-                                                    className='w-28 h-50 object-contain mr-2'
+                                                    className='w-28 h-full object-contain mr-2'
                                                 />
 
                                                 <div className='w-full flex flex-col gap-10 justify-between'>
@@ -301,41 +304,30 @@ const BagProductsSidebar = () => {
                             </div>
 
                             {/* Sidebar Footer */}
+
                             <div className='p-4 border-t z-50 bg-white absolute bottom-0 w-full'>
                                 <div className='flex items-center justify-between text-sm'>
                                     <p className='text-gray-500 font-semibold'>
                                         Subtotal:
                                     </p>
-                                    <p className='font-bold'>
-                                        $
-                                        {cartItems.cartItems
-                                            .reduce(
-                                                (
-                                                    previousValue,
-                                                    currentValue
-                                                ) => {
-                                                    return (
-                                                        parseFloat(
-                                                            previousValue
-                                                        ) +
-                                                        parseFloat(
-                                                            currentValue.quantity
-                                                        ) *
-                                                            parseFloat(
-                                                                currentValue
-                                                                    .product
-                                                                    .price
-                                                            )
-                                                    );
-                                                },
-                                                0
-                                            )
-                                            .toFixed(2)}
-                                    </p>
+                                    {cartItems === undefined ||
+                                        (cartItems?.cartItems?.length === 0 ? (
+                                            <p className='font-bold'>$0</p>
+                                        ) : (
+                                            <p className='font-bold'>
+                                                $
+                                                {calculateSubTotal(
+                                                    cartItems?.cartItems
+                                                )}
+                                            </p>
+                                        ))}
                                 </div>
-                                <button className='mt-4 px-2 py-3 rounded w-full font-semibold transition duration-200 bg-violet-500 text-white hover:bg-violet-700'>
-                                    Proceed to Checkout
-                                </button>
+
+                                <Link to='/payment'>
+                                    <Button className='mt-4 px-2 py-3 rounded w-full font-semibold transition duration-200 bg-violet-500 text-white hover:bg-violet-700'>
+                                        Proceed to Checkout
+                                    </Button>
+                                </Link>
                             </div>
                         </div>
                     </div>

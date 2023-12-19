@@ -15,7 +15,37 @@ export const ordersAPI = api.injectEndpoints({
                 NProgress.start();
             },
         }),
+        createOrders: builder.mutation({
+            query: (data) => ({
+                url: 'orders',
+                credentials: 'include',
+                body: data,
+                method: 'POST',
+            }),
+            invalidatesTags: () => [{ type: 'Orders', id: 'LIST' }],
+        }),
+        getOrderById: builder.query({
+            query: (id) => ({
+                url: `orders/${id}`,
+                credentials: 'include',
+                method: 'GET',
+            }),
+            providesTags: (result, error, id) => [{ type: 'Oders', id }],
+        }),
+        getCustomersOrders: builder.query({
+            query: () => ({
+                url: '/orders/customer/order',
+                credentials: 'include',
+                method: 'GET',
+            }),
+            providesTags: (result, error, id) => [{ type: 'Oders', id }],
+        }),
     }),
 });
 
-export const { useGetAllOrdersQuery } = ordersAPI;
+export const {
+    useGetAllOrdersQuery,
+    useCreateOrdersMutation,
+    useGetOrderByIdQuery,
+    useGetCustomersOrdersQuery,
+} = ordersAPI;

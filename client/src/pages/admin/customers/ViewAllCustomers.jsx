@@ -50,7 +50,6 @@ const ViewAllCustomers = () => {
         return <div>Error: {error}</div>;
     }
 
-    console.log('customer from view all customer', data);
     return (
         <Layout>
             {data && (

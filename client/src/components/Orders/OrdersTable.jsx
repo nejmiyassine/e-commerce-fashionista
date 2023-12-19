@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import NProgress from 'nprogress';
 
 import {
+    Image,
     Table,
     TableBody,
     TableCell,
@@ -39,7 +40,7 @@ const columns = [
 import useTableFeatures from '../../hooks/useTableFeatures';
 import TableTopContent from '../TableTopContent';
 import TableBottomContent from '../TableBottomContent';
-// import { MdOutlineGridOn } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 const OrdersTable = () => {
     const { isLoading, isError, error, data: orders } = useGetAllOrdersQuery();
@@ -158,10 +159,22 @@ const OrdersTable = () => {
 
             case 'order_items':
                 return (
-                    <p className='font-semibold'>{capitalize(cellValue[0])}</p>
+                    <Link
+                        to={`/admin/orders/${order['_id']}`}
+                        className='flex items-center gap-2'
+                    >
+                        <Image
+                            className='w-10 h-10'
+                            src={cellValue[0].product_images[0]}
+                            alt={cellValue[0].product_name}
+                        />
+                        <p className='font-semibold'>
+                            {capitalize(cellValue[0].product_name)}
+                        </p>
+                    </Link>
                 );
 
-            case 'price':
+            case 'cart_total_price':
                 return <FormatPrice price={order.cart_total_price} />;
 
             case 'status':

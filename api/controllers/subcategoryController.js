@@ -81,7 +81,6 @@ const getSubCategoryController = async (req, res) => {
             message: 'SubCategory found successfully',
         });
     } catch (error) {
-        console.log(error);
         res.status(404).send({
             success: false,
             message: 'Error finding SubCategory',
@@ -109,7 +108,6 @@ const getAllSubCategoryController = async (req, res) => {
             data: subcategories,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             success: false,
             message: 'Error listing all the subcategories',
@@ -142,7 +140,6 @@ const getSearchSubCategoryController = async (req, res) => {
             data: subcategories,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             success: false,
             message: 'Error listing subcategories',
@@ -175,7 +172,6 @@ const updateSubCategoryController = async (req, res) => {
             subcategory,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             success: false,
             error,

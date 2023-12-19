@@ -43,11 +43,11 @@ const OrdersLineChart = ({ data }) => {
                     backgroundColor: (context) => {
                         const ctx = context.chart.ctx;
                         const gradient = ctx.createLinearGradient(0, 0, 0, 200);
-                        gradient.addColorStop(0, 'rgba(75,192,192, 1)');
-                        gradient.addColorStop(1, 'rgba(75,192,192,0.2)');
+                        gradient.addColorStop(0, 'rgba(212,175,55,1)');
+                        gradient.addColorStop(1, 'rgba(212,175,55,0.2)');
                         return gradient;
                     },
-                    borderColor: 'rgba(75,192,192,1)',
+                    borderColor: 'rgba(212,175,55,1)',
                     borderWidth: 1,
                 },
             ],

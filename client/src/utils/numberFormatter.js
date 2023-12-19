@@ -19,27 +19,3 @@ export const nFormatter = (num, digits = 1) => {
         ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol
         : '0';
 };
-
-// const tests = [
-//     { num: 0, digits: 1 },
-//     { num: 12, digits: 1 },
-//     { num: 1234, digits: 1 },
-//     { num: 100000000, digits: 1 },
-//     { num: 299792458, digits: 1 },
-//     { num: 759878, digits: 1 },
-//     { num: 759878, digits: 0 },
-//     { num: 123, digits: 1 },
-//     { num: 123.456, digits: 1 },
-//     { num: 123.456, digits: 2 },
-//     { num: 123.456, digits: 4 },
-// ];
-// tests.forEach(function (test) {
-//     console.log(
-//         'nFormatter(' +
-//             test.num +
-//             ', ' +
-//             test.digits +
-//             ') = ' +
-//             nFormatter(test.num, test.digits)
-//     );
-// });

@@ -1,19 +1,6 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 
-// exports.addProduct = async (req, res) => {
-//   try {
-//     const newProduct = await Product.create(req.body);
-//     return res.status(200).json({
-//       status: 200,
-//       message: "product created successfully",
-//       data: newProduct,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     return res.json({message: error?.message});
-//   }
-// };
 exports.addProduct = async (req, res) => {
     try {
         const {
@@ -46,7 +33,6 @@ exports.addProduct = async (req, res) => {
             data: newProduct,
         });
     } catch (error) {
-        console.log(error);
         return res.json({ message: error?.message });
     }
 };
@@ -159,10 +145,9 @@ exports.listProductsByCategoryName = async (req, res) => {
 };
 // update product
 exports.updateProduct = async (req, res) => {
+    const idProduct = req.params.id;
+    const updatedProduct = req.body;
     try {
-        const idProduct = req.params.id;
-        const updatedProduct = req.body;
-        console.log(updatedProduct);
         const product = await Product.findOneAndUpdate(
             { _id: idProduct },
             updatedProduct,
@@ -177,7 +162,6 @@ exports.updateProduct = async (req, res) => {
             message: 'product updated successfully',
         });
     } catch (error) {
-        console.log(error);
         return res.json({ message: error?.message });
     }
 };

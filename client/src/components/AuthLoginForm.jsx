@@ -82,7 +82,7 @@ const AuthLoginForm = ({ account_type }) => {
             toast.success('You successfully logged in', {
                 position: 'bottom-right',
             });
-            navigate('/landingpage');
+            navigate('/landing-page');
         }
 
         if (isErrorCustomer) {
@@ -126,7 +126,7 @@ const AuthLoginForm = ({ account_type }) => {
 
     return (
         <form
-            className='w-full p flex flex-col flex-1 gap-2'
+            className='flex flex-col flex-1 gap-2 md:w-96 mx-auto'
             onSubmit={handleSubmit(onSubmit)}
         >
             <Input

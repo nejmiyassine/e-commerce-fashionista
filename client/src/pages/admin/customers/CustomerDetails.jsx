@@ -11,7 +11,6 @@ const CustomerDetails = () => {
 
     const dispatch = useDispatch();
     const { loading, data, error } = useSelector((state) => state.customers);
-    console.log('data from customerDetails' , data)
 
     useEffect(() => {
         dispatch(customersById(customerId));

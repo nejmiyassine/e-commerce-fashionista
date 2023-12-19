@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BiCartAdd } from 'react-icons/bi';
+import { CiSearch } from 'react-icons/ci';
+import { Input, Pagination, Select, SelectItem } from '@nextui-org/react';
+import { Link } from 'react-router-dom';
+
 import Layout from '../../../layouts/Layout';
 import DeleteProduct from '../../../components/products/DeleteProduct';
-
 import { getAllProducts } from '../../../features/products/productsSlice';
 import { getAllCategories } from '../../../features/categories/categoriesSlice';
 import ProductCard from '../../../components/products/ProductCard';
-import { Link } from 'react-router-dom';
-import { CiSearch } from 'react-icons/ci';
-import { Input, Pagination, Select, SelectItem } from '@nextui-org/react';
 
 const Products = () => {
     const dispatch = useDispatch();
@@ -164,7 +164,7 @@ const Products = () => {
                     </div>
                 </div>
 
-                <div className='grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+                <div className='grid grid-col-2 md:grid-cols-3 lg:grid-cols-4 gap-4'>
                     {items ? (
                         items
                             .filter(
@@ -175,7 +175,6 @@ const Products = () => {
                                     (selectedCategory === '' ||
                                         product?.category_id._id ===
                                             selectedCategory)
-                                // product?.category_id.name.toLowerCase().includes(search.toLowerCase())
                             )
                             .map((product) => (
                                 <ProductCard

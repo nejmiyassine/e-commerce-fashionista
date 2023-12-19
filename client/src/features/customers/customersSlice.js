@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import API from '../../app/api/api';
 
-//all customers
+//GetAllcustomersByTheUser
 export const fetchCustomers = createAsyncThunk(
     'customers/fetchCustomers',
     async (_, { rejectWithValue }) => {
@@ -9,7 +9,6 @@ export const fetchCustomers = createAsyncThunk(
             const res = await API.get('customers', {
                 withCredentials: true,
             });
-            console.log('data from axios', res.data);
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -17,7 +16,7 @@ export const fetchCustomers = createAsyncThunk(
     }
 );
 
-//customerById
+//customerByIdAllowedByTheUser
 export const customersById = createAsyncThunk(
     'customers/customersById',
     async (customerId, { rejectWithValue }) => {
@@ -32,7 +31,7 @@ export const customersById = createAsyncThunk(
     }
 );
 
-//UpdateCustomer
+//UpdateCustomerByTheUser
 export const updateCustomer = createAsyncThunk(
     'customers/updateCustomer',
     async ({ customerId, updatedCustomerData }, { rejectWithValue }) => {
@@ -45,7 +44,6 @@ export const updateCustomer = createAsyncThunk(
                 }
             );
 
-            console.log('updated customer from customerSlice', res.data);
             return res.data;
         } catch (error) {
             rejectWithValue(error.res.data);
@@ -53,7 +51,7 @@ export const updateCustomer = createAsyncThunk(
     }
 );
 
-//delete Customer
+//deleteCustomerByTheUser
 export const deleteCustomer = createAsyncThunk(
     'customers/deleteCustomer',
     async ({ customerId }, { rejectWithValue }) => {
@@ -61,8 +59,54 @@ export const deleteCustomer = createAsyncThunk(
             const res = await API.delete(`customers/${customerId}`, {
                 withCredentials: true,
             });
-            console.log('delete from slice', res.data);
             return res.data;
+        } catch (error) {
+            rejectWithValue(error.res.data);
+        }
+    }
+);
+
+//GetCustomerProfileByTheCustomer
+export const getCustomerProfile = createAsyncThunk(
+    'fCustomer/getCustomerProfile',
+    async (_, { rejectWithValue }) => {
+        try {
+            const res = await API.get('customers/profile', {
+                withCredentials: true,
+            });
+            return res.data;
+        } catch (error) {
+            rejectWithValue(error.res.data);
+        }
+    }
+);
+
+//patchCustomerProfile
+export const patchCustomerData = createAsyncThunk(
+    'fCustomer/patchCustomerData',
+    async ({ customerId, patchedCustomerData }, { rejectWithValue }) => {
+        try {
+            const res = await API.patch(
+                `customers/${customerId}`,
+                patchedCustomerData,
+                {
+                    withCredentials: true,
+                }
+            );
+            return res.data;
+        } catch (error) {
+            rejectWithValue(error.res.data);
+        }
+    }
+);
+
+//logoutCustomer
+export const logOutCustomer = createAsyncThunk(
+    'fCustomer/logOutCustomer',
+    async (_, { rejectWithValue }) => {
+        try {
+            // eslint-disable-next-line no-unused-vars
+            const res = await API.get('customers/logout');
         } catch (error) {
             rejectWithValue(error.res.data);
         }
@@ -72,7 +116,7 @@ export const deleteCustomer = createAsyncThunk(
 const initialState = {
     isLoading: false,
     data: [],
-    error: '',
+    err: '',
     customer: null,
     access_token: '',
 };
@@ -82,11 +126,12 @@ const customersSlice = createSlice({
     initialState,
     reducers: {
         setCustomer: (state, action) => {
-            console.log(action.payload);
             state.customer = action.payload.user;
             state.access_token = action.payload.access_token;
         },
-        logout: () => ({ ...initialState, customer: null, access_token: '' }),
+        logout: () => {
+            ({ ...initialState, customer: null, access_token: '' });
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -95,93 +140,112 @@ const customersSlice = createSlice({
             .addCase(fetchCustomers.pending, (state) => {
                 state.isLoading = true;
                 state.data = [];
-                state.error = '';
-                console.log('pending')
+                state.err = '';
             })
             .addCase(fetchCustomers.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
-                state.error = '';
-                console.log('fetch customers', state.data);
+                state.err = '';
             })
             .addCase(fetchCustomers.rejected, (state, action) => {
                 state.isLoading = false;
-                state.state.error = action.error.message;
+                state.state.err = action.error.message;
             })
-
 
             // customers by id
             .addCase(customersById.pending, (state) => {
                 state.isLoading = true;
-                console.log('pending');
             })
-            //
             .addCase(customersById.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.data = action.payload;
-                console.log('payload', state.data);
-                state.error = '';
-                console.log('fulfilled');
+                state.err = '';
             })
-            //
             .addCase(customersById.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
-                console.log('rejected');
+                state.err = action.error.message;
             })
 
             //update Customer
             .addCase(updateCustomer.pending, (state) => {
                 state.isLoading = true;
             })
-
             .addCase(updateCustomer.fulfilled, (state, action) => {
                 state.isLoading = false;
                 const {
                     arg: { customerId },
                 } = action.meta;
-                console.log('action.meta', action.meta);
 
                 if (customerId) {
                     state.data = state.data?.map((customer) =>
                         customer._id === customerId ? action.payload : customer
                     );
                 }
-                state.error = '';
+                state.err = '';
             })
             .addCase(updateCustomer.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
-                console.log('rejected');
+                state.err = action.error.message;
             })
 
             //delete Customer
             .addCase(deleteCustomer.pending, (state) => {
                 state.isLoading = true;
-                console.log('pending');
-            });
-
-        builder
+            })
             .addCase(deleteCustomer.fulfilled, (state, action) => {
                 state.isLoading = false;
                 const {
                     arg: { customerId },
                 } = action.meta;
-                console.log('action.meta', action.meta);
                 if (customerId) {
                     state.data = state.data.filter(
                         (customer) => customer._id !== customerId
                     );
-                    console.log('state.data', state.data);
                 }
 
-                state.error = '';
-                console.log('fulfilled');
+                state.err = '';
             })
             .addCase(deleteCustomer.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message;
-                console.log('rejected');
+                state.err = action.error.message;
+            })
+
+            //GetCustomerProfileByTheCustomer
+            .addCase(getCustomerProfile.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getCustomerProfile.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.payload;
+            })
+            .addCase(getCustomerProfile.rejected, (state, action) => {
+                state.isLoading = false;
+                state.err = action.error.message;
+            })
+
+            //patchCustomerData
+            .addCase(patchCustomerData.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(patchCustomerData.fulfilled, (state) => {
+                state.isLoading = false;
+                state.err = '';
+            })
+            .addCase(patchCustomerData.rejected, (state, action) => {
+                state.isLoading = false;
+                state.data = action.error.message;
+            })
+
+            //logout customer
+            .addCase(logOutCustomer.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(logOutCustomer.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.data = action.data;
+            })
+            .addCase(logOutCustomer.rejected, (state, action) => {
+                state.err = action.error.message;
             });
     },
 });

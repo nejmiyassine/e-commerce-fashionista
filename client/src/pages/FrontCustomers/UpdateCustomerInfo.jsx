@@ -1,34 +1,31 @@
-import React, { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import LoadingSpinner from '../../components/LoadingSpinner';
 import UpdateCustomerComponent from '../../components/CustomersFront/UpdateCustomerComponent';
-import { useDispatch, useSelector } from 'react-redux';
-import { patchCustomerData } from '../../features/customers/frontCustomerSlice';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
-import NavbarCustomers from '../../components/CustomersFront/NavBarCustomers';
+import { useGetCustomerProfileDataQuery } from '../../app/api/customerApi';
+import CustomerNavbar from '../../layouts/CustomerNavbar';
 
 const UpdateCustomerInfo = () => {
-    const { customerId } = useParams();
-    console.log('customerId' , customerId)
-    const dispatch = useDispatch();
-    const { isLoading, customerData, err } = useSelector((state) => state.frontCustomers);
-    console.log('data from updateCustomerInfo', customerData);
+    const {
+        data: customer,
+        isLoading,
+        isFetching,
+        isError,
+        error,
+    } = useGetCustomerProfileDataQuery();
 
-
-
-    if (isLoading) {
+    if (isLoading || isFetching) {
         return <LoadingSpinner />;
     }
-    if (!isLoading && err) {
-        return <div>Error: {err}</div>;
+
+    if (!isLoading && isError) {
+        return <div>Error: {error}</div>;
     }
 
     return (
-        <div >
-        <NavbarCustomers customer={customerData} />
-            <UpdateCustomerComponent customer={customerData} />
+        <div>
+            <CustomerNavbar />
+            <UpdateCustomerComponent customer={customer} />
         </div>
-
     );
 };
 

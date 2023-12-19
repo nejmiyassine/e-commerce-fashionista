@@ -29,6 +29,11 @@ import Favorites from '../pages/favorites/Favorites';
 import Contact from '../components/LandingPage/Contact';
 import About from '../components/LandingPage/About';
 import Terms from '../components/LandingPage/Terms';
+import CustomersOrdersPage from '../pages/CustomersOrders/CustomersOrdersPage';
+import Payment from '../pages/Payment/Payment';
+import CheckoutSuccess from '../pages/Payment/CheckoutSuccess';
+import AdminTransactions from '../pages/admin/transactions/AdminTransactions';
+import OrdersDetails from '../pages/admin/Orders/OrdersDetails';
 
 const RouteConfig = () => {
     return (
@@ -39,16 +44,6 @@ const RouteConfig = () => {
                 <Route path='*' element={<PageNotFound />} />
 
                 <Route exact path='/' element={<Home />} />
-                <Route path='/landingPage' element={<LandingP />} />
-
-                <Route element={<ProtectedRoutesCustomer />}>
-                    <Route path='/shop' element={<Catalog />} />
-                    <Route
-                        path='/shop/product/:productId'
-                        element={<ProductDetails />}
-                    />
-                </Route>
-                <Route path='/catalog' element={<Catalog />} />
 
                 <Route path='/about' element={<About />} />
                 <Route path='/terms' element={<Terms />} />
@@ -59,41 +54,48 @@ const RouteConfig = () => {
                 <Route path='/login' element={<AuthLogin />} />
                 <Route path='/admin/login' element={<AdminLogin />} />
 
+                <Route path='/landing-page' element={<LandingP />} />
+
+                {/* Protected Customer */}
+                <Route element={<ProtectedRoutesCustomer />}>
+                    <Route path='/shop' element={<Catalog />} />
+                    <Route
+                        path='/shop/product/:productId'
+                        element={<ProductDetails />}
+                    />
+                    <Route path='/payment' element={<Payment />} />
+                    <Route
+                        path='/payment/success'
+                        element={<CheckoutSuccess />}
+                    />
+
+                    <Route
+                        path='/update-profile/:customerId'
+                        element={<UpdateCustomerInfo />}
+                    />
+
+                    <Route
+                        path='/customer-profile'
+                        element={<CustomerProfile />}
+                    />
+
+                    <Route
+                        path='/customers-orders'
+                        element={<CustomersOrdersPage />}
+                    />
+
+                    <Route
+                        path='/customers-favorites'
+                        element={<Favorites />}
+                    />
+                </Route>
+
                 {/* Admin Protected Routes */}
                 <Route
                     element={
                         <ProtectedRoutes allowedRoles={['admin', 'manager']} />
                     }
                 >
-                    <Route path='/admin/products' element={<Products />} />
-                    <Route
-                        path='/admin/edit/product/:productId'
-                        element={<EditProduct />}
-                    />
-                    <Route
-                        path='/admin/product/:productId'
-                        element={<AdminProductDetails />}
-                    />
-
-                    <Route path='/admin/add/product' element={<AddProduct />} />
-
-                    <Route path='/admin/categories' element={<Categories />} />
-                    <Route path='/admin/orders' element={<Orders />} />
-                    <Route
-                        path='/admin/subcategories'
-                        element={<Subcategories />}
-                    />
-
-                    <Route
-                        path='/admin/customers'
-                        element={<ViewAllCustomers />}
-                    />
-
-                    <Route
-                        path='/admin/customers/:customerId'
-                        element={<CustomerDetails />}
-                    />
-
                     <Route
                         path='/admin/dashboard'
                         element={<AdminDashboard />}
@@ -104,19 +106,47 @@ const RouteConfig = () => {
                         path='/admin/users/:userId'
                         element={<UserDetails />}
                     />
+
+                    <Route
+                        path='/admin/customers'
+                        element={<ViewAllCustomers />}
+                    />
+                    <Route
+                        path='/admin/customers/:customerId'
+                        element={<CustomerDetails />}
+                    />
+
+                    <Route path='/admin/products' element={<Products />} />
+                    <Route
+                        path='/admin/edit/product/:productId'
+                        element={<EditProduct />}
+                    />
+                    <Route
+                        path='/admin/product/:productId'
+                        element={<AdminProductDetails />}
+                    />
+                    <Route path='/admin/add/product' element={<AddProduct />} />
+
+                    <Route path='/admin/categories' element={<Categories />} />
+
+                    <Route
+                        path='/admin/subcategories'
+                        element={<Subcategories />}
+                    />
+
+                    <Route path='/admin/orders' element={<Orders />} />
+                    <Route
+                        path='/admin/orders/:orderId'
+                        element={<OrdersDetails />}
+                    />
+
+                    <Route
+                        path='/admin/transactions'
+                        element={<AdminTransactions />}
+                    />
                 </Route>
 
                 {/* front-store */}
-                <Route
-                    path='/updateProfile/:customerId'
-                    element={<UpdateCustomerInfo />}
-                />
-
-                <Route path='/customerProfile' element={<CustomerProfile />} />
-
-                <Route path='/customersOrders' />
-
-                <Route path='/customersFavorites' element={<Favorites />} />
             </Routes>
         </Router>
     );

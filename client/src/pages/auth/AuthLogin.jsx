@@ -1,46 +1,39 @@
+/* eslint-disable react/no-unescaped-entities */
 import { Spacer } from '@nextui-org/react';
-import SignInWithGoogle from '../../components/SignInWithGoogle';
 import AuthLoginForm from '../../components/AuthLoginForm';
-import AuthImage from '../../components/AuthImage';
 import { Link } from 'react-router-dom';
+import CustomerNavbar from '../../layouts/CustomerNavbar';
 
 const AuthLogin = () => {
     return (
-        <div className='flex items-center min-h-screen bg-white text-primaryColor-light dark:bg-primaryColor-deepDark dark:text-primaryColor-dark'>
-            <div className='w-full lg:w-1/2 px-16'>
-                <div className='px-8 py-6 md:px-16'>
-                    <div className='mb-6 text-center'>
-                        <h2 className='font-bold text-3xl mb-1'>
-                            Welcome back!
+        <>
+            <CustomerNavbar />
+            <div className='flex items-center min-h-screen bg-white text-primaryColor-light dark:bg-primaryColor-deepDark dark:text-primaryColor-dark'>
+                <div className='w-full'>
+                    <div className='px-8 py-6'>
+                        <h2 className='text-3xl font-extrabold text-center mb-4'>
+                            <span className='text-primaryColor-gold'>
+                                Fashionista{' '}
+                            </span>
+                            Login
                         </h2>
-
-                        <p className='flex justify-center gap-1'>
-                            <span className='text-gray-400'>{`Don't have an account?`}</span>
+                        <p className='text-gray-600 text-sm mt-4 text-center'>
+                            Don't have an account?{' '}
                             <Link
                                 to='/register'
-                                className='text-blue-600 underline'
+                                className='text-primaryColor-gold'
                             >
-                                Register
+                                Sign up here
                             </Link>
+                            .
                         </p>
+                        <Spacer y={6} />
+
+                        <AuthLoginForm account_type={'customer'} />
                     </div>
-
-                    <SignInWithGoogle />
-
-                    <Spacer y={6} />
-                    <div className='flex items-center gap-4'>
-                        <div className='h-[1px] w-full bg-gray-200'></div>
-                        <p className='font-bold text-center'>Or</p>
-                        <div className='h-[1px] w-full bg-gray-200'></div>
-                    </div>
-                    <Spacer y={6} />
-
-                    <AuthLoginForm account_type={'customer'} />
                 </div>
             </div>
-
-            <AuthImage />
-        </div>
+        </>
     );
 };
 

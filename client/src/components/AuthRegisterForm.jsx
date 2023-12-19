@@ -61,8 +61,8 @@ const AuthRegisterForm = ({ account_type }) => {
 
     useEffect(() => {
         if (isSuccess) {
-            toast.success('You successfully logged in');
-            navigate(account_type === 'user' ? '/admin/dashboard' : '/');
+            toast.success('You successfully register in');
+            navigate(account_type.toLowerCase() === 'customer' && '/login');
         }
 
         if (isError) {
@@ -94,7 +94,7 @@ const AuthRegisterForm = ({ account_type }) => {
 
     return (
         <form
-            className='w-full h-full overflow-y-hidden flex flex-col flex-1 gap-2'
+            className='flex flex-col flex-1 gap-2 md:w-96 mx-auto'
             onSubmit={handleSubmit(onSubmit)}
         >
             <div className='flex gap-2'>

@@ -1,27 +1,28 @@
-import React from 'react';
-import Head from '../../components/LandingPage/Head';
-import Navbar from '../../components/LandingPage/Navbar';
+// import Navbar from '../../layouts/Navbar';
 import Hero from '../../components/LandingPage/Hero';
 import Features from '../../components/LandingPage/Features';
-import Categories from '../../components/LandingPage/Categories';
 import Product from '../../components/LandingPage/Product';
 import Footer from '../../components/LandingPage/Footer';
-import SubCat from '../../components/LandingPage/SubCat';
+import LandingCategories from '../../components/LandingPage/LandingCategories';
 import Trending from '../../components/LandingPage/Trending';
+import CustomerNavbar from '../../layouts/CustomerNavbar';
+
 const LandingP = () => {
-  return (
-    <div>
-        <Head/>
-        <Navbar/>
-        <Hero/>
-        <Features/>
-        <Product/>
+    return (
+        <div>
+            {/* <Navbar /> */}
+            <CustomerNavbar />
 
-        <SubCat/>
-        <Trending/>
-        <Footer/>
-    </div>
-  )
-}
+            <Hero />
+            <Features />
+            <div className='container mx-auto'>
+                <Product />
+                <LandingCategories />
+                <Trending />
+            </div>
+            <Footer />
+        </div>
+    );
+};
 
-export default LandingP
+export default LandingP;

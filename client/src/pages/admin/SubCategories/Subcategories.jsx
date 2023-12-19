@@ -62,16 +62,12 @@ const ManageSubcategories = () => {
 
         try {
             const response = await dispatch(createSubcategory(name));
-            console.log('Create Subcategory Response:', response);
 
             if (response?.meta?.requestStatus === 'fulfilled') {
+                // eslint-disable-next-line no-unused-vars
                 const { success, subcategory } = response.payload;
 
-                console.log('Success:', success);
-                console.log('Subcategory:', subcategory);
-
                 if (success) {
-                    console.log('Subcategory created successfully');
                     dispatch(getAllSubcategories());
                     setName('');
                     setIsAddingSubcategory(false);
@@ -119,7 +115,6 @@ const ManageSubcategories = () => {
             const response = await dispatch(deleteSubcategory(subcategoryId));
 
             if (response?.meta?.requestStatus === 'fulfilled') {
-                console.log('Subcategory deleted');
                 dispatch(getAllSubcategories());
             } else {
                 console.error(response?.payload || 'Unknown error');
@@ -356,7 +351,7 @@ const ManageSubcategories = () => {
 
                     <div className='relative bg-white p-6 w-[350px] shadow-lg rounded-lg'>
                         <div className='pb-4 flex items-center justify-between'>
-                            <h2 className='text-xl font-bold'>
+                            <h2 className='text-xl font-bold text-black'>
                                 Update your subcategory
                             </h2>
                             <IoIosClose

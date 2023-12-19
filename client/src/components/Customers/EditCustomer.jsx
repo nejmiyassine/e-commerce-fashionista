@@ -10,7 +10,7 @@ import {
     Button,
 } from '@nextui-org/react';
 
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { updateCustomer } from '../../features/customers/customersSlice';
@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import { toast } from 'react-toastify';
+import { EyeFilledIcon, EyeSlashFilledIcon, MailIcon } from '../../icons/Icons';
 
 const schema = yup.object({
     first_name: yup.string().required('First Name is required'),
@@ -37,11 +38,14 @@ const EditCustomer = ({ isOpen, onOpenChange, updatedCustomer }) => {
     const isEditing = !!updatedCustomer;
     const passwordInitialValue = isEditing ? '' : '';
 
+    const [isVisible, setIsVisible] = React.useState(false);
+    const toggleVisibility = () => setIsVisible(!isVisible);
+
     const {
-        register,
         handleSubmit,
         formState: { errors },
         reset,
+        control,
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
@@ -58,7 +62,6 @@ const EditCustomer = ({ isOpen, onOpenChange, updatedCustomer }) => {
             onOpenChange(false);
             reset();
 
-            console.log(updatedCustomer._id);
             dispatch(
                 updateCustomer({
                     customerId: updatedCustomer._id,
@@ -93,94 +96,119 @@ const EditCustomer = ({ isOpen, onOpenChange, updatedCustomer }) => {
                         <form onSubmit={handleSubmit(onSubmit)}>
                             <ModalBody>
                                 <div className='flex flex-col gap-2'>
-                                    <Input
-                                        label='Customer ID'
-                                        placeholder='Customer ID'
-                                        isReadOnly
-                                        variant='bordered'
-                                        {...register('_id')}
-                                        isDisabled
-                                    />
-
-                                    <div className='flex items-center gap-3'>
-                                        <div className='flex-1'>
+                                    <div>
+                                        <Controller
+                                            render={({ field }) => (
+                                                <Input
+                                                    autoFocus
+                                                    label='First Name'
+                                                    placeholder='Enter First Name'
+                                                    variant='bordered'
+                                                    {...field}
+                                                    isInvalid={
+                                                        !!errors.first_name
+                                                    }
+                                                    errorMessage={
+                                                        errors.first_name &&
+                                                        errors.first_name
+                                                            ?.message
+                                                    }
+                                                />
+                                            )}
+                                            name='first_name'
+                                            control={control}
+                                            rules={{ required: true }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <Controller
+                                            render={({ field }) => (
+                                                <Input
+                                                    autoFocus
+                                                    label='Last Name'
+                                                    placeholder='Enter Last Name'
+                                                    variant='bordered'
+                                                    {...field}
+                                                    isInvalid={
+                                                        !!errors.last_name
+                                                    }
+                                                    errorMessage={
+                                                        errors.last_name &&
+                                                        errors.last_name
+                                                            ?.message
+                                                    }
+                                                />
+                                            )}
+                                            name='last_name'
+                                            control={control}
+                                            rules={{ required: true }}
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <Controller
+                                        render={({ field }) => (
                                             <Input
                                                 autoFocus
-                                                label='First Name'
-                                                placeholder='First Name'
                                                 variant='bordered'
-                                                {...register('first_name')}
+                                                label='Email'
+                                                placeholder='Enter Email'
+                                                type='email'
+                                                isInvalid={!!errors.email}
+                                                errorMessage={
+                                                    errors.email &&
+                                                    errors.email?.message
+                                                }
+                                                endContent={
+                                                    <MailIcon className='text-2xl text-default-400 pointer-events-none flex-shrink-0' />
+                                                }
+                                                {...field}
                                             />
-                                            <p className='text-red-500'>
-                                                {errors.firstName?.message}
-                                            </p>
-                                        </div>
-
-                                        <div className='flex-1'>
+                                        )}
+                                        name='email'
+                                        control={control}
+                                        rules={{ required: true }}
+                                    />
+                                </div>
+                                <div>
+                                    <Controller
+                                        render={({ field }) => (
                                             <Input
-                                                label='last Name'
-                                                placeholder='LastName'
-                                                type='text'
+                                                autoFocus
                                                 variant='bordered'
-                                                {...register('last_name')}
+                                                label='Password'
+                                                placeholder='Enter Password'
+                                                isInvalid={!!errors.password}
+                                                errorMessage={
+                                                    errors.password &&
+                                                    errors.password?.message
+                                                }
+                                                endContent={
+                                                    <button
+                                                        className='focus:outline-none'
+                                                        type='button'
+                                                        onClick={
+                                                            toggleVisibility
+                                                        }
+                                                    >
+                                                        {isVisible ? (
+                                                            <EyeSlashFilledIcon className='text-2xl text-default-400 pointer-events-none' />
+                                                        ) : (
+                                                            <EyeFilledIcon className='text-2xl text-default-400 pointer-events-none' />
+                                                        )}
+                                                    </button>
+                                                }
+                                                type={
+                                                    isVisible
+                                                        ? 'text'
+                                                        : 'password'
+                                                }
+                                                {...field}
                                             />
-                                            <p className='text-red-500'>
-                                                {errors.lastName?.message}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <Input
-                                            label='email'
-                                            placeholder='email'
-                                            type='text'
-                                            variant='bordered'
-                                            {...register('email')}
-                                        />
-                                        <p className='text-red-500'>
-                                            {errors.email?.message}
-                                        </p>
-                                    </div>
-
-                                    <div>
-                                        <Input
-                                            label='Password'
-                                            placeholder='password'
-                                            type='password'
-                                            variant='bordered'
-                                            {...register('password')}
-                                        />
-                                        <p className='text-red-500'>
-                                            {errors.password?.message}
-                                        </p>
-                                    </div>
-
-                                    <Input
-                                        label='creation date'
-                                        placeholder='creattion Date'
-                                        isReadOnly
-                                        variant='bordered'
-                                        {...register('creation_date')}
-                                        isDisabled
-                                    />
-
-                                    <Input
-                                        label='Last login date'
-                                        placeholder='last login'
-                                        isReadOnly
-                                        variant='bordered'
-                                        {...register('last_login')}
-                                        isDisabled
-                                    />
-
-                                    <Input
-                                        label='Valid Account'
-                                        placeholder='Valid Account'
-                                        isReadOnly
-                                        variant='bordered'
-                                        {...register('last_update')}
-                                        isDisabled
+                                        )}
+                                        name='password'
+                                        control={control}
+                                        rules={{ required: true }}
                                     />
                                 </div>
                             </ModalBody>

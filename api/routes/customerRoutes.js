@@ -78,13 +78,13 @@ router.post(
     loginHandler
 );
 
- router.use(deserializeUser, requireUser);
+router.use(deserializeUser, requireUser);
 
 router.get('/logout', logoutHandler);
 
 router.get('/profile', getCustomerProfileData);
 
-router.get('/',  getAllCustomersList);
+router.get('/', getAllCustomersList);
 router.get('/:id', restrictTo('admin', 'manager'), getCustomerById);
 router.get('/search', searchForCustomer);
 router.put('/:id', updateCustomers);
@@ -92,7 +92,6 @@ router.patch('/:id', customerCanUpdate);
 router.delete('/:id', restrictTo('admin', 'manager'), deleteCustomerById);
 
 // router.get('/profile/:id', getProfile);
-
 
 router.post('/verify-email', (req, res) => verifyEmail(req, res, 'Customer'));
 router.post('/forgot-password', (req, res) =>

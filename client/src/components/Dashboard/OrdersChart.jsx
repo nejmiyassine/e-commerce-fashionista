@@ -120,11 +120,19 @@ const OrdersChart = () => {
     const incomesCountByDay = selectIncomesCountByDay(last7DaysIncomes);
     // End of IncomesLineChart
 
-    // Calculate the percentage
     const calculatePercentageDifference = (currentWeek, lastWeek) => {
-        if (lastWeek === 0) {
-            return currentWeek === 0 ? 0 : 100; // Handle division by zero
+        currentWeek = parseFloat(currentWeek);
+        lastWeek = parseFloat(lastWeek);
+
+        if (isNaN(currentWeek) || isNaN(lastWeek)) {
+            return 0;
         }
+
+        // Handle division by zero
+        if (lastWeek === 0) {
+            return currentWeek === 0 ? 0 : 100;
+        }
+
         const difference = ((currentWeek - lastWeek) / lastWeek) * 100;
         return difference.toFixed(2);
     };

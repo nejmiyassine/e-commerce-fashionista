@@ -1,19 +1,15 @@
 import PropTypes from 'prop-types';
 import { Input } from '@nextui-org/react';
-import { CiSearch } from 'react-icons/ci';
+import {CiSearch } from 'react-icons/ci';
 
 import ProductCard from '../products/ProductCard';
 import Line from '../Line';
-import CatalogChangeLayout from './CatalogChangeLayout';
 
 const CatalogProducts = ({
     selected,
-    selectedPrice,
     products,
     filterValue,
     onSearchChange,
-    cols,
-    handleChangeCols,
     bottomContent,
 }) => {
     return (
@@ -26,14 +22,6 @@ const CatalogProducts = ({
                         className='font-semibold capitalize py-1 px-2 bg-black text-white rounded-md'
                     >
                         {select}
-                    </span>
-                ))}
-                {selectedPrice.map((selectPrice) => (
-                    <span
-                        key={selectPrice}
-                        className='font-semibold capitalize p-1 bg-gray-black text-white rounded-md'
-                    >
-                        ${selectPrice}
                     </span>
                 ))}
             </div>
@@ -65,22 +53,11 @@ const CatalogProducts = ({
                         }
                     />
                 </div>
-
-                <div className='hidden md:block'>
-                    <CatalogChangeLayout
-                        cols={cols}
-                        handleChangeCols={handleChangeCols}
-                    />
-                </div>
             </div>
 
             <Line />
 
-            <div
-                className={`grid grid-col-1 md:${
-                    cols === 2 ? 'grid-cols-2' : 'grid-cols-3'
-                } gap-4`}
-            >
+            <div className={`grid grid-cols-4 gap-8`}>
                 {products.length ? (
                     products.map((product) => (
                         <ProductCard
@@ -92,7 +69,7 @@ const CatalogProducts = ({
                     ))
                 ) : (
                     <div>
-                        <p>There are no product matching the search!</p>
+                        <p>There are no products matching the search!</p>
                     </div>
                 )}
             </div>

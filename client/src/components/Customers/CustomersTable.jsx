@@ -29,6 +29,9 @@ import EditCustomer from './EditCustomer';
 import { useDispatch } from 'react-redux';
 import { deleteCustomer } from '../../features/customers/customersSlice';
 import { toast } from 'react-toastify';
+import { MdDelete, MdEdit, MdVerified, MdVisibility } from 'react-icons/md';
+import { sliceText } from '../../utils/sliceText';
+import { PiColumnsBold } from 'react-icons/pi';
 
 const columns = [
     { name: 'ID', uid: '_id', sortable: true },
@@ -40,7 +43,7 @@ const columns = [
 
     { name: 'VALID_ACCOUNT', uid: 'valid_account' },
     { name: 'ACTIVE', uid: 'active' },
-    { name: '', uid: 'actions' },
+    { name: 'ACTIONS', uid: 'actions' },
 ];
 
 const verificationOptions = [
@@ -92,16 +95,13 @@ const CustomersTable = ({ data, error, loading }) => {
         );
     }, [visibleColumns]);
 
-    console.log('data' , data)
     const filteredItems = React.useMemo(() => {
         let filteredCustomers = data;
 
         // for searching filter
         if (hasSearchFilter) {
             filteredCustomers = filteredCustomers.filter((customer) =>
-                customer.first_name
-                    .toLowerCase()
-                    .includes(filterValue.toLowerCase())
+                customer.email.toLowerCase().includes(filterValue.toLowerCase())
             );
         }
 
@@ -149,15 +149,12 @@ const CustomersTable = ({ data, error, loading }) => {
                 onOpenChange(true);
             };
 
-             console.log('customer' , customer._id)
-
             const handleDelete = () => {
                 if (
                     window.confirm(
                         'Are you sure you want to delete this customer?'
                     )
                 ) {
-                    console.log(customer._id);
                     dispatch(
                         deleteCustomer({
                             customerId: customer._id,
@@ -169,6 +166,14 @@ const CustomersTable = ({ data, error, loading }) => {
             };
 
             switch (columnKey) {
+                case '_id':
+                    return (
+                        <div>
+                            <p className='text-gray-500 dark:text-gray-300'>
+                                {sliceText(cellValue, 10)}
+                            </p>
+                        </div>
+                    );
                 case 'email':
                     return (
                         <User
@@ -205,31 +210,23 @@ const CustomersTable = ({ data, error, loading }) => {
 
                 case 'actions':
                     return (
-                        <div className='relative flex justify-end items-center gap-2'>
-                            <Button
-                                className='bg-foreground text-background'
-                                size='sm'
-                                onPress={handleUpdate}
-                            >
-                                Edit
-                            </Button>
+                        <div className='relative flex justify-start items-center gap-2'>
+                            <button onClick={handleUpdate}>
+                                <MdEdit size={18} className='text-green-500' />
+                            </button>
 
-                            <Button
-                                className='bg-blue-600 text-background w-14'
-                                size='sm'
-                            >
+                            <button>
                                 <Link to={`/admin/customers/${customer._id}`}>
-                                    View
+                                    <MdVisibility
+                                        size={18}
+                                        className='text-blue-500'
+                                    />
                                 </Link>
-                            </Button>
+                            </button>
 
-                            <Button
-                                size='sm'
-                                onPress={handleDelete}
-                                className='bg-danger text-background'
-                            >
-                                Delete
-                            </Button>
+                            <button onClick={handleDelete}>
+                                <MdDelete size={18} className='text-rose-500' />
+                            </button>
                         </div>
                     );
 
@@ -249,6 +246,7 @@ const CustomersTable = ({ data, error, loading }) => {
                     return cellValue;
             }
         },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         [onOpenChange]
     );
 
@@ -277,7 +275,8 @@ const CustomersTable = ({ data, error, loading }) => {
                             base: 'w-full sm:max-w-[44%]',
                             inputWrapper: 'border-1',
                         }}
-                        placeholder='Search by name...'
+                        placeholder='Search by email...'
+                        labelPlacement='outside'
                         size='sm'
                         startContent={
                             <SearchIcon className='text-default-300' />
@@ -299,6 +298,10 @@ const CustomersTable = ({ data, error, loading }) => {
                                     size='sm'
                                     variant='flat'
                                 >
+                                    <MdVerified
+                                        className='text-[#0095F6]'
+                                        size={16}
+                                    />
                                     Valid Account
                                 </Button>
                             </DropdownTrigger>
@@ -332,6 +335,7 @@ const CustomersTable = ({ data, error, loading }) => {
                                     size='sm'
                                     variant='flat'
                                 >
+                                    <PiColumnsBold size={16} />
                                     Columns
                                 </Button>
                             </DropdownTrigger>
@@ -454,8 +458,7 @@ const CustomersTable = ({ data, error, loading }) => {
                 updatedCustomer={updatedCustomer}
             />
 
-
-            <div className='rounded-md p-4 shadow-sm overflow-y-scroll bg-white dark:bg-primary-deepDark'>
+            <div className='rounded-md p-4 shadow-sm overflow-x-hidden bg-white dark:bg-primaryColor-deepDark'>
                 <h2 className='font-bold text-xl mb-4'>Customers</h2>
 
                 <Table

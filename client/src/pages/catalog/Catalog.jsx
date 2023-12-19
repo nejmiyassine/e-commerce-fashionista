@@ -10,9 +10,10 @@ import FilterCatalogSidebar from '../../components/Catalog/FilterCatalogSidebar'
 import { getAllCategories } from '../../features/categories/categoriesSlice';
 import { getAllProducts } from '../../features/products/productsSlice';
 import BagProductsSidebar from '../../layouts/BagProductsSidebar';
-// import CartSidebar from '../../layouts/CartSidebar';
+import CustomerNavbar from '../../layouts/CustomerNavbar';
+import Footer from '../../components/LandingPage/Footer';
 
-import Navbar from '../../layouts/Navbar';
+import { toggleCartSidebar } from '../../features/cart/cartSlice';
 
 const Catalog = () => {
     const dispatch = useDispatch();
@@ -26,7 +27,7 @@ const Catalog = () => {
     const [selected, setSelected] = useState([]);
     const [selectedPrice, setSelectedPrice] = useState([]);
     const [filterValue, setFilterValue] = useState('');
-    const [columnCount, setColumnCount] = useState(2);
+    const [columnCount, setColumnCount] = useState(1);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -40,6 +41,10 @@ const Catalog = () => {
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
+    };
+
+    const openBagSidebar = () => {
+        dispatch(toggleCartSidebar(true));
     };
 
     const onSearchChange = useCallback((value) => {
@@ -156,7 +161,10 @@ const Catalog = () => {
 
     return (
         <>
-            <Navbar toggleSidebar={toggleSidebar} />
+            <CustomerNavbar
+                toggleSidebar={toggleSidebar}
+                openBagSidebar={openBagSidebar}
+            />
             <div className='flex gap-4'>
                 <div
                     className={`inset-0 z-30 bg-black opacity-50 ${
@@ -198,7 +206,8 @@ const Catalog = () => {
             </div>
 
             <BagProductsSidebar />
-            {/* <CartSidebar /> */}
+
+            <Footer />
         </>
     );
 };

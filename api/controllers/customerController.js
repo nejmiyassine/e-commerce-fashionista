@@ -7,9 +7,12 @@ exports.getCustomerProfileData = async (req, res, next) => {
     try {
         const user = res.locals.user;
 
-        res.status(200).json(   
+        res.status(200).json({
+            status: 'success',
+            data: {
                 user,
-        );
+            },
+        });
     } catch (error) {
         next(error);
     }
@@ -52,19 +55,18 @@ exports.deleteCustomerById = async (req, res) => {
             .status(200)
             .json({ message: 'Customer deleted successfully' });
     } catch (error) {
-        console.log('error from customerController : ', error);
         res.status(500).json({ message: error.message });
     }
 };
 
 exports.updateCustomers = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
+    const id = req.params.id;
 
     try {
         const salt = await bcrypt.genSalt(parseInt(saltRounds));
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        const id = { _id: req.params.id };
         const updatedFields = {
             first_name,
             last_name,
@@ -72,14 +74,6 @@ exports.updateCustomers = async (req, res) => {
             password,
         };
 
-        if (email) {
-            const exists = await Customer.findOne({ email });
-            if (exists) {
-                return res
-                    .status(400)
-                    .json({ message: 'email is already existed' });
-            }
-        }
         if (password) {
             updatedFields.password = hashedPassword;
         }
@@ -129,11 +123,10 @@ exports.customerCanUpdate = async (req, res) => {
     const { first_name, last_name, email, password } = req.body;
 
     try {
-        
         const salt = await bcrypt.genSalt(parseInt(saltRounds));
         const hashedPassword = await bcrypt.hash(password, salt);
+        const customerId = res.locals.user._id;
 
-        const id = { _id: req.params.id };
         const updatedFields = {
             first_name,
             last_name,
@@ -141,20 +134,12 @@ exports.customerCanUpdate = async (req, res) => {
             password,
         };
 
-        if (email) {
-            const exists = await Customer.findOne({ email });
-            if (exists) {
-                return res
-                    .status(400)
-                    .json({ message: 'email is already existed' });
-            }
-        }
         if (password) {
             updatedFields.password = hashedPassword;
         }
 
         const updatedCustomer = await Customer.findByIdAndUpdate(
-             id,
+            customerId,
             updatedFields,
             { new: true }
         );
@@ -166,20 +151,3 @@ exports.customerCanUpdate = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
-
-// exports.getProfile = async (req, res) => {
-//     try {
-    
-//          const customerId = res.locals.user._id;
-
-//         const customer = await Customer.findById(customerId);
-//         console.log('customer' , customer)
-
-//          if (!customer) res.status(404).json({ message: 'Customers not found' });
-//         return res.status(200).json(customer);
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
-
-

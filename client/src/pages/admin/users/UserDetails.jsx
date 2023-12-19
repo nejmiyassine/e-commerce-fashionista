@@ -12,6 +12,7 @@ import Layout from '../../../layouts/Layout';
 import { useGetUserByIdQuery } from '../../../app/api/usersApi';
 import { formatDate } from '../../../utils/formatDate';
 import { MailIcon, UserIcon } from '../../../icons/Icons';
+import { FaUserCheck } from 'react-icons/fa';
 const UserDetails = () => {
     let { userId } = useParams();
     const {
@@ -96,8 +97,9 @@ const UserDetails = () => {
                         <div className='flex justify-between gap-4'>
                             <div className='flex flex-col flex-1 py-1'>
                                 <p className='font-semibold p-1'>Role</p>
-                                <p className='flex items-center rounded-md border p-2 text-sm text-gray-500 dark:text-gray-100'>
-                                    <span className='bg-green-500 dark:bg-green-700 rounded-md text-white cursor-pointer w-12 text-center'>
+                                <p className='flex items-center text-green-500 gap-1 dark:text-green-400 rounded-md border p-2 text-sm'>
+                                    <FaUserCheck />
+                                    <span className='rounded-md capitalize cursor-pointer w-12 text-center'>
                                         {user.role}
                                     </span>
                                 </p>

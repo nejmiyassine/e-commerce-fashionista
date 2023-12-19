@@ -59,7 +59,6 @@ exports.updateCategory = async (req, res) => {
             category,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             success: false,
             error,
@@ -72,14 +71,12 @@ exports.updateCategory = async (req, res) => {
 exports.deleteCategory = async (req, res) => {
     try {
         const { id } = req.params;
-        console.log(id);
         await Category.findByIdAndDelete(id);
         res.status(200).send({
             success: true,
             message: 'Category deleted successfully',
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             success: false,
             message: 'Error deleting category',
@@ -99,7 +96,6 @@ exports.getCategoryById = async (req, res) => {
             message: 'Category found successfully',
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             success: false,
             message: 'Error finding category',
@@ -127,7 +123,6 @@ exports.getAllCategories = async (req, res) => {
             data: categories,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             success: false,
             message: 'Error listing all the categories',
@@ -159,7 +154,6 @@ exports.getSearchCategory = async (req, res) => {
             data: categories,
         });
     } catch (error) {
-        console.log(error);
         res.status(500).send({
             success: false,
             message: 'Error listing all the categories',
