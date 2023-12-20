@@ -62,16 +62,6 @@ const CustomerNavbar = ({ toggleSidebar, openBagSidebar }) => {
         });
     };
 
-    const CustomNavbarItem = ({ to, children, isActive }) => {
-        return (
-            <NavbarItem isActive={isActive}>
-                <Link to={to} className='text-primaryColor-gold'>
-                    {children}
-                </Link>
-            </NavbarItem>
-        );
-    };
-
     const loading = isCustomerProfileLoading || isFetching;
 
     if (loading) {

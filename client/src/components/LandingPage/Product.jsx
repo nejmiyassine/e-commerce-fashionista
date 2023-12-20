@@ -52,11 +52,11 @@ const Product = () => {
                         </Link>
                         <div className='mt-4 p-4 border border-t-0 rounded-b-md'>
                             <Link to={`/shop/product/${product._id}`}>
-                                <h5 className='text-lg font-semibold text-gray-800'>
+                                <h5 className='text-lg font-bold'>
                                     {sliceText(product.product_name, 25)}
                                 </h5>
                             </Link>
-                            <p className='text-gray-600 text-sm mt-2'>
+                            <p className='text-black/80 text-sm mt-2'>
                                 {product.short_description}
                             </p>
 
