@@ -36,7 +36,7 @@ export const store = configureStore({
         [cartAPI.reducerPath]: cartAPI.reducer,
         [paymentsAPI.reducerPath]: paymentsAPI.reducer,
     },
-    devTools: import.meta.env.VITE_REACT_APP_NODE_ENV === 'development',
+    devTools: import.meta.env.VITE_REACT_APP_NODE_ENV === 'production',
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({}).concat([
             usersAPI.middleware,
