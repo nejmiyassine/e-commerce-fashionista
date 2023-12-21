@@ -13,8 +13,8 @@ const indexRoutes = require('./routes/index.routes');
 const corsOptions = {
     origin: ['http://localhost:5173', BASE_URL],
     default: 'http://localhost:5173',
-    methods: 'GET, POST, PUT,DELETE, PATCH',
     credentials: true,
+    methods: 'GET, POST, PUT,DELETE, PATCH',
 };
 
 connectDb();

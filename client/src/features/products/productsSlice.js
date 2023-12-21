@@ -13,7 +13,7 @@ export const getAllProducts = createAsyncThunk(
     'products/getAllProducts',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get('v1/products');
+            const response = await axios.get('products');
             return response.data.data;
         } catch (error) {
             rejectWithValue(error);
@@ -26,7 +26,7 @@ export const getProductById = createAsyncThunk(
     async (productById, { rejectWithValue }) => {
         try {
             const response = await axios.get(
-                `v1/products/product/${productById}`,
+                `products/product/${productById}`,
                 { withCredentials: true }
             );
             return response.data.data;
@@ -41,7 +41,7 @@ export const editProduct = createAsyncThunk(
     'products/editProduct',
     async ({ id, data }, { rejectWithValue }) => {
         try {
-            const response = await axios.patch(`v1/products/${id}`, data);
+            const response = await axios.patch(`products/${id}`, data);
             return response.data.data;
         } catch (error) {
             rejectWithValue(error);
@@ -54,7 +54,7 @@ export const deleteProduct = createAsyncThunk(
     'products/deleteProduct',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await axios.delete(`v1/products/${id}`);
+            const response = await axios.delete(`products/${id}`);
             return response.data.data;
         } catch (error) {
             rejectWithValue(error);
@@ -67,7 +67,7 @@ export const createProduct = createAsyncThunk(
     'products/createProduct',
     async (productData, { rejectWithValue }) => {
         try {
-            const response = await axios.post('v1/products', productData);
+            const response = await axios.post('products', productData);
             return response.data.data;
         } catch (error) {
             rejectWithValue(error);
@@ -79,10 +79,7 @@ export const fetchProductsByCategory = createAsyncThunk(
     'products/fetchByCategory',
     async (categories, { rejectWithValue }) => {
         try {
-            const response = await axios.get(
-                'v1/products/categories',
-                categories
-            );
+            const response = await axios.get('products/categories', categories);
             return response.data;
         } catch (error) {
             return rejectWithValue(error.response.data);

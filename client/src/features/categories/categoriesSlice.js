@@ -14,7 +14,7 @@ export const getAllCategories = createAsyncThunk(
     'categories/getAllCategories',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await axios.get('v1/categories');
+            const response = await axios.get('categories');
             return response.data.data;
         } catch (error) {
             return rejectWithValue(error?.response?.data);
@@ -27,7 +27,7 @@ export const editCategory = createAsyncThunk(
     'categories/editCategory',
     async ({ id, name }, { rejectWithValue }) => {
         try {
-            const response = await axios.put(`v1/categories/${id}`, { name });
+            const response = await axios.put(`categories/${id}`, { name });
             return response.data.data;
         } catch (error) {
             return rejectWithValue(error?.response?.data);
@@ -40,7 +40,7 @@ export const deleteCategory = createAsyncThunk(
     'categories/deleteCategory',
     async (id, { rejectWithValue }) => {
         try {
-            const response = await axios.delete(`v1/categories/${id}`);
+            const response = await axios.delete(`categories/${id}`);
             return response.data.data;
         } catch (error) {
             return rejectWithValue(error?.response?.data);
@@ -53,7 +53,7 @@ export const createCategory = createAsyncThunk(
     'categories/createCategory',
     async (name, { rejectWithValue }) => {
         try {
-            const response = await axios.post('v1/categories', { name });
+            const response = await axios.post('categories', { name });
 
             if (response.data.success) {
                 return { success: true, category: response.data.category };

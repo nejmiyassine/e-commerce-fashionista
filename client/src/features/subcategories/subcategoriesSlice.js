@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from "../../api/axios";
+import axios from '../../api/axios';
 
 const initialState = {
     subcategories: [],
@@ -7,65 +7,67 @@ const initialState = {
     editedSubcategory: null,
     isLoading: true,
     error: null,
-}
+};
 
 // Get All Subcategories
 export const getAllSubcategories = createAsyncThunk(
     'subcategories/getAllSubcategories',
     async (_, { rejectWithValue }) => {
-      try {
-        const response = await axios.get('v1/subcategories');
-        return response.data.data;
-      } catch (error) {
-        return rejectWithValue(error?.response?.data);
-      }
+        try {
+            const response = await axios.get('subcategories');
+            return response.data.data;
+        } catch (error) {
+            return rejectWithValue(error?.response?.data);
+        }
     }
-  );
+);
 
-  // Edit Subcategory
-  export const editSubcategory = createAsyncThunk(
+// Edit Subcategory
+export const editSubcategory = createAsyncThunk(
     'subcategories/editSubcategory',
     async ({ id, name }, { rejectWithValue }) => {
-      try {
-        const response = await axios.put(`v1/subcategories/${id}`, { name });
-        return response.data.data;
-      } catch (error) {
-        return rejectWithValue(error?.response?.data);
-      }
+        try {
+            const response = await axios.put(`subcategories/${id}`, { name });
+            return response.data.data;
+        } catch (error) {
+            return rejectWithValue(error?.response?.data);
+        }
     }
-  );
+);
 
-  // Delete Subcategory
-  export const deleteSubcategory = createAsyncThunk(
+// Delete Subcategory
+export const deleteSubcategory = createAsyncThunk(
     'subcategories/deleteSubcategory',
     async (id, { rejectWithValue }) => {
-      try {
-        const response = await axios.delete(`v1/subcategories/${id}`);
-        return response.data.data;
-      } catch (error) {
-        return rejectWithValue(error?.response?.data);
-      }
+        try {
+            const response = await axios.delete(`subcategories/${id}`);
+            return response.data.data;
+        } catch (error) {
+            return rejectWithValue(error?.response?.data);
+        }
     }
-  );
+);
 
-  // Create Subcategory
-  export const createSubcategory = createAsyncThunk(
+// Create Subcategory
+export const createSubcategory = createAsyncThunk(
     'subcategories/createSubcategory',
     async (name, { rejectWithValue }) => {
-      try {
-        const response = await axios.post('v1/subcategories', { name });
+        try {
+            const response = await axios.post('subcategories', { name });
 
-        if (response.data.success) {
-          return { success: true, subcategory: response.data.subcategory };
-        } else {
-          return rejectWithValue(response.data);
+            if (response.data.success) {
+                return {
+                    success: true,
+                    subcategory: response.data.subcategory,
+                };
+            } else {
+                return rejectWithValue(response.data);
+            }
+        } catch (error) {
+            return rejectWithValue(error?.response?.data);
         }
-      } catch (error) {
-        return rejectWithValue(error?.response?.data);
-      }
     }
-  );
-
+);
 
 export const subcategoriesSlice = createSlice({
     name: 'subcategories',
@@ -133,7 +135,7 @@ export const subcategoriesSlice = createSlice({
             .addCase(createSubcategory.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.error;
-            })
+            });
     },
 });
 

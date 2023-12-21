@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
+const BASE_URL = import.meta.env.VITE_REACT_APP_BASEURL;
 
 export default axios.create({
-    baseURL: 'http://localhost:8000/'
-})
+    baseURL: `${BASE_URL}/v1`,
+});

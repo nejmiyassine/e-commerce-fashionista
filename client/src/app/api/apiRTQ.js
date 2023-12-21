@@ -4,7 +4,7 @@ const BASE_URL = import.meta.env.VITE_REACT_APP_BASEURL;
 
 // Create our baseQuery instance
 const baseQuery = fetchBaseQuery({
-    baseUrl: BASE_URL,
+    baseUrl: `${BASE_URL}/v1`,
 });
 
 export const api = createApi({
