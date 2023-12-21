@@ -11,9 +11,9 @@ const BASE_URL = require('./config/env').BASE_URL;
 const indexRoutes = require('./routes/index.routes');
 
 const corsOptions = {
-    origin: ['http://localhost:5173', BASE_URL],
+    origin: BASE_URL,
+    headers: ['Content-Type'],
     credentials: true,
-    methods: 'GET, POST, PUT,DELETE, PATCH',
 };
 
 connectDb();
