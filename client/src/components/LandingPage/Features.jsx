@@ -1,6 +1,6 @@
-import delivery from '../../assets/delivery.png';
-import refund from '../../assets/refund.png';
-import support from '../../assets/support.png';
+import delivery from '../../assets/delivery.webp';
+import refund from '../../assets/refund.webp';
+import support from '../../assets/support.webp';
 
 const Features = () => {
     return (

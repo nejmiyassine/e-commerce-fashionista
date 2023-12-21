@@ -9,8 +9,6 @@ import {
     Autoplay,
 } from 'swiper/modules';
 
-import HeroImage from '../../assets/hero2.png';
-import HeroImage1 from '../../assets/Hero!.png';
 import { FaChevronRight } from 'react-icons/fa';
 
 const Hero = () => {
@@ -33,7 +31,7 @@ const Hero = () => {
                 <div
                     className='relative bg-cover h-screen md:h-[36rem] text-center md:text-start w-full bg-no-repeat bg-center py-10 sm:py-28 flex items-center'
                     style={{
-                        backgroundImage: `url(${HeroImage})`,
+                        backgroundImage: `url(https://res.cloudinary.com/derzan9nn/image/upload/v1703068335/cfevzvx8fqcyxxuc6mwt.webp)`,
                     }}
                 >
                     <div className='fixed inset-0 h-full bg-black opacity-50 md:opacity-0 md:hidden'></div>
@@ -45,7 +43,7 @@ const Hero = () => {
                             </span>{' '}
                             Fashion
                         </h2>
-                        <p className='text-sm md:text-md mx-auto md:mx-0 w-4/5 text-white md:text-gray-500 mt-4 mb-2 italic capitalize'>
+                        <p className='text-sm md:text-md mx-auto md:mx-0 w-4/5 text-white md:text-black/80 mt-4 mb-2 italic capitalize'>
                             Explore our handpicked collection of chic essentials
                             and statement pieces. Crafted to make you stand out,
                             our latest fashion speaks volumes about your
@@ -67,7 +65,7 @@ const Hero = () => {
                 <div
                     className='relative bg-cover h-screen md:h-[36rem] text-center md:text-start w-full bg-no-repeat bg-center py-10 sm:py-28 flex items-center justify-center'
                     style={{
-                        backgroundImage: `url(${HeroImage1})`,
+                        backgroundImage: `url(https://res.cloudinary.com/derzan9nn/image/upload/v1703068325/uznwmhactavacyxtbc5j.webp)`,
                     }}
                 >
                     <div className='italic flex flex-col items-center justify-center w-[80rem]'>
@@ -79,7 +77,7 @@ const Hero = () => {
                             Style
                         </h2>
 
-                        <p className='text-sm md:text-md text-gray-600 w-4/5 md:w-2/5 my-8 mx-auto'>
+                        <p className='text-sm text-center md:text-md text-black/80 w-4/5 md:w-2/5 my-8 mx-auto'>
                             Unleash your individuality with our versatile
                             collection. Whether it's a casual day out or a
                             special occasion, our fashion adapts to your

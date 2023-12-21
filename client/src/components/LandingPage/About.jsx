@@ -1,7 +1,4 @@
 /* eslint-disable react/no-unescaped-entities */
-import About1 from '../../assets/about1.jpg';
-import About2 from '../../assets/about2.jpg';
-import About3 from '../../assets/about3.jpg';
 import CustomerNavbar from '../../layouts/CustomerNavbar.jsx';
 import Head from './Head.jsx';
 import Footer from './Footer.jsx';
@@ -18,7 +15,11 @@ const About = () => {
 
                 <div className=' flex flex-col lg:flex-row items-center gap-5'>
                     <div className=' w-full lg:w-2/4'>
-                        <img className=' rounded-lg' src={About1} alt='img' />
+                        <img
+                            className=' rounded-lg'
+                            src='https://res.cloudinary.com/derzan9nn/image/upload/v1703069185/qzen3wecjnupu10nczbj.webp'
+                            alt='img'
+                        />
                     </div>
                     <div className=' w-full lg:w-2/4 p-4 space-y-3'>
                         <h2 className=' font-semibold text-3xl text-primaryColor-gold italic'>
@@ -52,14 +53,22 @@ const About = () => {
                         </p>
                     </div>
                     <div className='w-full lg:w-2/4'>
-                        <img className='rounded-lg' src={About2} alt='img' />
+                        <img
+                            className='rounded-lg'
+                            src='https://res.cloudinary.com/derzan9nn/image/upload/v1703069185/mk7y3u1dnmu9cm0cawd6.webp'
+                            alt='img'
+                        />
                     </div>
                 </div>
             </div>
             <div className='py-8 flex flex-col items-center justify-center lg:px-32 px-5 bg-backgroundColor'>
                 <div className=' flex flex-col lg:flex-row items-center gap-5'>
                     <div className=' w-full lg:w-2/4'>
-                        <img className=' rounded-lg' src={About3} alt='img' />
+                        <img
+                            className=' rounded-lg'
+                            src='https://res.cloudinary.com/derzan9nn/image/upload/v1703069185/byfjl6mno0jyooowi5op.webp'
+                            alt='img'
+                        />
                     </div>
                     <div className=' w-full lg:w-2/4 p-4 space-y-3'>
                         <h2 className=' font-semibold text-3xl text-primaryColor-gold italic'>

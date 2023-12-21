@@ -1,4 +1,3 @@
-import Foooter from '../../assets/footer.jpg';
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
@@ -7,7 +6,7 @@ const Footer = () => {
             <footer className='bg-black lg:grid lg:grid-cols-5'>
                 <div className='relative block h-32 lg:col-span-2 lg:h-full'>
                     <img
-                        src={Foooter}
+                        src='https://res.cloudinary.com/derzan9nn/image/upload/v1703069349/wbaxxqglaybqlct4eovx.webp'
                         alt='Footer'
                         className='absolute inset-0 h-full w-full object-cover'
                     />
