@@ -12,7 +12,9 @@ const indexRoutes = require('./routes/index.routes');
 
 const corsOptions = {
     origin: BASE_URL,
-    headers: ['Content-Type'],
+    headers: {
+        'Access-Control-Allow-Origin': BASE_URL,
+    },
     credentials: true,
 };
 
