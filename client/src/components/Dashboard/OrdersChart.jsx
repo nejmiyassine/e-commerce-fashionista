@@ -1,5 +1,4 @@
 import React from 'react';
-import 'react-datepicker/dist/react-datepicker.css';
 import { toast } from 'react-toastify';
 import NProgress from 'nprogress';
 
