@@ -6,11 +6,13 @@ const cookieParser = require('cookie-parser');
 
 const connectDb = require('./config/database');
 const PORT = require('./config/env').PORT;
+const BASE_URL = require('./config/env').BASE_URL;
 
 const indexRoutes = require('./routes/index.routes');
 
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: [BASE_URL, 'http://localhost:5173/'],
+    default: 'http://localhost:5173',
     methods: 'GET, POST, PUT,DELETE, PATCH',
     credentials: true,
 };
