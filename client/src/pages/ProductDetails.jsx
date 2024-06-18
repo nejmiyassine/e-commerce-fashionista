@@ -1,18 +1,14 @@
 import { useParams } from 'react-router-dom';
 
-import ProductDetailsSection from '../components/ProductDetailsSection';
-import CustomerNavbar from '../layouts/CustomerNavbar';
+import ProductDetailsSection from '@components/ProductDetailsSection';
 
 const ProductDetails = () => {
     const { productId } = useParams();
 
     return (
-        <>
-            <CustomerNavbar />
-            <div className='container mx-auto'>
-                <ProductDetailsSection productId={productId} isAdmin={false} />
-            </div>
-        </>
+        <div className="container mx-auto">
+            <ProductDetailsSection productId={productId} isAdmin={false} />
+        </div>
     );
 };
 

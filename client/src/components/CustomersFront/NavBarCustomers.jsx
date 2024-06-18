@@ -71,16 +71,16 @@ const NavbarCustomers = () => {
     }
 
     return (
-        <div className=' shadow-md  border-black'>
+        <div className=" shadow-md  border-black">
             <Navbar>
-                <NavbarContent as='div' justify='end'>
-                    <div className='flex justify-center '>
-                        <ul className='flex justify-around w-80 relative right-80     '>
+                <NavbarContent as="div" justify="end">
+                    <div className="flex justify-center ">
+                        <ul className="flex justify-around w-80 relative right-80     ">
                             <li>
                                 <Button
-                                    className='bg-color-none hover:text-primaryColor-gold'
+                                    className="bg-color-none hover:text-primaryColor-gold"
                                     onClick={() => {
-                                        navigate('/landing-page');
+                                        navigate('/');
                                     }}
                                 >
                                     Home
@@ -88,9 +88,9 @@ const NavbarCustomers = () => {
                             </li>
                             <li>
                                 <Button
-                                    className='bg-color-none hover:text-primaryColor-gold'
+                                    className="bg-color-none hover:text-primaryColor-gold"
                                     onClick={() => {
-                                        navigate('/customers-orders');
+                                        navigate('/customers/orders');
                                     }}
                                 >
                                     Orders
@@ -98,9 +98,9 @@ const NavbarCustomers = () => {
                             </li>
                             <li>
                                 <Button
-                                    className='bg-color-none hover:text-primaryColor-gold'
+                                    className="bg-color-none hover:text-primaryColor-gold"
                                     onClick={() => {
-                                        navigate('/customers-favorites');
+                                        navigate('/customers/favorites');
                                     }}
                                 >
                                     Favorites
@@ -109,17 +109,17 @@ const NavbarCustomers = () => {
                         </ul>
                     </div>
 
-                    <Dropdown placement='bottom-end'>
+                    <Dropdown placement="bottom-end">
                         <DropdownTrigger>
-                            <div className='flex items-center gap-2 cursor-pointer'>
+                            <div className="flex items-center gap-2 cursor-pointer">
                                 <Avatar
                                     isBordered
-                                    as='button'
-                                    className='transition-transform'
-                                    color='secondaryColor'
-                                    name='profile'
-                                    size='sm'
-                                    src='https://i.pravatar.cc/150?u=a042581f4e29026704d'
+                                    as="button"
+                                    className="transition-transform"
+                                    color="secondaryColor"
+                                    name="profile"
+                                    size="sm"
+                                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
                                 />
                                 <span>
                                     {(!isLoading || customer) &&
@@ -128,12 +128,12 @@ const NavbarCustomers = () => {
                             </div>
                         </DropdownTrigger>
                         <DropdownMenu
-                            aria-label='Profile Actions'
-                            variant='flat'
+                            aria-label="Profile Actions"
+                            variant="flat"
                         >
                             <DropdownItem
-                                key='settings'
-                                className='h-8'
+                                key="settings"
+                                className="h-8"
                                 onClick={() => {
                                     navigate(`/update-profile/${customer._id}`);
                                 }}
@@ -142,9 +142,9 @@ const NavbarCustomers = () => {
                             </DropdownItem>
 
                             <DropdownItem
-                                key='logout'
-                                color='danger'
-                                className='h-8'
+                                key="logout"
+                                color="danger"
+                                className="h-8"
                                 onClick={handleLogout}
                             >
                                 Log out

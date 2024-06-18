@@ -1,28 +1,23 @@
 /* eslint-disable react/no-unescaped-entities */
-import CustomerNavbar from '../../layouts/CustomerNavbar.jsx';
-import Head from './Head.jsx';
-import Footer from './Footer.jsx';
 
 const About = () => {
     return (
         <div>
-            <Head />
-            <CustomerNavbar />
-            <div className=' py-5 flex flex-col items-center justify-center lg:px-32 px-5 bg-backgroundColor'>
-                <h1 className=' mb-5 font-black text-5xl italic capitalize text-center lg:mt-5 mx-5 text-yellow-500'>
+            <div className=" py-5 flex flex-col items-center justify-center lg:px-32 px-5 bg-backgroundColor">
+                <h1 className=" mb-5 font-black text-5xl italic capitalize text-center lg:mt-5 mx-5 text-yellow-500">
                     @Fashionista
                 </h1>
 
-                <div className=' flex flex-col lg:flex-row items-center gap-5'>
-                    <div className=' w-full lg:w-2/4'>
+                <div className=" flex flex-col lg:flex-row items-center gap-5">
+                    <div className=" w-full lg:w-2/4">
                         <img
-                            className=' rounded-lg'
-                            src='https://res.cloudinary.com/derzan9nn/image/upload/v1703069185/qzen3wecjnupu10nczbj.webp'
-                            alt='img'
+                            className=" rounded-lg"
+                            src="https://res.cloudinary.com/derzan9nn/image/upload/v1703069185/qzen3wecjnupu10nczbj.webp"
+                            alt="img"
                         />
                     </div>
-                    <div className=' w-full lg:w-2/4 p-4 space-y-3'>
-                        <h2 className=' font-semibold text-3xl text-primaryColor-gold italic'>
+                    <div className=" w-full lg:w-2/4 p-4 space-y-3">
+                        <h2 className=" font-semibold text-3xl text-primaryColor-gold italic">
                             Our Story:{' '}
                         </h2>
                         <p>
@@ -37,10 +32,10 @@ const About = () => {
                     </div>
                 </div>
             </div>
-            <div className='py-8 flex flex-col items-center justify-center lg:px-32 px-3'>
-                <div className='flex flex-col lg:flex-row items-center gap-5'>
-                    <div className='w-full lg:w-2/4 p-4 space-y-3'>
-                        <h2 className=' font-semibold text-3xl text-primaryColor-gold italic'>
+            <div className="py-8 flex flex-col items-center justify-center lg:px-32 px-3">
+                <div className="flex flex-col lg:flex-row items-center gap-5">
+                    <div className="w-full lg:w-2/4 p-4 space-y-3">
+                        <h2 className=" font-semibold text-3xl text-primaryColor-gold italic">
                             Our Mission:
                         </h2>
                         <p>
@@ -52,26 +47,26 @@ const About = () => {
                             artistry that lies in simplicity and refined taste.
                         </p>
                     </div>
-                    <div className='w-full lg:w-2/4'>
+                    <div className="w-full lg:w-2/4">
                         <img
-                            className='rounded-lg'
-                            src='https://res.cloudinary.com/derzan9nn/image/upload/v1703069185/mk7y3u1dnmu9cm0cawd6.webp'
-                            alt='img'
+                            className="rounded-lg"
+                            src="https://res.cloudinary.com/derzan9nn/image/upload/v1703069185/mk7y3u1dnmu9cm0cawd6.webp"
+                            alt="img"
                         />
                     </div>
                 </div>
             </div>
-            <div className='py-8 flex flex-col items-center justify-center lg:px-32 px-5 bg-backgroundColor'>
-                <div className=' flex flex-col lg:flex-row items-center gap-5'>
-                    <div className=' w-full lg:w-2/4'>
+            <div className="py-8 flex flex-col items-center justify-center lg:px-32 px-5 bg-backgroundColor">
+                <div className=" flex flex-col lg:flex-row items-center gap-5">
+                    <div className=" w-full lg:w-2/4">
                         <img
-                            className=' rounded-lg'
-                            src='https://res.cloudinary.com/derzan9nn/image/upload/v1703069185/byfjl6mno0jyooowi5op.webp'
-                            alt='img'
+                            className=" rounded-lg"
+                            src="https://res.cloudinary.com/derzan9nn/image/upload/v1703069185/byfjl6mno0jyooowi5op.webp"
+                            alt="img"
                         />
                     </div>
-                    <div className=' w-full lg:w-2/4 p-4 space-y-3'>
-                        <h2 className=' font-semibold text-3xl text-primaryColor-gold italic'>
+                    <div className=" w-full lg:w-2/4 p-4 space-y-3">
+                        <h2 className=" font-semibold text-3xl text-primaryColor-gold italic">
                             Crafting Your Style Story:
                         </h2>
                         <p>
@@ -86,7 +81,6 @@ const About = () => {
                     </div>
                 </div>
             </div>
-            <Footer />
         </div>
     );
 };

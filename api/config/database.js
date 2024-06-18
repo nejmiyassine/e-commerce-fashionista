@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const db = require('./env').MongoURI;
+const db = require('./env').MONGO_URI;
 
 const connectDb = () => {
     return mongoose

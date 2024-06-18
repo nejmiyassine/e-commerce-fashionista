@@ -3,7 +3,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
-const JwtSecretKey = require('../config/env').JwtSecretKey;
+const JWT_SECRET_KEY = require('../config/env').JWT_SECRET_KEY;
 
 const User = require('../models/User');
 const Customer = require('../models/Customers');
@@ -38,7 +38,7 @@ createLocalStrategy(Seller, 'local-seller');
 // JWT strategies
 const jwtOpts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: JwtSecretKey,
+    secretOrKey: JWT_SECRET_KEY,
 };
 
 const createJwtStrategy = (model, name) => {

@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 
 const DarkModeContext = createContext();
 
@@ -27,7 +26,3 @@ export const DarkModeProvider = ({ children }) => {
 };
 
 export default DarkModeContext;
-
-DarkModeProvider.propTypes = {
-    children: PropTypes.element,
-};

@@ -82,7 +82,7 @@ const AuthLoginForm = ({ account_type }) => {
             toast.success('You successfully logged in', {
                 position: 'bottom-right',
             });
-            navigate('/landing-page');
+            navigate('/');
         }
 
         if (isErrorCustomer) {
@@ -126,26 +126,26 @@ const AuthLoginForm = ({ account_type }) => {
 
     return (
         <form
-            className='flex flex-col flex-1 gap-2 md:w-96 mx-auto'
+            className="flex flex-col flex-1 gap-2 md:w-96 mx-auto"
             onSubmit={handleSubmit(onSubmit)}
         >
             <Input
                 clearable
-                variant='bordered'
+                variant="bordered"
                 fullWidth
-                aria-label='Email'
-                labelPlacement='outside'
-                type='email'
-                name='email'
-                label='Email'
-                placeholder='you@gmail.com'
+                aria-label="Email"
+                labelPlacement="outside"
+                type="email"
+                name="email"
+                label="Email"
+                placeholder="you@gmail.com"
                 {...register('email')}
                 isInvalid={!!errors.email}
                 errorMessage={errors.email && errors.email?.message}
                 startContent={
                     <IoMdMail
                         size={20}
-                        className='text-2xl text-default-400 pointer-events-none flex-shrink-0'
+                        className="text-2xl text-default-400 pointer-events-none flex-shrink-0"
                     />
                 }
             />
@@ -153,42 +153,42 @@ const AuthLoginForm = ({ account_type }) => {
             <Input
                 clearable
                 fullWidth
-                variant='bordered'
-                aria-label='Password'
-                labelPlacement='outside'
+                variant="bordered"
+                aria-label="Password"
+                labelPlacement="outside"
                 type={isVisible ? 'text' : 'password'}
-                name='password'
-                label='Password'
-                placeholder='Password'
+                name="password"
+                label="Password"
+                placeholder="Password"
                 {...register('password')}
                 isInvalid={!!errors.password}
                 errorMessage={errors.password && errors.password?.message}
                 startContent={
                     <RiLockPasswordFill
                         size={28}
-                        className='text-2xl text-default-400 pointer-events-none pr-1'
+                        className="text-2xl text-default-400 pointer-events-none pr-1"
                     />
                 }
                 endContent={
                     <button
-                        className='focus:outline-none'
-                        type='button'
+                        className="focus:outline-none"
+                        type="button"
                         onClick={toggleVisibility}
                     >
                         {isVisible ? (
-                            <FaEyeSlash className='text-2xl text-default-400 pointer-events-none' />
+                            <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
                         ) : (
-                            <FaEye className='text-2xl text-default-400 pointer-events-none' />
+                            <FaEye className="text-2xl text-default-400 pointer-events-none" />
                         )}
                     </button>
                 }
             />
 
             {account_type === 'customer' && (
-                <div className='flex justify-end py-1'>
+                <div className="flex justify-end py-1">
                     <Link
-                        to='/forgot-password'
-                        className='text-sm hover:underline'
+                        to="/forgot-password"
+                        className="text-sm hover:underline"
                     >
                         Forget Password?
                     </Link>
@@ -196,8 +196,8 @@ const AuthLoginForm = ({ account_type }) => {
             )}
 
             <Button
-                className='mt-4 bg-primaryColor-deepDark text-primaryColor-dark dark:bg-white dark:text-primaryColor-light'
-                type='submit'
+                className="mt-4 bg-primaryColor-deepDark text-primaryColor-dark dark:bg-white dark:text-primaryColor-light"
+                type="submit"
                 isLoading={isLoading || isLoadingCustomer}
             >
                 Sign in

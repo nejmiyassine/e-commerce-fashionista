@@ -49,7 +49,7 @@ const UpdateCustomerComponent = ({ customer }) => {
             })
         );
         reset();
-        navigate('/customer-profile');
+        navigate('/customer/profile');
         toast.success('Customer is updated successfully', {
             position: 'bottom-right',
         });

@@ -29,30 +29,30 @@ const Hero = () => {
         >
             <SwiperSlide>
                 <div
-                    className='relative bg-cover h-screen md:h-[36rem] text-center md:text-start w-full bg-no-repeat bg-center py-10 sm:py-28 flex items-center'
+                    className="relative bg-cover h-screen md:h-[36rem] text-center md:text-start w-full bg-no-repeat bg-center py-10 sm:py-28 flex items-center"
                     style={{
                         backgroundImage: `url(https://res.cloudinary.com/derzan9nn/image/upload/v1703068335/cfevzvx8fqcyxxuc6mwt.webp)`,
                     }}
                 >
-                    <div className='fixed inset-0 h-full bg-black opacity-50 md:opacity-0 md:hidden'></div>
-                    <div className='w-full z-50 md:w-1/2 md:ml-8'>
-                        <h2 className='text-3xl md:text-6xl font-bold text-black capitalize'>
+                    <div className="fixed inset-0 h-full bg-black opacity-50 md:opacity-0 md:hidden"></div>
+                    <div className="w-full z-50 md:w-1/2 md:ml-8">
+                        <h2 className="text-3xl md:text-6xl font-bold text-black capitalize">
                             Discover{' '}
-                            <span className='text-primaryColor-gold'>
+                            <span className="text-primaryColor-gold">
                                 Trendsetting
                             </span>{' '}
                             Fashion
                         </h2>
-                        <p className='text-sm md:text-md mx-auto md:mx-0 w-4/5 text-white md:text-black/80 mt-4 mb-2 italic capitalize'>
+                        <p className="text-sm md:text-md mx-auto md:mx-0 w-4/5 text-white md:text-black/80 mt-4 mb-2 italic capitalize">
                             Explore our handpicked collection of chic essentials
                             and statement pieces. Crafted to make you stand out,
                             our latest fashion speaks volumes about your
                             personality and passion. Stay trendy with us!
                         </p>
-                        <button className='mt-3 bg-black text-white py-2 px-4 rounded  hover:text-primaryColor-gold'>
+                        <button className="mt-3 bg-black text-white py-2 px-4 rounded  hover:text-primaryColor-gold">
                             <Link
-                                to='/shop'
-                                className='flex items-center gap-2'
+                                to="/shop"
+                                className="flex items-center gap-2"
                             >
                                 Shop Now
                                 <FaChevronRight size={14} />
@@ -63,21 +63,21 @@ const Hero = () => {
             </SwiperSlide>
             <SwiperSlide>
                 <div
-                    className='relative bg-cover h-screen md:h-[36rem] text-center md:text-start w-full bg-no-repeat bg-center py-10 sm:py-28 flex items-center justify-center'
+                    className="relative bg-cover h-screen md:h-[36rem] text-center md:text-start w-full bg-no-repeat bg-center py-10 sm:py-28 flex items-center justify-center"
                     style={{
                         backgroundImage: `url(https://res.cloudinary.com/derzan9nn/image/upload/v1703068325/uznwmhactavacyxtbc5j.webp)`,
                     }}
                 >
-                    <div className='italic flex flex-col items-center justify-center w-[80rem]'>
-                        <h2 className='text-center text-3xl w-4/5 md:text-6xl md:w-2/5 mx-auto font-bold text-black capitalize font-poppins text-center'>
+                    <div className="italic flex flex-col items-center justify-center w-[80rem]">
+                        <h2 className="text-center text-3xl w-4/5 md:text-6xl md:w-2/5 mx-auto font-bold text-black capitalize font-poppins">
                             Elevate Your{' '}
-                            <span className='text-primaryColor-gold'>
+                            <span className="text-primaryColor-gold">
                                 Everyday{' '}
                             </span>
                             Style
                         </h2>
 
-                        <p className='text-sm text-center md:text-md text-black/80 w-4/5 md:w-2/5 my-8 mx-auto'>
+                        <p className="text-sm text-center md:text-md text-black/80 w-4/5 md:w-2/5 my-8 mx-auto">
                             Unleash your individuality with our versatile
                             collection. Whether it's a casual day out or a
                             special occasion, our fashion adapts to your
@@ -85,8 +85,8 @@ const Hero = () => {
                             sophistication. Explore the extraordinary and
                             redefine your everyday style.
                         </p>
-                        <button className='mt-3 bg-black text-white py-2 px-4 rounded hover:bg-primaryColor-gold hover:text-white-300'>
-                            <Link to='/shop'>Discover Our Collection</Link>
+                        <button className="mt-3 bg-black text-white py-2 px-4 rounded hover:bg-primaryColor-gold hover:text-white-300">
+                            <Link to="/shop">Discover Our Collection</Link>
                         </button>
                     </div>
                 </div>

@@ -42,15 +42,16 @@ export default function CustomersOrders() {
             ? 'loading'
             : 'idle';
 
+    console.log({ customerOrders });
+
     const renderCell = useCallback((order, columnKey) => {
         const cellValue = order[columnKey];
         switch (columnKey) {
             case '_id':
                 return (
                     <div>
-                        <p className='text-gray-500 dark:text-gray-300'>
-                            {(cellValue, 10)}
-                            {/* {sliceText(cellValue, 10)} */}
+                        <p className="text-gray-500 dark:text-gray-300">
+                            {cellValue.slice(0, 10)}...
                         </p>
                     </div>
                 );
@@ -58,15 +59,17 @@ export default function CustomersOrders() {
             case 'order_items':
                 return (
                     <Link
-                        to={`/admin/orders/${order['_id']}`}
-                        className='flex items-center gap-2'
+                        // to={`/admin/orders/${order['_id']}`}
+                        to="/customers/orders"
+                        className="flex items-center gap-2"
+                        aria-label={`Order ${order['_id']} - ${cellValue[0].product_name}`}
                     >
                         <Image
-                            className='w-10 h-10'
+                            className="w-10 h-10"
                             src={cellValue[0].product_images[0]}
                             alt={cellValue[0].product_name}
                         />
-                        <p className='font-semibold'>
+                        <p className="font-semibold">
                             {cellValue[0].product_name}
                             {/* {capitalize(cellValue[0].product_name)} */}
                         </p>
@@ -96,7 +99,7 @@ export default function CustomersOrders() {
     }
 
     return (
-        <div className='container mx-auto'>
+        <div className="container mx-auto">
             <Table>
                 <TableHeader columns={columns}>
                     {(column) => (
@@ -106,6 +109,7 @@ export default function CustomersOrders() {
                                 column.uid === 'actions' ? 'center' : 'start'
                             }
                             allowsSorting={column.sortable}
+                            aria-label={column.name} // Add aria-label here
                         >
                             {column.name}
                         </TableColumn>

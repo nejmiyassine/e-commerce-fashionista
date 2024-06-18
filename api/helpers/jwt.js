@@ -1,15 +1,15 @@
 const jwt = require('jsonwebtoken');
-const JwtSecretKey = require('../config/env').JwtSecretKey;
+const JWT_SECRET_KEY = require('../config/env').JWT_SECRET_KEY;
 
 const signJwt = (payload) => {
-    return jwt.sign(payload, JwtSecretKey, {
+    return jwt.sign(payload, JWT_SECRET_KEY, {
         expiresIn: '1d',
     });
 };
 
 const verifyJwt = (token) => {
     try {
-        return jwt.verify(token, JwtSecretKey);
+        return jwt.verify(token, JWT_SECRET_KEY);
     } catch (error) {
         return null;
     }

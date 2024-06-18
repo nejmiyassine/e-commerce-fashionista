@@ -61,7 +61,7 @@ function AddProduct() {
                     formData.append('upload_preset', 'tjbjycer');
 
                     const response = await axios.post(
-                        'https://api.cloudinary.com/v1_1/dgbwl69xi/image/upload',
+                        import.meta.env.VITE_REACT_APP_CLOUDINARY_URL,
                         formData
                     );
                     return response.data.secure_url;
@@ -113,95 +113,95 @@ function AddProduct() {
 
     return (
         <Layout>
-            <div className='w-full p-2 flex items-center'>
-                <div className='rounded lg:w-full md:min-w-[500px]'>
-                    <h1 className='text-2xl font-bold mb-3'>Add Product</h1>
+            <div className="w-full p-2 flex items-center">
+                <div className="rounded lg:w-full md:min-w-[500px]">
+                    <h1 className="text-2xl font-bold mb-3">Add Product</h1>
 
-                    <div className='mb-3'>
+                    <div className="mb-3">
                         <Input
                             defaultSelected
-                            className='bg-white rounded-full'
+                            className="bg-white rounded-full"
                             isRequired
                             endContent={
-                                <CgRename className='text-default-400 pointer-events-none flex-shrink-0' />
+                                <CgRename className="text-default-400 pointer-events-none flex-shrink-0" />
                             }
-                            labelPlacement='outside'
-                            type='text'
-                            label='Product Name'
-                            aria-label='Product Name'
-                            placeholder='Enter Product Name'
-                            variant='bordered'
+                            labelPlacement="outside"
+                            type="text"
+                            label="Product Name"
+                            aria-label="Product Name"
+                            placeholder="Enter Product Name"
+                            variant="bordered"
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
-                    <div className='mb-3 flex items-center gap-3'>
+                    <div className="mb-3 flex items-center gap-3">
                         <Input
-                            className='bg-white rounded-full'
+                            className="bg-white rounded-full"
                             isRequired
                             endContent={
-                                <ImListNumbered className='text-default-400 pointer-events-none flex-shrink-0' />
+                                <ImListNumbered className="text-default-400 pointer-events-none flex-shrink-0" />
                             }
-                            labelPlacement='outside'
-                            type='number'
-                            label='Product Quantity'
-                            aria-label='Product Quantity'
-                            placeholder='Quantity'
-                            variant='bordered'
+                            labelPlacement="outside"
+                            type="number"
+                            label="Product Quantity"
+                            aria-label="Product Quantity"
+                            placeholder="Quantity"
+                            variant="bordered"
                             onChange={(e) => setQuantity(e.target.value)}
                         />
 
                         <Input
-                            className='bg-white rounded-full'
+                            className="bg-white rounded-full"
                             isRequired
                             endContent={
-                                <BiDollar className='text-default-400 pointer-events-none flex-shrink-0' />
+                                <BiDollar className="text-default-400 pointer-events-none flex-shrink-0" />
                             }
-                            labelPlacement='outside'
-                            type='number'
-                            label='Product Discount Price'
-                            aria-label='Product Discount Price'
-                            placeholder='Product Discount Price'
-                            variant='bordered'
+                            labelPlacement="outside"
+                            type="number"
+                            label="Product Discount Price"
+                            aria-label="Product Discount Price"
+                            placeholder="Product Discount Price"
+                            variant="bordered"
                             onChange={(e) => setDiscount_price(e.target.value)}
                         />
 
                         <Input
                             isRequired
-                            className='bg-white rounded-full'
+                            className="bg-white rounded-full"
                             endContent={
-                                <BiDollar className='text-default-400 pointer-events-none flex-shrink-0' />
+                                <BiDollar className="text-default-400 pointer-events-none flex-shrink-0" />
                             }
-                            labelPlacement='outside'
-                            type='number'
-                            label='Product Price'
-                            aria-label='Product Price'
-                            placeholder='Product Price'
-                            variant='bordered'
+                            labelPlacement="outside"
+                            type="number"
+                            label="Product Price"
+                            aria-label="Product Price"
+                            placeholder="Product Price"
+                            variant="bordered"
                             onChange={(e) => setPrice(e.target.value)}
                         />
                     </div>
 
-                    <div className='mb-3'>
+                    <div className="mb-3">
                         <label
-                            className='flex capitalize text-sm mb-2'
-                            htmlFor='options'
+                            className="flex capitalize text-sm mb-2"
+                            htmlFor="options"
                         >
                             options
-                            <LuAsterisk color='#F4558C' size={10} />
+                            <LuAsterisk color="#F4558C" size={10} />
                         </label>
-                        <div className='relative shadow appearance-none bg-white border rounded-lg w-full flex py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'>
-                            <div className='flex space-x-2'>
+                        <div className="relative shadow appearance-none bg-white border rounded-lg w-full flex py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                            <div className="flex space-x-2">
                                 {options &&
                                     options.map((option, idx) => (
                                         <span
                                             key={idx}
-                                            className='rounded-md bg-black text-white relative flex'
+                                            className="rounded-md bg-black text-white relative flex"
                                         >
-                                            <span className='p-2'>
+                                            <span className="p-2">
                                                 {option}
                                             </span>
                                             <span
-                                                className='px-1 cursor-pointer flex place-content-center place-items-center'
+                                                className="px-1 cursor-pointer flex place-content-center place-items-center"
                                                 onClick={() =>
                                                     setOptions(
                                                         options.filter(
@@ -215,31 +215,31 @@ function AddProduct() {
                                             </span>
                                         </span>
                                     ))}
-                                <div className='absolute top-1/2 right-2 -translate-y-1/2'>
-                                    <CgOptions className='text-default-400 pointer-events-none flex-shrink-0' />
+                                <div className="absolute top-1/2 right-2 -translate-y-1/2">
+                                    <CgOptions className="text-default-400 pointer-events-none flex-shrink-0" />
                                 </div>
                             </div>
                             <input
-                                className='outline-none ml-2 '
+                                className="outline-none ml-2 "
                                 onChange={(e) => setCharOptions(e.target.value)}
                                 value={charOptions}
-                                id='options'
-                                type='text'
-                                placeholder='...'
+                                id="options"
+                                type="text"
+                                placeholder="..."
                                 disabled={options.length === optionsLength}
                             />
                         </div>
                     </div>
 
-                    <div className='pt-2 mb-3'>
+                    <div className="pt-2 mb-3">
                         <Select
                             isRequired
-                            className='w-full bg-white'
-                            variant='underlined'
-                            labelPlacement='outside'
-                            label='Product Category'
-                            aria-label='Product Category'
-                            placeholder='Select product category'
+                            className="w-full bg-white"
+                            variant="underlined"
+                            labelPlacement="outside"
+                            label="Product Category"
+                            aria-label="Product Category"
+                            placeholder="Select product category"
                             onChange={(e) => setCategory(e.target.value)}
                         >
                             {categories &&
@@ -254,61 +254,61 @@ function AddProduct() {
                         </Select>
                     </div>
 
-                    <div className='mb-3'>
+                    <div className="mb-3">
                         <label
-                            className='flex capitalize text-sm mb-2'
-                            htmlFor='short_description'
+                            className="flex capitalize text-sm mb-2"
+                            htmlFor="short_description"
                         >
                             Short Description{' '}
-                            <LuAsterisk color='#F4558C' size={10} />
+                            <LuAsterisk color="#F4558C" size={10} />
                         </label>
                         <Textarea
                             isRequired
                             // label='Short Description'
-                            area-label='Short Description'
-                            labelPlacement='outside'
-                            id='short_description'
-                            placeholder='Enter your short description'
-                            variant='bordered'
-                            className='bg-white max-w-full'
+                            area-label="Short Description"
+                            labelPlacement="outside"
+                            id="short_description"
+                            placeholder="Enter your short description"
+                            variant="bordered"
+                            className="bg-white max-w-full"
                             onChange={(e) =>
                                 setShort_description(e.target.value)
                             }
                         />
                     </div>
-                    <div className='mb-3'>
+                    <div className="mb-3">
                         <label
-                            className='flex capitalize text-sm mb-2'
-                            htmlFor='long_description'
+                            className="flex capitalize text-sm mb-2"
+                            htmlFor="long_description"
                         >
                             Long Description
-                            <LuAsterisk color='#F4558C' size={10} />
+                            <LuAsterisk color="#F4558C" size={10} />
                         </label>
                         <Textarea
                             isRequired
-                            id='long_description'
-                            area-label='Long Description'
-                            labelPlacement='outside'
-                            placeholder='Enter your long description'
-                            variant='bordered'
-                            className='max-w-full bg-white'
+                            id="long_description"
+                            area-label="Long Description"
+                            labelPlacement="outside"
+                            placeholder="Enter your long description"
+                            variant="bordered"
+                            className="max-w-full bg-white"
                             onChange={(e) =>
                                 setLong_description(e.target.value)
                             }
                         />
                     </div>
 
-                    <div className='mb-3'>
+                    <div className="mb-3">
                         <div
                             onClick={handleClick}
-                            className='p-4 flex  flex-col items-center gap-2 bg-violet-100 text-violet-500 rounded-lg hover:bg-violet-100 cursor-pointer'
+                            className="p-4 flex  flex-col items-center gap-2 bg-violet-100 text-violet-500 rounded-lg hover:bg-violet-100 cursor-pointer"
                         >
-                            <IoMdCloudUpload className='w-6 h-6' />
+                            <IoMdCloudUpload className="w-6 h-6" />
                             <span>Choose some files to upload</span>
                             <input
-                                id='product_image'
-                                type='file'
-                                className='hidden'
+                                id="product_image"
+                                type="file"
+                                className="hidden"
                                 ref={ref}
                                 onChange={(event) =>
                                     setImages((prevImages) => [
@@ -322,15 +322,15 @@ function AddProduct() {
                     </div>
 
                     {images.length > 0 && (
-                        <div className='mb-3'>
-                            <label className='block text-gray-700 text-sm font-bold'>
+                        <div className="mb-3">
+                            <label className="block text-gray-700 text-sm font-bold">
                                 Uploaded Images
                             </label>
-                            <div className='flex space-x-2'>
+                            <div className="flex space-x-2">
                                 {images.map((file, index) => (
-                                    <div key={index} className='relative'>
+                                    <div key={index} className="relative">
                                         <span
-                                            className='bg-red-300 p-2 cursor-pointer flex place-content-center place-items-center'
+                                            className="bg-red-300 p-2 cursor-pointer flex place-content-center place-items-center"
                                             onClick={() =>
                                                 setImages(
                                                     images.filter(
@@ -344,7 +344,7 @@ function AddProduct() {
                                         <img
                                             src={URL.createObjectURL(file)}
                                             alt={`uploaded-${index}`}
-                                            className='w-20 h-20 object-cover rounded'
+                                            className="w-20 h-20 object-cover rounded"
                                         />
                                     </div>
                                 ))}
@@ -352,11 +352,11 @@ function AddProduct() {
                         </div>
                     )}
 
-                    <div className='flex justify-between space-x-3'>
+                    <div className="flex justify-between space-x-3">
                         <button
                             onClick={addProduct}
                             disabled={loading}
-                            className='bg-black border hover:border-black hover:text-black hover:bg-white w-full text-white font-bold py-2 px-4 rounded'
+                            className="bg-black border hover:border-black hover:text-black hover:bg-white w-full text-white font-bold py-2 px-4 rounded"
                         >
                             {loading ? 'Loading...' : 'Add Product'}
                         </button>

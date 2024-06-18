@@ -1,19 +1,16 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Pagination } from '@nextui-org/react';
 
-import LoadingSpinner from '../../components/LoadingSpinner';
-import CatalogProducts from '../../components/Catalog/CatalogProducts';
-import FilterCatalogSidebar from '../../components/Catalog/FilterCatalogSidebar';
+import LoadingSpinner from '@components/LoadingSpinner';
+import CatalogProducts from '@components/Catalog/CatalogProducts';
+import FilterCatalogSidebar from '@components/Catalog/FilterCatalogSidebar';
 
-import { getAllCategories } from '../../features/categories/categoriesSlice';
-import { getAllProducts } from '../../features/products/productsSlice';
-import BagProductsSidebar from '../../layouts/BagProductsSidebar';
-import CustomerNavbar from '../../layouts/CustomerNavbar';
-import Footer from '../../components/LandingPage/Footer';
-
-import { toggleCartSidebar } from '../../features/cart/cartSlice';
+import { getAllCategories } from '@features/categories/categoriesSlice';
+import { getAllProducts } from '@features/products/productsSlice';
+import BagProductsSidebar from '@layouts/BagProductsSidebar';
+import FilterProductContext from '@context/FilterProductContext';
 
 const Catalog = () => {
     const dispatch = useDispatch();
@@ -21,6 +18,7 @@ const Catalog = () => {
         (state) => state.products
     );
     const { categories, isLoading } = useSelector((state) => state.categories);
+    const { isSidebarOpen, toggleSidebar } = useContext(FilterProductContext);
 
     const loading = isLoading;
 
@@ -28,23 +26,21 @@ const Catalog = () => {
     const [selectedPrice, setSelectedPrice] = useState([]);
     const [filterValue, setFilterValue] = useState('');
     const [columnCount, setColumnCount] = useState(1);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [page, setPage] = useState(1);
 
     const hasSearchFilter = Boolean(filterValue);
 
+    const handleRemoveSelected = (value) => {
+        const updatedSelected = selected.filter(
+            (selectedValue) => selectedValue !== value
+        );
+        setSelected(updatedSelected);
+    };
+
     const handleColumnChange = (newColumnCount) => {
         setColumnCount(newColumnCount);
-    };
-
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
-
-    const openBagSidebar = () => {
-        dispatch(toggleCartSidebar(true));
     };
 
     const onSearchChange = useCallback((value) => {
@@ -120,15 +116,15 @@ const Catalog = () => {
 
     const bottomContent = useMemo(() => {
         return (
-            <div className='mt-6 px-2 flex justify-between items-center'>
+            <div className="mt-6 px-2 flex justify-between items-center">
                 {pages > 0 ? (
                     <Pagination
                         showControls
                         classNames={{
                             cursor: 'bg-foreground text-background',
                         }}
-                        color='default'
-                        variant='light'
+                        color="default"
+                        variant="light"
                         page={page}
                         total={pages}
                         isDisabled={hasSearchFilter}
@@ -136,18 +132,18 @@ const Catalog = () => {
                     />
                 ) : null}
 
-                <div className='flex justify-between gap-2 items-center'>
-                    <span className='text-default-400 text-md'>
+                <div className="flex justify-between gap-2 items-center">
+                    <span className="text-default-400 text-md">
                         Total {products && products.length} products:
                     </span>
-                    <label className='flex items-center text-default-400 text-small'>
+                    <label className="flex items-center text-default-400 text-small">
                         rows per page:
                         <select
-                            className='bg-transparent outline-none text-default-400 text-small'
+                            className="bg-transparent outline-none text-default-400 text-small"
                             onChange={onRowsPerPageChange}
                         >
-                            <option value='10'>10</option>
-                            <option value='16'>16</option>
+                            <option value="10">10</option>
+                            <option value="16">16</option>
                         </select>
                     </label>
                 </div>
@@ -161,13 +157,9 @@ const Catalog = () => {
 
     return (
         <>
-            <CustomerNavbar
-                toggleSidebar={toggleSidebar}
-                openBagSidebar={openBagSidebar}
-            />
-            <div className='flex gap-4'>
+            <div className="flex gap-4">
                 <div
-                    className={`inset-0 z-30 bg-black opacity-50 ${
+                    className={`inset-0 z-50 bg-black opacity-50 ${
                         isSidebarOpen ? 'fixed' : 'hidden'
                     }`}
                     onClick={toggleSidebar}
@@ -188,17 +180,19 @@ const Catalog = () => {
                         toggleSidebar={toggleSidebar}
                     />
                 </aside>
-                <div className='w-full p-2 md:p-4 lg:p-6'>
+                <div className="w-full p-2 md:p-4 lg:p-6">
                     {items && (
                         <CatalogProducts
                             selected={selected}
                             selectedPrice={selectedPrice}
+                            setSelectedPrice={setSelectedPrice}
                             products={items}
                             filterValue={filterValue}
                             cols={columnCount}
                             handleChangeCols={handleColumnChange}
                             onSearchChange={onSearchChange}
                             bottomContent={bottomContent}
+                            handleRemoveSelected={handleRemoveSelected}
                         />
                     )}
                     {bottomContent}
@@ -206,8 +200,6 @@ const Catalog = () => {
             </div>
 
             <BagProductsSidebar />
-
-            <Footer />
         </>
     );
 };

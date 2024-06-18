@@ -1,8 +1,8 @@
-    const { genSalt, hash } = require('bcrypt');
+const { genSalt, hash } = require('bcrypt');
 const passport = require('passport');
 const { isValidObjectId } = require('mongoose');
 
-const { JwtSecretKey, BASE_URL } = require('../config/env');
+const { JWT_SECRET_KEY, BASE_URL } = require('../config/env');
 const jwtHelper = require('../helpers/issueJwt');
 const {
     generateOtp,
@@ -78,7 +78,7 @@ const authLogin = async (req, res, next, local) => {
             return res.status(401).json({ message: 'invalid credentials' });
         }
 
-        const jwt = jwtHelper.issueJwt(user, JwtSecretKey);
+        const jwt = jwtHelper.issueJwt(user, JWT_SECRET_KEY);
         const { token, expires } = jwt;
 
         res.status(200).json({ user, token, expiresIn: expires });

@@ -1,19 +1,13 @@
-import CustomerNavbar from '../../layouts/CustomerNavbar.jsx';
-import Head from './Head.jsx';
-import Footer from './Footer.jsx';
-
 const About = () => {
     return (
         <div>
-            <Head />
-            <CustomerNavbar />
-            <div className='min-h-screen flex flex-col items-center justify-center lg:px-16'>
-                <h1 className='border rounded-lg py-4 px-5 bg-blue-950 mt-5 italic text-yellow-400 font-semibold text-center text-4xl lg:mb-6'>
+            <div className="min-h-screen flex flex-col items-center justify-center lg:px-16">
+                <h1 className="border rounded-lg py-4 px-5 bg-blue-950 mt-5 italic text-yellow-400 font-semibold text-center text-4xl lg:mb-6">
                     Terms & Conditions
                 </h1>
 
-                <div className='w-full my-8 space-y-3'>
-                    <h2 className='font-semibold text-2xl mb-2 text-blue-900 '>
+                <div className="w-full my-8 space-y-3">
+                    <h2 className="font-semibold text-2xl mb-2 text-blue-900 ">
                         1. Acceptance of Terms
                     </h2>
                     <p>
@@ -23,7 +17,7 @@ const About = () => {
                         terms, please do not use our website.
                     </p>
 
-                    <h2 className='font-semibold text-2xl mb-2 text-blue-900 '>
+                    <h2 className="font-semibold text-2xl mb-2 text-blue-900 ">
                         2. Intellectual Property
                     </h2>
                     <p>
@@ -34,7 +28,7 @@ const About = () => {
                         copyright and trademark law.
                     </p>
 
-                    <h2 className='font-semibold text-2xl mb-2 text-blue-900 '>
+                    <h2 className="font-semibold text-2xl mb-2 text-blue-900 ">
                         3. User Account
                     </h2>
                     <p>
@@ -45,7 +39,7 @@ const About = () => {
                         that occur under your account.
                     </p>
 
-                    <h2 className='font-semibold text-2xl mb-2 text-blue-900 '>
+                    <h2 className="font-semibold text-2xl mb-2 text-blue-900 ">
                         4. Privacy Policy
                     </h2>
                     <p>
@@ -54,7 +48,7 @@ const About = () => {
                         our practices.
                     </p>
 
-                    <h2 className='font-semibold text-2xl mb-2 text-blue-900 '>
+                    <h2 className="font-semibold text-2xl mb-2 text-blue-900 ">
                         5. Governing Law
                     </h2>
                     <p>
@@ -64,7 +58,7 @@ const About = () => {
                         of the courts of [Your Jurisdiction].
                     </p>
 
-                    <h2 className='font-semibold text-2xl mb-2 text-blue-900 '>
+                    <h2 className="font-semibold text-2xl mb-2 text-blue-900 ">
                         6. Changes to Terms
                     </h2>
                     <p>
@@ -74,18 +68,16 @@ const About = () => {
                         Conditions.
                     </p>
 
-                    <p className='mt-4'>
+                    <p className="mt-4">
                         For any questions or concerns regarding these terms,
                         please contact us at{' '}
-                        <span className='text-red-600 capitalize font-bold'>
+                        <span className="text-red-600 capitalize font-bold">
                             [+212-654-456-543]
                         </span>{' '}
                         .
                     </p>
                 </div>
             </div>
-
-            <Footer />
         </div>
     );
 };

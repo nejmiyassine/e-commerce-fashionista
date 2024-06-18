@@ -1,7 +1,8 @@
 import { useCookies } from 'react-cookie';
-import { useGetCustomerProfileDataQuery } from '../app/api/customerApi';
-import LoadingSpinner from '../components/LoadingSpinner';
 import { Navigate, Outlet } from 'react-router-dom';
+
+import { useGetCustomerProfileDataQuery } from '@app/api/customerApi';
+import LoadingSpinner from '@components/LoadingSpinner';
 
 const ProtectedRoutesCustomer = () => {
     const [cookies] = useCookies(['logged_in']);
@@ -19,7 +20,7 @@ const ProtectedRoutesCustomer = () => {
         return <LoadingSpinner />;
     }
 
-    return isLoggedIn && customer ? <Outlet /> : <Navigate to='/login' />;
+    return isLoggedIn && customer ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoutesCustomer;

@@ -1,23 +1,21 @@
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
+import { Button } from '@nextui-org/react';
+import { Link } from 'react-router-dom';
 import { IoCloseOutline } from 'react-icons/io5';
 import { IoIosAdd, IoIosRemove } from 'react-icons/io';
 import { MdDelete } from 'react-icons/md';
 
-import { toggleCartSidebar } from '../features/cart/cartSlice';
+import { toggleCartSidebar } from '@features/cart/cartSlice';
 import {
     useAddProductToCartMutation,
     useGetAllCartItemsQuery,
     useRemoveProductFromCartMutation,
     useDecreaseProductQuantityMutation,
-} from '../app/api/cartApi';
+} from '@app/api/cartApi';
 
-import LoadingSpinner from '../components/LoadingSpinner';
-import { Button } from '@nextui-org/react';
-import { Link } from 'react-router-dom';
-import { calculateSubTotal } from '../utils/calculateSubTotal';
+import LoadingSpinner from '@components/LoadingSpinner';
+import { calculateSubTotal } from '@utils/calculateSubTotal';
 
 /* eslint-disable react/prop-types */
 const BagProductsSidebar = () => {
@@ -26,130 +24,69 @@ const BagProductsSidebar = () => {
 
     const { data: cartItems, isLoading } = useGetAllCartItemsQuery();
 
-    const [
-        addProductToCart,
-        {
-            isLoading: isAddLoading,
-            isSuccess: isAddSuccess,
-            isError: isAddError,
-            error: addError,
-        },
-    ] = useAddProductToCartMutation();
-    const [
-        decreaseProductQuantity,
-        {
-            isLoading: isDecreaseLoading,
-            isSuccess: isDecreaseSuccess,
-            isError: isDecreaseError,
-            error: decreaseError,
-        },
-    ] = useDecreaseProductQuantityMutation();
-    const [
-        removeProductFromCart,
-        {
-            isLoading: isRemoveLoading,
-            isSuccess: isRemoveSuccess,
-            isError: isRemoveError,
-            error: removeError,
-        },
-    ] = useRemoveProductFromCartMutation();
+    const [addProductToCart, { isLoading: isAddLoading }] =
+        useAddProductToCartMutation();
+    const [decreaseProductQuantity, { isLoading: isDecreaseLoading }] =
+        useDecreaseProductQuantityMutation();
+    const [removeProductFromCart, { isLoading: isRemoveLoading }] =
+        useRemoveProductFromCartMutation();
 
     const closeBagSidebar = () => {
         dispatch(toggleCartSidebar(false));
     };
 
-    const handleAddToCart = (productId) => {
+    const handleAddToCart = async (productId) => {
         const quantity = 1;
 
-        addProductToCart({
-            productId,
-            quantity,
-        });
+        try {
+            await addProductToCart({
+                productId,
+                quantity,
+            });
+
+            toast.info('Quantity increased successfully', {
+                position: 'bottom-right',
+            });
+        } catch (error) {
+            toast.error(error?.message, {
+                position: 'bottom-right',
+            });
+        }
     };
 
     const handleDecreaseProductQuantity = async (productId) => {
         const quantity = 1;
 
-        await decreaseProductQuantity({
-            productId: productId,
-            quantity,
-        });
+        try {
+            await decreaseProductQuantity({
+                productId: productId,
+                quantity,
+            });
+
+            toast.info('Quantity decreased successfully', {
+                position: 'bottom-right',
+            });
+        } catch (error) {
+            toast.error(error?.message, {
+                position: 'bottom-right',
+            });
+        }
     };
 
     const handleRemoveFromCart = async (productId) => {
-        await removeProductFromCart({
-            productId: productId,
-        });
+        try {
+            await removeProductFromCart({
+                productId: productId,
+            });
+            toast.info('Product removed from cart successfully', {
+                position: 'bottom-right',
+            });
+        } catch (error) {
+            toast.error(error?.message, {
+                position: 'bottom-right',
+            });
+        }
     };
-
-    useEffect(() => {
-        if (isAddSuccess) {
-            toast.info('Product updated successfully', {
-                position: 'bottom-right',
-            });
-        }
-
-        if (isAddError) {
-            if (Array.isArray(addError.data.error)) {
-                addError.data.error.forEach((el) =>
-                    toast.error(el.message, {
-                        position: 'bottom-right',
-                    })
-                );
-            } else {
-                toast.error(addError.data.message, {
-                    position: 'bottom-right',
-                });
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAddLoading]);
-
-    useEffect(() => {
-        if (isDecreaseSuccess) {
-            toast.info('Product updated successfully', {
-                position: 'bottom-right',
-            });
-        }
-
-        if (isDecreaseError) {
-            if (Array.isArray(decreaseError.data.error)) {
-                decreaseError.data.error.forEach((el) =>
-                    toast.error(el.message, {
-                        position: 'bottom-right',
-                    })
-                );
-            } else {
-                toast.error(decreaseError.data.message, {
-                    position: 'bottom-right',
-                });
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isDecreaseLoading]);
-
-    useEffect(() => {
-        if (isRemoveSuccess) {
-            toast.info('Product removed successfully', {
-                position: 'bottom-right',
-            });
-        }
-
-        if (isRemoveError) {
-            if (Array.isArray(removeError.data.error)) {
-                removeError.data.error.forEach((el) =>
-                    toast.error(el.message, {
-                        position: 'bottom-right',
-                    })
-                );
-            } else {
-                toast.error(removeError.data.message, {
-                    position: 'bottom-right',
-                });
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isRemoveLoading]);
 
     return (
         <div
@@ -157,31 +94,33 @@ const BagProductsSidebar = () => {
                 isOpen ? 'block' : 'hidden'
             }`}
         >
-            <div className='fixed inset-0 overflow-hidden'>
+            <div className="fixed inset-0 overflow-hidden">
                 {/* Dark overlay */}
                 <div
-                    className='fixed inset-0 bg-black opacity-50'
+                    className="fixed inset-0 bg-black opacity-50"
                     onClick={closeBagSidebar}
                 ></div>
 
                 {/* Sidebar */}
 
                 {isLoading ? (
-                    <LoadingSpinner />
+                    <div className="flex justify-center items-center">
+                        <LoadingSpinner />
+                    </div>
                 ) : (
-                    <div className='fixed inset-y-0 gap-4 left-0 max-w-full w-2/5 flex'>
-                        <div className='bg-white overflow-y-auto w-full'>
+                    <div className="fixed inset-y-0 gap-4 left-0 max-w-full w-2/5 flex">
+                        <div className="bg-white overflow-y-auto w-full">
                             {/* Sidebar Header */}
-                            <div className='p-4 flex items-center justify-between border-b'>
-                                <h2 className='text-2xl font-bold'>
+                            <div className="p-4 flex items-center justify-between border-b">
+                                <h2 className="text-2xl font-bold">
                                     My Bag (
                                     {cartItems?.cartItems
-                                        ? 0
-                                        : cartItems?.cartItems.length}
+                                        ? cartItems?.cartItems.length
+                                        : 0}
                                     )
                                 </h2>
                                 <button
-                                    className='text-gray-500'
+                                    className="text-gray-500"
                                     onClick={closeBagSidebar}
                                 >
                                     <IoCloseOutline size={30} />
@@ -189,11 +128,11 @@ const BagProductsSidebar = () => {
                             </div>
 
                             {/* Sidebar Content */}
-                            <div className='p-4 overflow-y-hidden'>
+                            <div className="p-4 overflow-y-hidden">
                                 {cartItems === undefined ||
                                 cartItems?.cartItems?.length === 0 ? (
                                     <div>
-                                        <h3 className='font-semibold text-lg text-gray-400 capitalize flex justify-center'>
+                                        <h3 className="font-semibold text-lg text-gray-400 capitalize flex justify-center">
                                             Your cart is empty!
                                         </h3>
                                     </div>
@@ -201,9 +140,9 @@ const BagProductsSidebar = () => {
                                     cartItems.cartItems.map((item) => (
                                         <div
                                             key={item.product._id}
-                                            className='pb-4 last:pb-28'
+                                            className="pb-4 last:pb-28"
                                         >
-                                            <div className='flex gap-2 h-32 mb-2'>
+                                            <div className="flex gap-2 h-32 mb-2">
                                                 <img
                                                     src={
                                                         item.product
@@ -213,18 +152,18 @@ const BagProductsSidebar = () => {
                                                         item.product
                                                             .product_name
                                                     }
-                                                    className='w-28 h-full object-contain mr-2'
+                                                    className="w-28 h-full object-contain mr-2"
                                                 />
 
-                                                <div className='w-full flex flex-col gap-10 justify-between'>
-                                                    <div className='flex items-center justify-between'>
-                                                        <p className='text-md w-60 capitalize font-bold'>
+                                                <div className="w-full flex flex-col gap-10 justify-between">
+                                                    <div className="flex items-center justify-between">
+                                                        <p className="text-md w-60 capitalize font-bold">
                                                             {
                                                                 item.product
                                                                     .product_name
                                                             }
                                                         </p>
-                                                        <p className='font-semibold ml-5 text-sm'>
+                                                        <p className="font-semibold ml-5 text-sm">
                                                             $
                                                             {
                                                                 item.product
@@ -233,12 +172,12 @@ const BagProductsSidebar = () => {
                                                         </p>
                                                     </div>
 
-                                                    <div className='flex items-center justify-between'>
-                                                        <div className='flex items-center border gap-4 p-1 mr-4'>
+                                                    <div className="flex items-center justify-between">
+                                                        <div className="flex items-center border gap-4 p-1 mr-4">
                                                             <Button
-                                                                size='sm'
-                                                                variant='light'
-                                                                className='cursor-pointer'
+                                                                size="sm"
+                                                                variant="light"
+                                                                className="cursor-pointer"
                                                                 onClick={() =>
                                                                     handleDecreaseProductQuantity(
                                                                         item
@@ -253,14 +192,14 @@ const BagProductsSidebar = () => {
                                                                 <IoIosRemove />
                                                             </Button>
 
-                                                            <span className='font-semibold w-6 text-center'>
+                                                            <span className="font-semibold w-6 text-center">
                                                                 {item.quantity}
                                                             </span>
 
                                                             <Button
-                                                                size='sm'
-                                                                variant='light'
-                                                                className='cursor-pointer'
+                                                                size="sm"
+                                                                variant="light"
+                                                                className="cursor-pointer"
                                                                 onClick={() =>
                                                                     handleAddToCart(
                                                                         item
@@ -277,10 +216,10 @@ const BagProductsSidebar = () => {
                                                         </div>
 
                                                         <Button
-                                                            size='sm'
-                                                            variant='light'
-                                                            className='cursor-pointer ml-2 text-gray-500
-                                                                '
+                                                            size="sm"
+                                                            variant="light"
+                                                            className="cursor-pointer ml-2 text-gray-500
+                                                                "
                                                             isDisabled={
                                                                 isRemoveLoading
                                                             }
@@ -305,16 +244,16 @@ const BagProductsSidebar = () => {
 
                             {/* Sidebar Footer */}
 
-                            <div className='p-4 border-t z-50 bg-white absolute bottom-0 w-full'>
-                                <div className='flex items-center justify-between text-sm'>
-                                    <p className='text-gray-500 font-semibold'>
+                            <div className="p-4 border-t z-50 bg-white absolute bottom-0 w-full">
+                                <div className="flex items-center justify-between text-sm">
+                                    <p className="text-gray-500 font-semibold">
                                         Subtotal:
                                     </p>
                                     {cartItems === undefined ||
                                         (cartItems?.cartItems?.length === 0 ? (
-                                            <p className='font-bold'>$0</p>
+                                            <p className="font-bold">$0</p>
                                         ) : (
-                                            <p className='font-bold'>
+                                            <p className="font-bold">
                                                 $
                                                 {calculateSubTotal(
                                                     cartItems?.cartItems
@@ -323,8 +262,8 @@ const BagProductsSidebar = () => {
                                         ))}
                                 </div>
 
-                                <Link to='/payment'>
-                                    <Button className='mt-4 px-2 py-3 rounded w-full font-semibold transition duration-200 bg-violet-500 text-white hover:bg-violet-700'>
+                                <Link to="/payment">
+                                    <Button className="mt-4 px-2 py-3 rounded w-full font-semibold transition duration-200 bg-violet-500 text-white hover:bg-violet-700">
                                         Proceed to Checkout
                                     </Button>
                                 </Link>

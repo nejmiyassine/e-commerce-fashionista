@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from 'react';
 import { Image } from '@nextui-org/react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -68,12 +67,12 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
     }
 
     return (
-        <section className='overflow-hidden bg-white font-poppins dark:bg-gray-800'>
-            <div className='max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-4'>
-                <div className='flex flex-wrap -mx-4'>
-                    <div className='w-full px-4 md:w-1/2 '>
-                        <div className='sticky top-0 z-50 overflow-hidden '>
-                            <div className='relative mb-6 lg:mb-10 lg:h-2/4 '>
+        <section className="overflow-hidden bg-white font-poppins dark:bg-gray-800">
+            <div className="max-w-6xl px-4 py-4 mx-auto lg:py-8 md:px-4">
+                <div className="flex flex-wrap -mx-4">
+                    <div className="w-full px-4 md:w-1/2 ">
+                        <div className="sticky top-0 z-50 overflow-hidden ">
+                            <div className="relative mb-6 lg:mb-10 lg:h-2/4 ">
                                 <Image
                                     src={
                                         product?.product_images.length > 0
@@ -81,17 +80,17 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
                                             : 'https://images.unsplash.com/photo-1683009427619-a1a11b799e05?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
                                     }
                                     alt={product?.product_name}
-                                    className='object-cover w-full lg:h-full cursor-pointer'
+                                    className="object-cover w-full lg:h-full cursor-pointer"
                                 />
                             </div>
-                            <div className='flex-wrap hidden md:flex '>
+                            <div className="flex-wrap hidden md:flex ">
                                 {product?.product_images.length > 1 &&
                                     product?.product_images
                                         .slice(1, product.product_images.length)
                                         .map((src, idx) => (
                                             <div
                                                 key={idx}
-                                                className='w-1/2 p-2 sm:w-1/4'
+                                                className="w-1/2 p-2 sm:w-1/4"
                                             >
                                                 <img
                                                     src={src}
@@ -99,18 +98,18 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
                                                         product.product_name +
                                                         idx
                                                     }
-                                                    className='object-contain cursor-pointer w-full lg:h-20'
+                                                    className="object-contain cursor-pointer w-full lg:h-20"
                                                 />
                                             </div>
                                         ))}
                             </div>
                         </div>
                     </div>
-                    <div className='w-full px-4 md:w-1/2 '>
-                        <div className='lg:pl-20'>
-                            <div className='mb-8 '>
-                                <div className='flex items-center justify-between'>
-                                    <span className='text-lg font-medium text-primaryColor-gold'>
+                    <div className="w-full px-4 md:w-1/2 ">
+                        <div className="lg:pl-20">
+                            <div className="mb-8 ">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-lg font-medium text-primaryColor-gold">
                                         {product?.category_id.name}
                                     </span>
                                     {isAdmin && (
@@ -119,130 +118,130 @@ const ProductDetailsSection = ({ productId, isAdmin }) => {
                                         >
                                             <MdEdit
                                                 size={20}
-                                                className='text-primaryColor-gold cursor-pointer'
+                                                className="text-primaryColor-gold cursor-pointer"
                                             />
                                         </Link>
                                     )}
                                 </div>
-                                <h2 className='max-w-xl mt-2 mb-6 text-2xl font-bold dark:text-white md:text-4xl'>
+                                <h2 className="max-w-xl mt-2 mb-6 text-2xl font-bold dark:text-white md:text-4xl">
                                     {product?.product_name}
                                 </h2>
-                                <div className='flex items-center mb-6'>
-                                    <ul className='flex mr-2'>
+                                <div className="flex items-center mb-6">
+                                    <ul className="flex mr-2">
                                         <li>
                                             <FaStar
                                                 size={16}
-                                                className='w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer'
+                                                className="w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer"
                                             />
                                         </li>
                                         <li>
                                             <FaStar
                                                 size={16}
-                                                className='w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer'
+                                                className="w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer"
                                             />
                                         </li>
                                         <li>
                                             <FaStar
                                                 size={16}
-                                                className='w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer'
+                                                className="w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer"
                                             />
                                         </li>
                                         <li>
                                             <FaStar
                                                 size={16}
-                                                className='w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer'
+                                                className="w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer"
                                             />
                                         </li>
                                         <li>
                                             <FaStar
                                                 size={16}
-                                                className='w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer'
+                                                className="w-4 mr-1 text-primaryColor-gold bi bi-star cursor-pointer"
                                             />
                                         </li>
                                     </ul>
-                                    <p className='text-xs dark:text-gray-400 '>
+                                    <p className="text-xs dark:text-gray-400 ">
                                         (2 customer reviews)
                                     </p>
                                 </div>
-                                <p className='max-w-md mb-8 text-black/80 dark:dark:text-white/80'>
+                                <p className="max-w-md mb-8 text-black/80 dark:dark:text-white/80">
                                     {product?.short_description}
                                 </p>
-                                <div className='flex items-center justify-between'>
-                                    <p className='inline-block mb-2 text-4xl flex items-center gap-1 font-bold dark:text-white '>
-                                        <span className='text-black/80 dark:text-white/90'>
+                                <div className="flex items-center justify-between">
+                                    <p className="mb-2 text-4xl flex items-center gap-1 font-bold dark:text-white ">
+                                        <span className="text-black/80 dark:text-white/90">
                                             ${product?.discount_price}
                                         </span>
-                                        <span className='text-base font-normal text-gray-500 line-through dark:text-gray-400'>
+                                        <span className="text-base font-normal text-gray-500 line-through dark:text-gray-400">
                                             ${product?.price}
                                         </span>
                                     </p>
-                                    <p className='font-semibold text-primaryColor-gold'>
+                                    <p className="font-semibold text-primaryColor-gold">
                                         {product?.quantity} in stock
                                     </p>
                                 </div>
                             </div>
 
-                            <div className='flex items-center mb-8'>
-                                <h2 className='w-16 text-xl font-bold dark:text-gray-400'>
+                            <div className="flex items-center mb-8">
+                                <h2 className="w-16 text-xl font-bold dark:text-gray-400">
                                     Size:
                                 </h2>
-                                <div className='flex flex-wrap -mx-2 -mb-2'>
+                                <div className="flex flex-wrap -mx-2 -mb-2">
                                     {product?.options.map((option, idx) => (
                                         <button
                                             key={idx}
-                                            className='py-1 mb-2 mr-1 uppercase text-sm font-semibold border px-2 hover:border-black dark:border-white hover:bg-black hover:text-white dark:hover:border-gray-300 dark:text-gray-400'
+                                            className="py-1 mb-2 mr-1 uppercase text-sm font-semibold border px-2 hover:border-black dark:border-white hover:bg-black hover:text-white dark:hover:border-gray-300 dark:text-gray-400"
                                         >
                                             {option}
                                         </button>
                                     ))}
                                 </div>
                             </div>
-                            <div className='w-32 mb-8'>
+                            <div className="w-32 mb-8">
                                 <label
-                                    htmlFor='quantity'
-                                    className='w-16 text-xl font-bold dark:text-gray-400'
+                                    htmlFor="quantity"
+                                    className="w-16 text-xl font-bold dark:text-gray-400"
                                 >
                                     Quantity:
                                 </label>
-                                <div className='relative flex flex-row w-full h-10 mt-4 bg-transparent rounded-lg'>
+                                <div className="relative flex flex-row w-full h-10 mt-4 bg-transparent rounded-lg">
                                     <button
                                         onClick={handleDecrementQuantity}
-                                        className='w-20 h-full text-white bg-black text-white rounded-l outline-none cursor-pointer dark:hover:bg-gray-700 dark:text-gray-400 dark:bg-gray-900 hover:bg-black/70'
+                                        className="w-20 h-full bg-black text-white rounded-l outline-none cursor-pointer dark:hover:bg-gray-700 dark:text-gray-400 dark:bg-gray-900 hover:bg-black/70"
                                     >
-                                        <span className='m-auto text-2xl font-thin'>
+                                        <span className="m-auto text-2xl font-thin">
                                             -
                                         </span>
                                     </button>
                                     <input
-                                        id='quantity'
-                                        name='quantity'
-                                        type='number'
+                                        id="quantity"
+                                        name="quantity"
+                                        type="number"
                                         value={quantity}
-                                        className='flex items-center w-full font-semibold text-center text-gray-700 placeholder-gray-700 bg-gray-100/70 outline-none dark:text-gray-400 dark:placeholder-gray-400 dark:bg-gray-900 focus:outline-none text-md hover:text-black'
-                                        placeholder='1'
+                                        className="flex items-center w-full font-semibold text-center text-gray-700 placeholder-gray-700 bg-gray-100/70 outline-none dark:text-gray-400 dark:placeholder-gray-400 dark:bg-gray-900 focus:outline-none text-md hover:text-black"
+                                        placeholder="1"
                                     />
                                     <button
-                                        className='w-20 h-full text-gray-600 bg-black text-white rounded-r outline-none cursor-pointer dark:hover:bg-gray-700 dark:text-gray-400 dark:bg-gray-900 hover:bg-black/70'
+                                        className="w-20 h-full bg-black text-white rounded-r outline-none cursor-pointer dark:hover:bg-gray-700 dark:text-gray-400 dark:bg-gray-900 hover:bg-black/70"
                                         onClick={handleIncrementQuantity}
                                     >
-                                        <span className='m-auto text-2xl font-thin'>
+                                        <span className="m-auto text-2xl font-thin">
                                             +
                                         </span>
                                     </button>
                                 </div>
                             </div>
-                            <div className='flex flex-col justify-center mb-8'>
-                                <h2 className='w-16 text-xl font-bold dark:text-gray-400'>
+                            <div className="flex flex-col justify-center mb-8">
+                                <h2 className="w-16 text-xl font-bold dark:text-gray-400">
                                     Description:
                                 </h2>
-                                <p className='pt-2'>
+                                <p className="pt-2">
                                     {product?.long_description}
                                 </p>
                             </div>
                             {!isAdmin ? (
-                                <div className='flex flex-wrap items-center -mx-4 '>
-                                    <div className='w-full px-4 mb-4 lg:w-1/2 lg:mb-0'>
-                                        <button className='flex items-center gap-2 capitalize justify-center w-full font-semibold py-4 text-white bg-black border border-black rounded-md transition dark:text-gray-200 dark:border-white hover:bg-white hover:text-black dark:bg-blue-600 dark:hover:bg-blue-700 dark:hover:border-blue-700 dark:hover:text-gray-300'>
+                                <div className="flex flex-wrap items-center -mx-4 ">
+                                    <div className="w-full px-4 mb-4 lg:w-1/2 lg:mb-0">
+                                        <button className="flex items-center gap-2 capitalize justify-center w-full font-semibold py-4 text-white bg-black border border-black rounded-md transition dark:text-gray-200 dark:border-white hover:bg-white hover:text-black dark:bg-blue-600 dark:hover:bg-blue-700 dark:hover:border-blue-700 dark:hover:text-gray-300">
                                             <FaCartPlus
                                                 size={18}
                                                 onClick={handleAddToCart}
