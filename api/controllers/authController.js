@@ -13,7 +13,8 @@ const accessTokenCookieOptions = {
     expires: new Date(Date.now() * 86400 * 1000),
     maxAge: 86400 * 1000,
     httpOnly: true,
-    sameSite: 'lax',
+    secure: true,
+    sameSite: 'None',
 };
 
 if (process.env.NODE_ENV === 'production')

@@ -36,7 +36,6 @@ app.use(express.json());
 app.use(cookieParser());
 // require('./middleware/passport');
 
-app.get('/', async (req, res) => res.send('Hello World!'));
 app.use('/v1', indexRoutes);
 
 app.listen(PORT, () => {
